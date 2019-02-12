@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html><head><meta name="GCD" content="YTk3ODQ3ZWZhN2I4NzZmMzBkNTEwYjJl66e7e407d0f07ada9274252c55855519"/>
+  <meta charset="utf-8">
+  <title>Index</title>
+  <meta name="generator" content="Google Web Designer 5.0.3.0130">
+  <style type="text/css" id="gwd-text-style">p {
+    margin: 0px;
+}
+h1 {
+    margin: 0px;
+}
+h2 {
+    margin: 0px;
+}
+h3 {
+    margin: 0px;
+}</style>
+  <style type="text/css">html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+}
+body {
+    background-color: transparent;
+    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+    -webkit-transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+    -moz-transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+    perspective: 1400px;
+    -webkit-perspective: 1400px;
+    -moz-perspective: 1400px;
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+}
+.gwd-p-1do4 {
+    height: auto;
+    left: 0px;
+    position: relative;
+    top: 0px;
+    width: auto;
+    background-image: none;
+    background-color: transparent;
+}
+.gwd-p-izlo {
+    height: auto;
+    left: 0px;
+    position: relative;
+    top: 0px;
+    width: auto;
+}
+.gwd-button-39lq {
+    color: red;
+    float: right;
+    width: 80px;
+    height: 40px;
+    left: 20px;
+}
+.gwd-button-11u5 {
+    height: 40px;
+    top: 5px;
+    width: 80px;
+    left: 0px;
+}
+.gwd-button-k5iy {
+    height: 39.8px;
+    top: 5px;
+    width: 80px;
+    left: 0px;
+}
+.gwd-button-cx08 {
+    height: 39.8px;
+    top: 5px;
+    width: 80px;
+    left: 0px;
+}
+.gwd-button-it82 {
+    height: 39.8px;
+    top: 5px;
+    width: 80px;
+    left: 0px;
+}
+.gwd-div-1w7a {
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    width: 100%;
+}
+.menu {
+    margin: auto;
+    width: 320px;
+    top: 0%;
+    height: 60px;
+}
+.gwd-div-2qgl {
+    position: relative;
+    overflow: auto;
+    top: 10%;
+    left: 0%;
+    height: 90%;
+    width: 100%;
+}
+.about {
+    text-align: left;
+    position: relative;
+    margin: auto;
+    width: 1000px;
+}</style>
+  <script type="text/javascript" gwd-events="support" src="gwd-events-support.1.0.js"></script>
+  <script type="text/javascript" gwd-events="handlers">
+    window.gwd = window.gwd || {};
+    gwd.about = function(event) {
+      var x = document.getElementById("canvas");
+      x.style.display = "none";
+      x = document.getElementById("canvas_H");
+      x.style.display = "none";
+      x = document.getElementById("about");
+      x.style.display = "block";
+    };
+    gwd.current = function(event) {
+      // current data
+      var x = document.getElementById("canvas");
+      x.style.display = "block";
+      x = document.getElementById("canvas_H");
+      x.style.display = "none";
+      x = document.getElementById("about");
+      x.style.display = "none";
+    };
+    gwd.history = function(event) {
+      // show history
+      var x = document.getElementById("canvas_H");
+      x.style.display = "block";
+      x = document.getElementById("canvas");
+      x.style.display = "none";
+      x = document.getElementById("about");
+      x.style.display = "none";
+    };
+  </script>
+  <script type="text/javascript" gwd-events="registration">
+    // Support code for event handling in Google Web Designer
+     // This script block is auto-generated. Please do not edit!
+    gwd.actions.events.registerEventHandlers = function(event) {
+      gwd.actions.events.addHandler('Btn_4', 'click', gwd.about, false);
+      gwd.actions.events.addHandler('Btn_1', 'click', gwd.current, false);
+      gwd.actions.events.addHandler('Btn_2', 'click', gwd.history, false);
+    };
+    gwd.actions.events.deregisterEventHandlers = function(event) {
+      gwd.actions.events.removeHandler('Btn_4', 'click', gwd.about, false);
+      gwd.actions.events.removeHandler('Btn_1', 'click', gwd.current, false);
+      gwd.actions.events.removeHandler('Btn_2', 'click', gwd.history, false);
+    };
+    document.addEventListener("DOMContentLoaded", gwd.actions.events.registerEventHandlers);
+    document.addEventListener("unload", gwd.actions.events.deregisterEventHandlers);
+  </script>
+</head>
+
+<body class="htmlNoPages">
+  <script type="text/javascript">
+    window.onload = function() {
+      var t_col = "#F07C60"
+      var h_col = "#8CC8E8"
+      var r_col = "#A3CDA8"
+      var p_col = "#BDBBB3"
+      var w_col = "#AD9CF3"
+      var ti_col = "#FFFFFF"
+      var PI = 3.1416;
+      var c = document.getElementById("canvas");
+      var ch = document.getElementById("canvas_H");
+
+      function draw_dial(x, y, win) {
+        win.beginPath();
+        win.arc(x, y, 100, 0.75 * PI, 0.25 * PI);
+        win.stroke();
+        win.beginPath();
+        win.moveTo(x - 71, y + 71);
+        win.lineTo(x + 71, y + 71);
+        win.stroke();
+      }
+
+      function draw_circ(x, y, win) {
+        win.beginPath();
+        win.arc(x, y, 100, 0, 2 * PI);
+        win.stroke();
+        win.beginPath();
+      }
+
+      function update_fields() {
+        var x = document.getElementById("canvas");
+        x.style.display = "block";
+        x = document.getElementById("canvas_H");
+        x.style.display = "none";
+        x = document.getElementById("about");
+        x.style.display = "none";
+        var ctx = c.getContext("2d");
+        ctx.fillStyle = t_col;
+        ctx.fillRect(0, 0, 333, 267);
+        ctx.fillRect(666, 0, 333, 267);
+        ctx.fillStyle = h_col;
+        ctx.fillRect(0, 267, 333, 266);
+        ctx.fillRect(666, 267, 333, 267);
+        ctx.fillStyle = p_col;
+        ctx.fillRect(333, 0, 333, 267);
+        ctx.fillStyle = r_col;
+        ctx.fillRect(333, 267, 333, 266);;
+        ctx.fillStyle = w_col;
+        ctx.fillRect(0, 533, 333, 267);
+        ctx.fillRect(666, 533, 333, 267);
+        ctx.fillStyle = ti_col;
+        ctx.fillRect(333, 533, 333, 267);
+        draw_dial(166, 133, ctx);
+        draw_dial(832, 133, ctx);
+        draw_dial(166, 400, ctx);
+        draw_dial(832, 400, ctx);
+        draw_dial(166, 666, ctx);
+        draw_circ(832, 666, ctx);
+        var xhr = new XMLHttpRequest();
+        var a = '0';
+        var url = "https://script.google.com/macros/s/AKfycbzep_6TONHLbfjt1H23_iCb0DMc126LPo3smsun/exec?read=current";
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState == 4) {
+            var t_r = xhr.responseText;
+            var dat = t_r.split(",");
+            ctx.font = "14px Arial";
+            ctx.fillText("Hello World", 10, 50);
+          }
+        };
+        xhr.open("GET", url, false);
+        xhr.send(null);
+
+
+      };
+      //  var myVar = setInterval( update_fields, 10000);
+      update_fields();
+    }
+  </script>
+  <div class="gwd-div-1w7a">
+    <div class="menu">
+      <button class="gwd-button-39lq gwd-button-it82" id="Btn_4">About</button>
+      <button class="gwd-button-39lq gwd-button-cx08" id="Btn_3"></button>
+      <button class="gwd-button-39lq gwd-button-k5iy" id="Btn_2">History</button>
+      <button class="gwd-button-39lq gwd-button-11u5" id="Btn_1">Current</button>
+    </div>
+  </div>
+  <div class="gwd-div-2qgl" id="Data">
+    <div class="about">
+      <canvas id="canvas" height="800" width="1000"></canvas>
+      <canvas id="canvas_H" height="800" width="1000"></canvas>
+      <div>
+        <div class="about" id="about">
+          <h3>Weather Station Operation</h3>
+          <h4>Temperature </h4>
+          <p>Sensor AM2320</p>
+          <h4>Humidity </h4>
+          <p>Sensor AM2320</p>
+          <p></p>
+          <h4>Air Pressure</h4>
+          <p>Sensor BMP180</p>
+          <p></p>
+          <h4>Rain Fall</h4>
+          <p>Count number of drips from calibrated Tube</p>
+          <p></p>
+          <h4>Wind Speed and Direction</h4>
+          <p>Utrasonic Sensors @ N, S, E &amp; W</p>
+          <p>Pulse Sensors N-S, S-N</p>
+          <p>Measure Time of Flight each way to calculte N-S vector</p>
+          <p>Pulse Sensors E-W, W-E</p>
+          <p>Measure Time of Flight each way to calculte E-W vector</p>
+          <p>Calculate Speed of Sound using Temperature and Humidity</p>
+          <p>From above calculate Wind Speed and Bearing using Trig</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</body></html>
