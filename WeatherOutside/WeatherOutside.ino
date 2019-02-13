@@ -36,7 +36,6 @@ unsigned int free_stack_before = 0;
 int http_status = 0;
 String body = "";
 String dataString = "";
-int del = 30;
 
 HTU21D th;
 
@@ -44,11 +43,22 @@ int tx_pin = 16;
 byte channel = 3;
 double            temp, hum;
 
-volatile int      sec_interval = 1000;
+
+uint32_t interval_milli_sec = 800000;
+volatile byte tick = 0;
+volatile int    interval_set = 1000;
 volatile int      weather_status = 0;
 volatile int      rain ;
-volatile boolean getting_data = false;
 
+volatile boolean measure = false;
+volatile boolean  update_outside_data = false;
+volatile boolean getting_data = false;
+volatile boolean  update_froggy_data = false;
+
+
+double  wind_speed = 0;
+double  peak_wind_speed = 0;
+int  bearing = 0;
 
 typedef struct data_packet_1 {
   int16_t status;
@@ -60,6 +70,39 @@ typedef struct data_packet_1 {
 
 remotedata remote_data;
 
+
+void inline timer0_ISR (void) {
+  //Serial.println(millis());
+  if (tick == 0) {
+    tick++;
+    measure = true;
+    timer0_write(ESP.getCycleCount() + (interval_milli_sec * interval_set ));
+    return;
+  }
+
+  if (tick == 1) {
+    update_froggy_data = true;
+    tick++;
+    timer0_write(ESP.getCycleCount() + (interval_milli_sec * interval_set ));
+    return;
+  }
+
+  if (tick == 3) {
+    update_outside_data = true;
+    tick++;
+    timer0_write(ESP.getCycleCount() + (interval_milli_sec * interval_set ));
+    return;
+  }
+
+  if (tick >= 5) {
+    tick = 0;
+    timer0_write(ESP.getCycleCount() + (interval_milli_sec * interval_set ));
+    return;
+  }
+
+  tick++;
+  timer0_write(ESP.getCycleCount() + (interval_milli_sec * interval_set ));
+}
 
 byte Sum(byte  * message, int nBytes)
 {
@@ -127,14 +170,14 @@ void i2c_WindSensor_read() {
   //  {
   //    memcpy(&remote_data, buf, 9);
   //    if (remote_data.status == 0) {
-  //      sensor_data.wind_speed = remote_data.wind_speed;
-  //      sensor_data.peak_wind_speed = remote_data.peak_wind_speed;
-  //      sensor_data.bearing = remote_data.bearing;
+  //      wind_speed = (double)remote_data.wind_speed / 100;
+  //      peak_wind_speed = (double)remote_data.peak_wind_speed / 100;
+  //      bearing = remote_data.bearing;
   //    }
   //    else {
-  //      sensor_data.wind_speed = 0;
-  //      sensor_data.peak_wind_speed = 0;
-  //      sensor_data.bearing = 0;
+  //      wind_speed = 0;
+  //      peak_wind_speed = 0;
+  //      bearing = 0;
   //
   //    }
   //  }
@@ -199,6 +242,55 @@ void Send_Froggy_Data() {
   clock_pulse();
 }
 
+
+int send_data(String data)
+{
+  // Use HTTPSRedirect class to create a new TLS connection
+  client = new HTTPSRedirect(httpsPort);
+  client->setTimeout(10000); // 15 Seconds
+  client->setInsecure();
+  client->setPrintResponseBody(true);
+  client->setContentTypeHeader("application/json");
+
+  //    Serial.print("Connecting to ");
+  //    Serial.print(host);
+  //    Serial.print("  ");
+  // Try to connect for a maximum of 5 times
+  bool flag = false;
+  for (int i = 0; i < 5; i++) {
+    int retval = client->connect(host, httpsPort);
+    if (retval == 1) {
+      flag = true;
+      break;
+    }
+    //   else
+    //      Serial.println("Connection failed. Retrying...");
+  }
+
+  if (!flag) {
+    //      Serial.print("Could not connect to server: ");
+    //      Serial.println(host);
+    //      Serial.println("Exiting...");
+    return 0;
+  }
+  // fetch spreadsheet data
+  //   Serial.println(host + url + dataString);
+  client->GET(url + data, host);
+
+  ESP.getFreeHeap();
+  ESP.getFreeContStack();
+
+  http_status = client->getStatusCode();
+  body = client->getResponseBody();
+  // delete HTTPSRedirect object
+  delete client;
+  client = nullptr;                             //  time taken 3.6 seconds
+  //Serial.print("body = ");
+  //Serial.println(body);
+  if (body == "fail") return 0;
+  return (int) body.toInt();
+}
+
 void setup() {
   Serial.begin(115200);
   Serial.flush();
@@ -218,82 +310,77 @@ void setup() {
   th.begin();
   delay(1000);
   pinMode(tx_pin, OUTPUT);
+
+     hum = th.readHumidity();
+    temp = th.readTemperature();
+  String dataString = "outside," + String(temp) + "," + String(hum) + "," 
+                + String(0)  + "," + String(0)  + "," + String(0)  + "," 
+                + String(0)  + "," + String(weather_status);
+   int del = send_data( dataString);
+
+   if(del < 60) tick = 1 + (int)(del/10);else tick = 0;
+//     Serial.print("tick = "); Serial.println(tick);
+  noInterrupts();
+  timer0_isr_init();
+  timer0_attachInterrupt(timer0_ISR);
+  timer0_write(ESP.getCycleCount() + interval_milli_sec * interval_set );
+  interrupts();
 }
 
 void loop() {
 
-  hum = th.readHumidity();
-  temp = th.readTemperature();         // time taken 72 - 73 milliseconds
 
-  long t = millis();
-  getting_data = true;
-  if (!i2c_RainSensor_read()) weather_status |= 2;
-  while (getting_data) {
-    delay(10);
-    if ((millis() - t ) > 1000) {
-      weather_status |= 2;
-      break;
-    }
-  };                                  // time taken 1 - 2 milliseconds
 
-  //    t = millis();
-  //    i2c_WindSensor_read();
-  //    while (getting_data) {
-  //      delay(10);
-  //      if ((millis() - t ) > 1000) {
-  //        Serial.println("timeout");
-  //        weather_status |= 4;
-  //        // give false data
-  //        break;
-  //      }
+  if (  measure ) {
+    measure = false;
+    weather_status = 0;
+    int repeat = 3;
+    do {
+      hum = th.readHumidity();
+      temp = th.readTemperature();
+      if ((hum != 998) && (temp != 998))
+      {
+        break;
+      }
+      repeat--;
+      if (hum = 998)  weather_status |= 1;
+      if (temp = 998) weather_status |= 2;
 
-  delay(1000);
-  Send_Froggy_Data();
-  delay(3000);
+    } while (repeat > 0);
 
-  dataString = "outside," + String(temp) + "," + String(hum) + ",0,0,0," + String(rain);
+    long t = millis();
+    getting_data = true;
+    if (!i2c_RainSensor_read()) weather_status |= 2;
+    while (getting_data) {
+      delay(10);
+      if ((millis() - t ) > 1000) {
+        weather_status |= 4;
+        break;
+      }
+    };                                  // time taken 1 - 2 milliseconds
 
-  // Use HTTPSRedirect class to create a new TLS connection
-  client = new HTTPSRedirect(httpsPort);
-  client->setTimeout(10000); // 10 Seconds
-  client->setInsecure();
-  client->setPrintResponseBody(true);
-  client->setContentTypeHeader("application/json");
-
-  // Try to connect for a maximum of 5 times
-  bool flag = false;
-  for (int i = 0; i < 5; i++) {
-    int retval = client->connect(host, httpsPort);
-    if (retval == 1) {
-      flag = true;
-      break;
-    }
+    //    t = millis();
+    //    i2c_WindSensor_read();
+    //    while (getting_data) {
+    //      delay(10);
+    //      if ((millis() - t ) > 1000) {
+    //        Serial.println("timeout");
+    //        weather_status |= 8;
+    //        // give false data
+    //        break;
+    //      }
   }
-
-  if (!flag) {
-    //      Serial.print("Could not connect to server: ");
-    //      Serial.println(host);
-    //      Serial.println("Exiting...");
-    return;
+  if ( update_froggy_data) {
+    update_froggy_data = false;
+    Send_Froggy_Data();
   }
-  // fetch spreadsheet data
-  //  Serial.println(host + url + dataString);
-  client->GET(url + dataString, host);
+  if ( update_outside_data) {
+    update_outside_data = false;
+   dataString = "outside," + String(temp) + "," + String(hum) + "," 
+                + String(wind_speed)  + "," + String(peak_wind_speed)  + "," + String(bearing)  + "," 
+                + String(rain)  + "," + String(weather_status);
+    send_data( dataString);
 
-  ESP.getFreeHeap();
-  ESP.getFreeContStack();
-
-  http_status = client->getStatusCode();
-  body = client->getResponseBody();
-  // delete HTTPSRedirect object
-  delete client;
-  client = nullptr;                             //  time taken 3.6 seconds
-
-  if (http_status == 200)
-    del = ((60 - body.toInt()) + 30) * sec_interval;
-  else
-    del = 10 * sec_interval;
-  // clear the string:
-  dataString = "";
-  delay(del);
+    dataString = "";
+  }
 }

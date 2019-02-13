@@ -181,6 +181,24 @@
         win.stroke();
         win.beginPath();
       }
+      
+      function data_plot(x, y, win){
+         var delta;
+        var x1,y1;
+        swicth(x){
+          case 0: delta = (30 + y)/80;
+               x1 = 166;
+               y1 = 133;
+          break;
+        }
+        
+        win.beginPath();
+        win.moveTo(x1, y1);
+     //   win.arc(x1, y1, 90, 0, delta* 2 * PI);
+        win.lineTo(100, 75);
+        win.lineTo(100, 25);
+        win.fill();
+      }
 
       function update_fields() {
         var x = document.getElementById("canvas");
@@ -199,7 +217,7 @@
         ctx.fillStyle = p_col;
         ctx.fillRect(333, 0, 333, 267);
         ctx.fillStyle = r_col;
-        ctx.fillRect(333, 267, 333, 266);;
+        ctx.fillRect(333, 267, 333, 266);
         ctx.fillStyle = w_col;
         ctx.fillRect(0, 533, 333, 267);
         ctx.fillRect(666, 533, 333, 267);
@@ -211,21 +229,23 @@
         draw_dial(832, 400, ctx);
         draw_dial(166, 666, ctx);
         draw_circ(832, 666, ctx);
-         var xhr = new XMLHttpRequest();
-  var a = '0';
-  var url = "https://script.google.com/macros/s/AKfycbzep_6TONHLbfjt1H23_iCb0DMc126LPo3smsun/exec?read=current";
-  xhr.onreadystatechange = function (){
-  if(xhr.readyState == 4){
-  var t_r=xhr.responseText;
-  var dat=t_r.split(",");
-  ctx.font = "14px Arial";
-ctx.fillText("Hello World", 10, 50);
-  }
-  };
-  xhr.open("GET", url, false);
-  xhr.send(null);
-
+        var xhr = new XMLHttpRequest();
+        var a = '0';
+        var url = "https://script.google.com/macros/s/AKfycbzep_6TONHLbfjt1H23_iCb0DMc126LPo3smsun/exec?read=current";
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState == 4) {
+            var t_r = xhr.responseText;
+            var dat = t_r.split(",");
+            ctx.font = "14px Arial";
+            ctx.fillText(dat[0], 10, 50);
         
+         data_plot(0, parseFloat(dat[0]), ctx)
+          }
+        };
+        xhr.open("GET", url, false);
+        xhr.send(null);
+
+
       };
       //  var myVar = setInterval( update_fields, 10000);
       update_fields();
