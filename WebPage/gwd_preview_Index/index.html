@@ -164,41 +164,120 @@ body {
       var w_col = "#AD9CF3"
       var ti_col = "#FFFFFF"
       var PI = 3.1416;
+      var rad = 57.2958;
       var c = document.getElementById("canvas");
       var ch = document.getElementById("canvas_H");
 
-      function draw_dial(x, y, win) {
+      function draw_dial(loc, win) {
+        var x1,y1;
+        var ident;
+        switch(loc) {
+         case 0:  x1 = 166;
+                  y1 = 133;
+            ident = 13;
+                   break;
+         case 1:  x1 = 832;
+                  y1 = 133;
+            ident = 13;
+                   break;
+         case 2:  x1 = 166;
+                  y1 = 400;
+            ident = 11;
+                   break;
+         case 3:  x1 = 832;
+                  y1 = 400;
+            ident = 11;
+                   break;
+         case 4:  x1 = 166;
+                  y1 = 666;
+            ident = 11;
+                   break;
+             }
+        var step = 270/(ident-1);
         win.beginPath();
-        win.arc(x, y, 100, 0.75 * PI, 0.25 * PI);
+        win.arc(x1, y1, 100, 0.75 * PI, 0.25 * PI);
         win.stroke();
         win.beginPath();
-        win.moveTo(x - 71, y + 71);
-        win.lineTo(x + 71, y + 71);
+        win.moveTo(x1 - 71, y1 + 71);
+        win.lineTo(x1 + 71, y1 + 71);
         win.stroke();
+        for(var i = 0 ; i<ident; i++){
+          var x2, y2,x3,y3 ;
+          var ang = (-45 + (step *i))/rad;
+           y2 = y1 - (102* Math.sin(ang));
+           y3 = y1 - (110* Math.sin(ang));
+           x2 = (102* Math.cos(ang))+ x1;
+           x3 = (110* Math.cos(ang))+ x1;
+        win.beginPath();
+        win.moveTo(x2, y2);
+        win.lineTo(x3, y3);
+        win.stroke();
+          
+        }
+        
       }
 
       function draw_circ(x, y, win) {
+          var  ident = 12;
         win.beginPath();
         win.arc(x, y, 100, 0, 2 * PI);
         win.stroke();
         win.beginPath();
-      }
-      
-      function data_plot(x, y, win){
-         var delta;
-        var x1,y1;
-        swicth(x){
-          case 0: delta = (30 + y)/80;
-               x1 = 166;
-               y1 = 133;
-          break;
-        }
-        
+        var step = 360/(ident-1);
+         for(var i = 0 ; i<ident; i++){
+          var x2, y2,x3,y3 ;
+          var ang = (-45 + (step *i))/rad;
+           y2 = y - (102* Math.sin(ang));
+           y3 = y - (110* Math.sin(ang));
+           x2 = (102* Math.cos(ang))+ x;
+           x3 = (110* Math.cos(ang))+ x;
         win.beginPath();
+        win.moveTo(x2, y2);
+        win.lineTo(x3, y3);
+        win.stroke();
+          
+        }
+      }
+
+      function data_plot(x, y, win) {
+        var delta;
+        var x1, y1;
+        switch(x) {
+         case 0:  delta = 0.75 + (((20 + y) / 80) * 2);
+                  x1 = 166;
+                  y1 = 133;
+                   break;
+         case 1:  delta = 0.75 + (((20 + y) / 80) * 2);
+                  x1 = 832;
+                  y1 = 133;
+                   break;
+         case 2:  delta = 0.75 + ((y / 133) * 2);
+                  x1 = 166;
+                  y1 = 400;
+                   break;
+         case 3:  delta = delta = 0.75 + ((y / 133) * 2);
+                  x1 = 832;
+                  y1 = 400;
+                   break;
+             }
+         var x2, y2,x3,y3,x4,y4 ;
+      //    var ang = (-45 + (step *i))/rad;
+           y2 = y1 - (75* Math.sin(delta +0.05 ));
+           y3 = y1 - (95* Math.sin(delta));
+           y4 = y1 - (75* Math.sin(delta-0.05));
+           x2 = (75* Math.cos(delta + 0.05))+ x1;
+           x3 = (95* Math.cos(delta))+ x1;
+           x4 = (75* Math.cos(delta-0.05))+ x1;
+
+        win.beginPath();
+     //  win.moveTo(x1, y1);
+      //  win.arc(x1, y1, 90, 0.75 * PI, delta * PI);
+     //   win.lineTo(x1, y1);
         win.moveTo(x1, y1);
-     //   win.arc(x1, y1, 90, 0, delta* 2 * PI);
-        win.lineTo(100, 75);
-        win.lineTo(100, 25);
+        win.lineTo(x2, y2);
+        win.lineTo(x3, y3);
+        win.lineTo(x4, y4);
+        win.lineTo(x1, y1);
         win.fill();
       }
 
@@ -225,29 +304,31 @@ body {
         ctx.fillRect(666, 533, 333, 267);
         ctx.fillStyle = ti_col;
         ctx.fillRect(333, 533, 333, 267);
-        draw_dial(166, 133, ctx);
-        draw_dial(832, 133, ctx);
-        draw_dial(166, 400, ctx);
-        draw_dial(832, 400, ctx);
-        draw_dial(166, 666, ctx);
+        draw_dial(0, ctx);
+        draw_dial(1, ctx);
+        draw_dial(2, ctx);
+        draw_dial(3, ctx);
+        draw_dial(4, ctx);
         draw_circ(832, 666, ctx);
         var xhr = new XMLHttpRequest();
         var a = '0';
         var url = "https://script.google.com/macros/s/AKfycbzep_6TONHLbfjt1H23_iCb0DMc126LPo3smsun/exec?read=current";
         xhr.onreadystatechange = function() {
-          if (xhr.readyState == 4) {
-            var t_r = xhr.responseText;
-            var dat = t_r.split(",");
-            ctx.font = "14px Arial";
-            ctx.fillText(dat[0], 10, 50);
-        
-         data_plot(0, parseFloat(dat[0]), ctx)
-          }
-        };
+           if (xhr.readyState == 4) {
+              var t_r = xhr.responseText;
+              var dat = t_r.split(",");
+              ctx.font = "14px Arial";
+              ctx.fillText(dat[0], 10, 50);
+              ctx.fillStyle = "Yellow";
+              data_plot(0, parseFloat(dat[0]), ctx);
+              data_plot(1, parseFloat(dat[18]), ctx);
+              ctx.fillStyle = "Green";
+              data_plot(2, parseFloat(dat[3]), ctx);
+              data_plot(3, parseFloat(dat[21]), ctx);
+            }
+          };
         xhr.open("GET", url, false);
         xhr.send(null);
-
-
       };
       //  var myVar = setInterval( update_fields, 10000);
       update_fields();
