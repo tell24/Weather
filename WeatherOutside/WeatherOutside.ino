@@ -41,7 +41,7 @@ HTU21D th;
 
 int tx_pin = 16;
 byte channel = 3;
-double            temp, hum;
+double     temp, hum, old_temp = 0, old_hum = 0;
 
 
 uint32_t interval_milli_sec = 800000;
@@ -311,15 +311,15 @@ void setup() {
   delay(1000);
   pinMode(tx_pin, OUTPUT);
 
-     hum = th.readHumidity();
-    temp = th.readTemperature();
-  String dataString = "outside," + String(temp) + "," + String(hum) + "," 
-                + String(0)  + "," + String(0)  + "," + String(0)  + "," 
-                + String(0)  + "," + String(weather_status);
-   int del = send_data( dataString);
+  hum = th.readHumidity();
+  temp = th.readTemperature();
+  String dataString = "outside," + String(temp) + "," + String(hum) + ","
+                      + String(0)  + "," + String(0)  + "," + String(0)  + ","
+                      + String(0)  + "," + String(weather_status);
+  int del = send_data( dataString);
 
-   if(del < 60) tick = 1 + (int)(del/10);else tick = 0;
-//     Serial.print("tick = "); Serial.println(tick);
+  if (del < 60) tick = 1 + (int)(del / 10); else tick = 0;
+  //     Serial.print("tick = "); Serial.println(tick);
   noInterrupts();
   timer0_isr_init();
   timer0_attachInterrupt(timer0_ISR);
@@ -328,8 +328,6 @@ void setup() {
 }
 
 void loop() {
-
-
 
   if (  measure ) {
     measure = false;
@@ -343,10 +341,18 @@ void loop() {
         break;
       }
       repeat--;
-      if (hum = 998)  weather_status |= 1;
-      if (temp = 998) weather_status |= 2;
-
+      if (hum == 998) {
+        weather_status |= 1;
+        hum =  old_hum;
+      }
+      if (temp == 998) {
+        weather_status |= 2;
+        temp = old_temp;
+      }
     } while (repeat > 0);
+    if (hum > 100)hum = 99.9;
+    old_temp = temp;
+    old_hum = hum;
 
     long t = millis();
     getting_data = true;
@@ -376,9 +382,9 @@ void loop() {
   }
   if ( update_outside_data) {
     update_outside_data = false;
-   dataString = "outside," + String(temp) + "," + String(hum) + "," 
-                + String(wind_speed)  + "," + String(peak_wind_speed)  + "," + String(bearing)  + "," 
-                + String(rain)  + "," + String(weather_status);
+    dataString = "outside," + String(temp) + "," + String(hum) + ","
+                 + String(wind_speed)  + "," + String(peak_wind_speed)  + "," + String(bearing)  + ","
+                 + String(rain)  + "," + String(weather_status);
     send_data( dataString);
 
     dataString = "";

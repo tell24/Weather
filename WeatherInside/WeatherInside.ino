@@ -44,7 +44,7 @@ SFE_BMP180 pressure;
 
 int my_pressure;
 #define ALTITUDE 70.0 // altitude at home
-double temp, hum;
+double temp, hum, old_temp = 0, old_hum = 0;
 
 long data_time = 0;
 int http_status = 0;
@@ -114,97 +114,97 @@ int i2c_Pressure_read()
 int send_data(String data)
 {
   // Use HTTPSRedirect class to create a new TLS connection
-    client = new HTTPSRedirect(httpsPort);
-    client->setTimeout(10000); // 15 Seconds
-    client->setInsecure();
-    client->setPrintResponseBody(true);
-    client->setContentTypeHeader("application/json");
+  client = new HTTPSRedirect(httpsPort);
+  client->setTimeout(10000); // 15 Seconds
+  client->setInsecure();
+  client->setPrintResponseBody(true);
+  client->setContentTypeHeader("application/json");
 
-//    Serial.print("Connecting to ");
-//    Serial.print(host);
-//    Serial.print("  ");
-    // Try to connect for a maximum of 5 times
-    bool flag = false;
-    for (int i = 0; i < 5; i++) {
-      int retval = client->connect(host, httpsPort);
-      if (retval == 1) {
-        flag = true;
-        break;
-      }
-  //   else
-  //      Serial.println("Connection failed. Retrying...");
+  //    Serial.print("Connecting to ");
+  //    Serial.print(host);
+  //    Serial.print("  ");
+  // Try to connect for a maximum of 5 times
+  bool flag = false;
+  for (int i = 0; i < 5; i++) {
+    int retval = client->connect(host, httpsPort);
+    if (retval == 1) {
+      flag = true;
+      break;
     }
+    //   else
+    //      Serial.println("Connection failed. Retrying...");
+  }
 
-    if (!flag) {
-//      Serial.print("Could not connect to server: ");
-//      Serial.println(host);
-//      Serial.println("Exiting...");
-      return 0;
-    }
-    // fetch spreadsheet data
-    //   Serial.println(host + url + dataString);
-    client->GET(url + data, host);
+  if (!flag) {
+    //      Serial.print("Could not connect to server: ");
+    //      Serial.println(host);
+    //      Serial.println("Exiting...");
+    return 0;
+  }
+  // fetch spreadsheet data
+  //   Serial.println(host + url + dataString);
+  client->GET(url + data, host);
 
-    ESP.getFreeHeap();
-    ESP.getFreeContStack();
+  ESP.getFreeHeap();
+  ESP.getFreeContStack();
 
-      http_status = client->getStatusCode();
+  http_status = client->getStatusCode();
   body = client->getResponseBody();
   // delete HTTPSRedirect object
   delete client;
   client = nullptr;                             //  time taken 3.6 seconds
-//Serial.print("body = ");
-//Serial.println(body);
-if(body == "fail") return 0;
-return (int) body.toInt();  
+  //Serial.print("body = ");
+  //Serial.println(body);
+  if (body == "fail") return 0;
+  return (int) body.toInt();
 }
 
 void setup() {
-//  Serial.begin(115200);
-//  Serial.flush();
+  //  Serial.begin(115200);
+  //  Serial.flush();
   inputString.reserve(200);
   free_heap_before = ESP.getFreeHeap();
   free_stack_before = ESP.getFreeContStack();
-//  Serial.printf("Free heap: %u\n", free_heap_before);
-//  Serial.printf("Free stack: %u\n", free_stack_before);
+  //  Serial.printf("Free heap: %u\n", free_heap_before);
+  //  Serial.printf("Free stack: %u\n", free_stack_before);
 
-//  Serial.println();
-//  Serial.print("Connecting to wifi: ");
-//  Serial.println(ssid);
+  //  Serial.println();
+  //  Serial.print("Connecting to wifi: ");
+  //  Serial.println(ssid);
   // flush() is needed to print the above (connecting...) message reliably,
   // in case the wireless connection doesn't go through
-// Serial.flush();
+  // Serial.flush();
 
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
-//    Serial.print(".");
+    //    Serial.print(".");
   }
-//  Serial.println("");
-//  Serial.println("WiFi connected");
-//  Serial.println("IP address: ");
-//  Serial.println(WiFi.localIP());
+  //  Serial.println("");
+  //  Serial.println("WiFi connected");
+  //  Serial.println("IP address: ");
+  //  Serial.println(WiFi.localIP());
 
 
   Wire.begin(0, 2);
 
   if (pressure.begin()) {
- //  Serial.println("BMP180 init success");
+    //  Serial.println("BMP180 init success");
   }
   else
   {
- //   Serial.println("BMP180 init fail\n\n");
+    //   Serial.println("BMP180 init fail\n\n");
   }
   th.begin();
   my_pressure = i2c_Pressure_read();
-   hum = th.readHumidity();
-    temp = th.readTemperature();
-  String dataString = "inside," + String(temp) + "," + String(hum) + "," 
-                + String(my_pressure)  + "," + String(data_status);
-   int del = send_data( dataString);
+  hum = th.readHumidity();
+  temp = th.readTemperature();
+  String dataString = "inside," + String(temp) + "," + String(hum) + ","
+                      + String(my_pressure)  + "," + String(data_status);
+  int del = send_data( dataString);
 
-   if(del < 60) tick = 1 + (int)(del/10);else tick = 0;
-//     Serial.print("tick = "); Serial.println(tick);
+  if (del < 60) tick = 1 + (int)(del / 10); else tick = 0;
+  //     Serial.print("tick = "); Serial.println(tick);
   noInterrupts();
   timer0_isr_init();
   timer0_attachInterrupt(timer0_ISR);
@@ -217,32 +217,41 @@ void loop() {
   // print the string when a newline arrives:
 
   if (  measure ) {
-     measure = false;
+    measure = false;
     int repeat = 3;
-  do{
-    hum = th.readHumidity();
-    temp = th.readTemperature();
-    if((hum != 998) && (temp != 998))
-    {
-      data_status = 0;
-      break;
-    }
-    repeat--;
-    if(hum = 998)data_status = 2;
-    if(temp = 998)data_status = 4;
-  }while(repeat > 0);
-    
+    do {
+      hum = th.readHumidity();
+      temp = th.readTemperature();
+      if ((hum != 998) && (temp != 998))
+      {
+        data_status = 0;
+        break;
+      }
+      repeat--;
+      if (hum == 998) {
+        data_status |= 1;
+        hum =  old_hum;
+      }
+      if (temp == 998) {
+        data_status |= 2;
+        temp = old_temp;
+      }
+    } while (repeat > 0);
+    if (hum > 100)hum = 99.9;
+    old_temp = temp;
+    old_hum = hum;
+
     my_pressure = i2c_Pressure_read();
   }
 
   if ( update_inside_data) {
     update_inside_data = false;
-    String dataString = "inside," + String(temp) + "," + String(hum) + "," 
-                + String(my_pressure)  + "," + String(data_status);
+    String dataString = "inside," + String(temp) + "," + String(hum) + ","
+                        + String(my_pressure)  + "," + String(data_status);
 
 
     send_data( dataString);
-    
+
     dataString = "";
   }
 
