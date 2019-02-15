@@ -57,27 +57,27 @@ body {
     left: 20px;
 }
 .gwd-button-11u5 {
-    height: 40px;
-    top: 5px;
     width: 80px;
     left: 0px;
+    height: 30px;
+    top: 20px;
 }
 .gwd-button-k5iy {
-    height: 39.8px;
-    top: 5px;
     width: 80px;
-    left: 0px;
+    height: 30px;
+    left: -3px;
+    top: 20px;
 }
 .gwd-button-cx08 {
-    height: 39.8px;
-    top: 5px;
     width: 80px;
     left: 0px;
+    height: 30px;
+    top: 6px;
 }
 .gwd-button-it82 {
-    height: 39.8px;
-    top: 5px;
     width: 80px;
+    height: 30px;
+    top: 5px;
     left: 0px;
 }
 .gwd-div-1w7a {
@@ -85,20 +85,21 @@ body {
     top: 0%;
     left: 0%;
     width: 100%;
+    height: 40%;
 }
 .menu {
     margin: auto;
     width: 320px;
     top: 0%;
-    height: 60px;
+    height: 30px;
 }
 .gwd-div-2qgl {
     position: relative;
     overflow: auto;
-    top: 10%;
     left: 0%;
-    height: 90%;
     width: 100%;
+    height: 95%;
+    top: 5%;
 }
 .about {
     text-align: left;
@@ -167,11 +168,13 @@ body {
       var rad = 57.2958;
       var c = document.getElementById("canvas");
       var ch = document.getElementById("canvas_H");
-
+      var dia = 80;
+      
       function draw_dial(loc, win) {
         var x1, y1;
         var ident;
-        var scale = 5, start = -20;
+        var scale = 5,
+          start = -20;
         switch (loc) {
           case 0:
             x1 = 166;
@@ -209,54 +212,64 @@ body {
             start = 0;
             break;
         }
-        var step = 270 / (ident - 1);
+        var step = 240 / (ident - 1);
+        var offset = dia*0.707;
         win.beginPath();
-        win.arc(x1, y1, 100, 0.75 * PI, 0.25 * PI);
+        win.arc(x1, y1, dia, 0.75 * PI, 0.25 * PI);
         win.stroke();
         win.beginPath();
-        win.moveTo(x1 - 71, y1 + 71);
-        win.lineTo(x1 + 71, y1 + 71);
+        win.moveTo(x1 - offset, y1 + offset);
+        win.lineTo(x1 + offset, y1 + offset);
         win.stroke();
         var val;
         for (var i = 0; i < ident; i++) {
           var x2, y2, x3, y3;
-          var ang = (-45 + (step * i)) / rad;
-          y2 = y1 - (102 * Math.sin(ang));
-          y3 = y1 - (110 * Math.sin(ang));
-          x2 = x1 - (102 * Math.cos(ang)) ;
-          x3 = x1 - (110 * Math.cos(ang)) ;
+          var ang = (-30 + (step * i)) / rad;
+          y2 = y1 - ((dia + 2) * Math.sin(ang));
+          y3 = y1 - ((dia + 10) * Math.sin(ang));
+          x2 = x1 - ((dia + 2) * Math.cos(ang));
+          x3 = x1 - ((dia + 10) * Math.cos(ang));
           win.beginPath();
           win.moveTo(x2, y2);
           win.lineTo(x3, y3);
           win.stroke();
-          val =  (i*scale)+start ;
-          y2 = y1+5 - (125 * Math.sin(ang));
-          x2 = x1-10 - (125 * Math.cos(ang));
-          
-            win.font = "14px Arial";
-            win.fillText(val.toString(), x2, y2);
-          
+          val = (i * scale) + start;
+          y2 = y1 + 5 - ((dia+25) * Math.sin(ang));
+          x2 = x1 - 10 - ((dia+25) * Math.cos(ang));
+
+          win.font = "14px Arial";
+          win.fillText(val.toString(), x2, y2);
+
         }
       }
 
-      function draw_circ(x, y, win) {
-        var ident = 12;
+      function draw_bearing(x, y, win) {
+        var ident = 8;
+        var direction = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
         win.beginPath();
-        win.arc(x, y, 100, 0, 2 * PI);
+        win.arc(x, y, dia, 0, 2 * PI);
         win.stroke();
         win.beginPath();
-        var step = 360 / (ident - 1);
+        
+        var step = 360 / ident;        
         for (var i = 0; i < ident; i++) {
           var x2, y2, x3, y3;
-          var ang = (-45 + (step * i)) / rad;
-          y2 = y - (102 * Math.sin(ang));
-          y3 = y - (110 * Math.sin(ang));
-          x2 = (102 * Math.cos(ang)) + x;
-          x3 = (110 * Math.cos(ang)) + x;
+          var ang = (90 + (step * i)) / rad;
+          y2 = y - ((dia + 2) * Math.sin(ang));
+          y3 = y - ((dia + 10)  * Math.sin(ang));
+          x2 = ((dia + 2)  * Math.cos(ang)) + x;
+          x3 = ((dia + 10)  * Math.cos(ang)) + x;
           win.beginPath();
           win.moveTo(x2, y2);
           win.lineTo(x3, y3);
           win.stroke();
+          
+          val = (i * 30);
+          y2 = y + 5 - ((dia+25) * Math.sin(ang));
+          x2 = x - 5 - ((dia+25) * Math.cos(ang));
+
+          win.font = "14px Arial";
+          win.fillText(direction[i], x2, y2);
         }
       }
 
@@ -265,33 +278,33 @@ body {
         var x1, y1;
         switch (x) {
           case 0:
-            delta =  (1.25 - (((20 + y) / 80) * 2)) *PI;
+            delta = (1.1667 - (((20 + y) / 90) * 2)) * PI;
             x1 = 166;
             y1 = 133;
             break;
           case 1:
-            delta = (1.25 - (((20 + y) / 80) * 2))* PI;
+            delta = (1.1667 - (((20 + y) / 90) * 2)) * PI;
             x1 = 832;
             y1 = 133;
             break;
           case 2:
-            delta = (1.25 - ((y / 133) * 2))* PI;
+            delta = (1.1667 - ((y / 150) * 2)) * PI;
             x1 = 166;
             y1 = 400;
             break;
           case 3:
-            delta = delta = (1.25 - ((y / 133) * 2)) * PI;
+            delta = (1.1667 - ((y / 150) * 2)) * PI;
             x1 = 832;
             y1 = 400;
             break;
         }
         var x2, y2, x3, y3, x4, y4;
-        y2 = y1 - (75 * Math.sin(delta + 0.05));
-        y3 = y1 - (95 * Math.sin(delta));
-        y4 = y1 - (75 * Math.sin(delta - 0.05));
-        x2 = (75 * Math.cos(delta + 0.05)) + x1;
-        x3 = (95 * Math.cos(delta)) + x1;
-        x4 = (75 * Math.cos(delta - 0.05)) + x1;
+        y2 = y1 - ((dia - 15) * Math.sin(delta + 0.05));
+        y3 = y1 - ((dia -5) * Math.sin(delta));
+        y4 = y1 - ((dia - 15) * Math.sin(delta - 0.05));
+        x2 = ((dia - 15) * Math.cos(delta + 0.05)) + x1;
+        x3 = ((dia -5) * Math.cos(delta)) + x1;
+        x4 = ((dia - 15) * Math.cos(delta - 0.05)) + x1;
 
         win.beginPath();
         win.moveTo(x1, y1);
@@ -330,7 +343,7 @@ body {
         draw_dial(2, ctx);
         draw_dial(3, ctx);
         draw_dial(4, ctx);
-        draw_circ(832, 666, ctx);
+        draw_bearing(832, 666, ctx);
         var xhr = new XMLHttpRequest();
         var a = '0';
         var url = "https://script.google.com/macros/s/AKfycbzep_6TONHLbfjt1H23_iCb0DMc126LPo3smsun/exec?read=current";
@@ -344,8 +357,8 @@ body {
             ctx.fillStyle = "Green";
             data_plot(2, parseFloat(dat[3]), ctx);
             data_plot(3, parseFloat(dat[21]), ctx);
-            
-                  }
+
+          }
         };
         xhr.open("GET", url, false);
         xhr.send(null);
@@ -354,12 +367,12 @@ body {
       update_fields();
     }
   </script>
-  <div class="gwd-div-1w7a">
-    <div class="menu">
-      <button class="gwd-button-39lq gwd-button-it82" id="Btn_4">About</button>
-      <button class="gwd-button-39lq gwd-button-cx08" id="Btn_3"></button>
-      <button class="gwd-button-39lq gwd-button-k5iy" id="Btn_2">History</button>
-      <button class="gwd-button-39lq gwd-button-11u5" id="Btn_1">Current</button>
+  <div class="gwd-div-1w7a gwd-gen-19kmgwdanimation">
+    <div class="menu gwd-gen-1ep5gwdanimation">
+      <button class="gwd-button-39lq gwd-button-it82 gwd-gen-it1egwdanimation" id="Btn_4">About</button>
+      <button class="gwd-button-39lq gwd-button-cx08 gwd-gen-9blwgwdanimation" id="Btn_3"></button>
+      <button class="gwd-button-39lq gwd-button-k5iy gwd-gen-5uiygwdanimation" id="Btn_2">History</button>
+      <button class="gwd-button-39lq gwd-button-11u5 gwd-gen-1ju9gwdanimation" id="Btn_1">Current</button>
     </div>
   </div>
   <div class="gwd-div-2qgl" id="Data">
