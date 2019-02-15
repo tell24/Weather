@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html><head><meta name="GCD" content="YTk3ODQ3ZWZhN2I4NzZmMzBkNTEwYjJl37e3276d31ec18dd1a699abd14b3fa89"/>
+<html><head><meta name="GCD" content="YTk3ODQ3ZWZhN2I4NzZmMzBkNTEwYjJl9e95f61016dee4f757a68e9e35aef5fa"/>
   <meta charset="utf-8">
   <title>Index</title>
   <meta name="generator" content="Google Web Designer 5.0.3.0130">
@@ -169,7 +169,7 @@ body {
       var c = document.getElementById("canvas");
       var ch = document.getElementById("canvas_H");
       var dia = 80;
-      
+
       function draw_dial(loc, win) {
         var x1, y1;
         var ident;
@@ -205,6 +205,13 @@ body {
             start = 0;
             break;
           case 4:
+            x1 = 500;
+            y1 = 133;
+            ident = 11;
+            scale = 20;
+            start = 860;
+            break;
+          case 5:
             x1 = 166;
             y1 = 666;
             ident = 11;
@@ -213,7 +220,7 @@ body {
             break;
         }
         var step = 240 / (ident - 1);
-        var offset = dia*0.707;
+        var offset = dia * 0.707;
         win.beginPath();
         win.arc(x1, y1, dia, 0.75 * PI, 0.25 * PI);
         win.stroke();
@@ -234,8 +241,8 @@ body {
           win.lineTo(x3, y3);
           win.stroke();
           val = (i * scale) + start;
-          y2 = y1 + 5 - ((dia+25) * Math.sin(ang));
-          x2 = x1 - 10 - ((dia+25) * Math.cos(ang));
+          y2 = y1 + 5 - ((dia + 25) * Math.sin(ang));
+          x2 = x1 - 10 - ((dia + 25) * Math.cos(ang));
 
           win.font = "14px Arial";
           win.fillText(val.toString(), x2, y2);
@@ -250,23 +257,23 @@ body {
         win.arc(x, y, dia, 0, 2 * PI);
         win.stroke();
         win.beginPath();
-        
-        var step = 360 / ident;        
+
+        var step = 360 / ident;
         for (var i = 0; i < ident; i++) {
           var x2, y2, x3, y3;
           var ang = (90 + (step * i)) / rad;
           y2 = y - ((dia + 2) * Math.sin(ang));
-          y3 = y - ((dia + 10)  * Math.sin(ang));
-          x2 = ((dia + 2)  * Math.cos(ang)) + x;
-          x3 = ((dia + 10)  * Math.cos(ang)) + x;
+          y3 = y - ((dia + 10) * Math.sin(ang));
+          x2 = ((dia + 2) * Math.cos(ang)) + x;
+          x3 = ((dia + 10) * Math.cos(ang)) + x;
           win.beginPath();
           win.moveTo(x2, y2);
           win.lineTo(x3, y3);
           win.stroke();
-          
+
           val = (i * 30);
-          y2 = y + 5 - ((dia+25) * Math.sin(ang));
-          x2 = x - 5 - ((dia+25) * Math.cos(ang));
+          y2 = y + 5 - ((dia + 25) * Math.sin(ang));
+          x2 = x - 5 - ((dia + 25) * Math.cos(ang));
 
           win.font = "14px Arial";
           win.fillText(direction[i], x2, y2);
@@ -297,13 +304,28 @@ body {
             x1 = 832;
             y1 = 400;
             break;
+          case 4:
+            delta = (1.1667 - (((y - 860) / 300) * 2)) * PI;
+            x1 = 500;
+            y1 = 133;
+            break;
+          case 5:
+            delta = (1.1667 - ((y / 75) * 2)) * PI;
+            x1 = 166;
+            y1 = 666;
+            break;
+          case 6:
+            delta = (0.5 - ((y / 360) * 2)) * PI;
+            x1 = 832;
+            y1 = 666;
+            break;
         }
         var x2, y2, x3, y3, x4, y4;
         y2 = y1 - ((dia - 15) * Math.sin(delta + 0.05));
-        y3 = y1 - ((dia -5) * Math.sin(delta));
+        y3 = y1 - ((dia - 5) * Math.sin(delta));
         y4 = y1 - ((dia - 15) * Math.sin(delta - 0.05));
         x2 = ((dia - 15) * Math.cos(delta + 0.05)) + x1;
-        x3 = ((dia -5) * Math.cos(delta)) + x1;
+        x3 = ((dia - 5) * Math.cos(delta)) + x1;
         x4 = ((dia - 15) * Math.cos(delta - 0.05)) + x1;
 
         win.beginPath();
@@ -343,6 +365,7 @@ body {
         draw_dial(2, ctx);
         draw_dial(3, ctx);
         draw_dial(4, ctx);
+        draw_dial(5, ctx);
         draw_bearing(832, 666, ctx);
         var xhr = new XMLHttpRequest();
         var a = '0';
@@ -357,6 +380,9 @@ body {
             ctx.fillStyle = "Green";
             data_plot(2, parseFloat(dat[3]), ctx);
             data_plot(3, parseFloat(dat[21]), ctx);
+            data_plot(4, parseFloat(dat[24]), ctx);
+            data_plot(5, parseFloat("10"), ctx);
+            data_plot(6, parseFloat("90"), ctx);
 
           }
         };
