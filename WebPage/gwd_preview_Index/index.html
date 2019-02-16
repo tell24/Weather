@@ -158,12 +158,13 @@ body {
 <body class="htmlNoPages">
   <script type="text/javascript">
     window.onload = function() {
-      var t_col = "#F07C60"
-      var h_col = "#8CC8E8"
-      var r_col = "#A3CDA8"
-      var p_col = "#BDBBB3"
-      var w_col = "#AD9CF3"
-      var ti_col = "#FFFFFF"
+      var t_col = "#F07C60";
+      var h_col = "#8CC8E8";
+      var r_col = "#A3CDA8";
+      var p_col = "#BDBBB3";
+      var w_col = "#AD9CF3";
+      var ti_col = "#FFFFFF";
+      var peak_col = "#ff0000";
       var PI = 3.1416;
       var rad = 57.2958;
       var c = document.getElementById("canvas");
@@ -337,7 +338,7 @@ body {
             y1 = 666;
             break;
           case 7:
-            delta = (0.5 - ((y / 360) * 2)) * PI;
+            delta = (1.1667 - ((y / 75) * 2)) * PI;
             x1 = 166;
             y1 = 666;
             peak = true;
@@ -345,21 +346,24 @@ body {
         }
         var x2, y2, x3, y3, x4, y4;
         if (peak) {
-          y2 = y1 - ((dia - 5) * Math.sin(delta + 0.05));
+          
+        win.fillStyle = peak_col;
+          y2 = y1 - ((dia - 10) * Math.sin(delta + 0.075));
           y3 = y1 - (dia * Math.sin(delta));
-          y4 = y1 - ((dia - 5) * Math.sin(delta - 0.05));
-          x2 = ((dia - 5) * Math.cos(delta + 0.05)) + x1;
+          y4 = y1 - ((dia - 10) * Math.sin(delta - 0.075));
+          x2 = ((dia - 10) * Math.cos(delta + 0.075)) + x1;
           x3 = (dia * Math.cos(delta)) + x1;
-          x4 = ((dia - 5) * Math.cos(delta - 0.05)) + x1;
+          x4 = ((dia - 10) * Math.cos(delta - 0.075)) + x1;
 
           win.beginPath();
           win.moveTo(x2, y2);
           win.lineTo(x3, y3);
           win.lineTo(x4, y4);
-          win.lineTo(x, y2);
+          win.lineTo(x2, y2);
           win.fill();
 
         } else {
+         
           y2 = y1 - ((dia - 15) * Math.sin(delta + 0.05));
           y3 = y1 - ((dia - 5) * Math.sin(delta));
           y4 = y1 - ((dia - 15) * Math.sin(delta - 0.05));
@@ -414,10 +418,9 @@ body {
           if (xhr.readyState == 4) {
             var t_r = xhr.responseText;
             var dat = t_r.split(",");
-            ctx.fillStyle = "Yellow";
+            ctx.fillStyle = "Black";
             data_plot(0, parseFloat(dat[0]), ctx);
             data_plot(1, parseFloat(dat[18]), ctx);
-            ctx.fillStyle = "Green";
             data_plot(2, parseFloat(dat[3]), ctx);
             data_plot(3, parseFloat(dat[21]), ctx);
             data_plot(4, parseFloat(dat[24]), ctx);
