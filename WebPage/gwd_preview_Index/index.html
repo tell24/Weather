@@ -264,6 +264,12 @@ body {
         win.fillText(text, x1, y1 + 105);
       }
 
+      function draw_rain(win) {
+    
+        win.rect(450,300,100,200);
+        win.stroke();
+      }
+      
       function draw_bearing(x, y, win) {
         var ident = 8;
         var direction = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
@@ -411,6 +417,7 @@ body {
         draw_dial(4, ctx);
         draw_dial(5, ctx);
         draw_bearing(832, 666, ctx);
+        draw_rain(ctx) 
         var xhr = new XMLHttpRequest();
         var a = '0';
         var url = "https://script.google.com/macros/s/AKfycbzep_6TONHLbfjt1H23_iCb0DMc126LPo3smsun/exec?read=current";
