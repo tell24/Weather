@@ -167,14 +167,14 @@
       var c = document.getElementById("canvas");
       var ch = document.getElementById("canvas_H");
       var dia = 80;
-      
+
       function draw_dial(loc, win) {
         var x1, y1;
         var ident;
         var scale = 5,
           start = -20;
         var text = "";
-        win.textAlign = "center";  
+        win.textAlign = "center";
         win.fillStyle = "Black";
         win.font = "14px Arial";
         switch (loc) {
@@ -216,7 +216,7 @@
             ident = 11;
             scale = 20;
             start = 860;
-            
+
             text = "Air Pressure ( mb )";
             break;
           case 5:
@@ -253,12 +253,12 @@
           y2 = y1 + 5 - ((dia + 25) * Math.sin(ang));
           x2 = x1 - ((dia + 25) * Math.cos(ang));
 
-         
+
           win.fillText(val.toString(), x2, y2);
 
         }
-        
-          win.fillText(text, x1 , y1 + 105);
+
+        win.fillText(text, x1, y1 + 105);
       }
 
       function draw_bearing(x, y, win) {
@@ -268,7 +268,7 @@
         win.arc(x, y, dia, 0, 2 * PI);
         win.stroke();
         win.beginPath();
-        win.textAlign = "center";  
+        win.textAlign = "center";
         win.fillStyle = "Black";
         win.font = "14px Arial";
         var step = 360 / ident;
@@ -285,13 +285,13 @@
           win.stroke();
 
           val = (i * 30);
-          y2 = y +5 - ((dia + 25) * Math.sin(ang));
-          x2 = x  - ((dia + 25) * Math.cos(ang));
+          y2 = y + 5 - ((dia + 25) * Math.sin(ang));
+          x2 = x - ((dia + 25) * Math.cos(ang));
           win.fillText(direction[i], x2, y2);
         }
-        
-            text = "Wind Bearing ( mph )";
-          win.fillText(text, x , y + 125);
+
+        text = "Wind Bearing ( mph )";
+        win.fillText(text, x, y + 125);
       }
 
       function data_plot(x, y, win) {
@@ -342,40 +342,37 @@
             break;
         }
         var x2, y2, x3, y3, x4, y4;
-        if(peak)
-          {
-        y2 = y1 - ((dia - 5) * Math.sin(delta + 0.05));
-        y3 = y1 - (dia  * Math.sin(delta));
-        y4 = y1 - ((dia - 5) * Math.sin(delta - 0.05));
-        x2 = ((dia - 5) * Math.cos(delta + 0.05)) + x1;
-        x3 = (dia  * Math.cos(delta)) + x1;
-        x4 = ((dia - 5) * Math.cos(delta - 0.05)) + x1;
+        if (peak) {
+          y2 = y1 - ((dia - 5) * Math.sin(delta + 0.05));
+          y3 = y1 - (dia * Math.sin(delta));
+          y4 = y1 - ((dia - 5) * Math.sin(delta - 0.05));
+          x2 = ((dia - 5) * Math.cos(delta + 0.05)) + x1;
+          x3 = (dia * Math.cos(delta)) + x1;
+          x4 = ((dia - 5) * Math.cos(delta - 0.05)) + x1;
 
-        win.beginPath();
-        win.moveTo(x2, y2);
-        win.lineTo(x3, y3);
-        win.lineTo(x4, y4);
-        win.lineTo(x, y2);
-        win.fill();
-            
-          }
-        else
-          {
-        y2 = y1 - ((dia - 15) * Math.sin(delta + 0.05));
-        y3 = y1 - ((dia - 5) * Math.sin(delta));
-        y4 = y1 - ((dia - 15) * Math.sin(delta - 0.05));
-        x2 = ((dia - 15) * Math.cos(delta + 0.05)) + x1;
-        x3 = ((dia - 5) * Math.cos(delta)) + x1;
-        x4 = ((dia - 15) * Math.cos(delta - 0.05)) + x1;
+          win.beginPath();
+          win.moveTo(x2, y2);
+          win.lineTo(x3, y3);
+          win.lineTo(x4, y4);
+          win.lineTo(x2, y2);
+          win.fill();
 
-        win.beginPath();
-        win.moveTo(x1, y1);
-        win.lineTo(x2, y2);
-        win.lineTo(x3, y3);
-        win.lineTo(x4, y4);
-        win.lineTo(x1, y1);
-        win.fill();
-          }
+        } else {
+          y2 = y1 - ((dia - 15) * Math.sin(delta + 0.05));
+          y3 = y1 - ((dia - 5) * Math.sin(delta));
+          y4 = y1 - ((dia - 15) * Math.sin(delta - 0.05));
+          x2 = ((dia - 15) * Math.cos(delta + 0.05)) + x1;
+          x3 = ((dia - 5) * Math.cos(delta)) + x1;
+          x4 = ((dia - 15) * Math.cos(delta - 0.05)) + x1;
+
+          win.beginPath();
+          win.moveTo(x1, y1);
+          win.lineTo(x2, y2);
+          win.lineTo(x3, y3);
+          win.lineTo(x4, y4);
+          win.lineTo(x1, y1);
+          win.fill();
+        }
       }
 
       function update_fields() {
@@ -421,7 +418,7 @@
             ctx.fillStyle = "Green";
             data_plot(2, parseFloat(dat[3]), ctx);
             data_plot(3, parseFloat(dat[21]), ctx);
-            data_plot(4, parseFloat(dat[24]), ctx);            
+            data_plot(4, parseFloat(dat[24]), ctx);
             data_plot(5, parseFloat("10"), ctx);
             data_plot(6, parseFloat("90"), ctx);
             data_plot(7, parseFloat("15"), ctx);
@@ -430,7 +427,7 @@
         xhr.open("GET", url, false);
         xhr.send(null);
       };
-        var myVar = setInterval( update_fields, 10000);
+      var myVar = setInterval(update_fields, 10000);
       update_fields();
     }
   </script>
