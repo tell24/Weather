@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html><head><meta name="GCD" content="YTk3ODQ3ZWZhN2I4NzZmMzBkNTEwYjJl9e95f61016dee4f757a68e9e35aef5fa"/>
+<html><head><meta name="GCD" content="YTk3ODQ3ZWZhN2I4NzZmMzBkNTEwYjJl183030a367c268622e820abadd18e7ab"/>
   <meta charset="utf-8">
   <title>Index</title>
   <meta name="generator" content="Google Web Designer 5.0.3.0130">
@@ -158,12 +158,13 @@ body {
 <body class="htmlNoPages">
   <script type="text/javascript">
     window.onload = function() {
-      var t_col = "#F07C60"
-      var h_col = "#8CC8E8"
-      var r_col = "#A3CDA8"
-      var p_col = "#BDBBB3"
-      var w_col = "#AD9CF3"
-      var ti_col = "#FFFFFF"
+      var t_col = "#F07C60";
+      var h_col = "#8CC8E8";
+      var r_col = "#A3CDA8";
+      var p_col = "#BDBBB3";
+      var w_col = "#AD9CF3";
+      var ti_col = "#FFFFFF";
+      var peak_col = "#ff0000";
       var PI = 3.1416;
       var rad = 57.2958;
       var c = document.getElementById("canvas");
@@ -175,6 +176,10 @@ body {
         var ident;
         var scale = 5,
           start = -20;
+        var text = "";
+        win.textAlign = "center";
+        win.fillStyle = "Black";
+        win.font = "14px Arial";
         switch (loc) {
           case 0:
             x1 = 166;
@@ -182,6 +187,7 @@ body {
             ident = 13;
             scale = 5;
             start = -20;
+            text = "Outside Temperature ( C )";
             break;
           case 1:
             x1 = 832;
@@ -189,6 +195,7 @@ body {
             ident = 13;
             scale = 5;
             start = -20;
+            text = "Inside Temperature ( C )";
             break;
           case 2:
             x1 = 166;
@@ -196,6 +203,7 @@ body {
             ident = 11;
             scale = 10;
             start = 0;
+            text = "Outside Humidity ( % )";
             break;
           case 3:
             x1 = 832;
@@ -203,6 +211,7 @@ body {
             ident = 11;
             scale = 10;
             start = 0;
+            text = "Inside Humidity ( % )";
             break;
           case 4:
             x1 = 500;
@@ -210,6 +219,8 @@ body {
             ident = 11;
             scale = 20;
             start = 860;
+
+            text = "Air Pressure ( mb )";
             break;
           case 5:
             x1 = 166;
@@ -217,6 +228,7 @@ body {
             ident = 11;
             scale = 5;
             start = 0;
+            text = "Wind Speed ( mph )";
             break;
         }
         var step = 240 / (ident - 1);
@@ -242,12 +254,14 @@ body {
           win.stroke();
           val = (i * scale) + start;
           y2 = y1 + 5 - ((dia + 25) * Math.sin(ang));
-          x2 = x1 - 10 - ((dia + 25) * Math.cos(ang));
+          x2 = x1 - ((dia + 25) * Math.cos(ang));
 
-          win.font = "14px Arial";
+
           win.fillText(val.toString(), x2, y2);
 
         }
+
+        win.fillText(text, x1, y1 + 105);
       }
 
       function draw_bearing(x, y, win) {
@@ -257,7 +271,9 @@ body {
         win.arc(x, y, dia, 0, 2 * PI);
         win.stroke();
         win.beginPath();
-
+        win.textAlign = "center";
+        win.fillStyle = "Black";
+        win.font = "14px Arial";
         var step = 360 / ident;
         for (var i = 0; i < ident; i++) {
           var x2, y2, x3, y3;
@@ -273,16 +289,18 @@ body {
 
           val = (i * 30);
           y2 = y + 5 - ((dia + 25) * Math.sin(ang));
-          x2 = x - 5 - ((dia + 25) * Math.cos(ang));
-
-          win.font = "14px Arial";
+          x2 = x - ((dia + 25) * Math.cos(ang));
           win.fillText(direction[i], x2, y2);
         }
+
+        text = "Wind Bearing ( mph )";
+        win.fillText(text, x, y + 125);
       }
 
       function data_plot(x, y, win) {
         var delta;
         var x1, y1;
+        var peak = false;
         switch (x) {
           case 0:
             delta = (1.1667 - (((20 + y) / 90) * 2)) * PI;
@@ -319,22 +337,48 @@ body {
             x1 = 832;
             y1 = 666;
             break;
+          case 7:
+            delta = (1.1667 - ((y / 75) * 2)) * PI;
+            x1 = 166;
+            y1 = 666;
+            peak = true;
+            break;
         }
         var x2, y2, x3, y3, x4, y4;
-        y2 = y1 - ((dia - 15) * Math.sin(delta + 0.05));
-        y3 = y1 - ((dia - 5) * Math.sin(delta));
-        y4 = y1 - ((dia - 15) * Math.sin(delta - 0.05));
-        x2 = ((dia - 15) * Math.cos(delta + 0.05)) + x1;
-        x3 = ((dia - 5) * Math.cos(delta)) + x1;
-        x4 = ((dia - 15) * Math.cos(delta - 0.05)) + x1;
+        if (peak) {
 
-        win.beginPath();
-        win.moveTo(x1, y1);
-        win.lineTo(x2, y2);
-        win.lineTo(x3, y3);
-        win.lineTo(x4, y4);
-        win.lineTo(x1, y1);
-        win.fill();
+          win.fillStyle = peak_col;
+          y2 = y1 - ((dia - 10) * Math.sin(delta + 0.075));
+          y3 = y1 - (dia * Math.sin(delta));
+          y4 = y1 - ((dia - 10) * Math.sin(delta - 0.075));
+          x2 = ((dia - 10) * Math.cos(delta + 0.075)) + x1;
+          x3 = (dia * Math.cos(delta)) + x1;
+          x4 = ((dia - 10) * Math.cos(delta - 0.075)) + x1;
+
+          win.beginPath();
+          win.moveTo(x2, y2);
+          win.lineTo(x3, y3);
+          win.lineTo(x4, y4);
+          win.lineTo(x2, y2);
+          win.fill();
+
+        } else {
+
+          y2 = y1 - ((dia - 15) * Math.sin(delta + 0.05));
+          y3 = y1 - ((dia - 5) * Math.sin(delta));
+          y4 = y1 - ((dia - 15) * Math.sin(delta - 0.05));
+          x2 = ((dia - 15) * Math.cos(delta + 0.05)) + x1;
+          x3 = ((dia - 5) * Math.cos(delta)) + x1;
+          x4 = ((dia - 15) * Math.cos(delta - 0.05)) + x1;
+
+          win.beginPath();
+          win.moveTo(x1, y1);
+          win.lineTo(x2, y2);
+          win.lineTo(x3, y3);
+          win.lineTo(x4, y4);
+          win.lineTo(x1, y1);
+          win.fill();
+        }
       }
 
       function update_fields() {
@@ -374,22 +418,27 @@ body {
           if (xhr.readyState == 4) {
             var t_r = xhr.responseText;
             var dat = t_r.split(",");
-            ctx.fillStyle = "Yellow";
+            ctx.fillStyle = "Black";
             data_plot(0, parseFloat(dat[0]), ctx);
-            data_plot(1, parseFloat(dat[18]), ctx);
-            ctx.fillStyle = "Green";
-            data_plot(2, parseFloat(dat[3]), ctx);
-            data_plot(3, parseFloat(dat[21]), ctx);
+            data_plot(1, parseFloat(dat[18]), ctx);              
+            if(parseFloat(dat[3])> 100)
+              data_plot(2, parseFloat("100"), ctx);
+            else
+              data_plot(2, parseFloat(dat[3]), ctx);              
+            if(parseFloat(dat[21])> 100)
+              data_plot(3, parseFloat("100"), ctx);
+            else
+              data_plot(3, parseFloat(dat[21]), ctx);
             data_plot(4, parseFloat(dat[24]), ctx);
             data_plot(5, parseFloat("10"), ctx);
             data_plot(6, parseFloat("90"), ctx);
-
+            data_plot(7, parseFloat("15"), ctx);
           }
         };
         xhr.open("GET", url, false);
         xhr.send(null);
       };
-      //  var myVar = setInterval( update_fields, 10000);
+      var myVar = setInterval(update_fields, 10000);
       update_fields();
     }
   </script>

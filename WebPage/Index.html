@@ -344,8 +344,8 @@
         }
         var x2, y2, x3, y3, x4, y4;
         if (peak) {
-          
-        win.fillStyle = peak_col;
+
+          win.fillStyle = peak_col;
           y2 = y1 - ((dia - 10) * Math.sin(delta + 0.075));
           y3 = y1 - (dia * Math.sin(delta));
           y4 = y1 - ((dia - 10) * Math.sin(delta - 0.075));
@@ -361,7 +361,7 @@
           win.fill();
 
         } else {
-         
+
           y2 = y1 - ((dia - 15) * Math.sin(delta + 0.05));
           y3 = y1 - ((dia - 5) * Math.sin(delta));
           y4 = y1 - ((dia - 15) * Math.sin(delta - 0.05));
@@ -418,9 +418,15 @@
             var dat = t_r.split(",");
             ctx.fillStyle = "Black";
             data_plot(0, parseFloat(dat[0]), ctx);
-            data_plot(1, parseFloat(dat[18]), ctx);
-            data_plot(2, parseFloat(dat[3]), ctx);
-            data_plot(3, parseFloat(dat[21]), ctx);
+            data_plot(1, parseFloat(dat[18]), ctx);              
+            if(parseFloat(dat[3])> 100)
+              data_plot(2, parseFloat("100"), ctx);
+            else
+              data_plot(2, parseFloat(dat[3]), ctx);              
+            if(parseFloat(dat[21])> 100)
+              data_plot(3, parseFloat("100"), ctx);
+            else
+              data_plot(3, parseFloat(dat[21]), ctx);
             data_plot(4, parseFloat(dat[24]), ctx);
             data_plot(5, parseFloat("10"), ctx);
             data_plot(6, parseFloat("90"), ctx);
