@@ -263,11 +263,11 @@
       }
 
       function draw_rain(win) {
-    
-        win.rect(450,300,100,200);
+        win.rect(449, 299, 52, 182);
+        win.rect(501, 299, 52, 182);
         win.stroke();
       }
-      
+
       function draw_bearing(x, y, win) {
         var ident = 8;
         var direction = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
@@ -384,6 +384,26 @@
           win.fill();
         }
       }
+      
+      function rain_plot( now , total, win)
+      {
+        now /= 150;
+        total /= 150;
+        var n_scale = Math.ceil(now);
+        var t_scale = Math.ceil(total);
+        var n_s = 180 * (now/n_scale);
+        var n_t = 180 * (total/t_scale);        
+          win.fillText(n_scale, 360, 300);        
+          win.fillText(t_scale, 640, 300);        
+        win.fillStyle = h_col;
+        win.rect(450, 480-n_s, 50, n_s);
+        win.fill(); 
+        win.beginPath();     
+        win.fillStyle = "Blue";
+        win.rect(502, 480 -n_t, 50, n_t);
+        win.fill();
+        
+      }
 
       function update_fields() {
         var x = document.getElementById("canvas");
@@ -415,7 +435,7 @@
         draw_dial(4, ctx);
         draw_dial(5, ctx);
         draw_bearing(832, 666, ctx);
-        draw_rain(ctx) 
+        draw_rain(ctx)
         var xhr = new XMLHttpRequest();
         var a = '0';
         var url = "https://script.google.com/macros/s/AKfycbzep_6TONHLbfjt1H23_iCb0DMc126LPo3smsun/exec?read=current";
@@ -425,12 +445,12 @@
             var dat = t_r.split(",");
             ctx.fillStyle = "Black";
             data_plot(0, parseFloat(dat[0]), ctx);
-            data_plot(1, parseFloat(dat[18]), ctx);              
-            if(parseFloat(dat[3])> 100)
+            data_plot(1, parseFloat(dat[18]), ctx);
+            if (parseFloat(dat[3]) > 100)
               data_plot(2, parseFloat("100"), ctx);
             else
-              data_plot(2, parseFloat(dat[3]), ctx);              
-            if(parseFloat(dat[21])> 100)
+              data_plot(2, parseFloat(dat[3]), ctx);
+            if (parseFloat(dat[21]) > 100)
               data_plot(3, parseFloat("100"), ctx);
             else
               data_plot(3, parseFloat(dat[21]), ctx);
@@ -438,6 +458,7 @@
             data_plot(5, parseFloat("10"), ctx);
             data_plot(6, parseFloat("90"), ctx);
             data_plot(7, parseFloat("15"), ctx);
+            rain_plot(parseFloat(dat[15]),parseFloat(dat[16]), ctx);
           }
         };
         xhr.open("GET", url, false);
