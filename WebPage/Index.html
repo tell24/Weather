@@ -350,8 +350,6 @@
         }
         var x2, y2, x3, y3, x4, y4;
         if (peak) {
-
-          win.fillStyle = peak_col;
           y2 = y1 - ((dia - 10) * Math.sin(delta + 0.075));
           y3 = y1 - (dia * Math.sin(delta));
           y4 = y1 - ((dia - 10) * Math.sin(delta - 0.075));
@@ -360,6 +358,7 @@
           x4 = ((dia - 10) * Math.cos(delta - 0.075)) + x1;
 
           win.beginPath();
+          win.fillStyle = peak_col;
           win.moveTo(x2, y2);
           win.lineTo(x3, y3);
           win.lineTo(x4, y4);
@@ -384,25 +383,65 @@
           win.fill();
         }
       }
-      
-      function rain_plot( now , total, win)
-      {
-        now /= 150;
+
+      function rain_plot(now, total, win) {
+        now /= 2.5;
         total /= 150;
-        var n_scale = Math.ceil(now);
-        var t_scale = Math.ceil(total);
-        var n_s = 180 * (now/n_scale);
-        var n_t = 180 * (total/t_scale);        
-          win.fillText(n_scale, 360, 300);        
-          win.fillText(t_scale, 640, 300);        
-        win.fillStyle = h_col;
-        win.rect(450, 480-n_s, 50, n_s);
-        win.fill(); 
-        win.beginPath();     
-        win.fillStyle = "Blue";
-        win.rect(502, 480 -n_t, 50, n_t);
-        win.fill();
+        var n_scale = Math.ceil(now+0.5);
+        var t_scale = Math.ceil(total+0.5);
+        var n_s = 180 * (now / n_scale);
+        var n_t = 180 * (total / t_scale);
+        var n_ticks ;
+        if(n_scale<2){ n_ticks = 0.2; ticks = 180/ Math.floor(n_scale/0.2);}
+        else
+        if(n_scale<5) { n_ticks = 0.5; ticks = 180/ Math.floor(n_scale/0.5);}
+        else
+        if(n_scale<20){ n_ticks = 2; ticks = 180/ Math.floor(n_scale/2);}
+        else
+         { n_ticks = 5; ticks = 180/ Math.floor(n_scale/5);}
+        var s = 0;
+        var num = s.toFixed(1); 
+        var y = 481;
+        do{
+          win.beginPath();
+          win.moveTo(444, y);
+          win.lineTo(449, y); 
+          win.stroke();
+          win.fillText(num, 415, y+5);
+          y -= ticks;
+          s += n_ticks;
+          num = s.toFixed(1);
+        }while(s <= n_scale);
         
+        if(t_scale<2){ n_ticks = 0.2; ticks = 180/ Math.floor(t_scale/0.2);}
+        else
+        if(t_scale<5) { n_ticks = 0.5; ticks = 180/ Math.floor(t_scale/0.5);}
+        else
+        if(t_scale<20){ n_ticks = 2; ticks = 180/ Math.floor(t_scale/2);}
+        else
+         { n_ticks = 5; ticks = 180/ Math.floor(t_scale/5);}
+        s = 0;
+        num = s.toFixed(1); 
+        var y = 481;
+        do{
+          win.beginPath();
+          win.moveTo(553, y);
+          win.lineTo(558, y); 
+          win.stroke();
+          win.fillText(num, 580, y+5);
+          y -= ticks;
+          s += n_ticks;
+          num = s.toFixed(1);
+        }while(s <= t_scale);
+        win.beginPath();
+        win.fillStyle = h_col;
+        win.rect(450, 480 - n_s, 50, n_s);
+        win.fill();
+        win.beginPath();
+        win.fillStyle = "Blue";
+        win.rect(502, 480 - n_t, 50, n_t);
+        win.fill();
+
       }
 
       function update_fields() {
@@ -458,7 +497,7 @@
             data_plot(5, parseFloat("10"), ctx);
             data_plot(6, parseFloat("90"), ctx);
             data_plot(7, parseFloat("15"), ctx);
-            rain_plot(parseFloat(dat[15]),parseFloat(dat[16]), ctx);
+            rain_plot(parseFloat(dat[15]), parseFloat(dat[16]), ctx);
           }
         };
         xhr.open("GET", url, false);
