@@ -265,11 +265,11 @@ body {
       }
 
       function draw_rain(win) {
-    
-        win.rect(450,300,100,200);
+
+        win.rect(450, 300, 100, 200);
         win.stroke();
       }
-      
+
       function draw_bearing(x, y, win) {
         var ident = 8;
         var direction = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
@@ -417,7 +417,7 @@ body {
         draw_dial(4, ctx);
         draw_dial(5, ctx);
         draw_bearing(832, 666, ctx);
-        draw_rain(ctx) 
+        draw_rain(ctx)
         var xhr = new XMLHttpRequest();
         var a = '0';
         var url = "https://script.google.com/macros/s/AKfycbzep_6TONHLbfjt1H23_iCb0DMc126LPo3smsun/exec?read=current";
@@ -427,12 +427,12 @@ body {
             var dat = t_r.split(",");
             ctx.fillStyle = "Black";
             data_plot(0, parseFloat(dat[0]), ctx);
-            data_plot(1, parseFloat(dat[18]), ctx);              
-            if(parseFloat(dat[3])> 100)
+            data_plot(1, parseFloat(dat[18]), ctx);
+            if (parseFloat(dat[3]) > 100)
               data_plot(2, parseFloat("100"), ctx);
             else
-              data_plot(2, parseFloat(dat[3]), ctx);              
-            if(parseFloat(dat[21])> 100)
+              data_plot(2, parseFloat(dat[3]), ctx);
+            if (parseFloat(dat[21]) > 100)
               data_plot(3, parseFloat("100"), ctx);
             else
               data_plot(3, parseFloat(dat[21]), ctx);
