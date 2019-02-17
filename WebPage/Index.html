@@ -262,6 +262,12 @@
         win.fillText(text, x1, y1 + 105);
       }
 
+      function draw_rain(win) {
+    
+        win.rect(450,300,100,200);
+        win.stroke();
+      }
+      
       function draw_bearing(x, y, win) {
         var ident = 8;
         var direction = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
@@ -344,8 +350,8 @@
         }
         var x2, y2, x3, y3, x4, y4;
         if (peak) {
-          
-        win.fillStyle = peak_col;
+
+          win.fillStyle = peak_col;
           y2 = y1 - ((dia - 10) * Math.sin(delta + 0.075));
           y3 = y1 - (dia * Math.sin(delta));
           y4 = y1 - ((dia - 10) * Math.sin(delta - 0.075));
@@ -361,7 +367,7 @@
           win.fill();
 
         } else {
-         
+
           y2 = y1 - ((dia - 15) * Math.sin(delta + 0.05));
           y3 = y1 - ((dia - 5) * Math.sin(delta));
           y4 = y1 - ((dia - 15) * Math.sin(delta - 0.05));
@@ -409,6 +415,7 @@
         draw_dial(4, ctx);
         draw_dial(5, ctx);
         draw_bearing(832, 666, ctx);
+        draw_rain(ctx) 
         var xhr = new XMLHttpRequest();
         var a = '0';
         var url = "https://script.google.com/macros/s/AKfycbzep_6TONHLbfjt1H23_iCb0DMc126LPo3smsun/exec?read=current";
@@ -418,9 +425,15 @@
             var dat = t_r.split(",");
             ctx.fillStyle = "Black";
             data_plot(0, parseFloat(dat[0]), ctx);
-            data_plot(1, parseFloat(dat[18]), ctx);
-            data_plot(2, parseFloat(dat[3]), ctx);
-            data_plot(3, parseFloat(dat[21]), ctx);
+            data_plot(1, parseFloat(dat[18]), ctx);              
+            if(parseFloat(dat[3])> 100)
+              data_plot(2, parseFloat("100"), ctx);
+            else
+              data_plot(2, parseFloat(dat[3]), ctx);              
+            if(parseFloat(dat[21])> 100)
+              data_plot(3, parseFloat("100"), ctx);
+            else
+              data_plot(3, parseFloat(dat[21]), ctx);
             data_plot(4, parseFloat(dat[24]), ctx);
             data_plot(5, parseFloat("10"), ctx);
             data_plot(6, parseFloat("90"), ctx);
