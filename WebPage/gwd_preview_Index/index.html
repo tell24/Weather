@@ -115,15 +115,18 @@ body {
       x.style.display = "none";
       x = document.getElementById("canvas_H");
       x.style.display = "none";
+      x.style.visibility = "hidden";
       x = document.getElementById("about");
-      x.style.display = "block";
+      x.style.style.display = "block";
     };
     gwd.current = function(event) {
       // current data
       var x = document.getElementById("canvas");
       x.style.display = "block";
+      x.style.visibility = "visible";
       x = document.getElementById("canvas_H");
       x.style.display = "none";
+      x.style.visibility = "hidden";
       x = document.getElementById("about");
       x.style.display = "none";
     };
@@ -131,8 +134,10 @@ body {
       // show history
       var x = document.getElementById("canvas_H");
       x.style.display = "block";
+      x.style.visibility = "visible";
       x = document.getElementById("canvas");
       x.style.display = "none";
+      x.style.visibility = "hidden";
       x = document.getElementById("about");
       x.style.display = "none";
     };
@@ -468,30 +473,31 @@ body {
         win.rect(502, 460 - n_t, 50, n_t);
         win.fill();
       }
+
       function drawHand(win, pos, length, width) {
         win.beginPath();
         win.lineWidth = width;
         win.lineCap = "round";
-        win.moveTo(500,666);
-        var x = Math.sin(pos/rad) * length;
-        var y = Math.cos(pos/rad) * length;
-        win.lineTo(500 + x, 666 -y);
+        win.moveTo(500, 666);
+        var x = Math.sin(pos / rad) * length;
+        var y = Math.cos(pos / rad) * length;
+        win.lineTo(500 + x, 666 - y);
         win.stroke();
       }
 
       function clock(win) {
-         var step = 30;
-         win.beginPath();          
-         win.arc(500, 666, 80, 0, 2 * PI);
-         win.stroke();
+        var step = 30;
+        win.beginPath();
+        win.arc(500, 666, 80, 0, 2 * PI);
+        win.stroke();
         for (var i = 1; i <= 12; i++) {
           var x2, y2, x3, y3;
           var ang = (90 + (step * i)) / rad;
-          y2 = 666 - ((80 ) * Math.sin(ang));
+          y2 = 666 - ((80) * Math.sin(ang));
           y3 = 666 - ((70) * Math.sin(ang));
           x2 = ((80) * Math.cos(ang)) + 500;
           x3 = ((70) * Math.cos(ang)) + 500;
-          win.beginPath();  
+          win.beginPath();
           win.moveTo(x2, y2);
           win.lineTo(x3, y3);
           win.stroke();
@@ -502,17 +508,17 @@ body {
           win.fillText(i, x2, y2);
         }
 
-        var d,h,m;
+        var d, h, m;
         d = new Date();
-        h=d.getHours();
-        m=d.getMinutes();
-        h=h%12;
+        h = d.getHours();
+        m = d.getMinutes();
+        h = h % 12;
         //hour
-        h=((h/12)*360)+ ((m/60)*30);
-        drawHand(win, h, 80*0.5, 4); 
+        h = ((h / 12) * 360) + ((m / 60) * 30);
+        drawHand(win, h, 80 * 0.5, 4);
         //minute
-        m = (m/60) *360;
-        drawHand(win, m, 80*0.8, 2);
+        m = (m / 60) * 360;
+        drawHand(win, m, 80 * 0.8, 2);
         win.lineWidth = 1;
 
       }
@@ -580,8 +586,14 @@ body {
         xhr.open("GET", url, false);
         xhr.send(null);
       };
-      var myVar = setInterval(update_fields, 10000);
-      update_fields();
+      
+      function sort_update(){
+        var ca = document.getElementById("canvas");
+        if(ca.style.visibility === "visible")
+          update_fields();
+      }
+      var myVar = setInterval(sort_update, 10000);
+      sort_update();
     }
   </script>
   <div class="gwd-div-1w7a gwd-gen-19kmgwdanimation">
