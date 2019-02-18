@@ -263,9 +263,17 @@
       }
 
       function draw_rain(win) {
-        win.rect(449, 299, 52, 182);
-        win.rect(501, 299, 52, 182);
+        win.rect(449, 299, 52, 162);
+        win.rect(501, 299, 52, 162);
         win.stroke();
+        win.beginPath();
+        win.textAlign = "center";
+        win.fillStyle = "Black";
+        win.font = "14px Arial";
+        win.fillText(" now ", 360, 385);
+        win.fillText("this", 630, 385);
+        win.fillText(" hr ", 630, 400);
+        win.fillText("Rain Fall ( mm/h )", 500, 505);
       }
 
       function draw_bearing(x, y, win) {
@@ -387,60 +395,123 @@
       function rain_plot(now, total, win) {
         now /= 2.5;
         total /= 150;
-        var n_scale = Math.ceil(now+0.5);
-        var t_scale = Math.ceil(total+0.5);
-        var n_s = 180 * (now / n_scale);
-        var n_t = 180 * (total / t_scale);
-        var n_ticks ;
-        if(n_scale<2){ n_ticks = 0.2; ticks = 180/ Math.floor(n_scale/0.2);}
-        else
-        if(n_scale<5) { n_ticks = 0.5; ticks = 180/ Math.floor(n_scale/0.5);}
-        else
-        if(n_scale<20){ n_ticks = 2; ticks = 180/ Math.floor(n_scale/2);}
-        else
-         { n_ticks = 5; ticks = 180/ Math.floor(n_scale/5);}
+        var n_scale = Math.ceil(now + 0.5);
+        var t_scale = Math.ceil(total + 0.5);
+        var n_s = 160 * (now / n_scale);
+        var n_t = 160 * (total / t_scale);
+        var n_ticks;
+        if (n_scale < 2) {
+          n_ticks = 0.2;
+          ticks = 162 / Math.floor(n_scale / 0.2);
+        } else
+        if (n_scale < 5) {
+          n_ticks = 0.5;
+          ticks = 162 / Math.floor(n_scale / 0.5);
+        } else
+        if (n_scale < 20) {
+          n_ticks = 2;
+          ticks = 162 / Math.floor(n_scale / 2);
+        } else {
+          n_ticks = 5;
+          ticks = 162 / Math.floor(n_scale / 5);
+        }
         var s = 0;
-        var num = s.toFixed(1); 
-        var y = 481;
-        do{
+        var num = s.toFixed(1);
+        var y = 461;
+        do {
           win.beginPath();
           win.moveTo(444, y);
-          win.lineTo(449, y); 
+          win.lineTo(449, y);
           win.stroke();
-          win.fillText(num, 415, y+5);
+          win.fillText(num, 415, y + 5);
           y -= ticks;
           s += n_ticks;
           num = s.toFixed(1);
-        }while(s <= n_scale);
-        
-        if(t_scale<2){ n_ticks = 0.2; ticks = 180/ Math.floor(t_scale/0.2);}
-        else
-        if(t_scale<5) { n_ticks = 0.5; ticks = 180/ Math.floor(t_scale/0.5);}
-        else
-        if(t_scale<20){ n_ticks = 2; ticks = 180/ Math.floor(t_scale/2);}
-        else
-         { n_ticks = 5; ticks = 180/ Math.floor(t_scale/5);}
+        } while (s <= n_scale);
+
+        if (t_scale < 2) {
+          n_ticks = 0.2;
+          ticks = 162 / Math.floor(t_scale / 0.2);
+        } else
+        if (t_scale < 5) {
+          n_ticks = 0.5;
+          ticks = 162 / Math.floor(t_scale / 0.5);
+        } else
+        if (t_scale < 20) {
+          n_ticks = 2;
+          ticks = 162 / Math.floor(t_scale / 2);
+        } else {
+          n_ticks = 5;
+          ticks = 162 / Math.floor(t_scale / 5);
+        }
         s = 0;
-        num = s.toFixed(1); 
-        var y = 481;
-        do{
+        num = s.toFixed(1);
+        var y = 461;
+        do {
           win.beginPath();
           win.moveTo(553, y);
-          win.lineTo(558, y); 
+          win.lineTo(558, y);
           win.stroke();
-          win.fillText(num, 580, y+5);
+          win.fillText(num, 580, y + 5);
           y -= ticks;
           s += n_ticks;
           num = s.toFixed(1);
-        }while(s <= t_scale);
+        } while (s <= t_scale);
         win.beginPath();
         win.fillStyle = h_col;
-        win.rect(450, 480 - n_s, 50, n_s);
+        win.rect(450, 460 - n_s, 50, n_s);
         win.fill();
         win.beginPath();
         win.fillStyle = "Blue";
-        win.rect(502, 480 - n_t, 50, n_t);
+        win.rect(502, 460 - n_t, 50, n_t);
         win.fill();
+      }
+      function drawHand(win, pos, length, width) {
+        win.beginPath();
+        win.lineWidth = width;
+        win.lineCap = "round";
+        win.moveTo(500,666);
+        var x = Math.sin(pos/rad) * length;
+        var y = Math.cos(pos/rad) * length;
+        win.lineTo(500 + x, 666 -y);
+        win.stroke();
+      }
+
+      function clock(win) {
+         var step = 30;
+         win.beginPath();          
+         win.arc(500, 666, 80, 0, 2 * PI);
+         win.stroke();
+        for (var i = 1; i <= 12; i++) {
+          var x2, y2, x3, y3;
+          var ang = (90 + (step * i)) / rad;
+          y2 = 666 - ((80 ) * Math.sin(ang));
+          y3 = 666 - ((70) * Math.sin(ang));
+          x2 = ((80) * Math.cos(ang)) + 500;
+          x3 = ((70) * Math.cos(ang)) + 500;
+          win.beginPath();  
+          win.moveTo(x2, y2);
+          win.lineTo(x3, y3);
+          win.stroke();
+
+          val = (i * 30);
+          y2 = 671 - ((90) * Math.sin(ang));
+          x2 = 500 - ((90) * Math.cos(ang));
+          win.fillText(i, x2, y2);
+        }
+
+        var d,h,m;
+        d = new Date();
+        h=d.getHours();
+        m=d.getMinutes();
+        h=h%12;
+        //hour
+        h=((h/12)*360)+ ((m/60)*30);
+        drawHand(win, h, 80*0.5, 4); 
+        //minute
+        m = (m/60) *360;
+        drawHand(win, m, 80*0.8, 2);
+        win.lineWidth = 1;
 
       }
 
@@ -474,7 +545,9 @@
         draw_dial(4, ctx);
         draw_dial(5, ctx);
         draw_bearing(832, 666, ctx);
-        draw_rain(ctx)
+        draw_rain(ctx);
+
+        clock(ctx);
         var xhr = new XMLHttpRequest();
         var a = '0';
         var url = "https://script.google.com/macros/s/AKfycbzep_6TONHLbfjt1H23_iCb0DMc126LPo3smsun/exec?read=current";
@@ -498,6 +571,8 @@
             data_plot(6, parseFloat("90"), ctx);
             data_plot(7, parseFloat("15"), ctx);
             rain_plot(parseFloat(dat[15]), parseFloat(dat[16]), ctx);
+
+            clock(ctx);
           }
         };
         xhr.open("GET", url, false);
