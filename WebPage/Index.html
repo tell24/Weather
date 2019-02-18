@@ -108,36 +108,38 @@
   <script type="text/javascript" gwd-events="support" src="gwd-events-support.1.0.js"></script>
   <script type="text/javascript" gwd-events="handlers">
     window.gwd = window.gwd || {};
+    var sort_update;
+     var active_window = 0;
     gwd.about = function(event) {
       var x = document.getElementById("canvas");
       x.style.display = "none";
       x = document.getElementById("canvas_H");
       x.style.display = "none";
-      x.style.visibility = "hidden";
       x = document.getElementById("about");
       x.style.style.display = "block";
+      active_window = 2;
     };
     gwd.current = function(event) {
       // current data
       var x = document.getElementById("canvas");
       x.style.display = "block";
-      x.style.visibility = "visible";
       x = document.getElementById("canvas_H");
       x.style.display = "none";
-      x.style.visibility = "hidden";
       x = document.getElementById("about");
       x.style.display = "none";
+      active_window = 0;
+      sort_update();
     };
     gwd.history = function(event) {
       // show history
       var x = document.getElementById("canvas_H");
       x.style.display = "block";
-      x.style.visibility = "visible";
       x = document.getElementById("canvas");
       x.style.display = "none";
-      x.style.visibility = "hidden";
       x = document.getElementById("about");
       x.style.display = "none";
+      active_window = 1;
+      sort_update();
     };
   </script>
   <script type="text/javascript" gwd-events="registration">
@@ -160,7 +162,8 @@
 
 <body class="htmlNoPages">
   <script type="text/javascript">
-    window.onload = function() {
+    window.onload = function() {      
+     
       var t_col = "#F07C60";
       var h_col = "#8CC8E8";
       var r_col = "#A3CDA8";
@@ -521,7 +524,14 @@
 
       }
 
-      function update_fields() {
+      function update_fields() {  
+         var xhr = new XMLHttpRequest();
+        var a = '0';
+        var url = "https://script.google.com/macros/s/AKfycbzep_6TONHLbfjt1H23_iCb0DMc126LPo3smsun/exec?read=current";
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState == 4) {
+            var t_r = xhr.responseText;
+            var dat = t_r.split(",");
         var x = document.getElementById("canvas");
         x.style.display = "block";
         x = document.getElementById("canvas_H");
@@ -554,13 +564,7 @@
         draw_rain(ctx);
 
         clock(ctx);
-        var xhr = new XMLHttpRequest();
-        var a = '0';
-        var url = "https://script.google.com/macros/s/AKfycbzep_6TONHLbfjt1H23_iCb0DMc126LPo3smsun/exec?read=current";
-        xhr.onreadystatechange = function() {
-          if (xhr.readyState == 4) {
-            var t_r = xhr.responseText;
-            var dat = t_r.split(",");
+       
             ctx.fillStyle = "Black";
             data_plot(0, parseFloat(dat[0]), ctx);
             data_plot(1, parseFloat(dat[18]), ctx);
@@ -581,17 +585,26 @@
             clock(ctx);
           }
         };
-        xhr.open("GET", url, false);
+        xhr.open("GET", url);
         xhr.send(null);
-      };
+      }
       
-      function sort_update(){
-        var ca = document.getElementById("canvas");
-        if(ca.style.visibility === "visible")
+      function update_history() {
+         var ctx = ch.getContext("2d");
+         ctx.fillStyle = t_col;
+         ctx.fillRect(0, 0, 333, 267);
+      }
+      
+      
+      sort_update = function() {       
+        if (active_window == 0)
           update_fields();
+        if (active_window == 1)
+          update_history();
       }
       var myVar = setInterval(sort_update, 10000);
-      sort_update();
+      active_window = 0;
+      sort_update;
     }
   </script>
   <div class="gwd-div-1w7a gwd-gen-19kmgwdanimation">

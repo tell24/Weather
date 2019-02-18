@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html><head><meta name="GCD" content="YTk3ODQ3ZWZhN2I4NzZmMzBkNTEwYjJl183030a367c268622e820abadd18e7ab"/>
+<html><head><meta name="GCD" content="YTk3ODQ3ZWZhN2I4NzZmMzBkNTEwYjJl8e0860df0f04b299df2d7d60c32ccaf0"/>
   <meta charset="utf-8">
   <title>Index</title>
   <meta name="generator" content="Google Web Designer 5.0.3.0130">
@@ -110,13 +110,16 @@ body {
   <script type="text/javascript" gwd-events="support" src="gwd-events-support.1.0.js"></script>
   <script type="text/javascript" gwd-events="handlers">
     window.gwd = window.gwd || {};
+    var sort_update;
+     var active_window = 0;
     gwd.about = function(event) {
       var x = document.getElementById("canvas");
       x.style.display = "none";
       x = document.getElementById("canvas_H");
       x.style.display = "none";
       x = document.getElementById("about");
-      x.style.display = "block";
+      x.style.style.display = "block";
+      active_window = 2;
     };
     gwd.current = function(event) {
       // current data
@@ -126,6 +129,8 @@ body {
       x.style.display = "none";
       x = document.getElementById("about");
       x.style.display = "none";
+      active_window = 0;
+      sort_update();
     };
     gwd.history = function(event) {
       // show history
@@ -135,6 +140,8 @@ body {
       x.style.display = "none";
       x = document.getElementById("about");
       x.style.display = "none";
+      active_window = 1;
+      sort_update();
     };
   </script>
   <script type="text/javascript" gwd-events="registration">
@@ -157,7 +164,8 @@ body {
 
 <body class="htmlNoPages">
   <script type="text/javascript">
-    window.onload = function() {
+    window.onload = function() {      
+     
       var t_col = "#F07C60";
       var h_col = "#8CC8E8";
       var r_col = "#A3CDA8";
@@ -264,6 +272,20 @@ body {
         win.fillText(text, x1, y1 + 105);
       }
 
+      function draw_rain(win) {
+        win.rect(449, 299, 52, 162);
+        win.rect(501, 299, 52, 162);
+        win.stroke();
+        win.beginPath();
+        win.textAlign = "center";
+        win.fillStyle = "Black";
+        win.font = "14px Arial";
+        win.fillText(" now ", 360, 385);
+        win.fillText("this", 630, 385);
+        win.fillText(" hr ", 630, 400);
+        win.fillText("Rain Fall ( mm/h )", 500, 505);
+      }
+
       function draw_bearing(x, y, win) {
         var ident = 8;
         var direction = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
@@ -346,8 +368,6 @@ body {
         }
         var x2, y2, x3, y3, x4, y4;
         if (peak) {
-
-          win.fillStyle = peak_col;
           y2 = y1 - ((dia - 10) * Math.sin(delta + 0.075));
           y3 = y1 - (dia * Math.sin(delta));
           y4 = y1 - ((dia - 10) * Math.sin(delta - 0.075));
@@ -356,6 +376,7 @@ body {
           x4 = ((dia - 10) * Math.cos(delta - 0.075)) + x1;
 
           win.beginPath();
+          win.fillStyle = peak_col;
           win.moveTo(x2, y2);
           win.lineTo(x3, y3);
           win.lineTo(x4, y4);
@@ -381,7 +402,138 @@ body {
         }
       }
 
-      function update_fields() {
+      function rain_plot(now, total, win) {
+        now /= 2.5;
+        total /= 150;
+        var n_scale = Math.ceil(now + 0.5);
+        var t_scale = Math.ceil(total + 0.5);
+        var n_s = 160 * (now / n_scale);
+        var n_t = 160 * (total / t_scale);
+        var n_ticks;
+        if (n_scale < 2) {
+          n_ticks = 0.2;
+          ticks = 162 / Math.floor(n_scale / 0.2);
+        } else
+        if (n_scale < 5) {
+          n_ticks = 0.5;
+          ticks = 162 / Math.floor(n_scale / 0.5);
+        } else
+        if (n_scale < 20) {
+          n_ticks = 2;
+          ticks = 162 / Math.floor(n_scale / 2);
+        } else {
+          n_ticks = 5;
+          ticks = 162 / Math.floor(n_scale / 5);
+        }
+        var s = 0;
+        var num = s.toFixed(1);
+        var y = 461;
+        do {
+          win.beginPath();
+          win.moveTo(444, y);
+          win.lineTo(449, y);
+          win.stroke();
+          win.fillText(num, 415, y + 5);
+          y -= ticks;
+          s += n_ticks;
+          num = s.toFixed(1);
+        } while (s <= n_scale);
+
+        if (t_scale < 2) {
+          n_ticks = 0.2;
+          ticks = 162 / Math.floor(t_scale / 0.2);
+        } else
+        if (t_scale < 5) {
+          n_ticks = 0.5;
+          ticks = 162 / Math.floor(t_scale / 0.5);
+        } else
+        if (t_scale < 20) {
+          n_ticks = 2;
+          ticks = 162 / Math.floor(t_scale / 2);
+        } else {
+          n_ticks = 5;
+          ticks = 162 / Math.floor(t_scale / 5);
+        }
+        s = 0;
+        num = s.toFixed(1);
+        var y = 461;
+        do {
+          win.beginPath();
+          win.moveTo(553, y);
+          win.lineTo(558, y);
+          win.stroke();
+          win.fillText(num, 580, y + 5);
+          y -= ticks;
+          s += n_ticks;
+          num = s.toFixed(1);
+        } while (s <= t_scale);
+        win.beginPath();
+        win.fillStyle = h_col;
+        win.rect(450, 460 - n_s, 50, n_s);
+        win.fill();
+        win.beginPath();
+        win.fillStyle = "Blue";
+        win.rect(502, 460 - n_t, 50, n_t);
+        win.fill();
+      }
+
+      function drawHand(win, pos, length, width) {
+        win.beginPath();
+        win.lineWidth = width;
+        win.lineCap = "round";
+        win.moveTo(500, 666);
+        var x = Math.sin(pos / rad) * length;
+        var y = Math.cos(pos / rad) * length;
+        win.lineTo(500 + x, 666 - y);
+        win.stroke();
+      }
+
+      function clock(win) {
+        var step = 30;
+        win.beginPath();
+        win.arc(500, 666, 80, 0, 2 * PI);
+        win.stroke();
+        for (var i = 1; i <= 12; i++) {
+          var x2, y2, x3, y3;
+          var ang = (90 + (step * i)) / rad;
+          y2 = 666 - ((80) * Math.sin(ang));
+          y3 = 666 - ((70) * Math.sin(ang));
+          x2 = ((80) * Math.cos(ang)) + 500;
+          x3 = ((70) * Math.cos(ang)) + 500;
+          win.beginPath();
+          win.moveTo(x2, y2);
+          win.lineTo(x3, y3);
+          win.stroke();
+
+          val = (i * 30);
+          y2 = 671 - ((90) * Math.sin(ang));
+          x2 = 500 - ((90) * Math.cos(ang));
+          win.fillText(i, x2, y2);
+        }
+
+        var d, h, m;
+        d = new Date();
+        h = d.getHours();
+        m = d.getMinutes();
+        h = h % 12;
+        //hour
+        h = ((h / 12) * 360) + ((m / 60) * 30);
+        drawHand(win, h, 80 * 0.5, 4);
+        //minute
+        m = (m / 60) * 360;
+        drawHand(win, m, 80 * 0.8, 2);
+        win.lineWidth = 1;
+
+      }
+
+      function update_fields() {  
+         var xhr = new XMLHttpRequest();
+        var a = '0';
+        var url = "https://script.google.com/macros/s/AKfycbzep_6TONHLbfjt1H23_iCb0DMc126LPo3smsun/exec?read=current";
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState == 4) {
+            var t_r = xhr.responseText;
+            var dat = t_r.split(",");
         var x = document.getElementById("canvas");
         x.style.display = "block";
         x = document.getElementById("canvas_H");
@@ -411,21 +563,18 @@ body {
         draw_dial(4, ctx);
         draw_dial(5, ctx);
         draw_bearing(832, 666, ctx);
-        var xhr = new XMLHttpRequest();
-        var a = '0';
-        var url = "https://script.google.com/macros/s/AKfycbzep_6TONHLbfjt1H23_iCb0DMc126LPo3smsun/exec?read=current";
-        xhr.onreadystatechange = function() {
-          if (xhr.readyState == 4) {
-            var t_r = xhr.responseText;
-            var dat = t_r.split(",");
+        draw_rain(ctx);
+
+        clock(ctx);
+       
             ctx.fillStyle = "Black";
             data_plot(0, parseFloat(dat[0]), ctx);
-            data_plot(1, parseFloat(dat[18]), ctx);              
-            if(parseFloat(dat[3])> 100)
+            data_plot(1, parseFloat(dat[18]), ctx);
+            if (parseFloat(dat[3]) > 100)
               data_plot(2, parseFloat("100"), ctx);
             else
-              data_plot(2, parseFloat(dat[3]), ctx);              
-            if(parseFloat(dat[21])> 100)
+              data_plot(2, parseFloat(dat[3]), ctx);
+            if (parseFloat(dat[21]) > 100)
               data_plot(3, parseFloat("100"), ctx);
             else
               data_plot(3, parseFloat(dat[21]), ctx);
@@ -433,13 +582,31 @@ body {
             data_plot(5, parseFloat("10"), ctx);
             data_plot(6, parseFloat("90"), ctx);
             data_plot(7, parseFloat("15"), ctx);
+            rain_plot(parseFloat(dat[15]), parseFloat(dat[16]), ctx);
+
+            clock(ctx);
           }
         };
-        xhr.open("GET", url, false);
+        xhr.open("GET", url);
         xhr.send(null);
-      };
-      var myVar = setInterval(update_fields, 10000);
-      update_fields();
+      }
+      
+      function update_history() {
+         var ctx = ch.getContext("2d");
+         ctx.fillStyle = t_col;
+         ctx.fillRect(0, 0, 333, 267);
+      }
+      
+      
+      sort_update = function() {       
+        if (active_window == 0)
+          update_fields();
+        if (active_window == 1)
+          update_history();
+      }
+      var myVar = setInterval(sort_update, 10000);
+      active_window = 0;
+      sort_update;
     }
   </script>
   <div class="gwd-div-1w7a gwd-gen-19kmgwdanimation">
