@@ -85,21 +85,21 @@ body {
     top: 0%;
     left: 0%;
     width: 100%;
-    height: 40%;
+    height: 8%;
 }
 .menu {
     margin: auto;
-    width: 320px;
     top: 0%;
+    width: 320px;
     height: 30px;
 }
 .gwd-div-2qgl {
     position: relative;
     overflow: auto;
     left: 0%;
-    width: 100%;
-    height: 95%;
-    top: 5%;
+    top: 8%;
+    height: 800px;
+    width: 1203px;
 }
 .about {
     text-align: left;
@@ -111,7 +111,7 @@ body {
   <script type="text/javascript" gwd-events="handlers">
     window.gwd = window.gwd || {};
     var sort_update;
-     var active_window = 0;
+    var active_window = 0;
     gwd.about = function(event) {
       var x = document.getElementById("canvas");
       x.style.display = "none";
@@ -164,8 +164,8 @@ body {
 
 <body class="htmlNoPages">
   <script type="text/javascript">
-    window.onload = function() {      
-     
+    window.onload = function() {
+
       var t_col = "#F07C60";
       var h_col = "#8CC8E8";
       var r_col = "#A3CDA8";
@@ -526,47 +526,47 @@ body {
 
       }
 
-      function update_fields() {  
-         var xhr = new XMLHttpRequest();
+      function update_fields() {
+        var xhr = new XMLHttpRequest();
         var a = '0';
         var url = "https://script.google.com/macros/s/AKfycbzep_6TONHLbfjt1H23_iCb0DMc126LPo3smsun/exec?read=current";
         xhr.onreadystatechange = function() {
           if (xhr.readyState == 4) {
             var t_r = xhr.responseText;
             var dat = t_r.split(",");
-        var x = document.getElementById("canvas");
-        x.style.display = "block";
-        x = document.getElementById("canvas_H");
-        x.style.display = "none";
-        x = document.getElementById("about");
-        x.style.display = "none";
-        var ctx = c.getContext("2d");
-        ctx.fillStyle = t_col;
-        ctx.fillRect(0, 0, 333, 267);
-        ctx.fillRect(666, 0, 333, 267);
-        ctx.fillStyle = h_col;
-        ctx.fillRect(0, 267, 333, 266);
-        ctx.fillRect(666, 267, 333, 267);
-        ctx.fillStyle = p_col;
-        ctx.fillRect(333, 0, 333, 267);
-        ctx.fillStyle = r_col;
-        ctx.fillRect(333, 267, 333, 266);
-        ctx.fillStyle = w_col;
-        ctx.fillRect(0, 533, 333, 267);
-        ctx.fillRect(666, 533, 333, 267);
-        ctx.fillStyle = ti_col;
-        ctx.fillRect(333, 533, 333, 267);
-        draw_dial(0, ctx);
-        draw_dial(1, ctx);
-        draw_dial(2, ctx);
-        draw_dial(3, ctx);
-        draw_dial(4, ctx);
-        draw_dial(5, ctx);
-        draw_bearing(832, 666, ctx);
-        draw_rain(ctx);
+            var x = document.getElementById("canvas");
+            x.style.display = "block";
+            x = document.getElementById("canvas_H");
+            x.style.display = "none";
+            x = document.getElementById("about");
+            x.style.display = "none";
+            var ctx = c.getContext("2d");
+            ctx.fillStyle = t_col;
+            ctx.fillRect(0, 0, 333, 267);
+            ctx.fillRect(666, 0, 333, 267);
+            ctx.fillStyle = h_col;
+            ctx.fillRect(0, 267, 333, 266);
+            ctx.fillRect(666, 267, 333, 267);
+            ctx.fillStyle = p_col;
+            ctx.fillRect(333, 0, 333, 267);
+            ctx.fillStyle = r_col;
+            ctx.fillRect(333, 267, 333, 266);
+            ctx.fillStyle = w_col;
+            ctx.fillRect(0, 533, 333, 267);
+            ctx.fillRect(666, 533, 333, 267);
+            ctx.fillStyle = ti_col;
+            ctx.fillRect(333, 533, 333, 267);
+            draw_dial(0, ctx);
+            draw_dial(1, ctx);
+            draw_dial(2, ctx);
+            draw_dial(3, ctx);
+            draw_dial(4, ctx);
+            draw_dial(5, ctx);
+            draw_bearing(832, 666, ctx);
+            draw_rain(ctx);
 
-        clock(ctx);
-       
+            clock(ctx);
+
             ctx.fillStyle = "Black";
             data_plot(0, parseFloat(dat[0]), ctx);
             data_plot(1, parseFloat(dat[18]), ctx);
@@ -590,15 +590,15 @@ body {
         xhr.open("GET", url);
         xhr.send(null);
       }
-      
+
       function update_history() {
-         var ctx = ch.getContext("2d");
-         ctx.fillStyle = t_col;
-         ctx.fillRect(0, 0, 333, 267);
+        var ctx = ch.getContext("2d");
+        ctx.fillStyle = t_col;
+        ctx.fillRect(0, 0, 333, 267);
       }
-      
-      
-      sort_update = function() {       
+
+
+      sort_update = function() {
         if (active_window == 0)
           update_fields();
         if (active_window == 1)
@@ -606,7 +606,7 @@ body {
       }
       var myVar = setInterval(sort_update, 10000);
       active_window = 0;
-      sort_update;
+      sort_update();
     }
   </script>
   <div class="gwd-div-1w7a gwd-gen-19kmgwdanimation">
@@ -618,33 +618,29 @@ body {
     </div>
   </div>
   <div class="gwd-div-2qgl" id="Data">
-    <div class="about">
-      <canvas id="canvas" height="800" width="1000"></canvas>
-      <canvas id="canvas_H" height="800" width="1000"></canvas>
-      <div>
-        <div class="about" id="about">
-          <h3>Weather Station Operation</h3>
-          <h4>Temperature </h4>
-          <p>Sensor AM2320</p>
-          <h4>Humidity </h4>
-          <p>Sensor AM2320</p>
-          <p></p>
-          <h4>Air Pressure</h4>
-          <p>Sensor BMP180</p>
-          <p></p>
-          <h4>Rain Fall</h4>
-          <p>Count number of drips from calibrated Tube</p>
-          <p></p>
-          <h4>Wind Speed and Direction</h4>
-          <p>Utrasonic Sensors @ N, S, E &amp; W</p>
-          <p>Pulse Sensors N-S, S-N</p>
-          <p>Measure Time of Flight each way to calculte N-S vector</p>
-          <p>Pulse Sensors E-W, W-E</p>
-          <p>Measure Time of Flight each way to calculte E-W vector</p>
-          <p>Calculate Speed of Sound using Temperature and Humidity</p>
-          <p>From above calculate Wind Speed and Bearing using Trig</p>
-        </div>
-      </div>
+    <canvas id="canvas" height="800" width="1000"></canvas>
+    <canvas id="canvas_H" height="800" width="1000"></canvas>
+    <div class="about" id="about">
+      <h3>Weather Station Operation</h3>
+      <h4>Temperature </h4>
+      <p>Sensor AM2320</p>
+      <h4>Humidity </h4>
+      <p>Sensor AM2320</p>
+      <p></p>
+      <h4>Air Pressure</h4>
+      <p>Sensor BMP180</p>
+      <p></p>
+      <h4>Rain Fall</h4>
+      <p>Count number of drips from calibrated Tube</p>
+      <p></p>
+      <h4>Wind Speed and Direction</h4>
+      <p>Utrasonic Sensors @ N, S, E &amp; W</p>
+      <p>Pulse Sensors N-S, S-N</p>
+      <p>Measure Time of Flight each way to calculte N-S vector</p>
+      <p>Pulse Sensors E-W, W-E</p>
+      <p>Measure Time of Flight each way to calculte E-W vector</p>
+      <p>Calculate Speed of Sound using Temperature and Humidity</p>
+      <p>From above calculate Wind Speed and Bearing using Trig</p>
     </div>
   </div>
 
