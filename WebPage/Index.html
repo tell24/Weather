@@ -202,6 +202,7 @@
 </head>
 
 <body class="htmlNoPages">
+  <script src= "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
   <script type="text/javascript">
     window.onload = function() {
 
@@ -631,7 +632,14 @@
       }
 
       function update_history() {
+         var chart0 = new Chart(document.getElementById("canvas_H"),{ 
+        type: 'line',
+  data : {labels:["12", "6am", "12", "6pm", "12", "6am", "12", "6pm", "12"],
+ datasets: [{label: "Outside",  borderColor: "#3e95cd", fill: false,data: [0,0,0,8,0,10,0,0] }]},
+        options: {title: { display: true, text: 'Temperature'},
+  animation: {duration: 0, hover: { animationDuration: 0,}, responsiveAnimationDuration: 0,}}});
         
+        chart0.update();
       }
 
 
@@ -648,7 +656,6 @@
   </script>
   <div class="gwd-div-1w7a gwd-gen-19kmgwdanimation">
     <div class="menu gwd-gen-1ep5gwdanimation">
-      
       <button class="gwd-button-39lq gwd-button-it82 gwd-gen-it1egwdanimation" id="Btn_4">About</button>
       <button class="gwd-button-39lq gwd-button-cx08 gwd-gen-9blwgwdanimation" id="Btn_3"></button>
       <button class="gwd-button-39lq gwd-button-k5iy gwd-gen-5uiygwdanimation" id="Btn_2">History</button>
@@ -660,14 +667,14 @@
       <div class="cent_c">
         <canvas id="canvas" height="800" width="1000"></canvas>
       </div>
-      <div id="canvas_H" height="800" width="1500">
-        <select id="duration" height="30" width="100" class="gwd-select-1y2s">
-        <option value="Hour">Hour</option>
-        <option value="Day">Day</option>
-        <option value="Month">Month</option>
-        <option value="Year">Year</option>
-      </select>
-      <h3>Weather History Operation</h3>
+      <div id="canvas_div" height="850" width="1500">
+        <select id="duration" height="50" width="100" class="gwd-select-1y2s">
+          <option value="Hour">Hour</option>
+          <option value="Day">Day</option>
+          <option value="Month">Month</option>
+          <option value="Year">Year</option>
+        </select>
+        <canvas id="canvas_H" Top= 50 height="800" width="1500"></canvas>
       </div>
       <div class="about" id="about">
         <div class="cent">
