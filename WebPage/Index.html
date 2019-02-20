@@ -87,22 +87,51 @@
     .menu {
       margin: auto;
       top: 0%;
-      width: 320px;
+      width: 520px;
       height: 30px;
     }
     .gwd-div-2qgl {
-      position: relative;
+      position: absolute;
+      margin: auto;
+      text-align: center;
       overflow: auto;
-      left: 0%;
       top: 8%;
       height: 800px;
-      width: 1203px;
+      width: 100%;
     }
     .about {
       text-align: left;
       position: relative;
       margin: auto;
+      width: 1500px;
+    }
+    .cent {
+      text-align: left;
+      position: relative;
+      margin: auto;
+      width: 400px;
+    }
+    .cent_c {
+      text-align: left;
+      position: relative;
+      margin: auto;
       width: 1000px;
+    }
+    .gwd-label-p0hn {
+      position: absolute;
+      width: 2px;
+      height: 1px;
+      left: 61px;
+      top: 30px;
+    }
+    .gwd-select-1f3m {
+      left: 25%;
+      top: 2%;
+      height: 40%;
+      width: 10%;
+    }
+    .gwd-select-1y2s {
+      visibility: hidden;
     }
   </style>
   <script type="text/javascript" gwd-events="support" src="gwd-events-support.1.0.js"></script>
@@ -116,7 +145,9 @@
       x = document.getElementById("canvas_H");
       x.style.display = "none";
       x = document.getElementById("about");
-      x.style.style.display = "block";
+      x.style.display = "block";
+      x = document.getElementById("duration");
+      x.style.visibility = "hidden";
       active_window = 2;
     };
     gwd.current = function(event) {
@@ -127,6 +158,8 @@
       x.style.display = "none";
       x = document.getElementById("about");
       x.style.display = "none";
+      x = document.getElementById("duration");
+      x.style.visibility = "hidden";
       active_window = 0;
       sort_update();
     };
@@ -138,8 +171,14 @@
       x.style.display = "none";
       x = document.getElementById("about");
       x.style.display = "none";
+      x = document.getElementById("duration");
+      x.style.visibility = "visible";
       active_window = 1;
       sort_update();
+    };
+    gwd.duration_change = function(event) {
+      // update graph
+      update_history();
     };
   </script>
   <script type="text/javascript" gwd-events="registration">
@@ -149,11 +188,13 @@
       gwd.actions.events.addHandler('Btn_4', 'click', gwd.about, false);
       gwd.actions.events.addHandler('Btn_1', 'click', gwd.current, false);
       gwd.actions.events.addHandler('Btn_2', 'click', gwd.history, false);
+      gwd.actions.events.addHandler('duration', 'change', gwd.duration_change, false);
     };
     gwd.actions.events.deregisterEventHandlers = function(event) {
       gwd.actions.events.removeHandler('Btn_4', 'click', gwd.about, false);
       gwd.actions.events.removeHandler('Btn_1', 'click', gwd.current, false);
       gwd.actions.events.removeHandler('Btn_2', 'click', gwd.history, false);
+      gwd.actions.events.removeHandler('duration', 'change', gwd.duration_change, false);
     };
     document.addEventListener("DOMContentLoaded", gwd.actions.events.registerEventHandlers);
     document.addEventListener("unload", gwd.actions.events.deregisterEventHandlers);
@@ -590,9 +631,7 @@
       }
 
       function update_history() {
-        var ctx = ch.getContext("2d");
-        ctx.fillStyle = t_col;
-        ctx.fillRect(0, 0, 333, 267);
+        
       }
 
 
@@ -609,6 +648,7 @@
   </script>
   <div class="gwd-div-1w7a gwd-gen-19kmgwdanimation">
     <div class="menu gwd-gen-1ep5gwdanimation">
+      
       <button class="gwd-button-39lq gwd-button-it82 gwd-gen-it1egwdanimation" id="Btn_4">About</button>
       <button class="gwd-button-39lq gwd-button-cx08 gwd-gen-9blwgwdanimation" id="Btn_3"></button>
       <button class="gwd-button-39lq gwd-button-k5iy gwd-gen-5uiygwdanimation" id="Btn_2">History</button>
@@ -616,31 +656,46 @@
     </div>
   </div>
   <div class="gwd-div-2qgl" id="Data">
-    <canvas id="canvas" height="800" width="1000"></canvas>
-    <canvas id="canvas_H" height="800" width="1000"></canvas>
-    <div class="about" id="about">
-      <h3>Weather Station Operation</h3>
-      <h4>Temperature </h4>
-      <p>Sensor AM2320</p>
-      <h4>Humidity </h4>
-      <p>Sensor AM2320</p>
-      <p></p>
-      <h4>Air Pressure</h4>
-      <p>Sensor BMP180</p>
-      <p></p>
-      <h4>Rain Fall</h4>
-      <p>Count number of drips from calibrated Tube</p>
-      <p></p>
-      <h4>Wind Speed and Direction</h4>
-      <p>Utrasonic Sensors @ N, S, E &amp; W</p>
-      <p>Pulse Sensors N-S, S-N</p>
-      <p>Measure Time of Flight each way to calculte N-S vector</p>
-      <p>Pulse Sensors E-W, W-E</p>
-      <p>Measure Time of Flight each way to calculte E-W vector</p>
-      <p>Calculate Speed of Sound using Temperature and Humidity</p>
-      <p>From above calculate Wind Speed and Bearing using Trig</p>
+    <div class="about">
+      <div class="cent_c">
+        <canvas id="canvas" height="800" width="1000"></canvas>
+      </div>
+      <div id="canvas_H" height="800" width="1500">
+        <select id="duration" height="30" width="100" class="gwd-select-1y2s">
+        <option value="Hour">Hour</option>
+        <option value="Day">Day</option>
+        <option value="Month">Month</option>
+        <option value="Year">Year</option>
+      </select>
+      <h3>Weather History Operation</h3>
+      </div>
+      <div class="about" id="about">
+        <div class="cent">
+          <h3>Weather Station Operation</h3>
+          <h4>Temperature </h4>
+          <p>Sensor AM2320</p>
+          <h4>Humidity </h4>
+          <p>Sensor AM2320</p>
+          <p></p>
+          <h4>Air Pressure</h4>
+          <p>Sensor BMP180</p>
+          <p></p>
+          <h4>Rain Fall</h4>
+          <p>Count number of drips from calibrated Tube</p>
+          <p></p>
+          <h4>Wind Speed and Direction</h4>
+          <p>Utrasonic Sensors @ N, S, E &amp; W</p>
+          <p>Pulse Sensors N-S, S-N</p>
+          <p>Measure Time of Flight each way to calculte N-S vector</p>
+          <p>Pulse Sensors E-W, W-E</p>
+          <p>Measure Time of Flight each way to calculte E-W vector</p>
+          <p>Calculate Speed of Sound using Temperature and Humidity</p>
+          <p>From above calculate Wind Speed and Bearing using Trig</p>
+        </div>
+      </div>
     </div>
   </div>
+  <label class="gwd-label-p0hn"></label>
 </body>
 
 </html>
