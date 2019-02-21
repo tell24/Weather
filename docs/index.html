@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html><head><meta name="GCD" content="YTk3ODQ3ZWZhN2I4NzZmMzBkNTEwYjJl8e0860df0f04b299df2d7d60c32ccaf0"/>
+<html><head><meta name="GCD" content="YTk3ODQ3ZWZhN2I4NzZmMzBkNTEwYjJl6c0c2372ec626a3dc9727f8cd959459c"/>
   <meta charset="utf-8">
   <title>Index</title>
   <meta name="generator" content="Google Web Designer 5.0.3.0130">
@@ -85,47 +85,93 @@ body {
     top: 0%;
     left: 0%;
     width: 100%;
-    height: 40%;
+    height: 8%;
 }
 .menu {
     margin: auto;
-    width: 320px;
     top: 0%;
+    width: 520px;
     height: 30px;
 }
 .gwd-div-2qgl {
-    position: relative;
+    position: absolute;
+    margin: auto;
+    text-align: center;
     overflow: auto;
-    left: 0%;
+    top: 8%;
+    height: 800px;
     width: 100%;
-    height: 95%;
-    top: 5%;
 }
 .about {
     text-align: left;
     position: relative;
     margin: auto;
+    width: 1500px;
+}
+.cent {
+    text-align: left;
+    position: relative;
+    margin: auto;
+    width: 400px;
+}
+.cent_c {
+    text-align: left;
+    position: relative;
+    margin: auto;
     width: 1000px;
+}
+.gwd-label-p0hn {
+    position: absolute;
+    width: 2px;
+    height: 1px;
+    left: 61px;
+    top: 30px;
+}
+.gwd-select-1f3m {
+    left: 25%;
+    top: 2%;
+    height: 40%;
+    width: 10%;
+}
+.gwd-select-1y2s {
+    visibility: hidden;
+}
+.column {
+    float: left;
+    height: 700px;
+    width: 500px;
+    text-align: center;
+}
+.column_1 {
+    width: 900px;
+    height: 700px;
+    float: right;
+    text-align: center;
+}
+.row::after {
+    content: "";
+    clear: both;
 }</style>
   <script type="text/javascript" gwd-events="support" src="gwd-events-support.1.0.js"></script>
   <script type="text/javascript" gwd-events="handlers">
     window.gwd = window.gwd || {};
     var sort_update;
-     var active_window = 0;
+    var active_window = 0;
     gwd.about = function(event) {
-      var x = document.getElementById("canvas");
+      var x = document.getElementById("cent_c");
       x.style.display = "none";
-      x = document.getElementById("canvas_H");
+      x = document.getElementById("canvas_area_1");
       x.style.display = "none";
       x = document.getElementById("about");
-      x.style.style.display = "block";
+      canvas_area_1
+      x.style.display = "block";
       active_window = 2;
     };
     gwd.current = function(event) {
       // current data
-      var x = document.getElementById("canvas");
+      var x = document.getElementById("cent_c");
       x.style.display = "block";
-      x = document.getElementById("canvas_H");
+      x = document.getElementById("canvas_area_1");
       x.style.display = "none";
       x = document.getElementById("about");
       x.style.display = "none";
@@ -134,14 +180,18 @@ body {
     };
     gwd.history = function(event) {
       // show history
-      var x = document.getElementById("canvas_H");
-      x.style.display = "block";
-      x = document.getElementById("canvas");
+      x = document.getElementById("cent_c");
       x.style.display = "none";
+      x = document.getElementById("canvas_area_1");
+      x.style.display = "block";
       x = document.getElementById("about");
       x.style.display = "none";
       active_window = 1;
       sort_update();
+    };
+    gwd.duration_change = function(event) {
+      // update graph
+      update_history();
     };
   </script>
   <script type="text/javascript" gwd-events="registration">
@@ -151,11 +201,13 @@ body {
       gwd.actions.events.addHandler('Btn_4', 'click', gwd.about, false);
       gwd.actions.events.addHandler('Btn_1', 'click', gwd.current, false);
       gwd.actions.events.addHandler('Btn_2', 'click', gwd.history, false);
+      gwd.actions.events.addHandler('duration', 'change', gwd.duration_change, false);
     };
     gwd.actions.events.deregisterEventHandlers = function(event) {
       gwd.actions.events.removeHandler('Btn_4', 'click', gwd.about, false);
       gwd.actions.events.removeHandler('Btn_1', 'click', gwd.current, false);
       gwd.actions.events.removeHandler('Btn_2', 'click', gwd.history, false);
+      gwd.actions.events.removeHandler('duration', 'change', gwd.duration_change, false);
     };
     document.addEventListener("DOMContentLoaded", gwd.actions.events.registerEventHandlers);
     document.addEventListener("unload", gwd.actions.events.deregisterEventHandlers);
@@ -163,9 +215,10 @@ body {
 </head>
 
 <body class="htmlNoPages">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
   <script type="text/javascript">
-    window.onload = function() {      
-     
+    window.onload = function() {
+
       var t_col = "#F07C60";
       var h_col = "#8CC8E8";
       var r_col = "#A3CDA8";
@@ -176,7 +229,6 @@ body {
       var PI = 3.1416;
       var rad = 57.2958;
       var c = document.getElementById("canvas");
-      var ch = document.getElementById("canvas_H");
       var dia = 80;
 
       function draw_dial(loc, win) {
@@ -526,47 +578,47 @@ body {
 
       }
 
-      function update_fields() {  
-         var xhr = new XMLHttpRequest();
+      function update_fields() {
+        var xhr = new XMLHttpRequest();
         var a = '0';
         var url = "https://script.google.com/macros/s/AKfycbzep_6TONHLbfjt1H23_iCb0DMc126LPo3smsun/exec?read=current";
         xhr.onreadystatechange = function() {
           if (xhr.readyState == 4) {
             var t_r = xhr.responseText;
             var dat = t_r.split(",");
-        var x = document.getElementById("canvas");
-        x.style.display = "block";
-        x = document.getElementById("canvas_H");
-        x.style.display = "none";
-        x = document.getElementById("about");
-        x.style.display = "none";
-        var ctx = c.getContext("2d");
-        ctx.fillStyle = t_col;
-        ctx.fillRect(0, 0, 333, 267);
-        ctx.fillRect(666, 0, 333, 267);
-        ctx.fillStyle = h_col;
-        ctx.fillRect(0, 267, 333, 266);
-        ctx.fillRect(666, 267, 333, 267);
-        ctx.fillStyle = p_col;
-        ctx.fillRect(333, 0, 333, 267);
-        ctx.fillStyle = r_col;
-        ctx.fillRect(333, 267, 333, 266);
-        ctx.fillStyle = w_col;
-        ctx.fillRect(0, 533, 333, 267);
-        ctx.fillRect(666, 533, 333, 267);
-        ctx.fillStyle = ti_col;
-        ctx.fillRect(333, 533, 333, 267);
-        draw_dial(0, ctx);
-        draw_dial(1, ctx);
-        draw_dial(2, ctx);
-        draw_dial(3, ctx);
-        draw_dial(4, ctx);
-        draw_dial(5, ctx);
-        draw_bearing(832, 666, ctx);
-        draw_rain(ctx);
+            var x = document.getElementById("cent_c");
+            x.style.display = "block";
+            x = document.getElementById("canvas_area_1");
+            x.style.display = "none";
+            x = document.getElementById("about");
+            x.style.display = "none";
+            var ctx = c.getContext("2d");
+            ctx.fillStyle = t_col;
+            ctx.fillRect(0, 0, 333, 267);
+            ctx.fillRect(666, 0, 333, 267);
+            ctx.fillStyle = h_col;
+            ctx.fillRect(0, 267, 333, 266);
+            ctx.fillRect(666, 267, 333, 267);
+            ctx.fillStyle = p_col;
+            ctx.fillRect(333, 0, 333, 267);
+            ctx.fillStyle = r_col;
+            ctx.fillRect(333, 267, 333, 266);
+            ctx.fillStyle = w_col;
+            ctx.fillRect(0, 533, 333, 267);
+            ctx.fillRect(666, 533, 333, 267);
+            ctx.fillStyle = ti_col;
+            ctx.fillRect(333, 533, 333, 267);
+            draw_dial(0, ctx);
+            draw_dial(1, ctx);
+            draw_dial(2, ctx);
+            draw_dial(3, ctx);
+            draw_dial(4, ctx);
+            draw_dial(5, ctx);
+            draw_bearing(832, 666, ctx);
+            draw_rain(ctx);
 
-        clock(ctx);
-       
+            clock(ctx);
+
             ctx.fillStyle = "Black";
             data_plot(0, parseFloat(dat[0]), ctx);
             data_plot(1, parseFloat(dat[18]), ctx);
@@ -590,15 +642,153 @@ body {
         xhr.open("GET", url);
         xhr.send(null);
       }
-      
+
       function update_history() {
-         var ctx = ch.getContext("2d");
-         ctx.fillStyle = t_col;
-         ctx.fillRect(0, 0, 333, 267);
+        var chart0 = new Chart(document.getElementById("canvas_a"), {
+          type: 'line',
+          data: {
+            labels: ["12", "6am", "12", "6pm", "12", "6am", "12", "6pm", "12"],
+            datasets: [{
+              label: "Outside",
+              borderColor: "#3e95cd",
+              fill: false,
+              data: [0, 0, 0, 8, 0, 10, 0, 0]
+            }]
+          },
+          options: {
+            title: {
+              display: true,
+              text: 'Temperature'
+            },
+            animation: {
+              duration: 0,
+              hover: {
+                animationDuration: 0,
+              },
+              responsiveAnimationDuration: 0,
+            }
+          }
+        });
+
+        chart0.update();
+        chart0 = new Chart(document.getElementById("canvas_b"), {
+          type: 'line',
+          data: {
+            labels: ["12", "6am", "12", "6pm", "12", "6am", "12", "6pm", "12"],
+            datasets: [{
+              label: "Outside",
+              borderColor: "#3e95cd",
+              fill: false,
+              data: [0, 0, 0, 8, 0, 10, 0, 0]
+            }]
+          },
+          options: {
+            title: {
+              display: true,
+              text: 'Temperature'
+            },
+            animation: {
+              duration: 0,
+              hover: {
+                animationDuration: 0,
+              },
+              responsiveAnimationDuration: 0,
+            }
+          }
+        });
+
+        chart0.update();
+
+        chart0.update();
+        chart0 = new Chart(document.getElementById("canvas_c"), {
+          type: 'line',
+          data: {
+            labels: ["12", "6am", "12", "6pm", "12", "6am", "12", "6pm", "12"],
+            datasets: [{
+              label: "Outside",
+              borderColor: "#3e95cd",
+              fill: false,
+              data: [0, 0, 0, 8, 0, 10, 0, 0]
+            }]
+          },
+          options: {
+            title: {
+              display: true,
+              text: 'Temperature'
+            },
+            animation: {
+              duration: 0,
+              hover: {
+                animationDuration: 0,
+              },
+              responsiveAnimationDuration: 0,
+            }
+          }
+        });
+
+        chart0.update();
+
+        chart0.update();
+        chart0 = new Chart(document.getElementById("canvas_d"), {
+          type: 'line',
+          data: {
+            labels: ["12", "6am", "12", "6pm", "12", "6am", "12", "6pm", "12"],
+            datasets: [{
+              label: "Outside",
+              borderColor: "#3e95cd",
+              fill: false,
+              data: [0, 0, 0, 8, 0, 10, 0, 0]
+            }]
+          },
+          options: {
+            title: {
+              display: true,
+              text: 'Temperature'
+            },
+            animation: {
+              duration: 0,
+              hover: {
+                animationDuration: 0,
+              },
+              responsiveAnimationDuration: 0,
+            }
+          }
+        });
+
+        chart0.update();
+
+        chart0.update();
+        chart0 = new Chart(document.getElementById("canvas_e"), {
+          type: 'line',
+          data: {
+            labels: ["12", "6am", "12", "6pm", "12", "6am", "12", "6pm", "12"],
+            datasets: [{
+              label: "Outside",
+              borderColor: "#3e95cd",
+              fill: false,
+              data: [0, 0, 0, 8, 0, 10, 0, 0]
+            }]
+          },
+          options: {
+            title: {
+              display: true,
+              text: 'Temperature'
+            },
+            animation: {
+              duration: 0,
+              hover: {
+                animationDuration: 0,
+              },
+              responsiveAnimationDuration: 0,
+            }
+          }
+        });
+
+        chart0.update();
       }
-      
-      
-      sort_update = function() {       
+
+
+      sort_update = function() {
         if (active_window == 0)
           update_fields();
         if (active_window == 1)
@@ -606,7 +796,7 @@ body {
       }
       var myVar = setInterval(sort_update, 10000);
       active_window = 0;
-      sort_update;
+      sort_update();
     }
   </script>
   <div class="gwd-div-1w7a gwd-gen-19kmgwdanimation">
@@ -619,34 +809,65 @@ body {
   </div>
   <div class="gwd-div-2qgl" id="Data">
     <div class="about">
-      <canvas id="canvas" height="800" width="1000"></canvas>
-      <canvas id="canvas_H" height="800" width="1000"></canvas>
-      <div>
-        <div class="about" id="about">
-          <h3>Weather Station Operation</h3>
-          <h4>Temperature </h4>
-          <p>Sensor AM2320</p>
-          <h4>Humidity </h4>
-          <p>Sensor AM2320</p>
-          <p></p>
-          <h4>Air Pressure</h4>
-          <p>Sensor BMP180</p>
-          <p></p>
-          <h4>Rain Fall</h4>
-          <p>Count number of drips from calibrated Tube</p>
-          <p></p>
-          <h4>Wind Speed and Direction</h4>
-          <p>Utrasonic Sensors @ N, S, E &amp; W</p>
-          <p>Pulse Sensors N-S, S-N</p>
-          <p>Measure Time of Flight each way to calculte N-S vector</p>
-          <p>Pulse Sensors E-W, W-E</p>
-          <p>Measure Time of Flight each way to calculte E-W vector</p>
-          <p>Calculate Speed of Sound using Temperature and Humidity</p>
-          <p>From above calculate Wind Speed and Bearing using Trig</p>
+      <div class="cent_c" id="cent_c">
+        <canvas id="canvas" height="800" width="1000"></canvas>
+      </div>
+      <div id="canvas_area_1" height="800" width="1500">
+        <select id="duration" height="50" width="100" class="gwd-select-1y2s">
+          <option value="Hour">Hour</option>
+          <option value="Day">Day</option>
+          <option value="Month">Month</option>
+          <option value="Year">Year</option>
+        </select>
+          <div class="column">
+        <div class="row">
+            <canvas id="canvas_a" ;=""></canvas>
+          </div>
+         
+        <div class="row">
+          <canvas id="canvas_b" ;=""></canvas>
+          </div>
+         
+        <div class="row">
+            <canvas id="canvas_c" ;=""></canvas>
+           </div>
+        
+        <div class="row">
+            <canvas id="canvas_d" ;=""></canvas>
+          </div>
+        </div>
+       
+          <div class="column_1">
+            <canvas id="canvas_e" height="700" width="900" ;=""></canvas>
         </div>
       </div>
     </div>
+    <div class="about" id="about">
+      <div class="cent">
+        <h3>Weather Station Operation</h3>
+        <h4>Temperature </h4>
+        <p>Sensor AM2320</p>
+        <h4>Humidity </h4>
+        <p>Sensor AM2320</p>
+        <p></p>
+        <h4>Air Pressure</h4>
+        <p>Sensor BMP180</p>
+        <p></p>
+        <h4>Rain Fall</h4>
+        <p>Count number of drips from calibrated Tube</p>
+        <p></p>
+        <h4>Wind Speed and Direction</h4>
+        <p>Utrasonic Sensors @ N, S, E &amp; W</p>
+        <p>Pulse Sensors N-S, S-N</p>
+        <p>Measure Time of Flight each way to calculte N-S vector</p>
+        <p>Pulse Sensors E-W, W-E</p>
+        <p>Measure Time of Flight each way to calculte E-W vector</p>
+        <p>Calculate Speed of Sound using Temperature and Humidity</p>
+        <p>From above calculate Wind Speed and Bearing using Trig</p>
+      </div>
+    </div>
   </div>
+  <label class="gwd-label-p0hn"></label>
 
 
 </body></html>
