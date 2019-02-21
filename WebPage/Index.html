@@ -134,21 +134,20 @@
       visibility: hidden;
     }
     .column {
-      float: left;   
-      height: 700px;
+      float: left;
+      height: 680px;
       width: 500px;
       text-align: center;
     }
-    .column_1 {      
-      width: 900px;    
-      height: 700px;
+    .column_1 {
+      width: 900px;
+      height: 680px;
       float: right;
       text-align: center;
     }
-    .row:after {
+    .row {
+      height: 170px;
       content: "";
-      height: 150px
-      display: table;
       clear: both;
     }
   </style>
@@ -230,6 +229,7 @@
       var rad = 57.2958;
       var c = document.getElementById("canvas");
       var dia = 80;
+      var dia_small = 70;
 
       function draw_dial(loc, win) {
         var x1, y1;
@@ -259,7 +259,7 @@
             break;
           case 2:
             x1 = 166;
-            y1 = 400;
+            y1 = 383;
             ident = 11;
             scale = 10;
             start = 0;
@@ -267,7 +267,7 @@
             break;
           case 3:
             x1 = 832;
-            y1 = 400;
+            y1 = 383;
             ident = 11;
             scale = 10;
             start = 0;
@@ -284,7 +284,7 @@
             break;
           case 5:
             x1 = 166;
-            y1 = 666;
+            y1 = 633;
             ident = 11;
             scale = 5;
             start = 0;
@@ -321,28 +321,15 @@
 
         }
 
-        win.fillText(text, x1, y1 + 105);
+        win.fillText(text, x1, y1 + 80);
       }
 
-      function draw_rain(win) {
-        win.rect(449, 299, 52, 162);
-        win.rect(501, 299, 52, 162);
-        win.stroke();
-        win.beginPath();
-        win.textAlign = "center";
-        win.fillStyle = "Black";
-        win.font = "14px Arial";
-        win.fillText(" now ", 360, 385);
-        win.fillText("this", 630, 385);
-        win.fillText(" hr ", 630, 400);
-        win.fillText("Rain Fall ( mm/h )", 500, 505);
-      }
 
       function draw_bearing(x, y, win) {
         var ident = 8;
         var direction = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
         win.beginPath();
-        win.arc(x, y, dia, 0, 2 * PI);
+        win.arc(x, y, dia_small, 0, 2 * PI);
         win.stroke();
         win.beginPath();
         win.textAlign = "center";
@@ -352,18 +339,18 @@
         for (var i = 0; i < ident; i++) {
           var x2, y2, x3, y3;
           var ang = (90 + (step * i)) / rad;
-          y2 = y - ((dia + 2) * Math.sin(ang));
-          y3 = y - ((dia + 10) * Math.sin(ang));
-          x2 = ((dia + 2) * Math.cos(ang)) + x;
-          x3 = ((dia + 10) * Math.cos(ang)) + x;
+          y2 = y - ((dia_small + 2) * Math.sin(ang));
+          y3 = y - ((dia_small + 10) * Math.sin(ang));
+          x2 = ((dia_small + 2) * Math.cos(ang)) + x;
+          x3 = ((dia_small + 10) * Math.cos(ang)) + x;
           win.beginPath();
           win.moveTo(x2, y2);
           win.lineTo(x3, y3);
           win.stroke();
 
           val = (i * 30);
-          y2 = y + 5 - ((dia + 25) * Math.sin(ang));
-          x2 = x - ((dia + 25) * Math.cos(ang));
+          y2 = y + 5 - ((dia_small + 25) * Math.sin(ang));
+          x2 = x - ((dia_small + 25) * Math.cos(ang));
           win.fillText(direction[i], x2, y2);
         }
 
@@ -373,6 +360,7 @@
 
       function data_plot(x, y, win) {
         var delta;
+        var dia1 = 80;
         var x1, y1;
         var peak = false;
         switch (x) {
@@ -389,12 +377,12 @@
           case 2:
             delta = (1.1667 - ((y / 150) * 2)) * PI;
             x1 = 166;
-            y1 = 400;
+            y1 = 383;
             break;
           case 3:
             delta = (1.1667 - ((y / 150) * 2)) * PI;
             x1 = 832;
-            y1 = 400;
+            y1 = 383;
             break;
           case 4:
             delta = (1.1667 - (((y - 860) / 300) * 2)) * PI;
@@ -404,28 +392,29 @@
           case 5:
             delta = (1.1667 - ((y / 75) * 2)) * PI;
             x1 = 166;
-            y1 = 666;
+            y1 = 633;
             break;
           case 6:
             delta = (0.5 - ((y / 360) * 2)) * PI;
             x1 = 832;
-            y1 = 666;
+            y1 = 600;
+            dia1 = 70;
             break;
           case 7:
             delta = (1.1667 - ((y / 75) * 2)) * PI;
             x1 = 166;
-            y1 = 666;
+            y1 = 633;
             peak = true;
             break;
         }
         var x2, y2, x3, y3, x4, y4;
         if (peak) {
-          y2 = y1 - ((dia - 10) * Math.sin(delta + 0.075));
-          y3 = y1 - (dia * Math.sin(delta));
-          y4 = y1 - ((dia - 10) * Math.sin(delta - 0.075));
-          x2 = ((dia - 10) * Math.cos(delta + 0.075)) + x1;
-          x3 = (dia * Math.cos(delta)) + x1;
-          x4 = ((dia - 10) * Math.cos(delta - 0.075)) + x1;
+          y2 = y1 - ((dia1 - 10) * Math.sin(delta + 0.075));
+          y3 = y1 - (dia1 * Math.sin(delta));
+          y4 = y1 - ((dia1 - 10) * Math.sin(delta - 0.075));
+          x2 = ((dia1 - 10) * Math.cos(delta + 0.075)) + x1;
+          x3 = (dia1 * Math.cos(delta)) + x1;
+          x4 = ((dia1 - 10) * Math.cos(delta - 0.075)) + x1;
 
           win.beginPath();
           win.fillStyle = peak_col;
@@ -434,24 +423,41 @@
           win.lineTo(x4, y4);
           win.lineTo(x2, y2);
           win.fill();
+          
+        win.fillText(y, x1 , y1 +50);
+          
 
         } else {
 
-          y2 = y1 - ((dia - 15) * Math.sin(delta + 0.05));
-          y3 = y1 - ((dia - 5) * Math.sin(delta));
-          y4 = y1 - ((dia - 15) * Math.sin(delta - 0.05));
-          x2 = ((dia - 15) * Math.cos(delta + 0.05)) + x1;
-          x3 = ((dia - 5) * Math.cos(delta)) + x1;
-          x4 = ((dia - 15) * Math.cos(delta - 0.05)) + x1;
+          y2 = y1 - ((dia1 - 10) * Math.sin(delta + 0.075));
+          y3 = y1 - (dia1 * Math.sin(delta));
+          y4 = y1 - ((dia1 - 10) * Math.sin(delta - 0.075));
+          x2 = ((dia1 - 10) * Math.cos(delta + 0.075)) + x1;
+          x3 = (dia1 * Math.cos(delta)) + x1;
+          x4 = ((dia1 - 10) * Math.cos(delta - 0.075)) + x1;
 
           win.beginPath();
-          win.moveTo(x1, y1);
-          win.lineTo(x2, y2);
+          win.moveTo(x2, y2);
           win.lineTo(x3, y3);
           win.lineTo(x4, y4);
-          win.lineTo(x1, y1);
+          win.lineTo(x2, y2);
           win.fill();
+          if(x != 6) win.fillText(y, x1, y1 +30);
         }
+      }
+      
+      function draw_rain(win) {
+        win.rect(449, 280, 52, 152);
+        win.rect(501, 280, 52, 152);
+        win.stroke();
+        win.beginPath();
+        win.textAlign = "center";
+        win.fillStyle = "Black";
+        win.font = "14px Arial";
+        win.fillText(" now ", 360, 355);
+        win.fillText("this", 630, 355);
+        win.fillText(" hr ", 630, 370);
+        win.fillText("Rain Fall ( mm/h )", 500, 455);
       }
 
       function rain_plot(now, total, win) {
@@ -459,27 +465,27 @@
         total /= 150;
         var n_scale = Math.ceil(now + 0.5);
         var t_scale = Math.ceil(total + 0.5);
-        var n_s = 160 * (now / n_scale);
-        var n_t = 160 * (total / t_scale);
+        var n_s = 145 * (now / n_scale);
+        var n_t = 145 * (total / t_scale);
         var n_ticks;
         if (n_scale < 2) {
           n_ticks = 0.2;
-          ticks = 162 / Math.floor(n_scale / 0.2);
+          ticks = 152 / Math.floor(n_scale / 0.2);
         } else
         if (n_scale < 5) {
           n_ticks = 0.5;
-          ticks = 162 / Math.floor(n_scale / 0.5);
+          ticks = 152 / Math.floor(n_scale / 0.5);
         } else
         if (n_scale < 20) {
           n_ticks = 2;
-          ticks = 162 / Math.floor(n_scale / 2);
+          ticks = 152 / Math.floor(n_scale / 2);
         } else {
           n_ticks = 5;
-          ticks = 162 / Math.floor(n_scale / 5);
+          ticks = 152 / Math.floor(n_scale / 5);
         }
         var s = 0;
         var num = s.toFixed(1);
-        var y = 461;
+        var y = 432;
         do {
           win.beginPath();
           win.moveTo(444, y);
@@ -493,22 +499,22 @@
 
         if (t_scale < 2) {
           n_ticks = 0.2;
-          ticks = 162 / Math.floor(t_scale / 0.2);
+          ticks = 152 / Math.floor(t_scale / 0.2);
         } else
         if (t_scale < 5) {
           n_ticks = 0.5;
-          ticks = 162 / Math.floor(t_scale / 0.5);
+          ticks = 152 / Math.floor(t_scale / 0.5);
         } else
         if (t_scale < 20) {
           n_ticks = 2;
-          ticks = 162 / Math.floor(t_scale / 2);
+          ticks = 152 / Math.floor(t_scale / 2);
         } else {
           n_ticks = 5;
-          ticks = 162 / Math.floor(t_scale / 5);
+          ticks = 152 / Math.floor(t_scale / 5);
         }
         s = 0;
         num = s.toFixed(1);
-        var y = 461;
+        var y = 432;
         do {
           win.beginPath();
           win.moveTo(553, y);
@@ -521,11 +527,11 @@
         } while (s <= t_scale);
         win.beginPath();
         win.fillStyle = h_col;
-        win.rect(450, 460 - n_s, 50, n_s);
+        win.rect(450, 432 - n_s, 50, n_s);
         win.fill();
         win.beginPath();
         win.fillStyle = "Blue";
-        win.rect(502, 460 - n_t, 50, n_t);
+        win.rect(502, 432 - n_t, 50, n_t);
         win.fill();
       }
 
@@ -533,33 +539,34 @@
         win.beginPath();
         win.lineWidth = width;
         win.lineCap = "round";
-        win.moveTo(500, 666);
+        win.moveTo(500, 600);
         var x = Math.sin(pos / rad) * length;
         var y = Math.cos(pos / rad) * length;
-        win.lineTo(500 + x, 666 - y);
+        win.lineTo(500 + x, 600 - y);
         win.stroke();
       }
 
       function clock(win) {
         var step = 30;
+        var cc = 633;
         win.beginPath();
-        win.arc(500, 666, 80, 0, 2 * PI);
+        win.arc(500, cc, 70, 0, 2 * PI);
         win.stroke();
         for (var i = 1; i <= 12; i++) {
           var x2, y2, x3, y3;
           var ang = (90 + (step * i)) / rad;
-          y2 = 666 - ((80) * Math.sin(ang));
-          y3 = 666 - ((70) * Math.sin(ang));
-          x2 = ((80) * Math.cos(ang)) + 500;
-          x3 = ((70) * Math.cos(ang)) + 500;
+          y2 = cc - ((70) * Math.sin(ang));
+          y3 = cc - ((65) * Math.sin(ang));
+          x2 = ((70) * Math.cos(ang)) + 500;
+          x3 = ((65) * Math.cos(ang)) + 500;
           win.beginPath();
           win.moveTo(x2, y2);
           win.lineTo(x3, y3);
           win.stroke();
 
           val = (i * 30);
-          y2 = 671 - ((90) * Math.sin(ang));
-          x2 = 500 - ((90) * Math.cos(ang));
+          y2 = cc + 5 - ((80) * Math.sin(ang));
+          x2 = 500 - ((80) * Math.cos(ang));
           win.fillText(i, x2, y2);
         }
 
@@ -570,10 +577,10 @@
         h = h % 12;
         //hour
         h = ((h / 12) * 360) + ((m / 60) * 30);
-        drawHand(win, h, 80 * 0.5, 4);
+        drawHand(win, h, dia_small * 0.5, 4);
         //minute
         m = (m / 60) * 360;
-        drawHand(win, m, 80 * 0.8, 2);
+        drawHand(win, m, dia_small * 0.8, 2);
         win.lineWidth = 1;
 
       }
@@ -594,27 +601,27 @@
             x.style.display = "none";
             var ctx = c.getContext("2d");
             ctx.fillStyle = t_col;
-            ctx.fillRect(0, 0, 333, 267);
-            ctx.fillRect(666, 0, 333, 267);
+            ctx.fillRect(0, 0, 333, 250);
+            ctx.fillRect(666, 0, 333, 250);
             ctx.fillStyle = h_col;
-            ctx.fillRect(0, 267, 333, 266);
-            ctx.fillRect(666, 267, 333, 267);
+            ctx.fillRect(0, 250, 333, 250);
+            ctx.fillRect(666, 250, 333, 250);
             ctx.fillStyle = p_col;
-            ctx.fillRect(333, 0, 333, 267);
+            ctx.fillRect(333, 0, 333, 250);
             ctx.fillStyle = r_col;
-            ctx.fillRect(333, 267, 333, 266);
+            ctx.fillRect(333, 250, 333, 250);
             ctx.fillStyle = w_col;
-            ctx.fillRect(0, 533, 333, 267);
-            ctx.fillRect(666, 533, 333, 267);
+            ctx.fillRect(0, 500, 333, 250);
+            ctx.fillRect(666, 500, 333, 250);
             ctx.fillStyle = ti_col;
-            ctx.fillRect(333, 533, 333, 267);
+            ctx.fillRect(333, 500, 333, 250);
             draw_dial(0, ctx);
             draw_dial(1, ctx);
             draw_dial(2, ctx);
             draw_dial(3, ctx);
             draw_dial(4, ctx);
             draw_dial(5, ctx);
-            draw_bearing(832, 666, ctx);
+            draw_bearing(832, 625, ctx);
             draw_rain(ctx);
 
             clock(ctx);
@@ -812,33 +819,29 @@
       <div class="cent_c" id="cent_c">
         <canvas id="canvas" height="800" width="1000"></canvas>
       </div>
-      <div id="canvas_area_1" height="800" width="1500">
+      <div id="canvas_area_1" height="750" width="1500">
         <select id="duration" height="50" width="100" class="gwd-select-1y2s">
           <option value="Hour">Hour</option>
           <option value="Day">Day</option>
           <option value="Month">Month</option>
           <option value="Year">Year</option>
         </select>
-          <div class="column">
-        <div class="row">
-            <canvas id="canvas_a" ; ></canvas>
+        <div class="column">
+          <div class="row">
+            <canvas id="canvas_a" height="170" width="500" ></canvas>
           </div>
-         
-        <div class="row">
-          <canvas id="canvas_b" ;></canvas>
+          <div class="row">
+            <canvas id="canvas_b" height="170" width="500" ></canvas>
           </div>
-         
-        <div class="row">
-            <canvas id="canvas_c" ;  ></canvas>
-           </div>
-        
-        <div class="row">
-            <canvas id="canvas_d" ;  ></canvas>
+          <div class="row">
+            <canvas id="canvas_c" height="170" width="500" ></canvas>
+          </div>
+          <div class="row">
+            <canvas id="canvas_d" height="170" width="500" ></canvas>
           </div>
         </div>
-       
-          <div class="column_1">
-            <canvas id="canvas_e"  height = "700" width= "900"; ></canvas>
+        <div class="column_1">
+          <canvas id="canvas_e" height="680" width="900" ></canvas>
         </div>
       </div>
     </div>
