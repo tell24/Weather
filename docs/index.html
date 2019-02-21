@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html><head><meta name="GCD" content="YTk3ODQ3ZWZhN2I4NzZmMzBkNTEwYjJl8b654fdca147ac10fe3dfd33cfe64f54"/>
+<html><head><meta name="GCD" content="YTk3ODQ3ZWZhN2I4NzZmMzBkNTEwYjJl5926f9f6a139b0eacc147186236bce3e"/>
   <meta charset="utf-8">
   <title>Index</title>
   <meta name="generator" content="Google Web Designer 5.0.3.0130">
@@ -225,7 +225,6 @@ body {
       var r_col = "#A3CDA8";
       var p_col = "#BDBBB3";
       var w_col = "#AD9CF3";
-      var ti_col = "#FFFFFF";
       var peak_col = "#ff0000";
       var PI = 3.1416;
       var rad = 57.2958;
@@ -425,9 +424,9 @@ body {
           win.lineTo(x4, y4);
           win.lineTo(x2, y2);
           win.fill();
-          
-        win.fillText(y, x1 , y1 +50);
-          
+
+          win.fillText(y, x1, y1 + 50);
+
 
         } else {
 
@@ -444,10 +443,10 @@ body {
           win.lineTo(x4, y4);
           win.lineTo(x2, y2);
           win.fill();
-          if(x != 6) win.fillText(y, x1, y1 +30);
+          if (x != 6) win.fillText(y, x1, y1 + 30);
         }
       }
-      
+
       function draw_rain(win) {
         win.rect(449, 280, 52, 152);
         win.rect(501, 280, 52, 152);
@@ -552,26 +551,25 @@ body {
         var step = 30;
         var cc = 633;
         win.beginPath();
-        win.arc(500, cc, 70, 0, 2 * PI);
+        win.arc(500, cc, dia, 0, 2 * PI);
         win.stroke();
         for (var i = 1; i <= 12; i++) {
           var x2, y2, x3, y3;
           var ang = (90 + (step * i)) / rad;
-          y2 = cc - ((70) * Math.sin(ang));
-          y3 = cc - ((65) * Math.sin(ang));
-          x2 = ((70) * Math.cos(ang)) + 500;
-          x3 = ((65) * Math.cos(ang)) + 500;
+          y2 = cc - ((dia) * Math.sin(ang));
+          y3 = cc - ((dia - 5) * Math.sin(ang));
+          x2 = ((dia) * Math.cos(ang)) + 500;
+          x3 = ((dia - 5) * Math.cos(ang)) + 500;
           win.beginPath();
           win.moveTo(x2, y2);
           win.lineTo(x3, y3);
           win.stroke();
 
           val = (i * 30);
-          y2 = cc + 5 - ((80) * Math.sin(ang));
-          x2 = 500 - ((80) * Math.cos(ang));
+          y2 = cc + 5 - ((dia + 10) * Math.sin(ang));
+          x2 = 500 - ((dia + 10) * Math.cos(ang));
           win.fillText(i, x2, y2);
         }
-
         var d, h, m;
         d = new Date();
         h = d.getHours();
@@ -579,10 +577,10 @@ body {
         h = h % 12;
         //hour
         h = ((h / 12) * 360) + ((m / 60) * 30);
-        drawHand(win, h, dia_small * 0.5, 4);
+        drawHand(win, h, dia * 0.5, 4);
         //minute
         m = (m / 60) * 360;
-        drawHand(win, m, dia_small * 0.8, 2);
+        drawHand(win, m, dia * 0.8, 2);
         win.lineWidth = 1;
 
       }
@@ -615,7 +613,7 @@ body {
             ctx.fillStyle = w_col;
             ctx.fillRect(0, 500, 333, 250);
             ctx.fillRect(666, 500, 333, 250);
-            ctx.fillStyle = ti_col;
+            ctx.fillStyle = p_col;
             ctx.fillRect(333, 500, 333, 250);
             draw_dial(0, ctx);
             draw_dial(1, ctx);
