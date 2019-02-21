@@ -87,7 +87,7 @@
     .menu {
       margin: auto;
       top: 0%;
-      width: 520px;
+      width: 320px;
       height: 30px;
     }
     .gwd-div-2qgl {
@@ -96,7 +96,7 @@
       text-align: center;
       overflow: auto;
       top: 8%;
-      height: 800px;
+      height: 750px;
       width: 100%;
     }
     .about {
@@ -355,7 +355,7 @@
         }
 
         text = "Wind Bearing ( mph )";
-        win.fillText(text, x, y + 125);
+        win.fillText(text, x, y + 120);
       }
 
       function data_plot(x, y, win) {
@@ -397,7 +397,7 @@
           case 6:
             delta = (0.5 - ((y / 360) * 2)) * PI;
             x1 = 832;
-            y1 = 600;
+            y1 = 620;
             dia1 = 70;
             break;
           case 7:
@@ -457,7 +457,7 @@
         win.fillText(" now ", 360, 355);
         win.fillText("this", 630, 355);
         win.fillText(" hr ", 630, 370);
-        win.fillText("Rain Fall ( mm/h )", 500, 455);
+        win.fillText("Rain Fall ( mm/h )", 500, 463);
       }
 
       function rain_plot(now, total, win) {
@@ -539,10 +539,10 @@
         win.beginPath();
         win.lineWidth = width;
         win.lineCap = "round";
-        win.moveTo(500, 600);
+        win.moveTo(500, 633);
         var x = Math.sin(pos / rad) * length;
         var y = Math.cos(pos / rad) * length;
-        win.lineTo(500 + x, 600 - y);
+        win.lineTo(500 + x, 633 - y);
         win.stroke();
       }
 
@@ -621,7 +621,7 @@
             draw_dial(3, ctx);
             draw_dial(4, ctx);
             draw_dial(5, ctx);
-            draw_bearing(832, 625, ctx);
+            draw_bearing(832, 620, ctx);
             draw_rain(ctx);
 
             clock(ctx);
@@ -807,7 +807,7 @@
     }
   </script>
   <div class="gwd-div-1w7a gwd-gen-19kmgwdanimation">
-    <div class="menu gwd-gen-1ep5gwdanimation">
+    <div class="menu ">
       <button class="gwd-button-39lq gwd-button-it82 gwd-gen-it1egwdanimation" id="Btn_4">About</button>
       <button class="gwd-button-39lq gwd-button-cx08 gwd-gen-9blwgwdanimation" id="Btn_3"></button>
       <button class="gwd-button-39lq gwd-button-k5iy gwd-gen-5uiygwdanimation" id="Btn_2">History</button>
@@ -817,7 +817,7 @@
   <div class="gwd-div-2qgl" id="Data">
     <div class="about">
       <div class="cent_c" id="cent_c">
-        <canvas id="canvas" height="800" width="1000"></canvas>
+        <canvas id="canvas" height="750" width="1000"></canvas>
       </div>
       <div id="canvas_area_1" height="750" width="1500">
         <select id="duration" height="50" width="100" class="gwd-select-1y2s">
