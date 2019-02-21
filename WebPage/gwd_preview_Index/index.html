@@ -133,9 +133,6 @@ body {
     height: 40%;
     width: 10%;
 }
-.gwd-select-1y2s {
-    visibility: hidden;
-}
 .column {
     float: left;
     height: 680px;
@@ -582,7 +579,6 @@ body {
         m = (m / 60) * 360;
         drawHand(win, m, dia * 0.8, 2);
         win.lineWidth = 1;
-
       }
 
       function update_fields() {
@@ -651,7 +647,128 @@ body {
       }
 
       function update_history() {
-        var chart0 = new Chart(document.getElementById("canvas_a"), {
+        var sel = document.getElementById("duration").value;
+        var len = "0";
+        var chart0;
+        var xhr ;
+        var url;
+        var t_r ;
+        var dat;
+        switch(sel){
+          case "hour": len = "0";
+            break;
+          case "day": len = "1";
+            break;
+          case "month": len = "2";
+            break;;
+          case "year": len = "3";
+            break;
+        }
+        xhr = new XMLHttpRequest();
+        url = "https://script.google.com/macros/s/AKfycbzep_6TONHLbfjt1H23_iCb0DMc126LPo3smsun/exec?read="+ len +",0";
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState == 4) { 
+            t_r = xhr.responseText;
+            dat = t_r.split(",");
+            
+        chart0 = new Chart(document.getElementById("canvas_a"), {
+          type: 'line',
+          data: {
+            labels: ["12", "6am", "12", "6pm", "12", "6am", "12", "6pm", "12"],
+            datasets: [{
+              label: "Outside",
+              borderColor: "#3e95cd",
+              fill: false,
+              data: [0, 0, 0, 8, 0, 10, 0, 0]
+            }]
+          },
+          options: {
+            title: {
+              display: true,
+              text: 'Temperature'
+            },
+            animation: {
+              duration: 0,
+              hover: {
+                animationDuration: 0,
+              },
+              responsiveAnimationDuration: 0,
+            }
+          }
+        });  
+                    chart0 = new Chart(document.getElementById("canvas_b"), {
+          type: 'line',
+          data: {
+            labels: ["12", "6am", "12", "6pm", "12", "6am", "12", "6pm", "12"],
+            datasets: [{
+              label: "Outside",
+              borderColor: "#3e95cd",
+              fill: false,
+              data: [0, 0, 0, 8, 0, 10, 0, 0]
+            }]
+          },
+          options: {
+            title: {
+              display: true,
+              text: 'Temperature'
+            },
+            animation: {
+              duration: 0,
+              hover: {
+                animationDuration: 0,
+              },
+              responsiveAnimationDuration: 0,
+            }
+          }
+        });          chart0 = new Chart(document.getElementById("canvas_c"), {
+          type: 'line',
+          data: {
+            labels: ["12", "6am", "12", "6pm", "12", "6am", "12", "6pm", "12"],
+            datasets: [{
+              label: "Outside",
+              borderColor: "#3e95cd",
+              fill: false,
+              data: [0, 0, 0, 8, 0, 10, 0, 0]
+            }]
+          },
+          options: {
+            title: {
+              display: true,
+              text: 'Temperature'
+            },
+            animation: {
+              duration: 0,
+              hover: {
+                animationDuration: 0,
+              },
+              responsiveAnimationDuration: 0,
+            }
+          }
+        });          chart0 = new Chart(document.getElementById("canvas_d"), {
+          type: 'line',
+          data: {
+            labels: ["12", "6am", "12", "6pm", "12", "6am", "12", "6pm", "12"],
+            datasets: [{
+              label: "Outside",
+              borderColor: "#3e95cd",
+              fill: false,
+              data: [0, 0, 0, 8, 0, 10, 0, 0]
+            }]
+          },
+          options: {
+            title: {
+              display: true,
+              text: 'Temperature'
+            },
+            animation: {
+              duration: 0,
+              hover: {
+                animationDuration: 0,
+              },
+              responsiveAnimationDuration: 0,
+            }
+          }
+        });          chart0 = new Chart(document.getElementById("canvas_e"), {
           type: 'line',
           data: {
             labels: ["12", "6am", "12", "6pm", "12", "6am", "12", "6pm", "12"],
@@ -676,122 +793,10 @@ body {
             }
           }
         });
-
-        chart0.update();
-        chart0 = new Chart(document.getElementById("canvas_b"), {
-          type: 'line',
-          data: {
-            labels: ["12", "6am", "12", "6pm", "12", "6am", "12", "6pm", "12"],
-            datasets: [{
-              label: "Outside",
-              borderColor: "#3e95cd",
-              fill: false,
-              data: [0, 0, 0, 8, 0, 10, 0, 0]
-            }]
-          },
-          options: {
-            title: {
-              display: true,
-              text: 'Temperature'
-            },
-            animation: {
-              duration: 0,
-              hover: {
-                animationDuration: 0,
-              },
-              responsiveAnimationDuration: 0,
             }
-          }
-        });
-
-        chart0.update();
-
-        chart0.update();
-        chart0 = new Chart(document.getElementById("canvas_c"), {
-          type: 'line',
-          data: {
-            labels: ["12", "6am", "12", "6pm", "12", "6am", "12", "6pm", "12"],
-            datasets: [{
-              label: "Outside",
-              borderColor: "#3e95cd",
-              fill: false,
-              data: [0, 0, 0, 8, 0, 10, 0, 0]
-            }]
-          },
-          options: {
-            title: {
-              display: true,
-              text: 'Temperature'
-            },
-            animation: {
-              duration: 0,
-              hover: {
-                animationDuration: 0,
-              },
-              responsiveAnimationDuration: 0,
-            }
-          }
-        });
-
-        chart0.update();
-
-        chart0.update();
-        chart0 = new Chart(document.getElementById("canvas_d"), {
-          type: 'line',
-          data: {
-            labels: ["12", "6am", "12", "6pm", "12", "6am", "12", "6pm", "12"],
-            datasets: [{
-              label: "Outside",
-              borderColor: "#3e95cd",
-              fill: false,
-              data: [0, 0, 0, 8, 0, 10, 0, 0]
-            }]
-          },
-          options: {
-            title: {
-              display: true,
-              text: 'Temperature'
-            },
-            animation: {
-              duration: 0,
-              hover: {
-                animationDuration: 0,
-              },
-              responsiveAnimationDuration: 0,
-            }
-          }
-        });
-
-        chart0.update();
-
-        chart0.update();
-        chart0 = new Chart(document.getElementById("canvas_e"), {
-          type: 'line',
-          data: {
-            labels: ["12", "6am", "12", "6pm", "12", "6am", "12", "6pm", "12"],
-            datasets: [{
-              label: "Outside",
-              borderColor: "#3e95cd",
-              fill: false,
-              data: [0, 0, 0, 8, 0, 10, 0, 0]
-            }]
-          },
-          options: {
-            title: {
-              display: true,
-              text: 'Temperature'
-            },
-            animation: {
-              duration: 0,
-              hover: {
-                animationDuration: 0,
-              },
-              responsiveAnimationDuration: 0,
-            }
-          }
-        });
-
-        chart0.update();
+        };
+        xhr.open("GET", url);
+        xhr.send(null);
       }
 
 
@@ -820,12 +825,15 @@ body {
         <canvas id="canvas" height="750" width="1000"></canvas>
       </div>
       <div id="canvas_area_1" height="750" width="1500">
-        <select id="duration" height="50" width="100" class="gwd-select-1y2s">
+        <div>
+      <label for="" duration=""> History Duration</label>
+        <select id="duration" height="50" width="100">
           <option value="Hour">Hour</option>
           <option value="Day">Day</option>
           <option value="Month">Month</option>
           <option value="Year">Year</option>
-        </select>
+        </select>          
+        </div>
         <div class="column">
           <div class="row">
             <canvas id="canvas_a" height="170" width="500"></canvas>
