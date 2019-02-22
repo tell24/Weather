@@ -155,6 +155,7 @@ body {
     window.gwd = window.gwd || {};
     var sort_update;
     var active_window = 0;
+    var H_offset = 0;
     gwd.about = function(event) {
       var x = document.getElementById("cent_c");
       x.style.display = "none";
@@ -191,6 +192,30 @@ body {
       // update graph
       update_history();
     };
+    gwd.c_a_click = function(event) {
+      // click
+      H_offset += 1;
+      H_offset = H_offset % 5;
+      update_history();
+    };
+    gwd.c_b_click = function(event) {
+      //click
+      H_offset += 2;
+      H_offset = H_offset % 5;
+      update_history();
+    };
+    gwd.c_c_click = function(event) {
+      //click
+      H_offset += 3;
+      H_offset = H_offset % 5;
+      update_history();
+    };
+    gwd.c_d_click = function(event) {
+      //click
+      H_offset += 4;
+      H_offset = H_offset % 5;
+      update_history();
+    };
   </script>
   <script type="text/javascript" gwd-events="registration">
     // Support code for event handling in Google Web Designer
@@ -200,12 +225,20 @@ body {
       gwd.actions.events.addHandler('Btn_1', 'click', gwd.current, false);
       gwd.actions.events.addHandler('Btn_2', 'click', gwd.history, false);
       gwd.actions.events.addHandler('duration', 'change', gwd.duration_change, false);
+      gwd.actions.events.addHandler('canvas_a', 'click', gwd.c_a_click, false);
+      gwd.actions.events.addHandler('canvas_b', 'click', gwd.c_b_click, false);
+      gwd.actions.events.addHandler('canvas_c', 'click', gwd.c_c_click, false);
+      gwd.actions.events.addHandler('canvas_d', 'click', gwd.c_d_click, false);
     };
     gwd.actions.events.deregisterEventHandlers = function(event) {
       gwd.actions.events.removeHandler('Btn_4', 'click', gwd.about, false);
       gwd.actions.events.removeHandler('Btn_1', 'click', gwd.current, false);
       gwd.actions.events.removeHandler('Btn_2', 'click', gwd.history, false);
       gwd.actions.events.removeHandler('duration', 'change', gwd.duration_change, false);
+      gwd.actions.events.removeHandler('canvas_a', 'click', gwd.c_a_click, false);
+      gwd.actions.events.removeHandler('canvas_b', 'click', gwd.c_b_click, false);
+      gwd.actions.events.removeHandler('canvas_c', 'click', gwd.c_c_click, false);
+      gwd.actions.events.removeHandler('canvas_d', 'click', gwd.c_d_click, false);
     };
     document.addEventListener("DOMContentLoaded", gwd.actions.events.registerEventHandlers);
     document.addEventListener("unload", gwd.actions.events.deregisterEventHandlers);
@@ -649,154 +682,180 @@ body {
       function update_history() {
         var sel = document.getElementById("duration").value;
         var len = "0";
-        var chart0;
-        var xhr ;
+        var xhr;
         var url;
-        var t_r ;
+        var t_r;
         var dat;
-        switch(sel){
-          case "hour": len = "0";
+        switch (sel) {
+          case "hour":
+            len = "0";
             break;
-          case "day": len = "1";
+          case "day":
+            len = "1";
             break;
-          case "month": len = "2";
+          case "month":
+            len = "2";
             break;;
-          case "year": len = "3";
+          case "year":
+            len = "3";
             break;
         }
-        xhr = new XMLHttpRequest();
-        url = "https://script.google.com/macros/s/AKfycbzep_6TONHLbfjt1H23_iCb0DMc126LPo3smsun/exec?read="+ len +",0";
-        xhr.onreadystatechange = function() {
-          if (xhr.readyState == 4) { 
-            t_r = xhr.responseText;
-            dat = t_r.split(",");
+        var c1,c2,c3,c4,c5;
+        switch (H_offset) {
+          case 0: c1 = "e";c2 = "a";c3 = "b";c4 = "c";c5 = "d";break;
+          case 1: c1 = "d";c2 = "e";c3 = "a";c4 = "b";c5 = "c";break;
+          case 2: c1 = "c";c2 = "d";c3 = "e";c4 = "a";c5 = "b";break;
+          case 3: c1 = "b";c2 = "c";c3 = "d";c4 = "e";c5 = "a";break;
+          case 4: c1 = "a";c2 = "b";c3 = "c";c4 = "d";c5 = "e";break;
+        }
+    //   xhr = new XMLHttpRequest();
+    //    url = "https://script.google.com/macros/s/AKfycbzep_6TONHLbfjt1H23_iCb0DMc126LPo3smsun/exec?read=" + len + ",0";
+    //    xhr.onreadystatechange = function() {
+    //     if (xhr.readyState == 4) {
+    //       t_r = xhr.responseText;
+    //        dat = t_r.split(",");
+
+         var   chart0 = new Chart(document.getElementById("canvas_" + c1), {
+              type: 'line',
+              data: {
+                labels: ["12", "6am", "12", "6pm", "12", "6am", "12", "6pm", "12"],
+                datasets: [{
+                  label: "Outside",
+                  borderColor: "#3e95cd",
+                  fill: false,
+                  data: [0, 0, 0, 8, 0, 10, 0, 0]
+                }]
+              },
+              options: {
+                title: {
+                  display: true,
+                  text: 'Temperature'
+                },
+                animation: {
+                  duration: 0,
+                  hover: {
+                    animationDuration: 0,
+                  },
+                  responsiveAnimationDuration: 0,
+                }
+              }
+            });
+        chart0.update();
+        
+        var    chart1 = new Chart(document.getElementById("canvas_" + c2), {
+              type: 'line',
+              data: {
+                labels: ["12", "6am", "12", "6pm", "12", "6am", "12", "6pm", "12"],
+                datasets: [{
+                  label: "Outside",
+                  borderColor: "#3e95cd",
+                  fill: false,
+                  data: [0, 0, 0, 8, 0, 10, 0, 0]
+                }]
+              },
+              options: {
+                title: {
+                  display: true,
+                  text: 'Humidity'
+                },
+                animation: {
+                  duration: 0,
+                  hover: {
+                    animationDuration: 0,
+                  },
+                  responsiveAnimationDuration: 0,
+                }
+              }
+            });
+        chart1.update();
+        
+         var  chart2 = new Chart(document.getElementById("canvas_" + c3), {
+              type: 'line',
+              data: {
+                labels: ["12", "6am", "12", "6pm", "12", "6am", "12", "6pm", "12"],
+                datasets: [{
+                  label: "Outside",
+                  borderColor: "#3e95cd",
+                  fill: false,
+                  data: [0, 0, 0, 8, 0, 10, 0, 0]
+                }]
+              },
+              options: {
+                title: {
+                  display: true,
+                  text: 'Pressure'
+                },
+                animation: {
+                  duration: 0,
+                  hover: {
+                    animationDuration: 0,
+                  },
+                  responsiveAnimationDuration: 0,
+                }
+              }
+            });
             
-        chart0 = new Chart(document.getElementById("canvas_a"), {
-          type: 'line',
-          data: {
-            labels: ["12", "6am", "12", "6pm", "12", "6am", "12", "6pm", "12"],
-            datasets: [{
-              label: "Outside",
-              borderColor: "#3e95cd",
-              fill: false,
-              data: [0, 0, 0, 8, 0, 10, 0, 0]
-            }]
-          },
-          options: {
-            title: {
-              display: true,
-              text: 'Temperature'
-            },
-            animation: {
-              duration: 0,
-              hover: {
-                animationDuration: 0,
+        chart2.update();
+        
+           var chart3 = new Chart(document.getElementById("canvas_" + c4), {
+              type: 'line',
+              data: {
+                labels: ["12", "6am", "12", "6pm", "12", "6am", "12", "6pm", "12"],
+                datasets: [{
+                  label: "Outside",
+                  borderColor: "#3e95cd",
+                  fill: false,
+                  data: [0, 0, 0, 8, 0, 10, 0, 0]
+                }]
               },
-              responsiveAnimationDuration: 0,
-            }
-          }
-        });  
-                    chart0 = new Chart(document.getElementById("canvas_b"), {
-          type: 'line',
-          data: {
-            labels: ["12", "6am", "12", "6pm", "12", "6am", "12", "6pm", "12"],
-            datasets: [{
-              label: "Outside",
-              borderColor: "#3e95cd",
-              fill: false,
-              data: [0, 0, 0, 8, 0, 10, 0, 0]
-            }]
-          },
-          options: {
-            title: {
-              display: true,
-              text: 'Temperature'
-            },
-            animation: {
-              duration: 0,
-              hover: {
-                animationDuration: 0,
+              options: {
+                title: {
+                  display: true,
+                  text: 'Rain'
+                },
+                animation: {
+                  duration: 0,
+                  hover: {
+                    animationDuration: 0,
+                  },
+                  responsiveAnimationDuration: 0,
+                }
+              }
+            });
+        
+        chart3.update();
+        
+          var  chart4 = new Chart(document.getElementById("canvas_" + c5), {
+              type: 'line',
+              data: {
+                labels: ["12", "6am", "12", "6pm", "12", "6am", "12", "6pm", "12"],
+                datasets: [{
+                  label: "Outside",
+                  borderColor: "#3e95cd",
+                  fill: false,
+                  data: [0, 0, 0, 8, 0, 10, 0, 0]
+                }]
               },
-              responsiveAnimationDuration: 0,
-            }
-          }
-        });          chart0 = new Chart(document.getElementById("canvas_c"), {
-          type: 'line',
-          data: {
-            labels: ["12", "6am", "12", "6pm", "12", "6am", "12", "6pm", "12"],
-            datasets: [{
-              label: "Outside",
-              borderColor: "#3e95cd",
-              fill: false,
-              data: [0, 0, 0, 8, 0, 10, 0, 0]
-            }]
-          },
-          options: {
-            title: {
-              display: true,
-              text: 'Temperature'
-            },
-            animation: {
-              duration: 0,
-              hover: {
-                animationDuration: 0,
-              },
-              responsiveAnimationDuration: 0,
-            }
-          }
-        });          chart0 = new Chart(document.getElementById("canvas_d"), {
-          type: 'line',
-          data: {
-            labels: ["12", "6am", "12", "6pm", "12", "6am", "12", "6pm", "12"],
-            datasets: [{
-              label: "Outside",
-              borderColor: "#3e95cd",
-              fill: false,
-              data: [0, 0, 0, 8, 0, 10, 0, 0]
-            }]
-          },
-          options: {
-            title: {
-              display: true,
-              text: 'Temperature'
-            },
-            animation: {
-              duration: 0,
-              hover: {
-                animationDuration: 0,
-              },
-              responsiveAnimationDuration: 0,
-            }
-          }
-        });          chart0 = new Chart(document.getElementById("canvas_e"), {
-          type: 'line',
-          data: {
-            labels: ["12", "6am", "12", "6pm", "12", "6am", "12", "6pm", "12"],
-            datasets: [{
-              label: "Outside",
-              borderColor: "#3e95cd",
-              fill: false,
-              data: [0, 0, 0, 8, 0, 10, 0, 0]
-            }]
-          },
-          options: {
-            title: {
-              display: true,
-              text: 'Temperature'
-            },
-            animation: {
-              duration: 0,
-              hover: {
-                animationDuration: 0,
-              },
-              responsiveAnimationDuration: 0,
-            }
-          }
-        });
-            }
-        };
-        xhr.open("GET", url);
-        xhr.send(null);
+              options: {
+                title: {
+                  display: true,
+                  text: 'Wind'
+                },
+                animation: {
+                  duration: 0,
+                  hover: {
+                    animationDuration: 0,
+                  },
+                  responsiveAnimationDuration: 0,
+                }
+              }
+            });
+        
+        chart4.update();
+    //      }
+    //    };
+    //    xhr.open("GET", url);
+    //    xhr.send(null);
       }
 
 
@@ -826,13 +885,13 @@ body {
       </div>
       <div id="canvas_area_1" height="750" width="1500">
         <div>
-      <label for="" duration=""> History Duration</label>
-        <select id="duration" height="50" width="100">
-          <option value="Hour">Hour</option>
-          <option value="Day">Day</option>
-          <option value="Month">Month</option>
-          <option value="Year">Year</option>
-        </select>          
+          <label for="" duration="">History Duration</label>
+          <select id="duration" height="50" width="100">
+            <option value="Hour">Hour</option>
+            <option value="Day">Day</option>
+            <option value="Month">Month</option>
+            <option value="Year">Year</option>
+          </select>
         </div>
         <div class="column">
           <div class="row">
