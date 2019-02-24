@@ -106,13 +106,13 @@ body {
     text-align: left;
     position: relative;
     margin: auto;
-    width: 1500px;
+    width: 1200px;
 }
 .cent {
     text-align: left;
     position: relative;
     margin: auto;
-    width: 400px;
+    width: 1300px;
 }
 .cent_c {
     text-align: left;
@@ -136,11 +136,11 @@ body {
 .column {
     float: left;
     height: 680px;
-    width: 500px;
+    width: 400px;
     text-align: center;
 }
 .column_1 {
-    width: 900px;
+    width: 800px;
     height: 680px;
     float: right;
     text-align: center;
@@ -154,8 +154,11 @@ body {
   <script type="text/javascript" gwd-events="handlers">
     window.gwd = window.gwd || {};
     var sort_update;
+    var update_history;
+    var move_history
     var active_window = 0;
     var H_offset = 0;
+    var milliseconds ;
     gwd.about = function(event) {
       var x = document.getElementById("cent_c");
       x.style.display = "none";
@@ -190,31 +193,33 @@ body {
     };
     gwd.duration_change = function(event) {
       // update graph
-      update_history();
-    };
-    gwd.c_a_click = function(event) {
-      // click
-      H_offset += 1;
-      H_offset = H_offset % 5;
+      sel = document.getElementById("mySelect").selectedIndex
       update_history();
     };
     gwd.c_b_click = function(event) {
-      //click
-      H_offset += 2;
+      // click
+      H_offset += 1;
       H_offset = H_offset % 5;
-      update_history();
+      milliseconds = new Date().getTime();
+      move_history();
     };
     gwd.c_c_click = function(event) {
       //click
-      H_offset += 3;
+      H_offset += 2;
       H_offset = H_offset % 5;
-      update_history();
+      move_history();
     };
     gwd.c_d_click = function(event) {
       //click
+      H_offset += 3;
+      H_offset = H_offset % 5;
+      move_history();
+    };
+    gwd.c_e_click = function(event) {
+      //click
       H_offset += 4;
       H_offset = H_offset % 5;
-      update_history();
+      move_history();
     };
   </script>
   <script type="text/javascript" gwd-events="registration">
@@ -225,20 +230,20 @@ body {
       gwd.actions.events.addHandler('Btn_1', 'click', gwd.current, false);
       gwd.actions.events.addHandler('Btn_2', 'click', gwd.history, false);
       gwd.actions.events.addHandler('duration', 'change', gwd.duration_change, false);
-      gwd.actions.events.addHandler('canvas_a', 'click', gwd.c_a_click, false);
       gwd.actions.events.addHandler('canvas_b', 'click', gwd.c_b_click, false);
       gwd.actions.events.addHandler('canvas_c', 'click', gwd.c_c_click, false);
       gwd.actions.events.addHandler('canvas_d', 'click', gwd.c_d_click, false);
+      gwd.actions.events.addHandler('canvas_e', 'click', gwd.c_e_click, false);
     };
     gwd.actions.events.deregisterEventHandlers = function(event) {
       gwd.actions.events.removeHandler('Btn_4', 'click', gwd.about, false);
       gwd.actions.events.removeHandler('Btn_1', 'click', gwd.current, false);
       gwd.actions.events.removeHandler('Btn_2', 'click', gwd.history, false);
       gwd.actions.events.removeHandler('duration', 'change', gwd.duration_change, false);
-      gwd.actions.events.removeHandler('canvas_a', 'click', gwd.c_a_click, false);
       gwd.actions.events.removeHandler('canvas_b', 'click', gwd.c_b_click, false);
       gwd.actions.events.removeHandler('canvas_c', 'click', gwd.c_c_click, false);
       gwd.actions.events.removeHandler('canvas_d', 'click', gwd.c_d_click, false);
+      gwd.actions.events.removeHandler('canvas_e', 'click', gwd.c_e_click, false);
     };
     document.addEventListener("DOMContentLoaded", gwd.actions.events.registerEventHandlers);
     document.addEventListener("unload", gwd.actions.events.deregisterEventHandlers);
@@ -249,18 +254,32 @@ body {
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
   <script type="text/javascript">
     window.onload = function() {
-
       var t_col = "#F07C60";
       var h_col = "#8CC8E8";
       var r_col = "#A3CDA8";
       var p_col = "#BDBBB3";
       var w_col = "#AD9CF3";
       var peak_col = "#ff0000";
+      var sel = 0;
       var PI = 3.1416;
       var rad = 57.2958;
       var c = document.getElementById("canvas");
       var dia = 80;
       var dia_small = 70;
+      var chart = [document.getElementById('canvas_a').getContext('2d'),
+        document.getElementById('canvas_b').getContext('2d'),
+        document.getElementById('canvas_c').getContext('2d'),
+        document.getElementById('canvas_d').getContext('2d'),
+        document.getElementById('canvas_e').getContext('2d')
+      ];
+      var H_chart = [new Chart(chart[0]), new Chart(chart[1]), new Chart(chart[2]), new Chart(chart[3]), new Chart(chart[4])];
+      var titles = ['Temperature', 'Humidity', 'Pressure', 'Wind Speed', 'Rain Fall'];
+      var plot = ['Min', 'Max', 'Min', 'Max', 'Min', 'Max', 'Mean', 'Gust', 'Total', 'Last Hour'];
+      var axis_x_label = ['Minutes', 'Hours', 'Day of Week', 'Day of Month', 'Week of Year'];
+      var axis_y_label = ['C', '', '%', '', 'mB', '', 'mph', '', 'mm', ' '];
+
+      const dat = [[0, 3, 0, 2, 0, 1, 0, 6, 0, 3, 0, 2, 0, 1, 0, 6, 0, 3, 0, 2, 0, 1, 0, 6, 0],[1, 3, 0, 2, 0, 0, 0, 6, 0, 3, 0, 4, 0, 1, 0, 6, 0, 3, 0, 2, 0, 1, 4, 6, 4],[0, 3, 0, 2, 2, 1, 0, 6, 0, 3, 0, 2, 0, 4, 0, 6, 0, 3, 0, 2, 0, 1, 0, 6, 0],[0, 3, 3, 2, 0, 1, 0, 6, 6, 3, 0, 2, 0, 1, 0, 6, 0, 3, 0, 2, 0, 1, 0, 6, 0],[0, 3, 0, 2, 0, 1, 0, 6, 0, 3, 0, 2, 4, 1, 0, 6, 0, 3, 0, 2, 4, 1, 0, 6, 0]];
+      const s_label = ["12", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
 
       function draw_dial(loc, win) {
         var x1, y1;
@@ -679,195 +698,226 @@ body {
         xhr.send(null);
       }
 
-      function update_history() {
-        var sel = document.getElementById("duration").value;
+      function build_history() {
+        var temp = 0;
+          temp = dat[0,0];
+        H_chart[0] = new Chart(chart[0], {
+          type: 'line',
+          data: {
+            labels: s_label,
+            datasets: [{
+              label: "Outside",
+              borderColor: "#3e95cd",
+              fill: false,
+              data: temp
+            }]
+          },
+          options: {
+            title: {
+              display: true,
+              text: 'Temperature'
+            },
+            animation: {
+              duration: 0,
+              hover: {
+                animationDuration: 0,
+              },
+              responsiveAnimationDuration: 0,
+            }
+          }
+        });      
+        H_chart[0].update();
+        
+         
+        temp = dat[1,0];
+        H_chart[1] = new Chart(chart[1], {
+          type: 'line',
+          data: {
+            labels: s_label,
+            datasets: [{
+              label: "Outside",
+              borderColor: "#3e95cd",
+              fill: false,
+              data: temp
+            }]
+          },
+          options: {
+            title: {
+              display: true,
+              text: 'Humidity'
+            },
+            animation: {
+              duration: 0,
+              hover: {
+                animationDuration: 0,
+              },
+              responsiveAnimationDuration: 0,
+            }
+          }
+        });      
+        H_chart[1].update();
+         
+        temp = dat[2,0];
+
+        H_chart[2] = new Chart(chart[2], {
+          type: 'line',
+          data: {
+            labels: s_label,
+            datasets: [{
+              label: "Outside",
+              borderColor: "#3e95cd",
+              fill: false,
+              data: temp
+            }]
+          },
+          options: {
+            title: {
+              display: true,
+              text: 'Pressure'
+            },
+            animation: {
+              duration: 0,
+              hover: {
+                animationDuration: 0,
+              },
+              responsiveAnimationDuration: 0,
+            }
+          }
+        });      
+        H_chart[2].update();
+         
+        temp = dat[3,0];
+        H_chart[3] = new Chart(chart[3], {
+          type: 'line',
+          data: {
+            labels: s_label,
+            datasets: [{
+              label: "Outside",
+              borderColor: "#3e95cd",
+              fill: false,
+              data: temp
+            }]
+          },
+          options: {
+            title: {
+              display: true,
+              text: 'Rain'
+            },
+            animation: {
+              duration: 0,
+              hover: {
+                animationDuration: 0,
+              },
+              responsiveAnimationDuration: 0,
+            }
+          }
+        });        
+        H_chart[3].update();
+         
+        temp = dat[4,0];
+        H_chart[4] = new Chart(chart[4], {
+          type: 'line',
+          data: {
+            labels: s_label,
+            datasets: [{
+              label: "Outside",
+              borderColor: "#3e95cd",
+              fill: false,
+              data: temp
+            }]
+          },
+          options: {
+            title: {
+              display: true,
+              text: 'Wind'
+            },
+            animation: {
+              duration: 0,
+              hover: {
+                animationDuration: 0,
+              },
+              responsiveAnimationDuration: 0,
+            }
+          }
+        });        
+        H_chart[4].update();
+      }
+
+      function fill_chart(c_num) {
+        var x = H_offset + c_num;
+        x = x % 5;
+        H_chart[c_num].options.title.text = titles[x];
+        H_chart[c_num].data.datasets[0].label = plot[x];
+
+    //    H_chart[c_num].data.datasets[0].data = dat;
+   //     H_chart[c_num].data.labels = s_label;
+
+        H_chart[c_num].update();
+      }
+
+      move_history = function() {
+        var x = H_offset;
+        var i = 0;
+        do {
+              x = x % 5;
+              H_chart[i].options.title.text = titles[H_offset];
+              H_chart[i].data.datasets[0].label = plot[H_offset];
+
+     //     var dataArray = H_chart[i].data.datasets[0].data;
+      //    var dataSize = dataArray.length;
+     //     var co = dat.length;          
+            //     H_chart[0].data.datasets[0].data[i] = dat[i] + H_offset;
+            //     H_chart[0].data.labels.push(s_label[i]);
+     //     do{
+    //        dat[i] = dat[i] + 10;
+    //        i++;
+     //    } while (i < co);
+     //    H_chart[i].update();
+            i++;
+            x++;
+        } while (i < 5)
+
+      }
+
+      update_history = function() {
         var len = "0";
         var xhr;
-        var url;
         var t_r;
-        var dat;
-        switch (sel) {
-          case "hour":
-            len = "0";
-            break;
-          case "day":
-            len = "1";
-            break;
-          case "month":
-            len = "2";
-            break;;
-          case "year":
-            len = "3";
-            break;
-        }
-        var c1,c2,c3,c4,c5;
-        switch (H_offset) {
-          case 0: c1 = "e";c2 = "a";c3 = "b";c4 = "c";c5 = "d";break;
-          case 1: c1 = "d";c2 = "e";c3 = "a";c4 = "b";c5 = "c";break;
-          case 2: c1 = "c";c2 = "d";c3 = "e";c4 = "a";c5 = "b";break;
-          case 3: c1 = "b";c2 = "c";c3 = "d";c4 = "e";c5 = "a";break;
-          case 4: c1 = "a";c2 = "b";c3 = "c";c4 = "d";c5 = "e";break;
-        }
-    //   xhr = new XMLHttpRequest();
-    //    url = "https://script.google.com/macros/s/AKfycbzep_6TONHLbfjt1H23_iCb0DMc126LPo3smsun/exec?read=" + len + ",0";
-    //    xhr.onreadystatechange = function() {
-    //     if (xhr.readyState == 4) {
-    //       t_r = xhr.responseText;
-    //        dat = t_r.split(",");
+        var url = "https://script.google.com/macros/s/AKfycbzep_6TONHLbfjt1H23_iCb0DMc126LPo3smsun/exec?read=" + sel.toString() + ",0";
 
-         var   chart0 = new Chart(document.getElementById("canvas_" + c1), {
-              type: 'line',
-              data: {
-                labels: ["12", "6am", "12", "6pm", "12", "6am", "12", "6pm", "12"],
-                datasets: [{
-                  label: "Outside",
-                  borderColor: "#3e95cd",
-                  fill: false,
-                  data: [0, 0, 0, 8, 0, 10, 0, 0]
-                }]
-              },
-              options: {
-                title: {
-                  display: true,
-                  text: 'Temperature'
-                },
-                animation: {
-                  duration: 0,
-                  hover: {
-                    animationDuration: 0,
-                  },
-                  responsiveAnimationDuration: 0,
-                }
-              }
-            });
-        chart0.update();
-        
-        var    chart1 = new Chart(document.getElementById("canvas_" + c2), {
-              type: 'line',
-              data: {
-                labels: ["12", "6am", "12", "6pm", "12", "6am", "12", "6pm", "12"],
-                datasets: [{
-                  label: "Outside",
-                  borderColor: "#3e95cd",
-                  fill: false,
-                  data: [0, 0, 0, 8, 0, 10, 0, 0]
-                }]
-              },
-              options: {
-                title: {
-                  display: true,
-                  text: 'Humidity'
-                },
-                animation: {
-                  duration: 0,
-                  hover: {
-                    animationDuration: 0,
-                  },
-                  responsiveAnimationDuration: 0,
-                }
-              }
-            });
-        chart1.update();
-        
-         var  chart2 = new Chart(document.getElementById("canvas_" + c3), {
-              type: 'line',
-              data: {
-                labels: ["12", "6am", "12", "6pm", "12", "6am", "12", "6pm", "12"],
-                datasets: [{
-                  label: "Outside",
-                  borderColor: "#3e95cd",
-                  fill: false,
-                  data: [0, 0, 0, 8, 0, 10, 0, 0]
-                }]
-              },
-              options: {
-                title: {
-                  display: true,
-                  text: 'Pressure'
-                },
-                animation: {
-                  duration: 0,
-                  hover: {
-                    animationDuration: 0,
-                  },
-                  responsiveAnimationDuration: 0,
-                }
-              }
-            });
-            
-        chart2.update();
-        
-           var chart3 = new Chart(document.getElementById("canvas_" + c4), {
-              type: 'line',
-              data: {
-                labels: ["12", "6am", "12", "6pm", "12", "6am", "12", "6pm", "12"],
-                datasets: [{
-                  label: "Outside",
-                  borderColor: "#3e95cd",
-                  fill: false,
-                  data: [0, 0, 0, 8, 0, 10, 0, 0]
-                }]
-              },
-              options: {
-                title: {
-                  display: true,
-                  text: 'Rain'
-                },
-                animation: {
-                  duration: 0,
-                  hover: {
-                    animationDuration: 0,
-                  },
-                  responsiveAnimationDuration: 0,
-                }
-              }
-            });
-        
-        chart3.update();
-        
-          var  chart4 = new Chart(document.getElementById("canvas_" + c5), {
-              type: 'line',
-              data: {
-                labels: ["12", "6am", "12", "6pm", "12", "6am", "12", "6pm", "12"],
-                datasets: [{
-                  label: "Outside",
-                  borderColor: "#3e95cd",
-                  fill: false,
-                  data: [0, 0, 0, 8, 0, 10, 0, 0]
-                }]
-              },
-              options: {
-                title: {
-                  display: true,
-                  text: 'Wind'
-                },
-                animation: {
-                  duration: 0,
-                  hover: {
-                    animationDuration: 0,
-                  },
-                  responsiveAnimationDuration: 0,
-                }
-              }
-            });
-        
-        chart4.update();
-    //      }
-    //    };
-    //    xhr.open("GET", url);
-    //    xhr.send(null);
+
+
+
+        //   xhr = new XMLHttpRequest();
+        //    xhr.onreadystatechange = function() {
+        //     if (xhr.readyState == 4) {
+        //       t_r = xhr.responseText;
+        //     var  all_dat = t_r.split(",");
+
+        fill_chart(0);
+        fill_chart(1);
+       fill_chart(2);
+        fill_chart(3);
+        fill_chart(4);
+
+        //      }
+        //    };
+        //    xhr.open("GET", url);
+        //    xhr.send(null);
       }
 
 
       sort_update = function() {
         if (active_window == 0)
           update_fields();
-        if (active_window == 1)
+        if (active_window == 1) {
           update_history();
+        }
       }
       var myVar = setInterval(sort_update, 10000);
       active_window = 0;
       sort_update();
+      build_history();
     }
   </script>
   <div class="gwd-div-1w7a gwd-gen-19kmgwdanimation">
@@ -883,8 +933,9 @@ body {
       <div class="cent_c" id="cent_c">
         <canvas id="canvas" height="750" width="1000"></canvas>
       </div>
-      <div id="canvas_area_1" height="750" width="1500">
+      <div class="cent" id="canvas_area_1" height="750" width="1300">
         <div>
+          <p1 id="t_delay">text</p1>
           <label for="" duration="">History Duration</label>
           <select id="duration" height="50" width="100">
             <option value="Hour">Hour</option>
@@ -895,20 +946,20 @@ body {
         </div>
         <div class="column">
           <div class="row">
-            <canvas id="canvas_a" height="170" width="500"></canvas>
+            <canvas id="canvas_b" height="170" width="400"></canvas>
           </div>
           <div class="row">
-            <canvas id="canvas_b" height="170" width="500"></canvas>
+            <canvas id="canvas_c" height="170" width="400"></canvas>
           </div>
           <div class="row">
-            <canvas id="canvas_c" height="170" width="500"></canvas>
+            <canvas id="canvas_d" height="170" width="400"></canvas>
           </div>
           <div class="row">
-            <canvas id="canvas_d" height="170" width="500"></canvas>
+            <canvas id="canvas_e" height="170" width="400"></canvas>
           </div>
         </div>
         <div class="column_1">
-          <canvas id="canvas_e" height="680" width="900"></canvas>
+          <canvas id="canvas_a" height="680" width="800"></canvas>
         </div>
       </div>
     </div>
