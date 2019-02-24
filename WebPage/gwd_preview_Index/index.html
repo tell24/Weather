@@ -158,7 +158,6 @@ body {
     var move_history
     var active_window = 0;
     var H_offset = 0;
-    var milliseconds ;
     gwd.about = function(event) {
       var x = document.getElementById("cent_c");
       x.style.display = "none";
@@ -200,7 +199,6 @@ body {
       // click
       H_offset += 1;
       H_offset = H_offset % 5;
-      milliseconds = new Date().getTime();
       move_history();
     };
     gwd.c_c_click = function(event) {
@@ -272,13 +270,19 @@ body {
         document.getElementById('canvas_d').getContext('2d'),
         document.getElementById('canvas_e').getContext('2d')
       ];
-      var H_chart = [new Chart(chart[0]), new Chart(chart[1]), new Chart(chart[2]), new Chart(chart[3]), new Chart(chart[4])];
+   //   var H_chart = [new Chart(chart[0]), new Chart(chart[1]), new Chart(chart[2]), new Chart(chart[3]), new Chart(chart[4])];
       var titles = ['Temperature', 'Humidity', 'Pressure', 'Wind Speed', 'Rain Fall'];
       var plot = ['Min', 'Max', 'Min', 'Max', 'Min', 'Max', 'Mean', 'Gust', 'Total', 'Last Hour'];
       var axis_x_label = ['Minutes', 'Hours', 'Day of Week', 'Day of Month', 'Week of Year'];
       var axis_y_label = ['C', '', '%', '', 'mB', '', 'mph', '', 'mm', ' '];
 
-      const dat = [[0, 3, 0, 2, 0, 1, 0, 6, 0, 3, 0, 2, 0, 1, 0, 6, 0, 3, 0, 2, 0, 1, 0, 6, 0],[1, 3, 0, 2, 0, 0, 0, 6, 0, 3, 0, 4, 0, 1, 0, 6, 0, 3, 0, 2, 0, 1, 4, 6, 4],[0, 3, 0, 2, 2, 1, 0, 6, 0, 3, 0, 2, 0, 4, 0, 6, 0, 3, 0, 2, 0, 1, 0, 6, 0],[0, 3, 3, 2, 0, 1, 0, 6, 6, 3, 0, 2, 0, 1, 0, 6, 0, 3, 0, 2, 0, 1, 0, 6, 0],[0, 3, 0, 2, 0, 1, 0, 6, 0, 3, 0, 2, 4, 1, 0, 6, 0, 3, 0, 2, 4, 1, 0, 6, 0]];
+      const dat = [
+        [0, 3, 0, 2, 0, 1, 0, 6, 0, 3, 0, 2, 0, 1, 0, 6, 0, 3, 0, 2, 0, 1, 0, 6, 0],
+        [1, 3, 0, 2, 0, 0, 0, 6, 0, 3, 0, 4, 0, 1, 0, 6, 0, 3, 0, 2, 0, 1, 4, 6, 4],
+        [0, 3, 0, 2, 2, 1, 0, 6, 0, 3, 0, 2, 0, 4, 0, 6, 0, 3, 0, 2, 0, 1, 0, 6, 0],
+        [0, 3, 3, 2, 0, 1, 0, 6, 6, 3, 0, 2, 0, 1, 0, 6, 0, 3, 0, 2, 0, 1, 0, 6, 0],
+        [0, 3, 0, 2, 0, 1, 0, 6, 0, 3, 0, 2, 4, 1, 0, 6, 0, 3, 0, 2, 4, 1, 0, 6, 0]
+      ];
       const s_label = ["12", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
 
       function draw_dial(loc, win) {
@@ -700,181 +704,205 @@ body {
 
       function build_history() {
         var temp = 0;
-          temp = dat[0,0];
-        H_chart[0] = new Chart(chart[0], {
-          type: 'line',
-          data: {
-            labels: s_label,
-            datasets: [{
-              label: "Outside",
-              borderColor: "#3e95cd",
-              fill: false,
-              data: temp
-            }]
-          },
-          options: {
-            title: {
-              display: true,
-              text: 'Temperature'
-            },
-            animation: {
-              duration: 0,
-              hover: {
-                animationDuration: 0,
-              },
-              responsiveAnimationDuration: 0,
-            }
-          }
-        });      
-        H_chart[0].update();
-        
-         
-        temp = dat[1,0];
-        H_chart[1] = new Chart(chart[1], {
-          type: 'line',
-          data: {
-            labels: s_label,
-            datasets: [{
-              label: "Outside",
-              borderColor: "#3e95cd",
-              fill: false,
-              data: temp
-            }]
-          },
-          options: {
-            title: {
-              display: true,
-              text: 'Humidity'
-            },
-            animation: {
-              duration: 0,
-              hover: {
-                animationDuration: 0,
-              },
-              responsiveAnimationDuration: 0,
-            }
-          }
-        });      
-        H_chart[1].update();
-         
-        temp = dat[2,0];
+        temp = dat[0, 0];
+        var ctx = chart[0];
+            ctx.fillStyle = t_col;
+            ctx.fillRect(0, 0, 800, 700);    
+        ctx = chart[1];
+            ctx.fillStyle = w_col;
+            ctx.fillRect(0, 0, 400, 170); 
+        ctx = chart[2];
+            ctx.fillStyle = t_col;
+            ctx.fillRect(0, 0, 400, 170);  
+        ctx = chart[3];
+            ctx.fillStyle = w_col;
+            ctx.fillRect(0, 0, 400, 170);  
+        ctx = chart[4];
+            ctx.fillStyle = t_col;
+            ctx.fillRect(0, 0, 400, 170);     
 
-        H_chart[2] = new Chart(chart[2], {
-          type: 'line',
-          data: {
-            labels: s_label,
-            datasets: [{
-              label: "Outside",
-              borderColor: "#3e95cd",
-              fill: false,
-              data: temp
-            }]
-          },
-          options: {
-            title: {
-              display: true,
-              text: 'Pressure'
-            },
-            animation: {
-              duration: 0,
-              hover: {
-                animationDuration: 0,
-              },
-              responsiveAnimationDuration: 0,
-            }
-          }
-        });      
-        H_chart[2].update();
-         
-        temp = dat[3,0];
-        H_chart[3] = new Chart(chart[3], {
-          type: 'line',
-          data: {
-            labels: s_label,
-            datasets: [{
-              label: "Outside",
-              borderColor: "#3e95cd",
-              fill: false,
-              data: temp
-            }]
-          },
-          options: {
-            title: {
-              display: true,
-              text: 'Rain'
-            },
-            animation: {
-              duration: 0,
-              hover: {
-                animationDuration: 0,
-              },
-              responsiveAnimationDuration: 0,
-            }
-          }
-        });        
-        H_chart[3].update();
-         
-        temp = dat[4,0];
-        H_chart[4] = new Chart(chart[4], {
-          type: 'line',
-          data: {
-            labels: s_label,
-            datasets: [{
-              label: "Outside",
-              borderColor: "#3e95cd",
-              fill: false,
-              data: temp
-            }]
-          },
-          options: {
-            title: {
-              display: true,
-              text: 'Wind'
-            },
-            animation: {
-              duration: 0,
-              hover: {
-                animationDuration: 0,
-              },
-              responsiveAnimationDuration: 0,
-            }
-          }
-        });        
-        H_chart[4].update();
+                1
+
+        
+        <!-- H_chart[0] = new Chart(chart[0], { -->
+        <!-- type: 'line', -->
+        <!-- data: { -->
+        <!-- labels: s_label, -->
+        <!-- datasets: [{ -->
+        <!-- label: "Outside", -->
+        <!-- borderColor: "#3e95cd", -->
+        <!-- fill: false, -->
+        <!-- data: temp -->
+        <!-- }] -->
+        <!-- }, -->
+        <!-- options: { -->
+        <!-- title: { -->
+        <!-- display: true, -->
+        <!-- text: 'Temperature' -->
+        <!-- }, -->
+        <!-- animation: { -->
+        <!-- duration: 0, -->
+        <!-- hover: { -->
+        <!-- animationDuration: 0, -->
+        <!-- }, -->
+        <!-- responsiveAnimationDuration: 0, -->
+        <!-- } -->
+        <!-- } -->
+        <!-- });       -->
+        <!-- H_chart[0].update(); -->
+
+
+        <!-- temp = dat[1,0]; -->
+        <!-- H_chart[1] = new Chart(chart[1], { -->
+        <!-- type: 'line', -->
+        <!-- data: { -->
+        <!-- labels: s_label, -->
+        <!-- datasets: [{ -->
+        <!-- label: "Outside", -->
+        <!-- borderColor: "#3e95cd", -->
+        <!-- fill: false, -->
+        <!-- data: temp -->
+        <!-- }] -->
+        <!-- }, -->
+        <!-- options: { -->
+        <!-- title: { -->
+        <!-- display: true, -->
+        <!-- text: 'Humidity' -->
+        <!-- }, -->
+        <!-- animation: { -->
+        <!-- duration: 0, -->
+        <!-- hover: { -->
+        <!-- animationDuration: 0, -->
+        <!-- }, -->
+        <!-- responsiveAnimationDuration: 0, -->
+        <!-- } -->
+        <!-- } -->
+        <!-- });       -->
+        <!-- H_chart[1].update(); -->
+
+        <!-- temp = dat[2,0]; -->
+
+        <!-- H_chart[2] = new Chart(chart[2], { -->
+        <!-- type: 'line', -->
+        <!-- data: { -->
+        <!-- labels: s_label, -->
+        <!-- datasets: [{ -->
+        <!-- label: "Outside", -->
+        <!-- borderColor: "#3e95cd", -->
+        <!-- fill: false, -->
+        <!-- data: temp -->
+        <!-- }] -->
+        <!-- }, -->
+        <!-- options: { -->
+        <!-- title: { -->
+        <!-- display: true, -->
+        <!-- text: 'Pressure' -->
+        <!-- }, -->
+        <!-- animation: { -->
+        <!-- duration: 0, -->
+        <!-- hover: { -->
+        <!-- animationDuration: 0, -->
+        <!-- }, -->
+        <!-- responsiveAnimationDuration: 0, -->
+        <!-- } -->
+        <!-- } -->
+        <!-- });       -->
+        <!-- H_chart[2].update(); -->
+
+        <!-- temp = dat[3,0]; -->
+        <!-- H_chart[3] = new Chart(chart[3], { -->
+        <!-- type: 'line', -->
+        <!-- data: { -->
+        <!-- labels: s_label, -->
+        <!-- datasets: [{ -->
+        <!-- label: "Outside", -->
+        <!-- borderColor: "#3e95cd", -->
+        <!-- fill: false, -->
+        <!-- data: temp -->
+        <!-- }] -->
+        <!-- }, -->
+        <!-- options: { -->
+        <!-- title: { -->
+        <!-- display: true, -->
+        <!-- text: 'Rain' -->
+        <!-- }, -->
+        <!-- animation: { -->
+        <!-- duration: 0, -->
+        <!-- hover: { -->
+        <!-- animationDuration: 0, -->
+        <!-- }, -->
+        <!-- responsiveAnimationDuration: 0, -->
+        <!-- } -->
+        <!-- } -->
+        <!-- });         -->
+        <!-- H_chart[3].update(); -->
+
+        <!-- temp = dat[4,0]; -->
+        <!-- H_chart[4] = new Chart(chart[4], { -->
+        <!-- type: 'line', -->
+        <!-- data: { -->
+        <!-- labels: s_label, -->
+        <!-- datasets: [{ -->
+        <!-- label: "Outside", -->
+        <!-- borderColor: "#3e95cd", -->
+        <!-- fill: false, -->
+        <!-- data: temp -->
+        <!-- }] -->
+        <!-- }, -->
+        <!-- options: { -->
+        <!-- title: { -->
+        <!-- display: true, -->
+        <!-- text: 'Wind' -->
+        <!-- }, -->
+        <!-- animation: { -->
+        <!-- duration: 0, -->
+        <!-- hover: { -->
+        <!-- animationDuration: 0, -->
+        <!-- }, -->
+        <!-- responsiveAnimationDuration: 0, -->
+        <!-- } -->
+        <!-- } -->
+        <!-- });         -->
+        <!-- H_chart[4].update(); -->
+          
+          
+          
+          
+          
       }
 
       function fill_chart(c_num) {
         var x = H_offset + c_num;
         x = x % 5;
-        H_chart[c_num].options.title.text = titles[x];
-        H_chart[c_num].data.datasets[0].label = plot[x];
+     //   H_chart[c_num].options.title.text = titles[x];
+     //   H_chart[c_num].data.datasets[0].label = plot[x];
 
-    //    H_chart[c_num].data.datasets[0].data = dat;
-   //     H_chart[c_num].data.labels = s_label;
+        //    H_chart[c_num].data.datasets[0].data = dat;
+        //     H_chart[c_num].data.labels = s_label;
 
-        H_chart[c_num].update();
+    //    H_chart[c_num].update();
       }
 
       move_history = function() {
         var x = H_offset;
         var i = 0;
         do {
-              x = x % 5;
-              H_chart[i].options.title.text = titles[H_offset];
-              H_chart[i].data.datasets[0].label = plot[H_offset];
+          x = x % 5;
+     //     H_chart[i].options.title.text = titles[H_offset];
+     //     H_chart[i].data.datasets[0].label = plot[H_offset];
 
-     //     var dataArray = H_chart[i].data.datasets[0].data;
-      //    var dataSize = dataArray.length;
-     //     var co = dat.length;          
-            //     H_chart[0].data.datasets[0].data[i] = dat[i] + H_offset;
-            //     H_chart[0].data.labels.push(s_label[i]);
-     //     do{
-    //        dat[i] = dat[i] + 10;
-    //        i++;
-     //    } while (i < co);
-     //    H_chart[i].update();
-            i++;
-            x++;
+          //     var dataArray = H_chart[i].data.datasets[0].data;
+          //    var dataSize = dataArray.length;
+          //     var co = dat.length;          
+          //     H_chart[0].data.datasets[0].data[i] = dat[i] + H_offset;
+          //     H_chart[0].data.labels.push(s_label[i]);
+          //     do{
+          //        dat[i] = dat[i] + 10;
+          //        i++;
+          //    } while (i < co);
+          //    H_chart[i].update();
+          i++;
+          x++;
         } while (i < 5)
 
       }
@@ -896,7 +924,7 @@ body {
 
         fill_chart(0);
         fill_chart(1);
-       fill_chart(2);
+        fill_chart(2);
         fill_chart(3);
         fill_chart(4);
 
