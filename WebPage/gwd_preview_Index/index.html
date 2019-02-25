@@ -270,7 +270,7 @@ body {
         document.getElementById('canvas_d').getContext('2d'),
         document.getElementById('canvas_e').getContext('2d')
       ];
-   //   var H_chart = [new Chart(chart[0]), new Chart(chart[1]), new Chart(chart[2]), new Chart(chart[3]), new Chart(chart[4])];
+      //   var H_chart = [new Chart(chart[0]), new Chart(chart[1]), new Chart(chart[2]), new Chart(chart[3]), new Chart(chart[4])];
       var titles = ['Temperature', 'Humidity', 'Pressure', 'Wind Speed', 'Rain Fall'];
       var plot = ['Min', 'Max', 'Min', 'Max', 'Min', 'Max', 'Mean', 'Gust', 'Total', 'Last Hour'];
       var axis_x_label = ['Minutes', 'Hours', 'Day of Week', 'Day of Month', 'Week of Year'];
@@ -701,29 +701,44 @@ body {
         xhr.open("GET", url);
         xhr.send(null);
       }
+      function draw_graph( num )
+      {
+        var ctx = chart[num];
+        
+        var x = 20;
+        var y = 20;
+        var w = 360;
+        var h = 130;
+        if(num === 0){
+          w = 760;
+          h = 640;
+        }
+        ;
+        ctx.strokeStyle = "grey";
+        ctx.rect(x, y, w, h);
+        ctx.stroke(); 
+        var xl = x;
+        var xs = w/24;
+        var c_b = y+h;
+        ctx.beginPath();
+        do{
+          xl+=xs;
+        ctx.moveTo(xl,y);
+        ctx.lineTo(xl,c_b); 
+        }while (xl<w+x-1);
+       ctx.stroke(); 
+      }
 
       function build_history() {
+        var h_c = 0;
+        do{
+           draw_graph( h_c );
+          h_c++;
+        }while (h_c < 5);
         var temp = 0;
         temp = dat[0, 0];
-        var ctx = chart[0];
-            ctx.fillStyle = t_col;
-            ctx.fillRect(0, 0, 800, 700);    
-        ctx = chart[1];
-            ctx.fillStyle = w_col;
-            ctx.fillRect(0, 0, 400, 170); 
-        ctx = chart[2];
-            ctx.fillStyle = t_col;
-            ctx.fillRect(0, 0, 400, 170);  
-        ctx = chart[3];
-            ctx.fillStyle = w_col;
-            ctx.fillRect(0, 0, 400, 170);  
-        ctx = chart[4];
-            ctx.fillStyle = t_col;
-            ctx.fillRect(0, 0, 400, 170);     
-
-                1
-
         
+
         <!-- H_chart[0] = new Chart(chart[0], { -->
         <!-- type: 'line', -->
         <!-- data: { -->
@@ -864,23 +879,23 @@ body {
         <!-- } -->
         <!-- });         -->
         <!-- H_chart[4].update(); -->
-          
-          
-          
-          
-          
+
+
+
+
+
       }
 
       function fill_chart(c_num) {
         var x = H_offset + c_num;
         x = x % 5;
-     //   H_chart[c_num].options.title.text = titles[x];
-     //   H_chart[c_num].data.datasets[0].label = plot[x];
+        //   H_chart[c_num].options.title.text = titles[x];
+        //   H_chart[c_num].data.datasets[0].label = plot[x];
 
         //    H_chart[c_num].data.datasets[0].data = dat;
         //     H_chart[c_num].data.labels = s_label;
 
-    //    H_chart[c_num].update();
+        //    H_chart[c_num].update();
       }
 
       move_history = function() {
@@ -888,8 +903,8 @@ body {
         var i = 0;
         do {
           x = x % 5;
-     //     H_chart[i].options.title.text = titles[H_offset];
-     //     H_chart[i].data.datasets[0].label = plot[H_offset];
+          //     H_chart[i].options.title.text = titles[H_offset];
+          //     H_chart[i].data.datasets[0].label = plot[H_offset];
 
           //     var dataArray = H_chart[i].data.datasets[0].data;
           //    var dataSize = dataArray.length;
@@ -963,7 +978,6 @@ body {
       </div>
       <div class="cent" id="canvas_area_1" height="750" width="1300">
         <div>
-          <p1 id="t_delay">text</p1>
           <label for="" duration="">History Duration</label>
           <select id="duration" height="50" width="100">
             <option value="Hour">Hour</option>
