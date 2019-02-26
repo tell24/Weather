@@ -153,7 +153,7 @@
     window.gwd = window.gwd || {};
     var sort_update;
     var update_history;
-    var move_history
+    var build_history
     var active_window = 0;
     var H_offset = 0;
     gwd.about = function(event) {
@@ -191,31 +191,31 @@
     gwd.duration_change = function(event) {
       // update graph
       sel = document.getElementById("mySelect").selectedIndex
-      update_history();
+      build_history();
     };
     gwd.c_b_click = function(event) {
       // click
       H_offset += 1;
       H_offset = H_offset % 5;
-      move_history();
+      build_history();
     };
     gwd.c_c_click = function(event) {
       //click
       H_offset += 2;
       H_offset = H_offset % 5;
-      move_history();
+      build_history();
     };
     gwd.c_d_click = function(event) {
       //click
       H_offset += 3;
       H_offset = H_offset % 5;
-      move_history();
+      build_history();
     };
     gwd.c_e_click = function(event) {
       //click
       H_offset += 4;
       H_offset = H_offset % 5;
-      move_history();
+      build_history();
     };
   </script>
   <script type="text/javascript" gwd-events="registration">
@@ -702,6 +702,7 @@
 
       function draw_graph(num, min, max, ticks, points) {
         var ctx = chart[num];
+        ctx.clearRect(0, 0, 800, 800);
         var range = max - min;
         var y_inc = Math.ceil(range) / 4;
         var x = 50;
@@ -750,8 +751,8 @@
         ctx.stroke();
       }
 
-      function build_history() {
-        var h_c = 0;
+       build_history = function() {
+        var h_c = H_offset;
         var temp = new Array();
         var min = 0;
         var max = 0;
@@ -778,6 +779,7 @@
 
         ticks = 24;
         points = 24;
+        var plots = 0;
         do {
           var i = points;
           temp = new Array();
@@ -789,10 +791,12 @@
             if (min > temp[i]) min = temp[i];
             if (max < temp[i]) max = temp[i];
           } while (i > 0);
-          draw_graph(h_c, min, max, ticks, points);
-          fill_chart(h_c, temp, min, max, points);
+          draw_graph(plots, min, max, ticks, points);
+          fill_chart(plots, temp, min, max, points);
           h_c++;
-        } while (h_c < 5);
+          h_c = h_c%5;
+          plots++;
+        } while (plots < 5);
 
 
         <!-- H_chart[0] = new Chart(chart[0], { -->
@@ -953,51 +957,27 @@
           w = 760;
           h = 640;
         };
-        var y_inc = h/ Math.ceil(range) ;
-        
+        var y_inc = h / Math.ceil(range);
+
         var i = Math.ceil(max);
         var s = 0;
         var y1 = 0;
-        var xs = w/p;
-        y1 = y + (y_inc*(i - p_data[0]));
-        
+        var xs = w / p;
+        y1 = y + (y_inc * (i - p_data[0]));
+
         ctx.strokeStyle = "blue";
         ctx.beginPath();
         ctx.moveTo(x, y1);
-        do {          
+        do {
           s++;
           x += xs;
-          y1 = y+(y_inc*(i - p_data[s]));
+          y1 = y + (y_inc * (i - p_data[s]));
           ctx.lineTo(x, y1);
         } while (s < p);
-          ctx.stroke();
-        
-
+        ctx.stroke();
       }
 
-      move_history = function() {
-        var x = H_offset;
-        var i = 0;
-        do {
-          x = x % 5;
-          //     H_chart[i].options.title.text = titles[H_offset];
-          //     H_chart[i].data.datasets[0].label = plot[H_offset];
 
-          //     var dataArray = H_chart[i].data.datasets[0].data;
-          //    var dataSize = dataArray.length;
-          //     var co = dat.length;          
-          //     H_chart[0].data.datasets[0].data[i] = dat[i] + H_offset;
-          //     H_chart[0].data.labels.push(s_label[i]);
-          //     do{
-          //        dat[i] = dat[i] + 10;
-          //        i++;
-          //    } while (i < co);
-          //    H_chart[i].update();
-          i++;
-          x++;
-        } while (i < 5)
-
-      }
 
       update_history = function() {
         var len = "0";
@@ -1013,13 +993,7 @@
         //     if (xhr.readyState == 4) {
         //       t_r = xhr.responseText;
         //     var  all_dat = t_r.split(",");
-
-        fill_chart(0);
-        fill_chart(1);
-        fill_chart(2);
-        fill_chart(3);
-        fill_chart(4);
-
+build_history();
         //      }
         //    };
         //    xhr.open("GET", url);
