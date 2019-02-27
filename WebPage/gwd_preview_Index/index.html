@@ -158,6 +158,7 @@ body {
     var build_history
     var active_window = 0;
     var H_offset = 0;
+    var old_H_offset = 0;
     gwd.about = function(event) {
       var x = document.getElementById("cent_c");
       x.style.display = "none";
@@ -196,25 +197,29 @@ body {
       build_history();
     };
     gwd.c_b_click = function(event) {
-      // click
+      // click 
+      old_H_offset = H_offset;
       H_offset += 1;
       H_offset = H_offset % 5;
       build_history();
     };
     gwd.c_c_click = function(event) {
       //click
+      old_H_offset = H_offset;
       H_offset += 2;
       H_offset = H_offset % 5;
       build_history();
     };
     gwd.c_d_click = function(event) {
       //click
+      old_H_offset = H_offset;
       H_offset += 3;
       H_offset = H_offset % 5;
       build_history();
     };
     gwd.c_e_click = function(event) {
       //click
+      old_H_offset = H_offset;
       H_offset += 4;
       H_offset = H_offset % 5;
       build_history();
@@ -249,7 +254,6 @@ body {
 <style type="text/css">#pagedeck { overflow: hidden !important; }</style></head>
 
 <body class="htmlNoPages">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
   <script type="text/javascript">
     window.onload = function() {
       var t_col = "#F07C60";
@@ -270,7 +274,7 @@ body {
         document.getElementById('canvas_d').getContext('2d'),
         document.getElementById('canvas_e').getContext('2d')
       ];
-      //   var H_chart = [new Chart(chart[0]), new Chart(chart[1]), new Chart(chart[2]), new Chart(chart[3]), new Chart(chart[4])];
+      
       var titles = ['Temperature', 'Humidity', 'Pressure', 'Wind Speed', 'Rain Fall'];
       var plot = ['Min', 'Max', 'Min', 'Max', 'Min', 'Max', 'Mean', 'Gust', 'Total', 'Last Hour'];
       var axis_x_label = ['Minutes', 'Hours', 'Day of Week', 'Day of Month', 'Week of Year'];
@@ -702,21 +706,22 @@ body {
         xhr.send(null);
       }
 
-      function draw_graph(num, min, max, ticks, points) {
+      function draw_graph(num, range, max, ticks, points) {
         var ctx = chart[num];
-        ctx.clearRect(0, 0, ctx.width, ctx.height);
-        var range = max - min;
-        var y_inc = Math.ceil(range) / 4;
+        ctx.clearRect(0, 0, 800, 800);
+        var y_inc = range / 4;
         var x = 50;
         var y = 20;
         var w = 360;
         var h = 130;
         var ys = 130 / 4;
+        var steps = 4;
         var x_step = Math.round(points / ticks);
         if (num === 0) {
           w = 760;
           h = 640;
-          y_inc = Math.ceil(range) / 8;
+          steps = 8;
+          y_inc = range / 8;
           ys = 640 / 8;
         };
         ctx.strokeStyle = "grey";
@@ -741,20 +746,22 @@ body {
         var yl = y;
         c_b = x + w;
         ctx.beginPath();
-        i = Math.ceil(max);
+        i = max;
+        var step = range/steps;
         do {
-          ctx.fillText(i, 5, yl);
+          ctx.fillText(i, 25, yl);
           yl += ys;
           ctx.moveTo(x, yl);
           ctx.lineTo(c_b, yl);
-          i -= y_inc;
+          i -= step;
         } while (yl < h + y - 1);
         ctx.fillText(i, 25, yl);
         ctx.stroke();
       }
 
-       build_history = function() {
+      build_history = function() {
         var h_c = H_offset;
+        var o_h_c = old_H_offset;
         var temp = new Array();
         var min = 0;
         var max = 0;
@@ -782,8 +789,25 @@ body {
         ticks = 24;
         points = 24;
         var plots = 0;
+        var  range= 0;
         do {
           var i = points;
+          temp = new Array();
+          temp = dat[o_h_c];
+          min = temp[i - 1];
+          max = temp[i - 1];
+          do {
+            i--;
+            if (min > temp[i]) min = temp[i];
+            if (max < temp[i]) max = temp[i];
+          } while (i > 0);    
+          
+          range = Math.ceil((Math.ceil(max)-Math.floor(min)) / 4) *4;
+          if(plots ===0) range = Math.ceil((Math.ceil(max)-Math.floor(min)) / 8)*8;
+          clear_chart(plots, range, Math.ceil(max), points);
+          
+         
+          i = points;
           temp = new Array();
           temp = dat[h_c];
           min = temp[i - 1];
@@ -793,164 +817,23 @@ body {
             if (min > temp[i]) min = temp[i];
             if (max < temp[i]) max = temp[i];
           } while (i > 0);
-          draw_graph(plots, min, max, ticks, points);
-          fill_chart(plots, temp, min, max, points);
+           range = Math.ceil((Math.ceil(max)-Math.floor(min)) / 4) *4;
+          if(plots ===0) range = Math.ceil((Math.ceil(max)-Math.floor(min)) / 8)*8;
+          draw_graph(plots, range, max, ticks, points);
+          
+          fill_chart(plots, temp, range, max, points);
           h_c++;
-          h_c = h_c%5;
+          h_c = h_c % 5;
+          o_h_c++;
+          o_h_c = o_h_c % 5;
           plots++;
         } while (plots < 5);
 
 
-        <!-- H_chart[0] = new Chart(chart[0], { -->
-        <!-- type: 'line', -->
-        <!-- data: { -->
-        <!-- labels: s_label, -->
-        <!-- datasets: [{ -->
-        <!-- label: "Outside", -->
-        <!-- borderColor: "#3e95cd", -->
-        <!-- fill: false, -->
-        <!-- data: temp -->
-        <!-- }] -->
-        <!-- }, -->
-        <!-- options: { -->
-        <!-- title: { -->
-        <!-- display: true, -->
-        <!-- text: 'Temperature' -->
-        <!-- }, -->
-        <!-- animation: { -->
-        <!-- duration: 0, -->
-        <!-- hover: { -->
-        <!-- animationDuration: 0, -->
-        <!-- }, -->
-        <!-- responsiveAnimationDuration: 0, -->
-        <!-- } -->
-        <!-- } -->
-        <!-- });       -->
-        <!-- H_chart[0].update(); -->
-
-
-        <!-- temp = dat[1,0]; -->
-        <!-- H_chart[1] = new Chart(chart[1], { -->
-        <!-- type: 'line', -->
-        <!-- data: { -->
-        <!-- labels: s_label, -->
-        <!-- datasets: [{ -->
-        <!-- label: "Outside", -->
-        <!-- borderColor: "#3e95cd", -->
-        <!-- fill: false, -->
-        <!-- data: temp -->
-        <!-- }] -->
-        <!-- }, -->
-        <!-- options: { -->
-        <!-- title: { -->
-        <!-- display: true, -->
-        <!-- text: 'Humidity' -->
-        <!-- }, -->
-        <!-- animation: { -->
-        <!-- duration: 0, -->
-        <!-- hover: { -->
-        <!-- animationDuration: 0, -->
-        <!-- }, -->
-        <!-- responsiveAnimationDuration: 0, -->
-        <!-- } -->
-        <!-- } -->
-        <!-- });       -->
-        <!-- H_chart[1].update(); -->
-
-        <!-- temp = dat[2,0]; -->
-
-        <!-- H_chart[2] = new Chart(chart[2], { -->
-        <!-- type: 'line', -->
-        <!-- data: { -->
-        <!-- labels: s_label, -->
-        <!-- datasets: [{ -->
-        <!-- label: "Outside", -->
-        <!-- borderColor: "#3e95cd", -->
-        <!-- fill: false, -->
-        <!-- data: temp -->
-        <!-- }] -->
-        <!-- }, -->
-        <!-- options: { -->
-        <!-- title: { -->
-        <!-- display: true, -->
-        <!-- text: 'Pressure' -->
-        <!-- }, -->
-        <!-- animation: { -->
-        <!-- duration: 0, -->
-        <!-- hover: { -->
-        <!-- animationDuration: 0, -->
-        <!-- }, -->
-        <!-- responsiveAnimationDuration: 0, -->
-        <!-- } -->
-        <!-- } -->
-        <!-- });       -->
-        <!-- H_chart[2].update(); -->
-
-        <!-- temp = dat[3,0]; -->
-        <!-- H_chart[3] = new Chart(chart[3], { -->
-        <!-- type: 'line', -->
-        <!-- data: { -->
-        <!-- labels: s_label, -->
-        <!-- datasets: [{ -->
-        <!-- label: "Outside", -->
-        <!-- borderColor: "#3e95cd", -->
-        <!-- fill: false, -->
-        <!-- data: temp -->
-        <!-- }] -->
-        <!-- }, -->
-        <!-- options: { -->
-        <!-- title: { -->
-        <!-- display: true, -->
-        <!-- text: 'Rain' -->
-        <!-- }, -->
-        <!-- animation: { -->
-        <!-- duration: 0, -->
-        <!-- hover: { -->
-        <!-- animationDuration: 0, -->
-        <!-- }, -->
-        <!-- responsiveAnimationDuration: 0, -->
-        <!-- } -->
-        <!-- } -->
-        <!-- });         -->
-        <!-- H_chart[3].update(); -->
-
-        <!-- temp = dat[4,0]; -->
-        <!-- H_chart[4] = new Chart(chart[4], { -->
-        <!-- type: 'line', -->
-        <!-- data: { -->
-        <!-- labels: s_label, -->
-        <!-- datasets: [{ -->
-        <!-- label: "Outside", -->
-        <!-- borderColor: "#3e95cd", -->
-        <!-- fill: false, -->
-        <!-- data: temp -->
-        <!-- }] -->
-        <!-- }, -->
-        <!-- options: { -->
-        <!-- title: { -->
-        <!-- display: true, -->
-        <!-- text: 'Wind' -->
-        <!-- }, -->
-        <!-- animation: { -->
-        <!-- duration: 0, -->
-        <!-- hover: { -->
-        <!-- animationDuration: 0, -->
-        <!-- }, -->
-        <!-- responsiveAnimationDuration: 0, -->
-        <!-- } -->
-        <!-- } -->
-        <!-- });         -->
-        <!-- H_chart[4].update(); -->
-
-
-
-
-
       }
 
-      function fill_chart(c_num, p_data, min, max, p) {
-        var ctx = chart[c_num];
-        var range = max - min;
+      function fill_chart(c_num, p_data, range, max, p) {
+        var ctx = chart[c_num];       
         var x = 50;
         var y = 20;
         var w = 360;
@@ -959,9 +842,9 @@ body {
           w = 760;
           h = 640;
         };
-        var y_inc = h / Math.ceil(range);
+        var y_inc = h / range;
 
-        var i = Math.ceil(max);
+        var i = max;
         var s = 0;
         var y1 = 0;
         var xs = w / p;
@@ -979,6 +862,36 @@ body {
         ctx.stroke();
       }
 
+ function clear_chart(c_num, p_data, range, max, p) {
+        var ctx = chart[c_num];
+       
+        var x = 50;
+        var y = 20;
+        var w = 360;
+        var h = 130;
+        if (c_num === 0) {
+          w = 760;
+          h = 640;
+        };
+        var y_inc = h / range;
+
+        var i = max;
+        var s = 0;
+        var y1 = 0;
+        var xs = w / p;
+        y1 = y + (y_inc * (i - p_data[0]));
+
+        ctx.strokeStyle = "white";
+        ctx.beginPath();
+        ctx.moveTo(x, y1);
+        do {
+          s++;
+          x += xs;
+          y1 = y + (y_inc * (i - p_data[s]));
+          ctx.lineTo(x, y1);
+        } while (s < p);
+        ctx.stroke();
+      }
 
 
       update_history = function() {
@@ -995,7 +908,7 @@ body {
         //     if (xhr.readyState == 4) {
         //       t_r = xhr.responseText;
         //     var  all_dat = t_r.split(",");
-build_history();
+        build_history();
         //      }
         //    };
         //    xhr.open("GET", url);
