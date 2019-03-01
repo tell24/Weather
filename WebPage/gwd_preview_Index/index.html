@@ -155,7 +155,7 @@ body {
     window.gwd = window.gwd || {};
     var sort_update;
     var update_history;
-    var build_history
+    var build_history;
     var active_window = 0;
     var H_offset = 0;
     var old_H_offset = 0;
@@ -166,7 +166,6 @@ body {
       x = document.getElementById("canvas_area_1");
       x.style.display = "none";
       x = document.getElementById("about");
-      canvas_area_1
       x.style.display = "block";
       active_window = 2;
     };
@@ -684,26 +683,28 @@ body {
             clock(ctx);
 
             ctx.fillStyle = "Black";
-            data_plot(0, parseFloat(dat[0]), ctx);
-            data_plot(1, parseFloat(dat[18]), ctx);
-            if (parseFloat(dat[3]) > 100)
+            data_plot(0, parseFloat(dat[1]), ctx);
+            data_plot(1, parseFloat(dat[19]), ctx);
+            if (parseFloat(dat[4]) > 100)
               data_plot(2, parseFloat("100"), ctx);
             else
-              data_plot(2, parseFloat(dat[3]), ctx);
-            if (parseFloat(dat[21]) > 100)
+              data_plot(2, parseFloat(dat[4]), ctx);
+            if (parseFloat(dat[22]) > 100)
               data_plot(3, parseFloat("100"), ctx);
             else
-              data_plot(3, parseFloat(dat[21]), ctx);
-            data_plot(4, parseFloat(dat[24]), ctx);
+              data_plot(3, parseFloat(dat[22]), ctx);
+            data_plot(4, parseFloat(dat[25]), ctx);
             data_plot(5, parseFloat("10"), ctx);
             data_plot(6, parseFloat("90"), ctx);
             data_plot(7, parseFloat("15"), ctx);
-            rain_plot(parseFloat(dat[15]), parseFloat(dat[16]), ctx);
-
-            clock(ctx);
+            rain_plot(parseFloat(dat[16]), parseFloat(dat[17]), ctx);
+            
+            var x = document.getElementById("cent_c");
+            x.style.display = "block";
+            
           }
         };
-        xhr.open("GET", url); 
+        xhr.open("GET", url);
         xhr.send(null);
       }
 
@@ -711,7 +712,7 @@ body {
         var ctx = chart[num];
         ctx.clearRect(0, 0, 800, 800);
         var y_inc = range / 4;
-        var x = 50;
+        var x = 40;
         var y = 20;
         var w = 360;
         var h = 130;
@@ -836,12 +837,12 @@ body {
 
       function fill_chart(c_num, p_data, range, max, p) {
         var ctx = chart[c_num];
-        var x = 50;
+        var x = 40;
         var y = 20;
         var w = 360;
         var h = 130;
         if (c_num === 0) {
-          w = 760;
+          w = 740;
           h = 640;
         };
         var y_inc = h / range;
@@ -909,8 +910,8 @@ body {
         xhr.onreadystatechange = function() {
           if (xhr.readyState == 4) {
             var t_r = xhr.responseText;
-            var all_dat = t_r.split(",");
-            //    build_history();
+               var all_dat = t_r.split(",");
+                build_history();
           }
         };
         xhr.open("GET", url);
@@ -969,7 +970,7 @@ body {
           </div>
         </div>
         <div class="column_1">
-          <canvas id="canvas_a" height="680" width="800"></canvas>
+          <canvas id="canvas_a" height="680" width="820"></canvas>
         </div>
       </div>
     </div>
