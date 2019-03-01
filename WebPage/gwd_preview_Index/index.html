@@ -703,10 +703,7 @@ body {
             clock(ctx);
           }
         };
-        xhr.open("GET", url);
-        xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
-     //  xhr.setRequestHeader("Access-Control-Allow-Methods","GET, POST, PATCH, PUT, DELETE, OPTIONS");
-     //   xhr.setRequestHeader("Access-Control-Allow-Headers"," Origin, Content-Type, X-Auth-Token"); 
+        xhr.open("GET", url); 
         xhr.send(null);
       }
 
@@ -907,8 +904,8 @@ body {
 
 
         xhr = new XMLHttpRequest();
-        
-        
+
+
         xhr.onreadystatechange = function() {
           if (xhr.readyState == 4) {
             var t_r = xhr.responseText;
@@ -917,9 +914,6 @@ body {
           }
         };
         xhr.open("GET", url);
-        xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
-        xhr.setRequestHeader("Access-Control-Allow-Methods","GET, POST, PATCH, PUT, DELETE, OPTIONS");
-    //    xhr.setRequestHeader("Access-Control-Allow-Headers"," Origin, Content-Type, X-Auth-Token"); 
         xhr.send(null);
       }
 

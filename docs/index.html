@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html><head><meta name="GCD" content="YTk3ODQ3ZWZhN2I4NzZmMzBkNTEwYjJl82cb52ad9ed7c6aa1d21eb1c75475b32"/>
+<html><head><meta name="GCD" content="YTk3ODQ3ZWZhN2I4NzZmMzBkNTEwYjJl529c34e0f4625337bd2cb2fd01470ec0"/>
   <meta charset="utf-8">
   <title>Index</title>
   <meta name="generator" content="Google Web Designer 5.0.3.0130">
@@ -703,10 +703,7 @@ body {
             clock(ctx);
           }
         };
-        xhr.open("GET", url);
-        xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
-     //  xhr.setRequestHeader("Access-Control-Allow-Methods","GET, POST, PATCH, PUT, DELETE, OPTIONS");
-     //   xhr.setRequestHeader("Access-Control-Allow-Headers"," Origin, Content-Type, X-Auth-Token"); 
+        xhr.open("GET", url); 
         xhr.send(null);
       }
 
@@ -907,8 +904,8 @@ body {
 
 
         xhr = new XMLHttpRequest();
-        
-        
+
+
         xhr.onreadystatechange = function() {
           if (xhr.readyState == 4) {
             var t_r = xhr.responseText;
@@ -917,9 +914,6 @@ body {
           }
         };
         xhr.open("GET", url);
-        xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
-        xhr.setRequestHeader("Access-Control-Allow-Methods","GET, POST, PATCH, PUT, DELETE, OPTIONS");
-    //    xhr.setRequestHeader("Access-Control-Allow-Headers"," Origin, Content-Type, X-Auth-Token"); 
         xhr.send(null);
       }
 
