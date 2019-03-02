@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html><head><meta name="GCD" content="YTk3ODQ3ZWZhN2I4NzZmMzBkNTEwYjJl529c34e0f4625337bd2cb2fd01470ec0"/>
+<html><head><meta name="GCD" content="YTk3ODQ3ZWZhN2I4NzZmMzBkNTEwYjJl99755809c0ea781e88905539285bd489"/>
   <meta charset="utf-8">
   <title>Index</title>
   <meta name="generator" content="Google Web Designer 5.0.3.0130">
@@ -155,7 +155,7 @@ body {
     window.gwd = window.gwd || {};
     var sort_update;
     var update_history;
-    var build_history
+    var build_history;
     var active_window = 0;
     var H_offset = 0;
     var old_H_offset = 0;
@@ -166,7 +166,6 @@ body {
       x = document.getElementById("canvas_area_1");
       x.style.display = "none";
       x = document.getElementById("about");
-      canvas_area_1
       x.style.display = "block";
       active_window = 2;
     };
@@ -280,7 +279,7 @@ body {
       var plot = ['Min', 'Max', 'Min', 'Max', 'Min', 'Max', 'Mean', 'Gust', 'Total', 'Last Hour'];
       var axis_x_label = ['Minutes', 'Hours', 'Day of Week', 'Day of Month', 'Week of Year'];
       var axis_y_label = ['C', '', '%', '', 'mB', '', 'mph', '', 'mm', ' '];
-
+      var myarr ;
       const dat = [
         [0, 3, 0, 2, 0, 1, 0, 6, 0, 3, 0, 2, 0, 1, 0, 6, 0, 3, 0, 2, 0, 1, 0, 6, 0],
         [1, 3, 0, 2, 0, 0, 0, 6, 0, 3, 0, 4, 0, 1, 0, 6, 0, 3, 0, 2, 0, 1, 4, 6, 4],
@@ -641,6 +640,7 @@ body {
         drawHand(win, m, dia * 0.8, 2);
         win.lineWidth = 1;
       }
+      
 
       function update_fields() {
         xhr = new XMLHttpRequest();
@@ -684,26 +684,28 @@ body {
             clock(ctx);
 
             ctx.fillStyle = "Black";
-            data_plot(0, parseFloat(dat[0]), ctx);
-            data_plot(1, parseFloat(dat[18]), ctx);
-            if (parseFloat(dat[3]) > 100)
+            data_plot(0, parseFloat(dat[1]), ctx);
+            data_plot(1, parseFloat(dat[19]), ctx);
+            if (parseFloat(dat[4]) > 100)
               data_plot(2, parseFloat("100"), ctx);
             else
-              data_plot(2, parseFloat(dat[3]), ctx);
-            if (parseFloat(dat[21]) > 100)
+              data_plot(2, parseFloat(dat[4]), ctx);
+            if (parseFloat(dat[22]) > 100)
               data_plot(3, parseFloat("100"), ctx);
             else
-              data_plot(3, parseFloat(dat[21]), ctx);
-            data_plot(4, parseFloat(dat[24]), ctx);
+              data_plot(3, parseFloat(dat[22]), ctx);
+            data_plot(4, parseFloat(dat[25]), ctx);
             data_plot(5, parseFloat("10"), ctx);
             data_plot(6, parseFloat("90"), ctx);
             data_plot(7, parseFloat("15"), ctx);
-            rain_plot(parseFloat(dat[15]), parseFloat(dat[16]), ctx);
+            rain_plot(parseFloat(dat[16]), parseFloat(dat[17]), ctx);
 
-            clock(ctx);
+            var x = document.getElementById("cent_c");
+            x.style.display = "block";
+
           }
         };
-        xhr.open("GET", url); 
+        xhr.open("GET", url);
         xhr.send(null);
       }
 
@@ -711,7 +713,7 @@ body {
         var ctx = chart[num];
         ctx.clearRect(0, 0, 800, 800);
         var y_inc = range / 4;
-        var x = 50;
+        var x = 40;
         var y = 20;
         var w = 360;
         var h = 130;
@@ -836,12 +838,12 @@ body {
 
       function fill_chart(c_num, p_data, range, max, p) {
         var ctx = chart[c_num];
-        var x = 50;
+        var x = 40;
         var y = 20;
         var w = 360;
         var h = 130;
         if (c_num === 0) {
-          w = 760;
+          w = 740;
           h = 640;
         };
         var y_inc = h / range;
@@ -898,23 +900,18 @@ body {
 
 
       update_history = function() {
-        var url = "https://script.google.com/macros/s/AKfycbzep_6TONHLbfjt1H23_iCb0DMc126LPo3smsun/exec?read=day"; //+ sel;
-
-
-
-
+        var url = "https://script.google.com/macros/s/AKfycbzep_6TONHLbfjt1H23_iCb0DMc126LPo3smsun/exec?read=hour"; //+ sel;
         xhr = new XMLHttpRequest();
-
-
         xhr.onreadystatechange = function() {
           if (xhr.readyState == 4) {
-            var t_r = xhr.responseText;
+           var t_r = xhr.responseText;
             var all_dat = t_r.split(",");
-            //    build_history();
-          }
+            
+            build_history();
+         }
         };
-        xhr.open("GET", url);
-        xhr.send(null);
+       xhr.open("GET", url);
+       xhr.send(null);
       }
 
 
@@ -925,10 +922,17 @@ body {
           update_history();
         }
       }
+      
+      function make_array(){
+        myarr  = new Array();
+      myarr.push([]);
+      myarr[0][0] = 'hello';
+      }
       var myVar = setInterval(sort_update, 10000);
       active_window = 0;
-      //     sort_update();
-      //     build_history();
+      make_array();
+           sort_update();
+           build_history();
     }
   </script>
   <div class="gwd-div-1w7a gwd-gen-19kmgwdanimation">
@@ -969,7 +973,7 @@ body {
           </div>
         </div>
         <div class="column_1">
-          <canvas id="canvas_a" height="680" width="800"></canvas>
+          <canvas id="canvas_a" height="680" width="820"></canvas>
         </div>
       </div>
     </div>
