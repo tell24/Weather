@@ -191,7 +191,7 @@
     };
     gwd.duration_change = function(event) {
       // update graph
-      sel = document.getElementById("mySelect").value;
+      sel = document.getElementById("duration").value;
       build_history();
     };
     gwd.c_b_click = function(event) {
@@ -199,28 +199,28 @@
       old_H_offset = H_offset;
       H_offset += 1;
       H_offset = H_offset % 5;
-      build_history(0,0,0);
+      build_history(0, 0, 0);
     };
     gwd.c_c_click = function(event) {
       //click
       old_H_offset = H_offset;
       H_offset += 2;
       H_offset = H_offset % 5;
-      build_history(0,0,0);
+      build_history(0, 0, 0);
     };
     gwd.c_d_click = function(event) {
       //click
       old_H_offset = H_offset;
       H_offset += 3;
       H_offset = H_offset % 5;
-      build_history(0,0,0);
+      build_history(0, 0, 0);
     };
     gwd.c_e_click = function(event) {
       //click
       old_H_offset = H_offset;
       H_offset += 4;
       H_offset = H_offset % 5;
-      build_history(0,0,0);
+      build_history(0, 0, 0);
     };
   </script>
   <script type="text/javascript" gwd-events="registration">
@@ -260,7 +260,7 @@
       var p_col = "#BDBBB3";
       var w_col = "#AD9CF3";
       var peak_col = "#ff0000";
-      var sel = "day";
+      var sel = "hour";
       var PI = 3.1416;
       var rad = 57.2958;
       var c = document.getElementById("canvas");
@@ -278,13 +278,7 @@
       var axis_x_label = ['Minutes', 'Hours', 'Day of Week', 'Day of Month', 'Week of Year'];
       var axis_y_label = ['C', '', '%', '', 'mB', '', 'mph', '', 'mm', ' '];
       var myarr;
-      const dat = [
-        [0, 3, 0, 2, 0, 1, 0, 6, 0, 3, 0, 2, 0, 1, 0, 6, 0, 3, 0, 2, 0, 1, 0, 6, 0],
-        [1, 3, 0, 2, 0, 0, 0, 6, 0, 3, 0, 4, 0, 1, 0, 6, 0, 3, 0, 2, 0, 1, 4, 6, 4],
-        [2, 3, 0, 2, 2, 1, 0, 6, 0, 3, 0, 2, 0, 4, 0, 6, 0, 3, 0, 2, 0, 1, 0, 6, 0],
-        [3, 3, 3, 2, 0, 1, 0, 6, 6, 3, 0, 2, 0, 1, 0, 6, 0, 3, 0, 2, 0, 1, 0, 6, 0],
-        [4, 3, 0, 2, 0, 1, 0, 6, 0, 3, 0, 2, 4, 1, 0, 6, 0, 3, 0, 2, 4, 1, 0, 6, 0]
-      ];
+      var m_m_arr;
       const s_label = ["12", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
 
       function draw_dial(loc, win) {
@@ -761,7 +755,7 @@
         ctx.stroke();
       }
 
-      build_history = function(type,min,max) {
+      build_history = function(data_set) {
         var h_c = H_offset;
         var o_h_c = old_H_offset;
         var temp = new Array();
@@ -769,65 +763,75 @@
         var max = 25;
         var ticks = 30;
         var points = 60;
-        switch (sel) {
-          case "hour":
-            ticks = 30;
-            points = 60;
-            break;
-          case "day":
-            ticks = 23;
-            points = 23;
-            break;
-          case "Feb":
-            ticks = 28;
-            points = 28;
-            break;
-          case "Apr":
-            ticks = 30;
-            points = 30;
-            break;
-          case "Jun":
-            ticks = 30;
-            points = 30;
-            break;
-          case "Sep":
-            ticks = 30;
-            points = 30;
-            break;
-          case "Nov":
-            ticks = 30;
-            points = 30;
-            break;
-          default:
-            ticks = 31;
-            points = 31;
-            break;
-        }
-
-        ticks = 24;
-        points = 24;
-        var plots = 0;
-        var range = 0;
-       if(type === 0){
+        if (data_set === 1) {
           min = 0;
           max = 10;
+          switch (sel) {
+            case "hour":
+              ticks = 30;
+              points = 60;
+              break;
+            case "day":
+              ticks = 23;
+              points = 23;
+              break;
+            case "Feb":
+              ticks = 28;
+              points = 28;
+              break;
+            case "Apr":
+              ticks = 30;
+              points = 30;
+              break;
+            case "Jun":
+              ticks = 30;
+              points = 30;
+              break;
+            case "Sep":
+              ticks = 30;
+              points = 30;
+              break;
+            case "Nov":
+              ticks = 30;
+              points = 30;
+              break;
+            default:
+              ticks = 31;
+              points = 31;
+              break;
           }
-        do{
-          if (plots === 0) range = Math.ceil((Math.ceil(max) - Math.floor(min)) / 8) * 8;         
-          range = Math.ceil((Math.ceil(max) - Math.floor(min)) / 4) * 4;
-          if (plots === 0) range = Math.ceil((Math.ceil(max) - Math.floor(min)) / 8) * 8;
-          draw_graph(plots, range, max, ticks, points);
-          temp = new Array();
-          temp = myarr[0];
-          fill_chart(0,plots, temp, range, max, points);     
-          temp = new Array();
-          temp = myarr[1];
-          fill_chart(1,plots, temp, range, max, points);     
-          plots++;
+        }
+        var plots = 0;
+        var range = 0;
+        var d_set = h_c;
+        do {  
+            var d = plots + h_c;
+            min = m_m_arr[0][d_set];
+           if((d === 0)||(d === 1)||(d === 3))   if(m_m_arr[0][d_set +1] < min) min = m_m_arr[0][d_set +1];
+           max = m_m_arr[1][plots];
+            if((d === 0)||(d === 1)||(d === 3))  if(m_m_arr[1][d_set +1] < max) max = m_m_arr[1][d_set +1];
+          
+            if (plots === 0) range = Math.ceil((Math.ceil(max) - Math.floor(min)) / 8) * 8;
+            range = Math.ceil((Math.ceil(max) - Math.floor(min)) / 4) * 4;
+            if (plots === 0) range = Math.ceil((Math.ceil(max) - Math.floor(min)) / 8) * 8;
+            draw_graph(plots, range, max, ticks, points);
+            temp = new Array();
+            temp = myarr[d_set ];
+            d_set++;
+          if(d_set === 8)d_set = 0;
+            fill_chart(0, plots, temp, range, max, points);
+            if((d === 0)||(d === 1)||(d === 3)){
+                temp = new Array();
+              temp = myarr[d_set + 1];
+              fill_chart(1, plots, temp, range, max, points);
+              d_set++;
+          if(d_set === 8)d_set = 0;
+            }
+            plots++;          
         } while (plots < 5);
       }
 
-      function fill_chart(col,c_num, p_data, range, max, p) {
+      function fill_chart(col, c_num, p_data, range, max, p) {
         var ctx = chart[c_num];
         var x = 40;
         var y = 20;
@@ -837,9 +841,9 @@
           w = 740;
           h = 640;
         };
-        if(col===0) ctx.strokeStyle = "blue";
-        if(col===1)  ctx.strokeStyle = "red";
-        if(col===2)  ctx.strokeStyle = "green";
+        if (col === 0) ctx.strokeStyle = "blue";
+        if (col === 1) ctx.strokeStyle = "red";
+        if (col === 2) ctx.strokeStyle = "green";
         var y_inc = h / range;
 
         var i = max;
@@ -893,29 +897,76 @@
 
 
       update_history = function() {
-        var url = "https://script.google.com/macros/s/AKfycbzep_6TONHLbfjt1H23_iCb0DMc126LPo3smsun/exec?read=hour"; //+ sel;
+        var url1 = "https://script.google.com/macros/s/AKfycbzep_6TONHLbfjt1H23_iCb0DMc126LPo3smsun/exec?read=" + sel;
         xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {
           if (xhr.readyState == 4) {
             var t_r = xhr.responseText;
             var all_dat = t_r.split(",");
             var len = 24;
-            switch(sel){
-              case "hour": len = 60;
+            var index = 0;
+            var cell = 2;
+            switch (sel) {
+              case "hour":
+                 len = 59;
+                 do {
+                    myarr[0][index] = all_dat[cell]; //in temp
+                    myarr[1][index] = all_dat[cell + 18]; //out temp
+                    myarr[2][index] = all_dat[cell+3]; //out hum
+                    myarr[3][index] = all_dat[cell + 21]; //in hum
+                    myarr[4][index] = all_dat[cell + 24]; //pres
+                    myarr[5][index] = all_dat[cell + 6]; //wind
+                    myarr[6][index] = all_dat[cell + 9]; //gust
+                    myarr[7][index] = all_dat[cell + 15]; //rain
+                    index++;
+                    cell += 29;
+                  } while (index < len);
+                m_m_arr[0][0] = all_dat[2+(61*29)];//out temp
+                m_m_arr[1][0] = all_dat[3+(61*29)];
+                m_m_arr[0][1] = all_dat[20+(61*29)];//in temp
+                m_m_arr[1][1] = all_dat[21+(61*29)];
+                m_m_arr[0][2] = all_dat[5+(61*29)];//out hum
+                m_m_arr[1][2] = all_dat[6+(61*29)];
+                m_m_arr[0][3] = all_dat[23+(61*29)];//in hum
+                m_m_arr[1][3] = all_dat[24+(61*29)];
+                m_m_arr[0][4] = all_dat[26+(61*29)];//in pes
+                m_m_arr[1][4] = all_dat[27+(61*29)];
+                m_m_arr[0][5] = all_dat[8+(61*29)];// wind
+                m_m_arr[1][5] = all_dat[12+(61*29)];
+                m_m_arr[0][6] = 0;                 //rain
+                m_m_arr[1][6] = all_dat[17+(62*29)];
+                break;
+              case "day":
+                len = 24;
+                 do {
+                    myarr[0][index] = all_dat[cell];
+                    myarr[1][index] = all_dat[cell + 18];
+                    index++;
+                    cell += 29;
+                  } while (index < len);
+                break;
+              default:
+                len = 31;
+                 do {
+                    myarr[0][index] = all_dat[cell];
+                    myarr[1][index] = all_dat[cell + 18];
+                    index++;
+                    cell += 29;
+                  } while (index < len);
                 break;
             }
             var index = 0;
             var cell = 2;
-            do{
+            do {
               myarr[0][index] = all_dat[cell];
               myarr[1][index] = all_dat[cell + 18];
               index++;
-              cell +=29;
-            }while(index< len);
+              cell += 29;
+            } while (index < len);
             build_history(len);
           }
         };
-        xhr.open("GET", url);
+        xhr.open("GET", url1);
         xhr.send(null);
       }
 
@@ -932,12 +983,21 @@
         myarr = new Array();
         myarr.push([]);
         myarr.push([]);
+        myarr.push([]);
+        myarr.push([]);
+        myarr.push([]);
+        myarr.push([]);
+        myarr.push([]);
+        myarr.push([]);
+        m_m_arr = new Array();
+        m_m_arr.push([]);
+        m_m_arr.push([]);
       }
       var myVar = setInterval(sort_update, 10000);
       active_window = 0;
       make_array();
       sort_update();
-      build_history(0,0,10);
+      build_history(0, 0, 10);
     }
   </script>
   <div class="gwd-div-1w7a gwd-gen-19kmgwdanimation">
