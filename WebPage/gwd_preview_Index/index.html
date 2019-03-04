@@ -275,10 +275,10 @@ body {
         document.getElementById('canvas_e').getContext('2d')
       ];
 
-      var titles = ['Temperature', 'Humidity', 'Pressure', 'Wind Speed', 'Rain Fall'];
+      var titles = ['Temperature','', ' Humidity  ', '', ' Pressure  ', ' Wind Speed ', '', ' Rain Fall '];
       var plot = ['Min', 'Max', 'Min', 'Max', 'Min', 'Max', 'Mean', 'Gust', 'Total', 'Last Hour'];
       var axis_x_label = ['Minutes', 'Hours', 'Day of Week', 'Day of Month', 'Week of Year'];
-      var axis_y_label = ['C', '', '%', '', 'mB', '', 'mph', '', 'mm', ' '];
+      var axis_y_label = ['C', '', '%', '', 'mB', 'mph', '', 'mm'];
       var myarr;
       var m_m_arr;
       const s_label = ["12", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
@@ -703,23 +703,24 @@ body {
         xhr.send(null);
       }
 
-      function draw_graph(num, range, max, ticks, points) {
+      function draw_graph(num, range, max, ticks, points, t_index) {
         var ctx = chart[num];
+        ctx.font = "10px Arial";    
         ctx.clearRect(0, 0, 800, 800);
         var y_inc = range / 4;
-        var x = 40;
-        var y = 20;
-        var w = 360;
-        var h = 130;
-        var ys = 130 / 4;
+        var x = 60;
+        var y = 30;
+        var w = 340;
+        var h = 100;
+        var ys = 100 / 4;
         var steps = 4;
         var x_step = Math.round(points / ticks);
         if (num === 0) {
-          w = 760;
-          h = 640;
+          w = 740;
+          h = 600;
           steps = 8;
           y_inc = range / 8;
-          ys = 640 / 8;
+          ys = h / 8;
         };
         ctx.lineWidth = 1;
         ctx.strokeStyle = "grey";
@@ -747,14 +748,20 @@ body {
         i = max;
         var step = range / steps;
         do {
-          ctx.fillText(i, 25, yl);
+          ctx.fillText(i, 45, yl);
           yl += ys;
           ctx.moveTo(x, yl);
           ctx.lineTo(c_b, yl);
           i -= step;
         } while (yl < h + y - 1);
-        ctx.fillText(i, 25, yl);
+        ctx.fillText(i, 45, yl);        
         ctx.stroke();
+        ctx.font = "13px Arial";
+        ctx.fillText(axis_y_label[t_index], 18 , y+(h/2));
+        ctx.fillText(titles[t_index], x+(w/2) , 17);
+        ctx.fillText(sel, x+(w/2), yl+25);
+        
+        ctx.font = "10px Arial";    
       }
 
       build_history = function(data_valid, data_set) {
@@ -811,15 +818,15 @@ body {
             min = -1;
             max = 1;
             range = 2
-            draw_graph(plots, range, max, ticks, points);
+            draw_graph(plots, range, max, ticks, points, 0);
             plots++;
           } while (plots < 5);
         } else {
           do {
-            min = m_m_arr[0][d_set];           
+            min = m_m_arr[0][d_set];
             max = m_m_arr[1][d_set];
-            range = Math.ceil((max - min) / 4) * 4;
-            draw_graph(plots, range, max, ticks, points);
+            range = Math.ceil((max - min) / 2) * 2;
+            draw_graph(plots, range, max, ticks, points, d_set);
             temp = new Array();
             temp = myarr[d_set];
             fill_chart(0, plots, temp, range, max, points);
@@ -838,13 +845,13 @@ body {
 
       function fill_chart(col, c_num, p_data, range, max, p) {
         var ctx = chart[c_num];
-        var x = 40;
-        var y = 20;
-        var w = 360;
-        var h = 130;
+        var x = 60;
+        var y = 30;
+        var w = 340;
+        var h = 100;
         if (c_num === 0) {
-          w = 760;
-          h = 640;
+          w = 740;
+          h = 600;
         };
         if (col === 0) ctx.strokeStyle = "blue";
         if (col === 1) ctx.strokeStyle = "red";
@@ -871,13 +878,13 @@ body {
       function clear_chart(c_num, p_data, range, max, p) {
         var ctx = chart[c_num];
 
-        var x = 50;
-        var y = 20;
-        var w = 360;
-        var h = 130;
+        var x = 60;
+        var y = 30;
+        var w = 340;
+        var h = 100;
         if (c_num === 0) {
-          w = 760;
-          h = 640;
+          w = 740;
+          h = 600;
         };
         var y_inc = h / range;
 
@@ -921,53 +928,53 @@ body {
                   myarr[4][index] = all_dat[cell + 24]; //pres
                   myarr[5][index] = all_dat[cell + 6]; //wind
                   myarr[6][index] = all_dat[cell + 9]; //gust
-                  myarr[7][index] = all_dat[cell + 15] / 150; //rain
+                  myarr[7][index] = all_dat[cell + 15] / 15; //rain
                   index++;
                   cell += 29;
                 } while (index <= len);
-                if(parseFloat(all_dat[2 + (61 * 29)]) < parseFloat(all_dat[20 + (61 * 29)]))          //temp low
-                     m_m_arr[0][0] = Math.floor(all_dat[2 + (61 * 29)]) - 1;
+                if (parseFloat(all_dat[2 + (61 * 29)]) < parseFloat(all_dat[20 + (61 * 29)])) //temp low
+                  m_m_arr[0][0] = Math.floor(all_dat[2 + (61 * 29)]) - 1;
                 else
-                     m_m_arr[0][0] = Math.floor(all_dat[20 + (61 * 29)]) - 1;
-                
-                if(parseFloat(all_dat[3 + (61 * 29)]) > parseFloat(all_dat[21 + (61 * 29)]))          //temp high
-                     m_m_arr[1][0] = Math.ceil(all_dat[3 + (61 * 29)]) + 1;
+                  m_m_arr[0][0] = Math.floor(all_dat[20 + (61 * 29)]) - 1;
+
+                if (parseFloat(all_dat[3 + (61 * 29)]) > parseFloat(all_dat[21 + (61 * 29)])) //temp high
+                  m_m_arr[1][0] = Math.ceil(all_dat[3 + (61 * 29)]) + 1;
                 else
-                     m_m_arr[1][0] = Math.ceil(all_dat[21 + (61 * 29)]) + 1;
-                
-                 m_m_arr[0][1] =  m_m_arr[0][0];
-                 m_m_arr[1][1] =  m_m_arr[1][0];
-                
-                
-                if(parseFloat(all_dat[5 + (61 * 29)]) < parseFloat(all_dat[20 + (61 * 29)]))          //hum low
-                     m_m_arr[0][2] = Math.floor(all_dat[5 + (61 * 29)]) - 1;
+                  m_m_arr[1][0] = Math.ceil(all_dat[21 + (61 * 29)]) + 1;
+
+                m_m_arr[0][1] = m_m_arr[0][0];
+                m_m_arr[1][1] = m_m_arr[1][0];
+
+
+                if (parseFloat(all_dat[5 + (61 * 29)]) < parseFloat(all_dat[20 + (61 * 29)])) //hum low
+                  m_m_arr[0][2] = Math.floor(all_dat[5 + (61 * 29)]) - 1;
                 else
-                     m_m_arr[0][2] = Math.floor(all_dat[20 + (61 * 29)]) - 1;
-                
-                if(parseFloat(all_dat[6 + (61 * 29)]) > parseFloat(all_dat[24 + (61 * 29)]))          //hum high
-                     m_m_arr[1][2] = Math.ceil(all_dat[6 + (61 * 29)]) + 1;
+                  m_m_arr[0][2] = Math.floor(all_dat[20 + (61 * 29)]) - 1;
+
+                if (parseFloat(all_dat[6 + (61 * 29)]) > parseFloat(all_dat[24 + (61 * 29)])) //hum high
+                  m_m_arr[1][2] = Math.ceil(all_dat[6 + (61 * 29)]) + 1;
                 else
-                     m_m_arr[1][2] = Math.ceil(all_dat[24 + (61 * 29)]) + 1;
-                
-                 m_m_arr[0][3] =  m_m_arr[0][2];
-                 m_m_arr[1][3] =  m_m_arr[1][2];
-                
+                  m_m_arr[1][2] = Math.ceil(all_dat[24 + (61 * 29)]) + 1;
+
+                m_m_arr[0][3] = m_m_arr[0][2];
+                m_m_arr[1][3] = m_m_arr[1][2];
+
                 m_m_arr[0][4] = Math.floor(all_dat[26 + (61 * 29)]) - 1; // pes low
-                m_m_arr[1][4] = Math.ceil(all_dat[27 + (61 * 29)]) + 1;  // pres high                
-               
-                m_m_arr[0][5] = 0;    //wind low
-                
-                if(parseFloat(all_dat[12 + (61 * 29)]) > parseFloat(all_dat[15 + (61 * 29)]))       //wind high
-                     m_m_arr[1][5] = Math.ceil(all_dat[12 + (61 * 29)]) + 1;
+                m_m_arr[1][4] = Math.ceil(all_dat[27 + (61 * 29)]) + 1; // pres high                
+
+                m_m_arr[0][5] = 0; //wind low
+
+                if (parseFloat(all_dat[12 + (61 * 29)]) > parseFloat(all_dat[15 + (61 * 29)])) //wind high
+                  m_m_arr[1][5] = Math.ceil(all_dat[12 + (61 * 29)]) + 1;
                 else
-                     m_m_arr[1][5] = Math.ceil(all_dat[15 + (61 * 29)]) + 1;
-                
-                 m_m_arr[0][6] =  m_m_arr[0][5];
-                 m_m_arr[1][6] =  m_m_arr[1][5];
-                
-              
+                  m_m_arr[1][5] = Math.ceil(all_dat[15 + (61 * 29)]) + 1;
+                if( m_m_arr[1][5] < 2) m_m_arr[1][5] = 2; 
+                m_m_arr[0][6] = m_m_arr[0][5];
+                m_m_arr[1][6] = m_m_arr[1][5];
+
+
                 m_m_arr[0][7] = 0; //rain
-                m_m_arr[1][7] = Math.ceil(all_dat[17 + (62 * 29)] / 150) + 1;
+                m_m_arr[1][7] = Math.ceil(all_dat[17 + (62 * 29)] / 15) + 1;
                 break;
               case "day":
                 len = 24;
