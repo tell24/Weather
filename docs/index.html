@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html><head><meta name="GCD" content="YTk3ODQ3ZWZhN2I4NzZmMzBkNTEwYjJlcf19748bae71ee9de2ed3b085b152261"/>
+<html><head><meta name="GCD" content="YTk3ODQ3ZWZhN2I4NzZmMzBkNTEwYjJla4eb0d7b779771111ea4a7cab1dd5cc6"/>
   <meta charset="utf-8">
   <title>Index</title>
   <meta name="generator" content="Google Web Designer 5.0.3.0130">
@@ -155,10 +155,10 @@ body {
     window.gwd = window.gwd || {};
     var sort_update;
     var update_history;
-    var build_history;
+    var move_history;
     var active_window = 0;
     var H_offset = 0;
-    var old_H_offset = 0;
+    var WaitDownload;
     var xhr;
     gwd.about = function(event) {
       var x = document.getElementById("cent_c");
@@ -182,47 +182,36 @@ body {
     };
     gwd.history = function(event) {
       // show history
-      x = document.getElementById("cent_c");
-      x.style.display = "none";
-      x = document.getElementById("canvas_area_1");
-      x.style.display = "block";
-      x = document.getElementById("about");
-      x.style.display = "none";
       active_window = 1;
+      WaitDownload();
       sort_update();
     };
     gwd.duration_change = function(event) {
       // update graph
       sel = document.getElementById("duration").value;
-      build_history();
+      sort_update();
     };
     gwd.c_b_click = function(event) {
       // click 
-      old_H_offset = H_offset;
       H_offset += 1;
       H_offset = H_offset % 5;
-      build_history(0, 0, 0);
+      move_history();
     };
     gwd.c_c_click = function(event) {
-      //click
-      old_H_offset = H_offset;
       H_offset += 2;
       H_offset = H_offset % 5;
-      build_history(0, 0, 0);
+      move_history();
     };
     gwd.c_d_click = function(event) {
-      //click
-      old_H_offset = H_offset;
       H_offset += 3;
       H_offset = H_offset % 5;
-      build_history(0, 0, 0);
+      move_history();
     };
     gwd.c_e_click = function(event) {
       //click
-      old_H_offset = H_offset;
       H_offset += 4;
       H_offset = H_offset % 5;
-      build_history(0, 0, 0);
+      move_history();
     };
   </script>
   <script type="text/javascript" gwd-events="registration">
@@ -269,6 +258,7 @@ body {
       var c = document.getElementById("canvas");
       var dia = 80;
       var dia_small = 70;
+      var myMsg;
       var chart = [document.getElementById('canvas_a').getContext('2d'),
         document.getElementById('canvas_b').getContext('2d'),
         document.getElementById('canvas_c').getContext('2d'),
@@ -332,7 +322,6 @@ body {
             ident = 11;
             scale = 20;
             start = 860;
-
             text = "Air Pressure ( mb )";
             break;
           case 5:
@@ -368,12 +357,8 @@ body {
           val = (i * scale) + start;
           y2 = y1 + 5 - ((dia + 25) * Math.sin(ang));
           x2 = x1 - ((dia + 25) * Math.cos(ang));
-
-
           win.fillText(val.toString(), x2, y2);
-
         }
-
         win.fillText(text, x1, y1 + 80);
       }
 
@@ -704,7 +689,7 @@ body {
         xhr.send(null);
       }
 
-      function draw_graph(num, range, max, ticks, points, t_index) {
+      function draw_graph(num, range, max, ticks, points, t_index, first) {
         var ctx = chart[num];
         ctx.font = "10px Arial";
         ctx.clearRect(0, 0, 800, 800);
@@ -732,7 +717,7 @@ body {
         var xl = x;
         var xs = w / ticks;
         var c_b = y + h;
-        var i = 0;
+        var i = first;
         ctx.beginPath();
         do {
           ctx.fillText(i, xl, y + h + 10);
@@ -765,20 +750,19 @@ body {
         ctx.font = "10px Arial";
       }
 
-      build_history = function(data_valid, data_set) {
-        var h_c = H_offset;
-        var o_h_c = old_H_offset;
+      build_history = function(data_valid) {
         var temp = new Array();
         var min = 0;
         var max = 1;
         var ticks = 30;
         var points = 60;
-        sel = document.getElementById("duration").value;
+        var first = 1;
         if (data_valid === 1) {
           switch (sel) {
             case "hour":
               ticks = 15;
               points = 60;
+              first = 0;
               break;
             case "day":
               ticks = 23;
@@ -812,13 +796,30 @@ body {
         }
         var plots = 0;
         var range = 0;
-        var d_set = h_c;
+        var d_set;
+        switch (H_offset) {
+          case 0:
+            d_set = 0;
+            break;
+          case 1:
+            d_set = 2;
+            break;
+          case 2:
+            d_set = 4;
+            break;
+          case 3:
+            d_set = 5;
+            break;
+          case 4:
+            d_set = 7;
+            break;
+        }
         if (data_valid === 0) {
           do {
             min = -1;
             max = 1;
             range = 2
-            draw_graph(plots, range, max, ticks, points, 0);
+            draw_graph(plots, range, max, ticks, points, 0, 0);
             plots++;
           } while (plots < 5);
         } else {
@@ -826,7 +827,7 @@ body {
             min = m_m_arr[0][d_set];
             max = m_m_arr[1][d_set];
             range = Math.ceil((max - min) / 2) * 2;
-            draw_graph(plots, range, max, ticks, points, d_set);
+            draw_graph(plots, range, max, ticks, points, d_set, first);
             temp = new Array();
             temp = myarr[d_set];
             fill_chart(0, plots, temp, range, max, points);
@@ -840,6 +841,13 @@ body {
             if (d_set === 8) d_set = 0;
             plots++;
           } while (plots < 5);
+          myMsg.close();
+          var x = document.getElementById("cent_c");
+          x.style.display = "none";
+          x = document.getElementById("canvas_area_1");
+          x.style.display = "block";
+          x = document.getElementById("about");
+          x.style.display = "none";
         }
       }
 
@@ -857,7 +865,6 @@ body {
         if (col === 1) ctx.strokeStyle = "red";
         if (col === 2) ctx.strokeStyle = "green";
         var y_inc = h / range;
-
         var i = max;
         var s = 0;
         var y1 = 0;
@@ -885,39 +892,9 @@ body {
 
       }
 
-      function clear_chart(c_num, p_data, range, max, p) {
-        var ctx = chart[c_num];
-
-        var x = 60;
-        var y = 30;
-        var w = 340;
-        var h = 100;
-        if (c_num === 0) {
-          w = 740;
-          h = 600;
-        };
-        var y_inc = h / range;
-
-        var i = max;
-        var s = 0;
-        var y1 = 0;
-        var xs = w / p;
-        y1 = y + (y_inc * (i - p_data[0]));
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = "white";
-        ctx.beginPath();
-        ctx.moveTo(x, y1);
-        do {
-          s++;
-          x += xs;
-          y1 = y + (y_inc * (i - p_data[s]));
-          ctx.lineTo(x, y1);
-        } while (s < p);
-        ctx.stroke();
-      }
-
 
       update_history = function() {
+        sel = document.getElementById("duration").value;
         var url1 = "https://script.google.com/macros/s/AKfycbzep_6TONHLbfjt1H23_iCb0DMc126LPo3smsun/exec?read=" + sel;
         xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {
@@ -1054,12 +1031,95 @@ body {
                 } while (index < len);
                 break;
             }
-         
-            build_history(1, len);
+            build_history(1);
           }
         };
         xhr.open("GET", url1);
         xhr.send(null);
+      }
+
+      move_history = function() {
+        var min;
+        var max;
+        var temp;
+        var points;
+        var h_c = 0;
+        var first = 1;
+        switch (sel) {
+          case "hour":
+            points = 60;
+            ticks = 15;
+            first = 0;
+            break;
+          case "day":
+            points = 23;
+            ticks = 23;
+            break;
+          case "Feb":
+            points = 28;
+            ticks = 28;
+            break;
+          case "Apr":
+            points = 30;
+            ticks = 30;
+            break;
+          case "Jun":
+            points = 30;
+            ticks = 30;
+            break;
+          case "Sep":
+            points = 30;
+            ticks = 30;
+            break;
+          case "Nov":
+            points = 30;
+            ticks = 30;
+            break;
+          default:
+            points = 31;
+            ticks = 31;
+            break;
+        }
+
+        switch (H_offset) {
+          case 0:
+            h_c = 0;
+            break;
+          case 1:
+            h_c = 2;
+            break;
+          case 2:
+            h_c = 4;
+            break;
+          case 3:
+            h_c = 5;
+            break;
+          case 4:
+            h_c = 7;
+            break;
+        }
+        var plots = 0;
+        do {
+          min = m_m_arr[0][h_c];
+          max = m_m_arr[1][h_c];
+          range = Math.ceil((max - min) / 2) * 2;
+          temp = new Array();
+          temp = myarr[h_c];
+          draw_graph(plots, range, max, ticks, points, h_c, first);
+          fill_chart(0, plots, temp, range, max, points);
+          if ((h_c === 0) || (h_c === 2) || (h_c === 5)) {
+            h_c++;
+            min = m_m_arr[0][h_c];
+            max = m_m_arr[1][h_c];
+            range = Math.ceil((max - min) / 2) * 2;
+            temp = new Array();
+            temp = myarr[h_c];
+            fill_chart(1, plots, temp, range, max, points);
+          }
+          h_c++;
+          if (h_c === 8) h_c = 0;
+          plots++;
+        } while (plots < 5)
       }
 
 
@@ -1069,6 +1129,19 @@ body {
         if (active_window == 1) {
           update_history();
         }
+      }
+
+
+
+      WaitDownload = function() {
+        wLeft = window.screenLeft ? window.screenLeft : window.screenX;
+        wTop = window.screenTop ? window.screenTop : window.screenY;
+
+        var left = wLeft + (window.innerWidth / 2) - (100);
+        var top = wTop + (window.innerHeight / 2) - (50);
+
+        myMsg = window.open("", "MsgWindow", 'toolbar=no, personalbar=no, directories=no, status=no, menubar=no, scrollbars=no,                             resizable=no,copyhistory=no, width= 200, height= 100 , top=' + top + ', left=' + left);
+        myMsg.document.write("<h1>Downloading Data</h1>");
       }
 
       function make_array() {
@@ -1089,7 +1162,6 @@ body {
       active_window = 0;
       make_array();
       sort_update();
-      build_history(0, 59);
     }
   </script>
   <div class="gwd-div-1w7a gwd-gen-19kmgwdanimation">
