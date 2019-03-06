@@ -155,10 +155,11 @@ body {
     window.gwd = window.gwd || {};
     var sort_update;
     var update_history;
-    var build_history;
+    var move_history;
     var active_window = 0;
     var H_offset = 0;
     var old_H_offset = 0;
+    var myWindow;
     var xhr;
     gwd.about = function(event) {
       var x = document.getElementById("cent_c");
@@ -182,47 +183,48 @@ body {
     };
     gwd.history = function(event) {
       // show history
-      x = document.getElementById("cent_c");
-      x.style.display = "none";
-      x = document.getElementById("canvas_area_1");
-      x.style.display = "block";
-      x = document.getElementById("about");
-      x.style.display = "none";
       active_window = 1;
+      message("Getting History Date");
       sort_update();
+      //     x = document.getElementById("cent_c");
+      //    x.style.display = "none";
+      //    x = document.getElementById("canvas_area_1");
+      //     x.style.display = "block";
+      //     x = document.getElementById("about");
+      //     x.style.display = "none";
     };
     gwd.duration_change = function(event) {
       // update graph
       sel = document.getElementById("duration").value;
-      build_history();
+      sort_update();
     };
     gwd.c_b_click = function(event) {
       // click 
       old_H_offset = H_offset;
       H_offset += 1;
       H_offset = H_offset % 5;
-      build_history(0, 0, 0);
+      move_history();
     };
     gwd.c_c_click = function(event) {
       //click
       old_H_offset = H_offset;
       H_offset += 2;
       H_offset = H_offset % 5;
-      build_history(0, 0, 0);
+      move_history();
     };
     gwd.c_d_click = function(event) {
       //click
       old_H_offset = H_offset;
       H_offset += 3;
       H_offset = H_offset % 5;
-      build_history(0, 0, 0);
+      move_history();
     };
     gwd.c_e_click = function(event) {
       //click
       old_H_offset = H_offset;
       H_offset += 4;
       H_offset = H_offset % 5;
-      build_history(0, 0, 0);
+      move_history();
     };
   </script>
   <script type="text/javascript" gwd-events="registration">
@@ -765,15 +767,12 @@ body {
         ctx.font = "10px Arial";
       }
 
-      build_history = function(data_valid, data_set) {
-        var h_c = H_offset;
-        var o_h_c = old_H_offset;
+      build_history = function(data_valid) {
         var temp = new Array();
         var min = 0;
         var max = 1;
         var ticks = 30;
         var points = 60;
-        sel = document.getElementById("duration").value;
         if (data_valid === 1) {
           switch (sel) {
             case "hour":
@@ -812,7 +811,7 @@ body {
         }
         var plots = 0;
         var range = 0;
-        var d_set = h_c;
+        var d_set = H_offset;
         if (data_valid === 0) {
           do {
             min = -1;
@@ -840,7 +839,16 @@ body {
             if (d_set === 8) d_set = 0;
             plots++;
           } while (plots < 5);
+
+          message.close();
+          var x = document.getElementById("cent_c");
+          x.style.display = "none";
+          x = document.getElementById("canvas_area_1");
+          x.style.display = "block";
+          x = document.getElementById("about");
+          x.style.display = "none";
         }
+
       }
 
       function fill_chart(col, c_num, p_data, range, max, p) {
@@ -918,6 +926,7 @@ body {
 
 
       update_history = function() {
+        sel = document.getElementById("duration").value;
         var url1 = "https://script.google.com/macros/s/AKfycbzep_6TONHLbfjt1H23_iCb0DMc126LPo3smsun/exec?read=" + sel;
         xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {
@@ -1054,13 +1063,88 @@ body {
                 } while (index < len);
                 break;
             }
-         
-            build_history(1, len);
+
+            build_history(1);
           }
         };
         xhr.open("GET", url1);
         xhr.send(null);
       }
+      
+       move_history = function()
+       {
+         var min;
+         var max;
+         var temp;
+         var points;
+        var h_c = H_offset;
+        var o_h_c = old_H_offset;
+         switch (sel) {
+            case "hour":
+              points = 60;
+              break;
+            case "day":
+              points = 23;
+              break;
+            case "Feb":
+              points = 28;
+              break;
+            case "Apr":
+              points = 30;
+              break;
+            case "Jun":
+              points = 30;
+              break;
+            case "Sep":
+              points = 30;
+              break;
+            case "Nov":
+              points = 30;
+              break;
+            default:
+              points = 31;
+              break;
+          }
+         var plots = 0;
+         do{
+            min = m_m_arr[0][o_h_c];
+            max = m_m_arr[1][o_h_c];
+            range = Math.ceil((max - min) / 2) * 2;           
+            temp = new Array();
+            temp = myarr[o_h_c];
+            clear_chart(plots, temp, range, max, points);
+            if ((o_h_c === 0) || (o_h_c === 2) || (o_h_c === 5)) {
+              o_h_c++;
+              min = m_m_arr[0][o_h_c];
+              max = m_m_arr[1][o_h_c];
+              range = Math.ceil((max - min) / 2) * 2;           
+              temp = new Array();
+              temp = myarr[o_h_c];
+              clear_chart(plots, temp, range, max, points);
+            }
+            o_h_c++;
+           if(o_h_c === 8) o_h_c = 0;
+            min = m_m_arr[0][h_c];
+            max = m_m_arr[1][h_c];
+            range = Math.ceil((max - min) / 2) * 2;         
+            temp = new Array();
+            temp = myarr[h_c];
+            fill_chart(0, plots, temp, range, max, points);
+            if ((h_c === 0) || (h_c === 2) || (h_c === 5)) {
+              o_h_c++;
+              min = m_m_arr[0][h_c];
+              max = m_m_arr[1][h_c];
+              range = Math.ceil((max - min) / 2) * 2;           
+              temp = new Array();
+              temp = myarr[h_c];
+              clear_chart(plots, temp, range, max, points);
+            }
+            h_c++;
+           if(h_c === 8) h_c = 0;
+           plots++;
+         }while(plots<5)
+         
+       }
 
 
       sort_update = function() {
@@ -1089,7 +1173,6 @@ body {
       active_window = 0;
       make_array();
       sort_update();
-      build_history(0, 59);
     }
   </script>
   <div class="gwd-div-1w7a gwd-gen-19kmgwdanimation">
