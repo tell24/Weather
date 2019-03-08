@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html><head><meta name="GCD" content="YTk3ODQ3ZWZhN2I4NzZmMzBkNTEwYjJl1dcf72c18d901bc0716314e59825bb69"/>
+<html><head><meta name="GCD" content="YTk3ODQ3ZWZhN2I4NzZmMzBkNTEwYjJl6c41e59cf8e71e2670ed1493dba4fd03"/>
   <meta charset="utf-8">
   <title>Index</title>
   <meta name="generator" content="Google Web Designer 5.0.3.0130">
@@ -269,7 +269,7 @@ body {
       ];
 
       var titles = ['Temperature', '', ' Humidity  ', '', ' Pressure  ', ' Wind Speed ', '', ' Rain Fall '];
-      var plot = ['Min', 'Max', 'Min', 'Max', 'Min', 'Max', 'Mean', 'Gust', 'Total', 'Last Hour'];
+      var plot = [ 'Min', 'Max','Min','Max', 'Mean', 'Mean', 'Gust', 'Total'];
       var axis_x_label = ['Minutes', 'Hours', 'Day of Week', 'Day of Month', 'Week of Year'];
       var axis_y_label = ['C', '', '%', '', 'mB', 'mph', '', 'mm'];
       var myarr;
@@ -819,12 +819,12 @@ body {
             draw_graph(plots, range, max, ticks, points, d_set, first);
             temp = new Array();
             temp = myarr[d_set];
-            fill_chart(0, plots, temp, range, max, points);
+            fill_chart(0, plots, temp, range, max, points, d_set);
             if ((d_set === 0) || (d_set === 2) || (d_set === 5)) {
               d_set++;
               temp = new Array();
               temp = myarr[d_set];
-              fill_chart(1, plots, temp, range, max, points);
+              fill_chart(1, plots, temp, range, max, points, d_set);
             }
             d_set++;
             if (d_set === 8) d_set = 0;
@@ -840,7 +840,7 @@ body {
         }
       }
 
-      function fill_chart(col, c_num, p_data, range, max, p) {
+      function fill_chart(col, c_num, p_data, range, max, p, type) {
         var ctx = chart[c_num];
         var x = 60;
         var y = 30;
@@ -850,9 +850,8 @@ body {
           w = 740;
           h = 600;
         };
-        if (col === 0) ctx.strokeStyle = "blue";
-        if (col === 1) ctx.strokeStyle = "red";
-        if (col === 2) ctx.strokeStyle = "green";
+        if (col === 0) {ctx.fillText(plot[type], 85, 17);ctx.strokeStyle = "red";ctx.fillStyle = "red";  ctx.fillRect(50, 7, 15, 10);}
+        if (col === 1) {ctx.fillText(plot[type], 145, 17);ctx.strokeStyle = "blue"; ctx.fillStyle = "blue";  ctx.fillRect(110, 7, 15, 10);}
         var y_inc = h / range;
         var i = max;
         var s = 0;
@@ -950,7 +949,7 @@ body {
                   m_m_arr[1][5] = Math.ceil(all_dat[12 + (61 * 29)]) + 1;
                 else
                   m_m_arr[1][5] = Math.ceil(all_dat[15 + (61 * 29)]) + 1;
-                
+
                 if (m_m_arr[1][5] < 2) m_m_arr[1][5] = 2;
 
                 m_m_arr[0][6] = m_m_arr[0][5];
@@ -1150,21 +1149,12 @@ body {
           temp = new Array();
           temp = myarr[h_c];
           draw_graph(plots, range, max, ticks, points, h_c, first);
-          fill_chart(0, plots, temp, range, max, points);
+          fill_chart(0, plots, temp, range, max, points, h_c);
           if ((h_c === 0) || (h_c === 2) || (h_c === 5)) {
             h_c++;
-    //        min = m_m_arr[0][h_c];
-    //        max = m_m_arr[1][h_c];
-    //        range = max - min;
-    //        if (plots === 0)
-    //          if (range > 8) range = Math.ceil(range / 8) * 8;
-    //          else range = Math.ceil(range / 4) * 4;
-    //        else
-    //        if (range > 4) range = Math.ceil(range / 4) * 4;
-    //        else range = Math.ceil(range / 2) * 2;
             temp = new Array();
             temp = myarr[h_c];
-            fill_chart(1, plots, temp, range, max, points);
+            fill_chart(1, plots, temp, range, max, points, h_c);
           }
           h_c++;
           if (h_c === 8) h_c = 0;
