@@ -87,7 +87,7 @@
     .menu {
       margin: auto;
       top: 0%;
-      width: 320px;
+      width: 540px;
       height: 30px;
     }
     .gwd-div-2qgl {
@@ -159,6 +159,8 @@
     var WaitDownload;
     var xhr;
     gwd.about = function(event) {
+     document.getElementById("duration").style.visibility = 'hidden';
+     document.getElementById("ld").style.visibility = 'hidden';
       var x = document.getElementById("cent_c");
       x.style.display = "none";
       x = document.getElementById("canvas_area_1");
@@ -169,6 +171,8 @@
     };
     gwd.current = function(event) {
       // current data
+     document.getElementById("duration").style.visibility = 'hidden';
+     document.getElementById("ld").style.visibility = 'hidden';
       var x = document.getElementById("cent_c");
       x.style.display = "block";
       x = document.getElementById("canvas_area_1");
@@ -180,6 +184,8 @@
     };
     gwd.history = function(event) {
       // show history
+     document.getElementById("duration").style.visibility = 'visible';
+     document.getElementById("ld").style.visibility = 'visible';
       active_window = 1;
       WaitDownload();
       sort_update();
@@ -242,12 +248,16 @@
 
 <body class="htmlNoPages">
   <script type="text/javascript">
-    window.onload = function() {
-      var t_col = "#F07C60";
-      var h_col = "#8CC8E8";
-      var r_col = "#A3CDA8";
-      var p_col = "#BDBBB3";
-      var w_col = "#AD9CF3";
+    window.onload = function() {      
+     document.getElementById("d1").style.visibility = 'hidden';
+     document.getElementById("ld1").style.visibility = 'hidden';    
+     document.getElementById("duration").style.visibility = 'hidden';
+     document.getElementById("ld").style.visibility = 'hidden';
+      var t_col = "white";// "#F07C60";
+      var h_col = "white";// "#8CC8E8";
+      var r_col = "white";// "#A3CDA8";
+      var p_col = "white";// "#BDBBB3";
+      var w_col = "white";// "#AD9CF3";
       var peak_col = "#ff0000";
       var sel;
       var PI = 3.1416;
@@ -267,7 +277,7 @@
       ];
 
       var titles = ['Temperature', '', ' Humidity  ', '', ' Pressure  ', ' Wind Speed ', '', ' Rain Fall '];
-      var plot = [ 'Min', 'Max','Min','Max', 'Mean', 'Mean', 'Gust', 'Total'];
+      var plot = ['Min', 'Max', 'Min', 'Max', 'Mean', 'Mean', 'Gust', 'Total'];
       var axis_x_label = ['Minutes', 'Hours', 'Day of Week', 'Day of Month', 'Week of Year'];
       var axis_y_label = ['C', '', '%', '', 'mB', 'mph', '', 'mm'];
       var myarr;
@@ -848,8 +858,18 @@
           w = 740;
           h = 600;
         };
-        if (col === 0) {ctx.fillText(plot[type], 85, 17);ctx.strokeStyle = "red";ctx.fillStyle = "red";  ctx.fillRect(50, 7, 15, 10);}
-        if (col === 1) {ctx.fillText(plot[type], 145, 17);ctx.strokeStyle = "blue"; ctx.fillStyle = "blue";  ctx.fillRect(110, 7, 15, 10);}
+        if (col === 0) {
+          ctx.fillText(plot[type], 85, 17);
+          ctx.strokeStyle = "red";
+          ctx.fillStyle = "red";
+          ctx.fillRect(50, 7, 15, 10);
+        }
+        if (col === 1) {
+          ctx.fillText(plot[type], 145, 17);
+          ctx.strokeStyle = "blue";
+          ctx.fillStyle = "blue";
+          ctx.fillRect(110, 7, 15, 10);
+        }
         var y_inc = h / range;
         var i = max;
         var s = 0;
@@ -1202,23 +1222,10 @@
       sort_update();
     }
   </script>
-  <div class="gwd-div-1w7a gwd-gen-19kmgwdanimation">
-    <div class="menu ">
-      <button class="gwd-button-39lq gwd-button-it82 gwd-gen-it1egwdanimation" id="Btn_4">About</button>
-      <button class="gwd-button-39lq gwd-button-cx08 gwd-gen-9blwgwdanimation" id="Btn_3"></button>
-      <button class="gwd-button-39lq gwd-button-k5iy gwd-gen-5uiygwdanimation" id="Btn_2">History</button>
-      <button class="gwd-button-39lq gwd-button-11u5 gwd-gen-1ju9gwdanimation" id="Btn_1">Current</button>
-    </div>
-  </div>
-  <div class="gwd-div-2qgl" id="Data">
-    <div class="about">
-      <div class="cent_c" id="cent_c">
-        <canvas id="canvas" height="750" width="1000"></canvas>
-      </div>
-      <div class="cent" id="canvas_area_1" height="750" width="1300">
-        <div>
-          <label for="" duration="">History Duration</label>
-          <select id="duration" height="50" width="100">
+  <div class="gwd-div-1w7a gwd-gen-19kmgwdanimation">  
+    <div class="menu ">  
+      <label id="ld" for="duration" class="select_box">History Duration</label>
+          <select id="duration" height="30" width="100"  margin = "auto">
             <option value="hour">Hour</option>
             <option value="day">Day</option>
             <option value="Jan">January</option>
@@ -1233,8 +1240,24 @@
             <option value="Oct">October</option>
             <option value="Nov">November</option>
             <option value="Dec">December</option>
-          </select>
-        </div>
+          </select>  
+      <button class="gwd-button-39lq gwd-button-it82 gwd-gen-it1egwdanimation" id="Btn_4">About</button>
+      <button class="gwd-button-39lq gwd-button-cx08 gwd-gen-9blwgwdanimation" id="Btn_3"></button>
+      <button class="gwd-button-39lq gwd-button-k5iy gwd-gen-5uiygwdanimation" id="Btn_2">History</button>
+      <button class="gwd-button-39lq gwd-button-11u5 gwd-gen-1ju9gwdanimation" id="Btn_1">Current</button>
+      <label id="ld1" for="d1" class="select_box">History Duration</label>
+          <select id="d1" height="30" width="100"  margin = "auto"></select>
+            
+            </select>
+    </div>
+  </div>
+  <div class="gwd-div-2qgl" id="Data">
+    <div class="about">
+      <div class="cent_c" id="cent_c">
+        <canvas id="canvas" height="750" width="1000"></canvas>
+      </div>
+      <div class="cent" id="canvas_area_1" height="750" width="1300">
+       
         <div class="column">
           <div class="row">
             <canvas id="canvas_b" height="170" width="440"></canvas>
