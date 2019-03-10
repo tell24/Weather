@@ -58,7 +58,7 @@ body {
       text-align: left;
       position: relative;
       margin: auto;
-      width: 1205px;
+      width: 1160px;
     }
     .cent_c {
       text-align: left;
@@ -69,11 +69,11 @@ body {
    .column {
       float: left;
       height: 680px;
-      width: 400px;
+      width: 370px;
       text-align: center;
     }
     .column_1 {
-      width: 800px;
+      width: 780px;
       height: 680px;
       float: right;
       text-align: center;
@@ -85,7 +85,7 @@ body {
     }
 
 @media screen and (max-height: 450px) {
-  .sidenav {padding-top: 15px;}
+  .sidenav {padding-top: 10px;}
   .sidenav a {font-size: 18px;}
 }
 </style>
@@ -100,7 +100,9 @@ window.onload = function() {
       x.style.display = "none";  
       document.getElementById("duration").style.visibility = 'hidden';
       document.getElementById("ld").style.visibility = 'hidden';
-  
+		var L1 = 130;
+		var L2 = 350;
+		var L3 = 570;
       var xhr;
       var H_offset = 0;
       var active_window = 1;
@@ -146,7 +148,7 @@ window.onload = function() {
         switch (loc) {
           case 0:
             x1 = 166;
-            y1 = 133;
+            y1 = L1;
             ident = 13;
             scale = 5;
             start = -20;
@@ -154,7 +156,7 @@ window.onload = function() {
             break;
           case 1:
             x1 = 832;
-            y1 = 133;
+            y1 = L1;
             ident = 13;
             scale = 5;
             start = -20;
@@ -162,7 +164,7 @@ window.onload = function() {
             break;
           case 2:
             x1 = 166;
-            y1 = 383;
+            y1 = L2;
             ident = 11;
             scale = 10;
             start = 0;
@@ -170,7 +172,7 @@ window.onload = function() {
             break;
           case 3:
             x1 = 832;
-            y1 = 383;
+            y1 = L2;
             ident = 11;
             scale = 10;
             start = 0;
@@ -178,7 +180,7 @@ window.onload = function() {
             break;
           case 4:
             x1 = 500;
-            y1 = 133;
+            y1 = L1;
             ident = 11;
             scale = 20;
             start = 860;
@@ -186,7 +188,7 @@ window.onload = function() {
             break;
           case 5:
             x1 = 166;
-            y1 = 633;
+            y1 = L3;
             ident = 11;
             scale = 5;
             start = 0;
@@ -223,7 +225,9 @@ window.onload = function() {
       }
 
 
-      function draw_bearing(x, y, win) {
+      function draw_bearing(win) {
+	  var x = 833;
+	  var y = L3 - 20;
         var ident = 8;
         var direction = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
         win.beginPath();
@@ -265,43 +269,43 @@ window.onload = function() {
           case 0:
             delta = (1.1667 - (((20 + y) / 90) * 2)) * PI;
             x1 = 166;
-            y1 = 133;
+            y1 = L1;
             break;
           case 1:
             delta = (1.1667 - (((20 + y) / 90) * 2)) * PI;
             x1 = 832;
-            y1 = 133;
+            y1 = L1;
             break;
           case 2:
             delta = (1.1667 - ((y / 150) * 2)) * PI;
             x1 = 166;
-            y1 = 383;
+            y1 = L2;
             break;
           case 3:
             delta = (1.1667 - ((y / 150) * 2)) * PI;
             x1 = 832;
-            y1 = 383;
+            y1 = L2;
             break;
           case 4:
             delta = (1.1667 - (((y - 860) / 300) * 2)) * PI;
             x1 = 500;
-            y1 = 133;
+            y1 = L1;
             break;
           case 5:
             delta = (1.1667 - ((y / 75) * 2)) * PI;
             x1 = 166;
-            y1 = 633;
+            y1 = L3;
             break;
           case 6:
             delta = (0.5 - ((y / 360) * 2)) * PI;
             x1 = 832;
-            y1 = 620;
+            y1 = L3-20;
             dia1 = 70;
             break;
           case 7:
             delta = (1.1667 - ((y / 75) * 2)) * PI;
             x1 = 166;
-            y1 = 633;
+            y1 = L3;
             peak = true;
             break;
         }
@@ -350,8 +354,8 @@ window.onload = function() {
       }
 
       function draw_rain(win) {
-        win.rect(449, 280, 52, 152);
-        win.rect(501, 280, 52, 152);
+        win.rect(449, 250, 52, 152);
+        win.rect(501, 250, 52, 152);
         win.stroke();
         win.beginPath();
         win.textAlign = "center";
@@ -388,7 +392,7 @@ window.onload = function() {
         }
         var s = 0;
         var num = s.toFixed(1);
-        var y = 432;
+        var y = 402;
         do {
           win.fillStyle = "black";
           win.beginPath();
@@ -418,7 +422,7 @@ window.onload = function() {
         }
         s = 0;
         num = s.toFixed(1);
-        var y = 432;
+        var y = 402;
         do {
           win.beginPath();
           win.moveTo(553, y);
@@ -431,11 +435,11 @@ window.onload = function() {
         } while (s <= t_scale);
         win.beginPath();
         win.fillStyle = r_col;
-        win.rect(450, 432 - n_s, 50, n_s);
+        win.rect(450, 402 - n_s, 50, n_s);
         win.fill();
         win.beginPath();
         win.fillStyle = "Blue";
-        win.rect(502, 432 - n_t, 50, n_t);
+        win.rect(502, 402 - n_t, 50, n_t);
         win.fill();
       }
 
@@ -443,16 +447,16 @@ window.onload = function() {
         win.beginPath();
         win.lineWidth = width;
         win.lineCap = "round";
-        win.moveTo(500, 633);
+        win.moveTo(500, L3);
         var x = Math.sin(pos / rad) * length;
         var y = Math.cos(pos / rad) * length;
-        win.lineTo(500 + x, 633 - y);
+        win.lineTo(500 + x, L3 - y);
         win.stroke();
       }
 
       function clock(win) {
         var step = 30;
-        var cc = 633;
+        var cc = L3;
         win.beginPath();
         win.arc(500, cc, dia, 0, 2 * PI);
         win.stroke();
@@ -511,7 +515,7 @@ window.onload = function() {
             draw_dial(3, ctx);
             draw_dial(4, ctx);
             draw_dial(5, ctx);
-            draw_bearing(832, 620, ctx);
+            draw_bearing(ctx);
             draw_rain(ctx);
 
             clock(ctx);
@@ -839,17 +843,17 @@ window.onload = function() {
   function draw_graph(num, range, min, ticks, points, t_index, first) {
         var ctx = chart[num];
         ctx.font = "10px Arial";
-        ctx.clearRect(0, 0, 820, 800);
+        ctx.clearRect(0, 0, 800, 800);
         var y_inc = range / 4;
         var x = 60;
         var y = 30;
-        var w = 340;
+        var w = 300;
         var h = 100;
         var ys = 100 / 4;
         var steps = 4;
         var x_step = Math.round(points / ticks);
         if (num === 0) {
-          w = 740;
+          w = 700;
           h = 600;
           steps = 8;
           y_inc = range / 8;
@@ -892,6 +896,9 @@ window.onload = function() {
         ctx.fillText(i, 45, yl + 5);
         ctx.stroke();
         ctx.font = "13px Arial";
+		if(num === 0)
+        ctx.fillText(axis_y_label[t_index], 25, y + (h / 2) -20);
+		else
         ctx.fillText(axis_y_label[t_index], 18, y + (h / 2));
         ctx.fillText(titles[t_index], x + (w / 2), 17);
         ctx.fillText(sel, x + (w / 2), yl + 28);
@@ -903,10 +910,10 @@ window.onload = function() {
         var ctx = chart[c_num];
         var x = 60;
         var y = 30;
-        var w = 340;
+        var w = 300;
         var h = 100;
         if (c_num === 0) {
-          w = 740;
+          w = 700;
           h = 600;
         };
         if (col === 0) {
@@ -1159,7 +1166,7 @@ window.onload = function() {
       <div class="cent_c" id="cent_c">
         <canvas id="canvas" height="750" width="1000"></canvas>
       </div>
-      <div class="cent" id="canvas_area_1" height="750" width="1250">
+      <div class="cent" id="canvas_area_1" height="750" width="1180">
         <div class="column">
           <div class="row">
             <canvas id="canvas_b" width="400" height="170" ></canvas>
@@ -1175,7 +1182,7 @@ window.onload = function() {
           </div>
         </div>
         <div class="column_1">
-          <canvas id="canvas_a"  width="800" height="680"></canvas>
+          <canvas id="canvas_a"  width="780" height="680"></canvas>
         </div>
       </div>
     </div>
