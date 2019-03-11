@@ -560,7 +560,7 @@ switch (sel) {
 case "hour":
 mark = true;
 len = 59;
-m_len = 59;
+m_len = 15;
 do {
 myarr[0][index] = all_dat[cell]; //in temp
 myarr[1][index] = all_dat[cell + 18]; //out temp
@@ -617,7 +617,6 @@ m_m_arr[1][6] = m_m_arr[1][5];
 
 m_m_arr[0][7] = 0; //rain
 m_m_arr[1][7] = Math.ceil(all_dat[17 + (62 * 29)] / 15) + 1;
-m_len = Math.ceil((len+1)/2);
 break;
 
 case "day":
@@ -878,27 +877,29 @@ var c_b = y + h;
 var i = first;
 ctx.font = "11px Arial";
 ctx.beginPath();
-do {
 ctx.fillText(i, xl, y + h + 14);
+while (xl <= (w + x)){
 xl += xs;
+if(w + x -10 <= xl)break;
 ctx.moveTo(xl, y);
 ctx.lineTo(xl, c_b);
 i += x_step;
-} while (xl <= w + x - (xs));
-ctx.fillText(points+1, w + x, y + h + 14);
+ctx.fillText(i, xl, y + h + 14);
+} ;
+ctx.fillText(points + first, w + x, y + h + 14);
 ctx.stroke();
 var yl = y;
 c_b = x + w;
 ctx.beginPath();
 i = min + range;
 var step = range / steps;
-do {
+while (yl <= (h + y) -1){
 ctx.fillText(i, 45, yl + 5);
 yl += ys;
 ctx.moveTo(x, yl);
 ctx.lineTo(c_b, yl);
 i -= step;
-} while (yl < h + y - 1);
+};
 ctx.fillText(i, 45, yl + 5);
 ctx.stroke();
 ctx.font = "13px Arial";
@@ -981,7 +982,7 @@ switch (sel) {
 case "hour":
 points = 60;
 ticks = 15;
-first = 1;
+first = 0;
 break;
 case "day":
 points = 23;
