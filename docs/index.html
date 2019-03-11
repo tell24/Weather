@@ -570,6 +570,10 @@ myarr[4][index] = all_dat[cell + 24]; //pres
 myarr[5][index] = all_dat[cell + 6]; //wind
 myarr[6][index] = all_dat[cell + 9]; //gust
 myarr[7][index] = all_dat[cell + 15] / 15; //rain
+myarr[8][index] = all_dat[cell +1]; //in low temp
+myarr[9][index] = all_dat[cell + 19]; //out low temp
+myarr[10][index] = all_dat[cell + 4]; //out low hum
+myarr[11][index] = all_dat[cell + 22]; //in low hum
 index++;
 cell += 29;
 } while (index <= len);
@@ -632,6 +636,10 @@ myarr[4][index] = all_dat[cell + 24]; //pres
 myarr[5][index] = all_dat[cell + 6]; //wind
 myarr[6][index] = all_dat[cell + 9]; //gust
 myarr[7][index] = all_dat[cell + 15] / 15; //rain
+myarr[8][index] = all_dat[cell +1]; //in low temp
+myarr[9][index] = all_dat[cell + 19]; //out low temp
+myarr[10][index] = all_dat[cell + 4]; //out low hum
+myarr[11][index] = all_dat[cell + 22]; //in low hum
 index++;
 cell += 29;
 } while (index <= len);
@@ -686,7 +694,7 @@ var d = new Date();
 m = parseInt(d.getMonth());
 var sm = parseInt(document.getElementById("duration").selectedIndex) - 2;
 if (sm === m)
-len = parseInt(d.getDate()) - 1;
+len = parseInt(d.getDate()) - 2;
 else {
 if ((sm === 3) || (sm === 5) || (sm === 8) || (sm === 10)) len = 29;
 else len = 30;
@@ -695,14 +703,18 @@ if (d.getFullYear() % 4 === 0) len = 28;
 else len = 27;
 }
 do {
-myarr[0][index] = all_dat[cell]; //in temp
-myarr[1][index] = all_dat[cell + 18]; //out temp
-myarr[2][index] = all_dat[cell + 3]; //out hum
-myarr[3][index] = all_dat[cell + 21]; //in hum
+myarr[0][index] = all_dat[cell]; //in high temp
+myarr[1][index] = all_dat[cell + 18]; //out high temp
+myarr[2][index] = all_dat[cell + 3]; //out high hum
+myarr[3][index] = all_dat[cell + 21]; //in high hum
 myarr[4][index] = all_dat[cell + 24]; //pres
 myarr[5][index] = all_dat[cell + 6]; //wind
 myarr[6][index] = all_dat[cell + 9]; //gust
 myarr[7][index] = all_dat[cell + 16] / 15; //rain
+myarr[8][index] = all_dat[cell +1]; //in low temp
+myarr[9][index] = all_dat[cell + 19]; //out low temp
+myarr[10][index] = all_dat[cell + 4]; //out low hum
+myarr[11][index] = all_dat[cell + 22]; //in low hum
 index++;
 cell += 29;
 } while (index <= len);
@@ -1047,6 +1059,10 @@ myMsg.document.write("<h1>Downloading Data</h1>");myMsg.document.write("<h1>Plea
 
 function make_array() {
 myarr = new Array();
+myarr.push([]);
+myarr.push([]);
+myarr.push([]);
+myarr.push([]);
 myarr.push([]);
 myarr.push([]);
 myarr.push([]);
