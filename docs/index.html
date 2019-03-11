@@ -6,27 +6,24 @@
 body {
 font-family: "Lato", sans-serif;
 }
-
 .sidenav {
-height: 750px;
+height: 100%;
 width: 130px;
 position: fixed;
 z-index: 1;
 top: 0;
 left: 0;
-background-color: #111;
+background-color: #500050;
 overflow-x: hidden;
 padding-top: 40px;
 }
-
 .sidenav a {
 padding: 5px 5px 5px 32px;
 text-decoration: none;
 font-size: 25px;
-color: #818181;
+color: #c0c0c0;
 display: block;
 }
-
 .sidenav a:hover {
 color: #f1f1f1;
 }
@@ -119,6 +116,7 @@ var dia = 80;
 var dia_small = 70;
 var myMsg;
 var m_len = 30;
+var len = 30;
 var chart = [document.getElementById('canvas_a').getContext('2d'),
 document.getElementById('canvas_b').getContext('2d'),
 document.getElementById('canvas_c').getContext('2d'),
@@ -136,6 +134,7 @@ document.getElementById("canvas_c").addEventListener("click", canvas_c_click);
 document.getElementById("canvas_d").addEventListener("click", canvas_d_click); 
 document.getElementById("canvas_e").addEventListener("click", canvas_e_click);
 
+// Start Current Page
 function draw_dial(loc, win) {
 var x1, y1;
 var ident;
@@ -361,10 +360,10 @@ win.beginPath();
 win.textAlign = "center";
 win.fillStyle = "Black";
 win.font = "14px Arial";
-win.fillText(" now ", 360, 355);
-win.fillText("this", 630, 355);
-win.fillText(" hr ", 630, 370);
-win.fillText("Rain Fall ( mm/h )", 500, 463);
+win.fillText(" now ", 370, 335);
+win.fillText("this", 620, 335);
+win.fillText(" hr ", 620, 350);
+win.fillText("Rain Fall ( mm/h )", 500, L2 + 80);
 }
 
 function rain_plot(now, total, win) {
@@ -471,7 +470,6 @@ win.beginPath();
 win.moveTo(x2, y2);
 win.lineTo(x3, y3);
 win.stroke();
-
 val = (i * 30);
 y2 = cc + 5 - ((dia + 10) * Math.sin(ang));
 x2 = 500 - ((dia + 10) * Math.cos(ang));
@@ -546,6 +544,7 @@ xhr.open("GET", url);
 xhr.send(null);
 }
 
+// Start History Page
 function update_history() {
 sel = document.getElementById("duration").value;
 var url1 = "https://script.google.com/macros/s/AKfycbzep_6TONHLbfjt1H23_iCb0DMc126LPo3smsun/exec?read=" + sel;
@@ -554,13 +553,14 @@ xhr.onreadystatechange = function() {
 if (xhr.readyState == 4) {
 var t_r = xhr.responseText;
 var all_dat = t_r.split(",");
-var len = 24;
+len = 30;
 var index = 0;
 var cell = 2;
 switch (sel) {
 case "hour":
 mark = true;
 len = 59;
+m_len = 59;
 do {
 myarr[0][index] = all_dat[cell]; //in temp
 myarr[1][index] = all_dat[cell + 18]; //out temp
@@ -617,10 +617,13 @@ m_m_arr[1][6] = m_m_arr[1][5];
 
 m_m_arr[0][7] = 0; //rain
 m_m_arr[1][7] = Math.ceil(all_dat[17 + (62 * 29)] / 15) + 1;
+m_len = Math.ceil((len+1)/2);
 break;
+
 case "day":
 mark = true;
 len = 24;
+m_len = 12;
 do {
 myarr[0][index] = all_dat[cell]; //in temp
 myarr[1][index] = all_dat[cell + 18]; //out temp
@@ -677,6 +680,7 @@ m_m_arr[1][6] = m_m_arr[1][5];
 m_m_arr[0][7] = 0; //rain
 m_m_arr[1][7] = Math.ceil(all_dat[17 + (28 * 29)] / 15) + 1;
 break;
+
 default:
 mark = false;
 var d = new Date();
@@ -745,7 +749,8 @@ m_m_arr[1][6] = m_m_arr[1][5];
 
 m_m_arr[0][7] = 0; //rain
 m_m_arr[1][7] = Math.ceil(all_dat[18 + (33 * 29)] / 15) + 1;
-m_len = len;
+
+m_len = Math.ceil((len+1)/2);
 break;
 }
 build_history(1, len);
@@ -770,11 +775,11 @@ points = 60;
 first = 0;
 break;
 case "day":
-ticks = 23;
+ticks = 12;
 points = 23;
 break;
 default:
-ticks = len;
+ticks = m_len;
 points = len;
 break;
 }
@@ -868,7 +873,7 @@ ctx.stroke();
 
 ctx.textAlign = "center";
 var xl = x;
-var xs = w / ticks;
+var xs = (w / (points))* x_step;
 var c_b = y + h;
 var i = first;
 ctx.font = "11px Arial";
@@ -879,8 +884,8 @@ xl += xs;
 ctx.moveTo(xl, y);
 ctx.lineTo(xl, c_b);
 i += x_step;
-} while (xl < w + x - 1);
-ctx.fillText(i, xl, y + h + 14);
+} while (xl <= w + x - (xs));
+ctx.fillText(points+1, w + x, y + h + 14);
 ctx.stroke();
 var yl = y;
 c_b = x + w;
@@ -980,10 +985,10 @@ first = 1;
 break;
 case "day":
 points = 23;
-ticks = 23;
+ticks = 12;
 break;
 default:
-points = m_len;
+points = len;
 ticks = m_len;
 break;
 }
