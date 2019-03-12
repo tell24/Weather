@@ -103,17 +103,18 @@ body {
     -moz-transform-style: preserve-3d;
 }</style>
   <script type="text/javascript">
-      var sel;
-	  var sort_update ;
-       function handleSelect() {
-        sel = document.getElementById("duration").value;
-        //WaitDownload();
-        active_window = 1;
-        sort_update();
-      }
-    
+    var sel;
+    var sort_update;
+
+    function handleSelect() {
+      sel = document.getElementById("duration").value;
+      //WaitDownload();
+      active_window = 1;
+      sort_update();
+    }
+
     window.onload = function() {
-     
+
       var L1 = 130;
       var L2 = 350;
       var L3 = 570;
@@ -140,7 +141,7 @@ body {
         document.getElementById('canvas_e').getContext('2d')
       ];
       var titles = ['Temperature', '', ' Humidity  ', '', ' Pressure  ', ' Wind Speed ', '', ' Rain Fall '];
-      var plot = ['Outside', 'Inside', 'Outside', 'Inside', 'High', 'Gust', 'Mean', 'Total', 'Outside', 'Inside', 'Outside', 'Inside','Low'];
+      var plot = ['Outside', 'Inside', 'Outside', 'Inside', 'High', 'Gust', 'Mean', 'Total', 'Outside', 'Inside', 'Outside', 'Inside', 'Low'];
       var axis_x_label = ['Minutes', 'Hours', 'January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
       var axis_y_label = ['C', '', '%', '', 'mB', 'mph', '', 'mm'];
       var myarr;
@@ -677,15 +678,15 @@ body {
                 m_m_arr[0][1] = m_m_arr[0][0];
                 m_m_arr[1][1] = m_m_arr[1][0];
 
-                if (parseFloat(all_dat[5 + (27 * 29)]) < parseFloat(all_dat[22 + (27 * 29)])) //hum low
+                if (parseFloat(all_dat[5 + (27 * 29)]) < parseFloat(all_dat[23 + (27 * 29)])) //hum low
                   m_m_arr[0][2] = Math.floor(all_dat[5 + (27 * 29)]) - 1;
                 else
-                  m_m_arr[0][2] = Math.floor(all_dat[22 + (27 * 29)]) - 1;
+                  m_m_arr[0][2] = Math.floor(all_dat[23 + (27 * 29)]) - 1;
 
-                if (parseFloat(all_dat[6 + (27 * 29)]) > parseFloat(all_dat[23 + (27 * 29)])) //hum high
+                if (parseFloat(all_dat[6 + (27 * 29)]) > parseFloat(all_dat[24 + (27 * 29)])) //hum high
                   m_m_arr[1][2] = Math.ceil(all_dat[6 + (27 * 29)]) + 1;
                 else
-                  m_m_arr[1][2] = Math.ceil(all_dat[23 + (27 * 29)]) + 1;
+                  m_m_arr[1][2] = Math.ceil(all_dat[24 + (27 * 29)]) + 1;
 
                 m_m_arr[0][3] = m_m_arr[0][2];
                 m_m_arr[1][3] = m_m_arr[1][2];
@@ -837,82 +838,82 @@ body {
             d_set = 7;
             break;
         }
-        switch(data_valid) {
-          case 0: 
-                do {
-                   min = 0;
-                   max = 2;
-                   range = 2
-                   draw_graph(plots, range, min, ticks, points, 0, 0);
-                  plots++;
-                } while (plots < 5);
+        switch (data_valid) {
+          case 0:
+            do {
+              min = 0;
+              max = 2;
+              range = 2
+              draw_graph(plots, range, min, ticks, points, 0, 0);
+              plots++;
+            } while (plots < 5);
             break;
-        case 1:
-          do {
-            min = m_m_arr[0][d_set];
-            max = m_m_arr[1][d_set];
-            range = max - min;
-            if (plots === 0)
-              range = Math.ceil(range / 8) * 8;
-            else
-              range = Math.ceil(range / 4) * 4;
-            draw_graph(plots, range, min, ticks, points, d_set, first);
-            temp = new Array();
-            temp = myarr[d_set];
-            fill_chart(0, plots, temp, range, min, points, d_set);
-            if ((d_set === 0) || (d_set === 2) || (d_set === 5)) {
-              d_set++;
+          case 1:
+            do {
+              min = m_m_arr[0][d_set];
+              max = m_m_arr[1][d_set];
+              range = max - min;
+              if (plots === 0)
+                range = Math.ceil(range / 8) * 8;
+              else
+                range = Math.ceil(range / 4) * 4;
+              draw_graph(plots, range, min, ticks, points, d_set, first);
               temp = new Array();
               temp = myarr[d_set];
-              fill_chart(3, plots, temp, range, min, points, d_set);            
-            }
-            d_set++;
-            if (d_set === 8) d_set = 0;
-            plots++;
-          } while (plots < 5);
-        break;
-        case 2:
-          do {
-            min = m_m_arr[0][d_set];
-            max = m_m_arr[1][d_set];
-            range = max - min;
-            if (plots === 0)
-              range = Math.ceil(range / 8) * 8;
-            else
-              range = Math.ceil(range / 4) * 4;
-            draw_graph(plots, range, min, ticks, points, d_set, first);
-            temp = new Array();
-            temp = myarr[d_set];
-            fill_chart(0, plots, temp, range, min, points, d_set);
-            if ((d_set === 0) || (d_set === 2)) {
-              temp = new Array();
-              temp = myarr[d_set + 8];
-              fill_chart(2, plots, temp, range, min, points, d_set + 8);
-            }
-            if ((d_set === 0) || (d_set === 2) || (d_set === 5)) {
+              fill_chart(0, plots, temp, range, min, points, d_set);
+              if ((d_set === 0) || (d_set === 2) || (d_set === 5)) {
+                d_set++;
+                temp = new Array();
+                temp = myarr[d_set];
+                fill_chart(3, plots, temp, range, min, points, d_set);
+              }
               d_set++;
+              if (d_set === 8) d_set = 0;
+              plots++;
+            } while (plots < 5);
+            break;
+          case 2:
+            do {
+              min = m_m_arr[0][d_set];
+              max = m_m_arr[1][d_set];
+              range = max - min;
+              if (plots === 0)
+                range = Math.ceil(range / 8) * 8;
+              else
+                range = Math.ceil(range / 4) * 4;
+              draw_graph(plots, range, min, ticks, points, d_set, first);
               temp = new Array();
               temp = myarr[d_set];
-              fill_chart(1, plots, temp, range, min, points, d_set);
-              if ((d_set === 1) || (d_set === 3)) {
+              fill_chart(0, plots, temp, range, min, points, d_set);
+              if ((d_set === 0) || (d_set === 2)) {
                 temp = new Array();
                 temp = myarr[d_set + 8];
-                fill_chart(3, plots, temp, range, min, points, d_set + 8);
+                fill_chart(2, plots, temp, range, min, points, d_set + 8);
               }
-            }
-            d_set++;
-            if (d_set === 8) d_set = 0;
-            plots++;
-          } while (plots < 5);
-        break;
-      }
-          myMsg.close();
-          var x = document.getElementById("cent_c");
-          x.style.display = "none";
-          x = document.getElementById("canvas_area_1");
-          x.style.display = "block";
-          x = document.getElementById("about");
-          x.style.display = "none";        
+              if ((d_set === 0) || (d_set === 2) || (d_set === 5)) {
+                d_set++;
+                temp = new Array();
+                temp = myarr[d_set];
+                fill_chart(1, plots, temp, range, min, points, d_set);
+                if ((d_set === 1) || (d_set === 3)) {
+                  temp = new Array();
+                  temp = myarr[d_set + 8];
+                  fill_chart(3, plots, temp, range, min, points, d_set + 8);
+                }
+              }
+              d_set++;
+              if (d_set === 8) d_set = 0;
+              plots++;
+            } while (plots < 5);
+            break;
+        }
+        myMsg.close();
+        var x = document.getElementById("cent_c");
+        x.style.display = "none";
+        x = document.getElementById("canvas_area_1");
+        x.style.display = "block";
+        x = document.getElementById("about");
+        x.style.display = "none";
       }
 
       function draw_graph(num, range, min, ticks, points, t_index, first) {
@@ -1217,9 +1218,9 @@ body {
         H_offset += 4;
         H_offset = H_offset % 5;
         move_history();
-      } 
+      }
 
-       var x = document.getElementById("cent_c");
+      var x = document.getElementById("cent_c");
       x.style.display = "block";
       x = document.getElementById("canvas_area_1");
       x.style.display = "none";
@@ -1227,7 +1228,7 @@ body {
       x.style.display = "none";
       document.getElementById("duration").style.visibility = 'hidden';
       document.getElementById("ld").style.visibility = 'hidden';
-      var myVar = setInterval(sort_update, 30000);    
+      var myVar = setInterval(sort_update, 30000);
       active_window = 0;
       make_array();
       sort_update();
@@ -1236,7 +1237,6 @@ body {
 <style type="text/css">#pagedeck { overflow: hidden !important; }</style></head>
 
 <body class="htmlNoPages">
-  
   <div class="sidenav">
     <a href="#" id="current">Current </a>
     <a href="#" id="history">History</a>
