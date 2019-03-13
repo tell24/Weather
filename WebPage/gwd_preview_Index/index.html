@@ -388,31 +388,18 @@ body {
       }
 
       function rain_plot(now, total, win) {
-        now /= 2.5;
-        total /= 150;
+        now = 350;
+        total = 350;
+        now /= (70/60);
+        total /= 70;
         var n_scale = Math.ceil(now + 0.5);
         var t_scale = Math.ceil(total + 0.5);
-        var n_s = 145 * (now / n_scale);
-        var n_t = 145 * (total / t_scale);
-        var n_ticks;
-        if (n_scale < 2) {
-          n_ticks = 0.2;
-          ticks = 152 / Math.floor(n_scale / 0.2);
-        } else
-        if (n_scale < 5) {
-          n_ticks = 0.5;
-          ticks = 152 / Math.floor(n_scale / 0.5);
-        } else
-        if (n_scale < 20) {
-          n_ticks = 2;
-          ticks = 152 / Math.floor(n_scale / 2);
-        } else {
-          n_ticks = 5;
-          ticks = 152 / Math.floor(n_scale / 5);
-        }
+        var n_ticks  =  Math.ceil(n_scale/5);
+        var ticks = 152/5;
         var s = 0;
         var num = s.toFixed(1);
         var y = 402;
+        var count = 5;
         do {
           win.fillStyle = "black";
           win.beginPath();
@@ -423,26 +410,18 @@ body {
           y -= ticks;
           s += n_ticks;
           num = s.toFixed(1);
-        } while (s <= n_scale);
+          count--;
+        } while (count>=0);
 
-        if (t_scale < 2) {
-          n_ticks = 0.2;
-          ticks = 152 / Math.floor(t_scale / 0.2);
-        } else
-        if (t_scale < 5) {
-          n_ticks = 0.5;
-          ticks = 152 / Math.floor(t_scale / 0.5);
-        } else
-        if (t_scale < 20) {
-          n_ticks = 2;
-          ticks = 152 / Math.floor(t_scale / 2);
-        } else {
-          n_ticks = 5;
-          ticks = 152 / Math.floor(t_scale / 5);
-        }
+          s -= n_ticks;
+          num = s.toFixed(1);
+        var n_s = 152 * (now / num);
+        var t_ticks  =  Math.ceil(t_scale/5);
+        ticks = 152/5;
         s = 0;
         num = s.toFixed(1);
         var y = 402;
+        count = 5;
         do {
           win.beginPath();
           win.moveTo(553, y);
@@ -450,9 +429,14 @@ body {
           win.stroke();
           win.fillText(num, 580, y + 5);
           y -= ticks;
-          s += n_ticks;
+          s += t_ticks;
           num = s.toFixed(1);
-        } while (s <= t_scale);
+          count--;
+        } while (count>=0);
+          s -= t_ticks;
+          num = s.toFixed(1);
+        
+        var n_t = 152 * (total / num);
         win.beginPath();
         win.fillStyle = r_col;
         win.rect(450, 402 - n_s, 50, n_s);
@@ -592,7 +576,7 @@ body {
                   myarr[4][index] = all_dat[cell + 24]; //pres
                   myarr[5][index] = all_dat[cell + 9]; //wind
                   myarr[6][index] = all_dat[cell + 6]; //gust
-                  myarr[7][index] = all_dat[cell + 15] / 15; //rain
+                  myarr[7][index] = all_dat[cell + 15] / 70; //rain mm
                   myarr[8][index] = all_dat[cell + 1]; //in low temp
                   myarr[9][index] = all_dat[cell + 19]; //out low temp
                   myarr[10][index] = all_dat[cell + 4]; //out low hum
@@ -659,7 +643,7 @@ body {
                   myarr[4][index] = all_dat[cell + 24]; //pres
                   myarr[5][index] = all_dat[cell + 6]; //wind
                   myarr[6][index] = all_dat[cell + 9]; //gust
-                  myarr[7][index] = all_dat[cell + 15] / 15; //rain
+                  myarr[7][index] = all_dat[cell + 15] / 70; //rain mm
                   myarr[8][index] = all_dat[cell + 1]; //in low temp
                   myarr[9][index] = all_dat[cell + 19]; //out low temp
                   myarr[10][index] = all_dat[cell + 4]; //out low hum
@@ -888,13 +872,24 @@ body {
               draw_graph(plots, range, min, ticks, points, d_set, first);
               temp = new Array();
               temp = myarr[d_set];
-              fill_chart(2, plots, temp, range, min, points, d_set);
+              if ((d_set === 4) || (d_set === 7)) {
+                fill_chart(0, plots, temp, range, min, points, d_set);
+              }
+              if (d_set === 5) {
+                fill_chart(0, plots, temp, range, min, points, d_set);
+                d_set++;
+                temp = new Array();
+                temp = myarr[d_set];
+                fill_chart(1, plots, temp, range, min, points, d_set);
+              }
+
               if ((d_set === 0) || (d_set === 2)) {
+                fill_chart(2, plots, temp, range, min, points, d_set);
                 temp = new Array();
                 temp = myarr[d_set + 8];
                 fill_chart(4, plots, temp, range, min, points, d_set + 8);
               }
-              if ((d_set === 0) || (d_set === 2) || (d_set === 5)) {
+              if ((d_set === 0) || (d_set === 2)) {
                 d_set++;
                 temp = new Array();
                 temp = myarr[d_set];
@@ -1010,31 +1005,31 @@ body {
           ctx.strokeStyle = col2;
           ctx.fillStyle = col2;
           ctx.fillRect(r_label + 90, 7, 15, 10);
-      //    ctx.fillRect(110, 7, 15, 10);
+          //    ctx.fillRect(110, 7, 15, 10);
         }
         if (col === 2) {
           ctx.fillText(plot[type], 80, 17);
+          ctx.strokeStyle = col3;
+          ctx.fillStyle = col3;
+          ctx.fillRect(110, 7, 15, 10);
+        }
+        if (col === 3) {
+          ctx.fillText(plot[type], r_label + 95, 17);
+          ctx.strokeStyle = col4;
+          ctx.fillStyle = col4;
+          ctx.fillRect(r_label + 120, 7, 15, 10);
+        }
+        if (col === 4) {
+          ctx.fillText(plot[type], 150, 17);
           ctx.strokeStyle = col1;
           ctx.fillStyle = col1;
           ctx.fillRect(40, 7, 15, 10);
         }
-        if (col === 3) {
-          ctx.fillText(plot[type], r_label+95, 17);
-          ctx.strokeStyle = col3;
-          ctx.fillStyle = col3;
-          ctx.fillRect(r_label+60, 7, 15, 10);
-        }
-        if (col === 4) {
-          ctx.fillText(plot[type], 150, 17);
-          ctx.strokeStyle = col2;
-          ctx.fillStyle = col2;
-          ctx.fillRect(110, 7, 15, 10);
-        }
         if (col === 5) {
           ctx.fillText(plot[type], r_label + 155, 17);
-          ctx.strokeStyle = col4;
-          ctx.fillStyle = col4;
-          ctx.fillRect(r_label + 120, 7, 15, 10);
+          ctx.strokeStyle = col2;
+          ctx.fillStyle = col2;
+          ctx.fillRect(r_label + 60, 7, 15, 10);
         }
         var y_inc = h / range;
         var i = min + range;
@@ -1075,13 +1070,16 @@ body {
         var max;
         var temp;
         var points;
+        var range;
         var h_c = 0;
         var first = 0;
+        var fun = 0;
         switch (sel) {
           case "hour":
             points = 60;
             ticks = 15;
             first = 0;
+            fun = 1;
             break;
           case "day":
             points = 23;
@@ -1111,28 +1109,80 @@ body {
             break;
         }
         var plots = 0;
-        do {
+        if(fun===1){
+           do {
+          min = m_m_arr[0][h_c];
+          max = m_m_arr[1][h_c];
+              range = max - min;
+              if (plots === 0)
+                range = Math.ceil(range / 8) * 8;
+              else
+                range = Math.ceil(range / 4) * 4;
+              draw_graph(plots, range, min, ticks, points, h_c, first);
+              temp = new Array();
+              temp = myarr[h_c];
+              fill_chart(0, plots, temp, range, min, points, h_c);
+              if ((h_c === 0) || (h_c === 2) || (h_c === 5)) {
+                h_c++;
+                temp = new Array();
+                temp = myarr[h_c];
+                fill_chart(1, plots, temp, range, min, points, h_c);
+              }
+              h_c++;
+              if (h_c === 8) h_c = 0;
+              plots++;
+        
+        } while (plots < 5)
+        }
+        else
+          { 
+          do {
           min = m_m_arr[0][h_c];
           max = m_m_arr[1][h_c];
           range = max - min;
-          if (plots === 0)
-            range = Math.ceil(range / 8) * 8;
-          else
-            range = Math.ceil(range / 4) * 4;
-          temp = new Array();
-          temp = myarr[h_c];
-          draw_graph(plots, range, min, ticks, points, h_c, first);
-          fill_chart(0, plots, temp, range, min, points, h_c);
-          if ((h_c === 0) || (h_c === 2) || (h_c === 5)) {
-            h_c++;
-            temp = new Array();
-            temp = myarr[h_c];
-            fill_chart(1, plots, temp, range, min, points, h_c);
-          }
-          h_c++;
-          if (h_c === 8) h_c = 0;
-          plots++;
+              if (plots === 0)
+                range = Math.ceil(range / 8) * 8;
+              else
+                range = Math.ceil(range / 4) * 4;
+              draw_graph(plots, range, min, ticks, points, h_c, first);
+              temp = new Array();
+              temp = myarr[h_c];
+              if ((h_c === 4) || (h_c === 7)) {
+                fill_chart(0, plots, temp, range, min, points, h_c);
+              }
+              if (h_c === 5) {
+                fill_chart(0, plots, temp, range, min, points, h_c);
+                h_c++;
+                temp = new Array();
+                temp = myarr[h_c];
+                fill_chart(1, plots, temp, range, min, points, h_c);
+              }
+
+              if ((h_c === 0) || (h_c === 2)) {
+                fill_chart(2, plots, temp, range, min, points, h_c);
+                temp = new Array();
+                temp = myarr[h_c + 8];
+                fill_chart(4, plots, temp, range, min, points, h_c + 8);
+              }
+              if ((h_c === 0) || (h_c === 2)) {
+                h_c++;
+                temp = new Array();
+                temp = myarr[h_c];
+                fill_chart(3, plots, temp, range, min, points, h_c);
+                if ((h_c === 1) || (h_c === 3)) {
+                  temp = new Array();
+                  temp = myarr[h_c + 8];
+                  fill_chart(5, plots, temp, range, min, points, h_c + 8);
+                }
+              }
+              h_c++;
+              if (h_c === 8) h_c = 0;
+              plots++;
+
         } while (plots < 5)
+            
+          }
+       
       }
 
       function WaitDownload() {
