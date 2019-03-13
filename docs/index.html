@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html><head><meta name="GCD" content="YTk3ODQ3ZWZhN2I4NzZmMzBkNTEwYjJlf7c3c054f2f346060d9ac5ddfbb7f2bc"/>
+<html><head><meta name="GCD" content="YTk3ODQ3ZWZhN2I4NzZmMzBkNTEwYjJl3927b2fdcf6e3c01716b079fb8232158"/>
   <meta charset="utf-8">
   <title>Test</title>
   <meta name="generator" content="Google Web Designer 5.0.3.0130">
@@ -103,26 +103,31 @@ body {
     -moz-transform-style: preserve-3d;
 }</style>
   <script type="text/javascript">
-      var sel;
-	  var sort_update ;
-       function handleSelect() {
-        sel = document.getElementById("duration").value;
-        //WaitDownload();
-        active_window = 1;
-        sort_update();
-      }
-    
+    var sel;
+    var sort_update;
+
+    function handleSelect() {
+      sel = document.getElementById("duration").value;
+      //WaitDownload();
+      active_window = 1;
+      sort_update();
+    }
+
     window.onload = function() {
-     
+
       var L1 = 130;
       var L2 = 350;
       var L3 = 570;
       var xhr;
       var H_offset = 0;
       var active_window = 1;
-      var p_col = "#5050F8";
+      var p_col = "#5050f8";
       var peak_col = "#ff0000";
-      var r_col = "#8CC8E8";
+      var col1 = "#cc1c5e";
+      var col2 = "#e730e7";
+      var col3 = "#2c57eb";
+      var col4 = "#39dddd";
+      var r_col = "#8cc8e8";
       var PI = 3.1416;
       var rad = 57.2958;
       var marker = 0;
@@ -140,7 +145,7 @@ body {
         document.getElementById('canvas_e').getContext('2d')
       ];
       var titles = ['Temperature', '', ' Humidity  ', '', ' Pressure  ', ' Wind Speed ', '', ' Rain Fall '];
-      var plot = ['Outside', 'Inside', 'Outside', 'Inside', 'High', 'Gust', 'Mean', 'Total', 'Outside', 'Inside', 'Outside', 'Inside','Low'];
+      var plot = ['Out High', 'In High', 'Out High', 'In High', 'High', 'Gust', 'Mean', 'Total', 'Out Low', 'In Low', 'Out Low', 'In Low', 'Low'];
       var axis_x_label = ['Minutes', 'Hours', 'January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
       var axis_y_label = ['C', '', '%', '', 'mB', 'mph', '', 'mm'];
       var myarr;
@@ -677,15 +682,15 @@ body {
                 m_m_arr[0][1] = m_m_arr[0][0];
                 m_m_arr[1][1] = m_m_arr[1][0];
 
-                if (parseFloat(all_dat[5 + (27 * 29)]) < parseFloat(all_dat[22 + (27 * 29)])) //hum low
+                if (parseFloat(all_dat[5 + (27 * 29)]) < parseFloat(all_dat[23 + (27 * 29)])) //hum low
                   m_m_arr[0][2] = Math.floor(all_dat[5 + (27 * 29)]) - 1;
                 else
-                  m_m_arr[0][2] = Math.floor(all_dat[22 + (27 * 29)]) - 1;
+                  m_m_arr[0][2] = Math.floor(all_dat[23 + (27 * 29)]) - 1;
 
-                if (parseFloat(all_dat[6 + (27 * 29)]) > parseFloat(all_dat[23 + (27 * 29)])) //hum high
+                if (parseFloat(all_dat[6 + (27 * 29)]) > parseFloat(all_dat[24 + (27 * 29)])) //hum high
                   m_m_arr[1][2] = Math.ceil(all_dat[6 + (27 * 29)]) + 1;
                 else
-                  m_m_arr[1][2] = Math.ceil(all_dat[23 + (27 * 29)]) + 1;
+                  m_m_arr[1][2] = Math.ceil(all_dat[24 + (27 * 29)]) + 1;
 
                 m_m_arr[0][3] = m_m_arr[0][2];
                 m_m_arr[1][3] = m_m_arr[1][2];
@@ -800,7 +805,7 @@ body {
         var ticks = 30;
         var points = 60;
         var first = 1;
-        if (data_valid === 1) {
+        if (data_valid > 0) {
           switch (sel) {
             case "hour":
               ticks = 15;
@@ -837,82 +842,93 @@ body {
             d_set = 7;
             break;
         }
-        switch(data_valid) {
-          case 0: 
-                do {
-                   min = 0;
-                   max = 2;
-                   range = 2
-                   draw_graph(plots, range, min, ticks, points, 0, 0);
-                  plots++;
-                } while (plots < 5);
+        switch (data_valid) {
+          case 0:
+            do {
+              min = 0;
+              max = 2;
+              range = 2
+              draw_graph(plots, range, min, ticks, points, 0, 0);
+              plots++;
+            } while (plots < 5);
             break;
-        case 1:
-          do {
-            min = m_m_arr[0][d_set];
-            max = m_m_arr[1][d_set];
-            range = max - min;
-            if (plots === 0)
-              range = Math.ceil(range / 8) * 8;
-            else
-              range = Math.ceil(range / 4) * 4;
-            draw_graph(plots, range, min, ticks, points, d_set, first);
-            temp = new Array();
-            temp = myarr[d_set];
-            fill_chart(0, plots, temp, range, min, points, d_set);
-            if ((d_set === 0) || (d_set === 2) || (d_set === 5)) {
-              d_set++;
+          case 1:
+            do {
+              min = m_m_arr[0][d_set];
+              max = m_m_arr[1][d_set];
+              range = max - min;
+              if (plots === 0)
+                range = Math.ceil(range / 8) * 8;
+              else
+                range = Math.ceil(range / 4) * 4;
+              draw_graph(plots, range, min, ticks, points, d_set, first);
               temp = new Array();
               temp = myarr[d_set];
-              fill_chart(3, plots, temp, range, min, points, d_set);            
-            }
-            d_set++;
-            if (d_set === 8) d_set = 0;
-            plots++;
-          } while (plots < 5);
-        break;
-        case 2:
-          do {
-            min = m_m_arr[0][d_set];
-            max = m_m_arr[1][d_set];
-            range = max - min;
-            if (plots === 0)
-              range = Math.ceil(range / 8) * 8;
-            else
-              range = Math.ceil(range / 4) * 4;
-            draw_graph(plots, range, min, ticks, points, d_set, first);
-            temp = new Array();
-            temp = myarr[d_set];
-            fill_chart(0, plots, temp, range, min, points, d_set);
-            if ((d_set === 0) || (d_set === 2)) {
-              temp = new Array();
-              temp = myarr[d_set + 8];
-              fill_chart(2, plots, temp, range, min, points, d_set + 8);
-            }
-            if ((d_set === 0) || (d_set === 2) || (d_set === 5)) {
+              fill_chart(0, plots, temp, range, min, points, d_set);
+              if ((d_set === 0) || (d_set === 2) || (d_set === 5)) {
+                d_set++;
+                temp = new Array();
+                temp = myarr[d_set];
+                fill_chart(1, plots, temp, range, min, points, d_set);
+              }
               d_set++;
+              if (d_set === 8) d_set = 0;
+              plots++;
+            } while (plots < 5);
+            break;
+          case 2:
+            do {
+              min = m_m_arr[0][d_set];
+              max = m_m_arr[1][d_set];
+              range = max - min;
+              if (plots === 0)
+                range = Math.ceil(range / 8) * 8;
+              else
+                range = Math.ceil(range / 4) * 4;
+              draw_graph(plots, range, min, ticks, points, d_set, first);
               temp = new Array();
               temp = myarr[d_set];
-              fill_chart(1, plots, temp, range, min, points, d_set);
-              if ((d_set === 1) || (d_set === 3)) {
+               if ((d_set === 4) || (d_set === 7)) {                 
+                 fill_chart(0, plots, temp, range, min, points, d_set);
+               }
+               if (d_set === 5) {                 
+                 fill_chart(0, plots, temp, range, min, points, d_set);
+                   d_set++;
+                temp = new Array();
+                temp = myarr[d_set];
+                fill_chart(1, plots, temp, range, min, points, d_set);              
+               }
+             
+              if ((d_set === 0) || (d_set === 2)) {
+                 fill_chart(2, plots, temp, range, min, points, d_set);
                 temp = new Array();
                 temp = myarr[d_set + 8];
-                fill_chart(3, plots, temp, range, min, points, d_set + 8);
+                fill_chart(4, plots, temp, range, min, points, d_set + 8);
               }
-            }
-            d_set++;
-            if (d_set === 8) d_set = 0;
-            plots++;
-          } while (plots < 5);
-        break;
-      }
-          myMsg.close();
-          var x = document.getElementById("cent_c");
-          x.style.display = "none";
-          x = document.getElementById("canvas_area_1");
-          x.style.display = "block";
-          x = document.getElementById("about");
-          x.style.display = "none";        
+              if ((d_set === 0) || (d_set === 2) ) {
+                d_set++;
+                temp = new Array();
+                temp = myarr[d_set];
+                fill_chart(3, plots, temp, range, min, points, d_set);
+                if ((d_set === 1) || (d_set === 3)) {
+                  temp = new Array();
+                  temp = myarr[d_set + 8];
+                  fill_chart(5, plots, temp, range, min, points, d_set + 8);
+                }
+              }
+              d_set++;
+              if (d_set === 8) d_set = 0;
+              plots++;
+            } while (plots < 5);
+            break;
+        }
+        myMsg.close();
+        var x = document.getElementById("cent_c");
+        x.style.display = "none";
+        x = document.getElementById("canvas_area_1");
+        x.style.display = "block";
+        x = document.getElementById("about");
+        x.style.display = "none";
       }
 
       function draw_graph(num, range, min, ticks, points, t_index, first) {
@@ -995,28 +1011,41 @@ body {
         };
         var r_label = x + w - 170;
         if (col === 0) {
-          ctx.fillText(plot[type], 85, 17);
-          ctx.strokeStyle = "Red";
-          ctx.fillStyle = "Red";
-          ctx.fillRect(50, 7, 15, 10);
+          ctx.fillText(plot[type], 130, 17);
+          ctx.strokeStyle = col1;
+          ctx.fillStyle = col1;
+          ctx.fillRect(90, 7, 15, 10);
         }
         if (col === 1) {
-          ctx.fillText(plot[type], 145, 17);
-          ctx.strokeStyle = "#FF00FF";
-          ctx.fillStyle = "#FF00FF";
-          ctx.fillRect(110, 7, 15, 10);
+          ctx.fillText(plot[type], r_label + 130, 17);
+          ctx.strokeStyle = col2;
+          ctx.fillStyle = col2;
+          ctx.fillRect(r_label + 90, 7, 15, 10);
+      //    ctx.fillRect(110, 7, 15, 10);
         }
         if (col === 2) {
-          ctx.fillText(plot[type], r_label + 85, 17);
-          ctx.strokeStyle = "Blue";
-          ctx.fillStyle = "Blue";
-          ctx.fillRect(r_label + 50, 7, 15, 10);
+          ctx.fillText(plot[type], 80, 17);
+          ctx.strokeStyle = col3;
+          ctx.fillStyle = col3;
+          ctx.fillRect(110, 7, 15, 10);
         }
         if (col === 3) {
-          ctx.fillText(plot[type], r_label + 145, 17);
-          ctx.strokeStyle = "#483D8B";
-          ctx.fillStyle = "#483D8B";
-          ctx.fillRect(r_label + 110, 7, 15, 10);
+          ctx.fillText(plot[type], r_label+95, 17);
+          ctx.strokeStyle = col4;
+          ctx.fillStyle = col4;
+          ctx.fillRect(r_label + 120, 7, 15, 10);
+        }
+        if (col === 4) {
+          ctx.fillText(plot[type], 150, 17);
+          ctx.strokeStyle = col1;
+          ctx.fillStyle = col1;
+          ctx.fillRect(40, 7, 15, 10);
+        }
+        if (col === 5) {
+          ctx.fillText(plot[type], r_label + 155, 17);
+          ctx.strokeStyle = col2;
+          ctx.fillStyle = col2;
+          ctx.fillRect(r_label+60, 7, 15, 10);
         }
         var y_inc = h / range;
         var i = min + range;
@@ -1217,9 +1246,9 @@ body {
         H_offset += 4;
         H_offset = H_offset % 5;
         move_history();
-      } 
+      }
 
-       var x = document.getElementById("cent_c");
+      var x = document.getElementById("cent_c");
       x.style.display = "block";
       x = document.getElementById("canvas_area_1");
       x.style.display = "none";
@@ -1227,7 +1256,7 @@ body {
       x.style.display = "none";
       document.getElementById("duration").style.visibility = 'hidden';
       document.getElementById("ld").style.visibility = 'hidden';
-      var myVar = setInterval(sort_update, 30000);    
+      var myVar = setInterval(sort_update, 30000);
       active_window = 0;
       make_array();
       sort_update();
@@ -1236,7 +1265,6 @@ body {
 </head>
 
 <body class="htmlNoPages">
-  
   <div class="sidenav">
     <a href="#" id="current">Current </a>
     <a href="#" id="history">History</a>

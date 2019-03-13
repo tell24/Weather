@@ -119,9 +119,13 @@
       var xhr;
       var H_offset = 0;
       var active_window = 1;
-      var p_col = "#5050F8";
+      var p_col = "#5050f8";
       var peak_col = "#ff0000";
-      var r_col = "#8CC8E8";
+      var col1 = "#cc1c5e";
+      var col2 = "#e730e7";
+      var col3 = "#2c57eb";
+      var col4 = "#39dddd";
+      var r_col = "#8cc8e8";
       var PI = 3.1416;
       var rad = 57.2958;
       var marker = 0;
@@ -139,7 +143,7 @@
         document.getElementById('canvas_e').getContext('2d')
       ];
       var titles = ['Temperature', '', ' Humidity  ', '', ' Pressure  ', ' Wind Speed ', '', ' Rain Fall '];
-      var plot = ['Outside', 'Inside', 'Outside', 'Inside', 'High', 'Gust', 'Mean', 'Total', 'Outside', 'Inside', 'Outside', 'Inside', 'Low'];
+      var plot = ['Out High', 'In High', 'Out High', 'In High', 'High', 'Gust', 'Mean', 'Total', 'Out Low', 'In Low', 'Out Low', 'In Low', 'Low'];
       var axis_x_label = ['Minutes', 'Hours', 'January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
       var axis_y_label = ['C', '', '%', '', 'mB', 'mph', '', 'mm'];
       var myarr;
@@ -799,7 +803,7 @@
         var ticks = 30;
         var points = 60;
         var first = 1;
-        if (data_valid === 1) {
+        if (data_valid > 0) {
           switch (sel) {
             case "hour":
               ticks = 15;
@@ -863,7 +867,7 @@
                 d_set++;
                 temp = new Array();
                 temp = myarr[d_set];
-                fill_chart(3, plots, temp, range, min, points, d_set);
+                fill_chart(1, plots, temp, range, min, points, d_set);
               }
               d_set++;
               if (d_set === 8) d_set = 0;
@@ -882,21 +886,32 @@
               draw_graph(plots, range, min, ticks, points, d_set, first);
               temp = new Array();
               temp = myarr[d_set];
-              fill_chart(0, plots, temp, range, min, points, d_set);
+               if ((d_set === 4) || (d_set === 7)) {                 
+                 fill_chart(0, plots, temp, range, min, points, d_set);
+               }
+               if (d_set === 5) {                 
+                 fill_chart(0, plots, temp, range, min, points, d_set);
+                   d_set++;
+                temp = new Array();
+                temp = myarr[d_set];
+                fill_chart(1, plots, temp, range, min, points, d_set);              
+               }
+             
               if ((d_set === 0) || (d_set === 2)) {
+                 fill_chart(2, plots, temp, range, min, points, d_set);
                 temp = new Array();
                 temp = myarr[d_set + 8];
-                fill_chart(2, plots, temp, range, min, points, d_set + 8);
+                fill_chart(4, plots, temp, range, min, points, d_set + 8);
               }
-              if ((d_set === 0) || (d_set === 2) || (d_set === 5)) {
+              if ((d_set === 0) || (d_set === 2) ) {
                 d_set++;
                 temp = new Array();
                 temp = myarr[d_set];
-                fill_chart(1, plots, temp, range, min, points, d_set);
+                fill_chart(3, plots, temp, range, min, points, d_set);
                 if ((d_set === 1) || (d_set === 3)) {
                   temp = new Array();
                   temp = myarr[d_set + 8];
-                  fill_chart(3, plots, temp, range, min, points, d_set + 8);
+                  fill_chart(5, plots, temp, range, min, points, d_set + 8);
                 }
               }
               d_set++;
@@ -994,28 +1009,41 @@
         };
         var r_label = x + w - 170;
         if (col === 0) {
-          ctx.fillText(plot[type], 85, 17);
-          ctx.strokeStyle = "Red";
-          ctx.fillStyle = "Red";
-          ctx.fillRect(50, 7, 15, 10);
+          ctx.fillText(plot[type], 130, 17);
+          ctx.strokeStyle = col1;
+          ctx.fillStyle = col1;
+          ctx.fillRect(90, 7, 15, 10);
         }
         if (col === 1) {
-          ctx.fillText(plot[type], 145, 17);
-          ctx.strokeStyle = "#FF00FF";
-          ctx.fillStyle = "#FF00FF";
-          ctx.fillRect(110, 7, 15, 10);
+          ctx.fillText(plot[type], r_label + 130, 17);
+          ctx.strokeStyle = col2;
+          ctx.fillStyle = col2;
+          ctx.fillRect(r_label + 90, 7, 15, 10);
+      //    ctx.fillRect(110, 7, 15, 10);
         }
         if (col === 2) {
-          ctx.fillText(plot[type], r_label + 85, 17);
-          ctx.strokeStyle = "Blue";
-          ctx.fillStyle = "Blue";
-          ctx.fillRect(r_label + 50, 7, 15, 10);
+          ctx.fillText(plot[type], 80, 17);
+          ctx.strokeStyle = col3;
+          ctx.fillStyle = col3;
+          ctx.fillRect(110, 7, 15, 10);
         }
         if (col === 3) {
-          ctx.fillText(plot[type], r_label + 145, 17);
-          ctx.strokeStyle = "#483D8B";
-          ctx.fillStyle = "#483D8B";
-          ctx.fillRect(r_label + 110, 7, 15, 10);
+          ctx.fillText(plot[type], r_label+95, 17);
+          ctx.strokeStyle = col4;
+          ctx.fillStyle = col4;
+          ctx.fillRect(r_label + 120, 7, 15, 10);
+        }
+        if (col === 4) {
+          ctx.fillText(plot[type], 150, 17);
+          ctx.strokeStyle = col1;
+          ctx.fillStyle = col1;
+          ctx.fillRect(40, 7, 15, 10);
+        }
+        if (col === 5) {
+          ctx.fillText(plot[type], r_label + 155, 17);
+          ctx.strokeStyle = col2;
+          ctx.fillStyle = col2;
+          ctx.fillRect(r_label+60, 7, 15, 10);
         }
         var y_inc = h / range;
         var i = min + range;
