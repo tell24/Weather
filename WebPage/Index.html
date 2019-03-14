@@ -170,7 +170,7 @@
             ident = 13;
             scale = 5;
             start = -20;
-            text = "Outside Temperature ( C )";
+            text = "Inside Temperature ( C )";
             break;
           case 1:
             x1 = 832;
@@ -178,7 +178,7 @@
             ident = 13;
             scale = 5;
             start = -20;
-            text = "Inside Temperature ( C )";
+            text = "Outside Temperature ( C )";
             break;
           case 2:
             x1 = 166;
@@ -186,7 +186,7 @@
             ident = 11;
             scale = 10;
             start = 0;
-            text = "Outside Humidity ( % )";
+            text = "Inside Humidity ( % )";
             break;
           case 3:
             x1 = 832;
@@ -194,7 +194,7 @@
             ident = 11;
             scale = 10;
             start = 0;
-            text = "Inside Humidity ( % )";
+            text = "Outside Humidity ( % )";
             break;
           case 4:
             x1 = 500;
@@ -379,10 +379,10 @@
         win.textAlign = "center";
         win.fillStyle = "Black";
         win.font = "14px Arial";
-        win.fillText(" now ", 370, 335);
+        win.fillText("now", 370, 335);
         win.fillText("this", 620, 335);
         win.fillText(" hr ", 620, 350);
-        win.fillText("Rain Fall ( mm/h )", 500, L2 + 80);
+        win.fillText("Rain Fall ( mm )", 500, L2 + 80);
       }
 
       function rain_plot(now, total, win) {
@@ -520,16 +520,16 @@
             clock(ctx);
 
             ctx.fillStyle = "Black";
-            data_plot(0, parseFloat(dat[1]), ctx);
-            data_plot(1, parseFloat(dat[19]), ctx);
-            if (parseFloat(dat[4]) > 100)
+            data_plot(0, parseFloat(dat[19]), ctx);
+            data_plot(1, parseFloat(dat[1]), ctx);
+            if (parseFloat(dat[22]) > 100)
               data_plot(2, parseFloat("100"), ctx);
             else
-              data_plot(2, parseFloat(dat[4]), ctx);
-            if (parseFloat(dat[22]) > 100)
+              data_plot(2, parseFloat(dat[22]), ctx);
+            if (parseFloat(dat[4]) > 100)
               data_plot(3, parseFloat("100"), ctx);
             else
-              data_plot(3, parseFloat(dat[22]), ctx);
+              data_plot(3, parseFloat(dat[4]), ctx);
             data_plot(4, parseFloat(dat[25]), ctx);
             data_plot(5, parseFloat(dat[7]), ctx);
             data_plot(6, parseFloat(dat[10]), ctx);
@@ -590,6 +590,7 @@
                   m_m_arr[1][0] = Math.ceil(all_dat[3 + (61 * 29)]) + 1;
                 else
                   m_m_arr[1][0] = Math.ceil(all_dat[21 + (61 * 29)]) + 1;
+                if(m_m_arr[1][0]>100)m_m_arr[1][0] = 50;
 
                 m_m_arr[0][1] = m_m_arr[0][0];
                 m_m_arr[1][1] = m_m_arr[1][0];
@@ -598,12 +599,14 @@
                   m_m_arr[0][2] = Math.floor(all_dat[5 + (61 * 29)]) - 1;
                 else
                   m_m_arr[0][2] = Math.floor(all_dat[23 + (61 * 29)]) - 1;
+                if(m_m_arr[0][2]<0)m_m_arr[0][2] = 0;
 
                 if (parseFloat(all_dat[6 + (61 * 29)]) > parseFloat(all_dat[24 + (61 * 29)])) //hum high
                   m_m_arr[1][2] = Math.ceil(all_dat[6 + (61 * 29)]) + 1;
                 else
                   m_m_arr[1][2] = Math.ceil(all_dat[24 + (61 * 29)]) + 1;
-
+                if(m_m_arr[1][2]>100)m_m_arr[1][2] = 100;
+                
                 m_m_arr[0][3] = m_m_arr[0][2];
                 m_m_arr[1][3] = m_m_arr[1][2];
 
@@ -658,6 +661,8 @@
                   m_m_arr[1][0] = Math.ceil(all_dat[3 + (27 * 29)]) + 1;
                 else
                   m_m_arr[1][0] = Math.ceil(all_dat[21 + (27 * 29)]) + 1;
+                
+                if(m_m_arr[1][0]>100)m_m_arr[1][0] = 50;
 
                 m_m_arr[0][1] = m_m_arr[0][0];
                 m_m_arr[1][1] = m_m_arr[1][0];
@@ -666,11 +671,14 @@
                   m_m_arr[0][2] = Math.floor(all_dat[5 + (27 * 29)]) - 1;
                 else
                   m_m_arr[0][2] = Math.floor(all_dat[23 + (27 * 29)]) - 1;
+                if(m_m_arr[0][2]<0)m_m_arr[0][2] = 0;
 
                 if (parseFloat(all_dat[6 + (27 * 29)]) > parseFloat(all_dat[24 + (27 * 29)])) //hum high
                   m_m_arr[1][2] = Math.ceil(all_dat[6 + (27 * 29)]) + 1;
                 else
                   m_m_arr[1][2] = Math.ceil(all_dat[24 + (27 * 29)]) + 1;
+                
+                if(m_m_arr[1][2]>100)m_m_arr[1][2] = 100;
 
                 m_m_arr[0][3] = m_m_arr[0][2];
                 m_m_arr[1][3] = m_m_arr[1][2];
@@ -729,24 +737,28 @@
                   m_m_arr[0][0] = Math.floor(all_dat[2 + (33 * 29)]) - 1;
                 else
                   m_m_arr[0][0] = Math.floor(all_dat[20 + (33 * 29)]) - 1;
-
+                
                 if (parseFloat(all_dat[3 + (33 * 29)]) > parseFloat(all_dat[21 + (33 * 29)])) //temp high
                   m_m_arr[1][0] = Math.ceil(all_dat[3 + (33 * 29)]) + 1;
                 else
                   m_m_arr[1][0] = Math.ceil(all_dat[21 + (33 * 29)]) + 1;
+                if(m_m_arr[1][0]>100)m_m_arr[1][0] = 50;
 
                 m_m_arr[0][1] = m_m_arr[0][0];
                 m_m_arr[1][1] = m_m_arr[1][0];
+                               
 
-                if (parseFloat(all_dat[5 + (33 * 29)]) < parseFloat(all_dat[22 + (33 * 29)])) //hum low
+                if (parseFloat(all_dat[5 + (33 * 29)]) < parseFloat(all_dat[23 + (33 * 29)])) //hum low
                   m_m_arr[0][2] = Math.floor(all_dat[5 + (33 * 29)]) - 1;
                 else
-                  m_m_arr[0][2] = Math.floor(all_dat[22 + (33 * 29)]) - 1;
+                  m_m_arr[0][2] = Math.floor(all_dat[23 + (33 * 29)]) - 1;
+                if(m_m_arr[0][2]<0)m_m_arr[0][2] = 0;
 
-                if (parseFloat(all_dat[6 + (33 * 29)]) > parseFloat(all_dat[23 + (33 * 29)])) //hum high
+                if (parseFloat(all_dat[6 + (33 * 29)]) > parseFloat(all_dat[24 + (33 * 29)])) //hum high
                   m_m_arr[1][2] = Math.ceil(all_dat[6 + (33 * 29)]) + 1;
                 else
-                  m_m_arr[1][2] = Math.ceil(all_dat[23 + (33 * 29)]) + 1;
+                  m_m_arr[1][2] = Math.ceil(all_dat[24 + (33 * 29)]) + 1;
+                if(m_m_arr[1][2]>100)m_m_arr[1][2] = 100;
 
                 m_m_arr[0][3] = m_m_arr[0][2];
                 m_m_arr[1][3] = m_m_arr[1][2];
@@ -919,7 +931,6 @@
         var sm = parseInt(document.getElementById("duration").selectedIndex);
         var ctx = chart[num];
         ctx.font = "10px Arial";
-        ctx.clearRect(0, 0, 800, 800);
         var y_inc = range / 4;
         var x = 60;
         var y = 30;
@@ -928,13 +939,20 @@
         var ys = 100 / 4;
         var steps = 4;
         var x_step = Math.round(points / ticks);
+        
+        ctx.fillStyle = "White";
+        
         if (num === 0) {
           w = 700;
           h = 600;
           steps = 8;
           y_inc = range / 8;
-          ys = h / 8;
-        };
+          ys = h / 8;          
+          ctx.fillRect(0, 0, 800, 780);
+        } 
+        else        
+          ctx.fillRect(0, 0, 400, 170); 
+        ctx.fillStyle = "black";
         ctx.beginPath();
         ctx.lineWidth = 1;
         ctx.strokeStyle = "grey";
@@ -981,6 +999,9 @@
         ctx.fillText(titles[t_index], x + (w / 2), 17);
         ctx.fillText(axis_x_label[sm], x + (w / 2), yl + 28);
         ctx.font = "11px Arial";
+        
+        ctx.strokeStyle = "black";
+        ctx.fillStyle = "black";
       }
 
       function fill_chart(col, c_num, p_data, range, min, p, type) {
@@ -1038,6 +1059,7 @@
         var xs = w / p;
         var xm = x + (xs * marker);
         var hm = y + h;
+          if(i < p_data[0]) p_data[0] = i;
         y1 = y + (y_inc * (i - p_data[0]));
         ctx.lineWidth = 2;
         ctx.beginPath();
@@ -1045,6 +1067,7 @@
         do {
           s++;
           x += xs;
+          if(i < p_data[s]) p_data[s] = i;
           y1 = y + (y_inc * (i - p_data[s]));
           if (y1 > (y + h))
             ctx.moveTo(x, y + h);
@@ -1072,7 +1095,7 @@
         var points;
         var range;
         var h_c = 0;
-        var first = 0;
+        var first = 1;
         var fun = 0;
         switch (sel) {
           case "hour":
@@ -1116,6 +1139,8 @@
             range = max - min;
             if (plots === 0)
               range = Math.ceil(range / 8) * 8;
+                if (max < (range / 2))
+                  range = Math.ceil(range / 2);
             else
               range = Math.ceil(range / 4) * 4;
             draw_graph(plots, range, min, ticks, points, h_c, first);
@@ -1140,6 +1165,8 @@
             range = max - min;
             if (plots === 0)
               range = Math.ceil(range / 8) * 8;
+                if (max < (range / 2))
+                  range = Math.ceil(range / 2);
             else
               range = Math.ceil(range / 4) * 4;
             draw_graph(plots, range, min, ticks, points, h_c, first);
@@ -1330,7 +1357,7 @@
   <div class="data" id="Data">
     <div class="graph">
       <div class="cent_c" id="cent_c">
-        <canvas id="canvas" height="750" width="1000"></canvas>
+        <canvas id="canvas" height="780" width="1000"></canvas>
       </div>
       <div class="cent" id="canvas_area_1" height="750" width="1180">
         <div class="column">
