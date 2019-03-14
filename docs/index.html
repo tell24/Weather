@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html><head><meta name="GCD" content="YTk3ODQ3ZWZhN2I4NzZmMzBkNTEwYjJl518247772cb032f108a1d05aacddf1fc"/>
+<html><head><meta name="GCD" content="YTk3ODQ3ZWZhN2I4NzZmMzBkNTEwYjJl46c44f7d68377a60e027a23b1b55da2e"/>
   <meta charset="utf-8">
   <title>Test</title>
   <meta name="generator" content="Google Web Designer 5.0.3.0130">
@@ -641,7 +641,7 @@ body {
                   myarr[4][index] = all_dat[cell + 24]; //pres
                   myarr[5][index] = all_dat[cell + 6]; //wind
                   myarr[6][index] = all_dat[cell + 9]; //gust
-                  myarr[7][index] = all_dat[cell + 15] / 70; //rain mm
+                  myarr[7][index] = all_dat[cell + 16] / 70; //rain mm
                   myarr[8][index] = all_dat[cell + 1]; //in low temp
                   myarr[9][index] = all_dat[cell + 19]; //out low temp
                   myarr[10][index] = all_dat[cell + 4]; //out low hum
@@ -692,7 +692,7 @@ body {
                 m_m_arr[1][6] = m_m_arr[1][5];
 
                 m_m_arr[0][7] = 0; //rain
-                m_m_arr[1][7] = Math.ceil(all_dat[17 + (28 * 29)] / 15) + 1;
+                m_m_arr[1][7] = Math.ceil(all_dat[18 + (28 * 29)] / 15) + 1;
                 break;
 
               default:
@@ -718,7 +718,7 @@ body {
                   myarr[4][index] = all_dat[cell + 24]; //pres
                   myarr[5][index] = all_dat[cell + 6]; //wind
                   myarr[6][index] = all_dat[cell + 9]; //gust
-                  myarr[7][index] = all_dat[cell + 15] / 15; //rain
+                  myarr[7][index] = all_dat[cell + 16] / 70; //rain
                   myarr[8][index] = all_dat[cell + 1]; //in low temp
                   myarr[9][index] = all_dat[cell + 19]; //out low temp
                   myarr[10][index] = all_dat[cell + 4]; //out low hum
@@ -839,9 +839,11 @@ body {
               min = m_m_arr[0][d_set];
               max = m_m_arr[1][d_set];
               range = max - min;
-              if (plots === 0)
+              if (plots === 0) {
                 range = Math.ceil(range / 8) * 8;
-              else
+                if (max < (range / 2))
+                  range = Math.ceil(range / 2);
+              } else
                 range = Math.ceil(range / 4) * 4;
               draw_graph(plots, range, min, ticks, points, d_set, first);
               temp = new Array();
@@ -863,9 +865,11 @@ body {
               min = m_m_arr[0][d_set];
               max = m_m_arr[1][d_set];
               range = max - min;
-              if (plots === 0)
+              if (plots === 0) {
                 range = Math.ceil(range / 8) * 8;
-              else
+                if (max < (range / 2))
+                  range = Math.ceil(range / 2);
+              } else
                 range = Math.ceil(range / 4) * 4;
               draw_graph(plots, range, min, ticks, points, d_set, first);
               temp = new Array();
