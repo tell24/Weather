@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html><head><meta name="GCD" content="YTk3ODQ3ZWZhN2I4NzZmMzBkNTEwYjJl041c5cf7a018d576b0d23a0011f81d2b"/>
+<html><head><meta name="GCD" content="YTk3ODQ3ZWZhN2I4NzZmMzBkNTEwYjJl4645ea7619f5809322b4eb4b71d25ed4"/>
   <meta charset="utf-8">
   <title>Test</title>
-  <meta name="generator" content="Google Web Designer 5.0.3.0130">
+  <meta name="generator" content="Google Web Designer 5.0.4.0226">
   <style type="text/css" id="gwd-text-style">.sidenav {
     height: 100%;
     width: 130px;
@@ -584,43 +584,43 @@ body {
                 } while (index <= len);
                 marker = all_dat[1770];
                 if (parseFloat(all_dat[2 + (61 * 29)]) < parseFloat(all_dat[20 + (61 * 29)])) //temp low
-                  m_m_arr[0][0] = Math.floor(all_dat[2 + (61 * 29)]) - 1;
+                  m_m_arr[0][0] = Math.floor(all_dat[2 + (61 * 29)]);
                 else
-                  m_m_arr[0][0] = Math.floor(all_dat[20 + (61 * 29)]) - 1;
+                  m_m_arr[0][0] = Math.floor(all_dat[20 + (61 * 29)]);
 
                 if (parseFloat(all_dat[3 + (61 * 29)]) > parseFloat(all_dat[21 + (61 * 29)])) //temp high
-                  m_m_arr[1][0] = Math.ceil(all_dat[3 + (61 * 29)]) + 1;
+                  m_m_arr[1][0] = Math.ceil(all_dat[3 + (61 * 29)]);
                 else
-                  m_m_arr[1][0] = Math.ceil(all_dat[21 + (61 * 29)]) + 1;
-                if(m_m_arr[1][0]>100)m_m_arr[1][0] = 50;
+                  m_m_arr[1][0] = Math.ceil(all_dat[21 + (61 * 29)]);
+                if (m_m_arr[1][0] > 100) m_m_arr[1][0] = 50;
 
                 m_m_arr[0][1] = m_m_arr[0][0];
                 m_m_arr[1][1] = m_m_arr[1][0];
 
                 if (parseFloat(all_dat[5 + (61 * 29)]) < parseFloat(all_dat[23 + (61 * 29)])) //hum low
-                  m_m_arr[0][2] = Math.floor(all_dat[5 + (61 * 29)]) - 1;
+                  m_m_arr[0][2] = Math.floor(all_dat[5 + (61 * 29)]);
                 else
-                  m_m_arr[0][2] = Math.floor(all_dat[23 + (61 * 29)]) - 1;
-                if(m_m_arr[0][2]<0)m_m_arr[0][2] = 0;
+                  m_m_arr[0][2] = Math.floor(all_dat[23 + (61 * 29)]);
+                if (m_m_arr[0][2] < 0) m_m_arr[0][2] = 0;
 
                 if (parseFloat(all_dat[6 + (61 * 29)]) > parseFloat(all_dat[24 + (61 * 29)])) //hum high
-                  m_m_arr[1][2] = Math.ceil(all_dat[6 + (61 * 29)]) + 1;
+                  m_m_arr[1][2] = Math.ceil(all_dat[6 + (61 * 29)]);
                 else
-                  m_m_arr[1][2] = Math.ceil(all_dat[24 + (61 * 29)]) + 1;
-                if(m_m_arr[1][2]>100)m_m_arr[1][2] = 100;
-                
+                  m_m_arr[1][2] = Math.ceil(all_dat[24 + (61 * 29)]);
+                if (m_m_arr[1][2] > 100) m_m_arr[1][2] = 100;
+
                 m_m_arr[0][3] = m_m_arr[0][2];
                 m_m_arr[1][3] = m_m_arr[1][2];
 
-                m_m_arr[0][4] = Math.floor(all_dat[26 + (61 * 29)]) - 1; // pes low
-                m_m_arr[1][4] = Math.ceil(all_dat[27 + (61 * 29)]) + 1; // pres high                
+                m_m_arr[0][4] = Math.floor(all_dat[26 + (61 * 29)]); // pes low
+                m_m_arr[1][4] = Math.ceil(all_dat[27 + (61 * 29)]); // pres high                
 
                 m_m_arr[0][5] = 0; //wind low
 
                 if (parseFloat(all_dat[12 + (61 * 29)]) > parseFloat(all_dat[15 + (61 * 29)])) //wind high
-                  m_m_arr[1][5] = Math.ceil(all_dat[12 + (61 * 29)]) + 1;
+                  m_m_arr[1][5] = Math.ceil(all_dat[12 + (61 * 29)]);
                 else
-                  m_m_arr[1][5] = Math.ceil(all_dat[15 + (61 * 29)]) + 1;
+                  m_m_arr[1][5] = Math.ceil(all_dat[15 + (61 * 29)]);
 
                 if (m_m_arr[1][5] < 2) m_m_arr[1][5] = 2;
 
@@ -628,7 +628,7 @@ body {
                 m_m_arr[1][6] = m_m_arr[1][5];
 
                 m_m_arr[0][7] = 0; //rain
-                m_m_arr[1][7] = Math.ceil(all_dat[17 + (62 * 29)] / 15) + 1;
+                m_m_arr[1][7] = Math.ceil(all_dat[17 + (62 * 29)] / 70);
                 break;
 
               case "day":
@@ -655,52 +655,52 @@ body {
                 } while (index <= len);
                 marker = all_dat[784];
                 if (parseFloat(all_dat[2 + (27 * 29)]) < parseFloat(all_dat[20 + (27 * 29)])) //temp low
-                  m_m_arr[0][0] = Math.floor(all_dat[2 + (27 * 29)]) - 1;
+                  m_m_arr[0][0] = Math.floor(all_dat[2 + (27 * 29)]);
                 else
-                  m_m_arr[0][0] = Math.floor(all_dat[20 + (27 * 29)]) - 1;
+                  m_m_arr[0][0] = Math.floor(all_dat[20 + (27 * 29)]);
 
                 if (parseFloat(all_dat[3 + (27 * 29)]) > parseFloat(all_dat[21 + (27 * 29)])) //temp high
-                  m_m_arr[1][0] = Math.ceil(all_dat[3 + (27 * 29)]) + 1;
+                  m_m_arr[1][0] = Math.ceil(all_dat[3 + (27 * 29)]);
                 else
-                  m_m_arr[1][0] = Math.ceil(all_dat[21 + (27 * 29)]) + 1;
-                
-                if(m_m_arr[1][0]>100)m_m_arr[1][0] = 50;
+                  m_m_arr[1][0] = Math.ceil(all_dat[21 + (27 * 29)]);
+
+                if (m_m_arr[1][0] > 100) m_m_arr[1][0] = 50;
 
                 m_m_arr[0][1] = m_m_arr[0][0];
                 m_m_arr[1][1] = m_m_arr[1][0];
 
                 if (parseFloat(all_dat[5 + (27 * 29)]) < parseFloat(all_dat[23 + (27 * 29)])) //hum low
-                  m_m_arr[0][2] = Math.floor(all_dat[5 + (27 * 29)]) - 1;
+                  m_m_arr[0][2] = Math.floor(all_dat[5 + (27 * 29)]);
                 else
-                  m_m_arr[0][2] = Math.floor(all_dat[23 + (27 * 29)]) - 1;
-                if(m_m_arr[0][2]<0)m_m_arr[0][2] = 0;
+                  m_m_arr[0][2] = Math.floor(all_dat[23 + (27 * 29)]);
+                if (m_m_arr[0][2] < 0) m_m_arr[0][2] = 0;
 
                 if (parseFloat(all_dat[6 + (27 * 29)]) > parseFloat(all_dat[24 + (27 * 29)])) //hum high
-                  m_m_arr[1][2] = Math.ceil(all_dat[6 + (27 * 29)]) + 1;
+                  m_m_arr[1][2] = Math.ceil(all_dat[6 + (27 * 29)]);
                 else
-                  m_m_arr[1][2] = Math.ceil(all_dat[24 + (27 * 29)]) + 1;
-                
-                if(m_m_arr[1][2]>100)m_m_arr[1][2] = 100;
+                  m_m_arr[1][2] = Math.ceil(all_dat[24 + (27 * 29)]);
+
+                if (m_m_arr[1][2] > 100) m_m_arr[1][2] = 100;
 
                 m_m_arr[0][3] = m_m_arr[0][2];
                 m_m_arr[1][3] = m_m_arr[1][2];
 
-                m_m_arr[0][4] = Math.floor(all_dat[26 + (27 * 29)]) - 1; // pes low
-                m_m_arr[1][4] = Math.ceil(all_dat[27 + (27 * 29)]) + 1; // pres high                
+                m_m_arr[0][4] = Math.floor(all_dat[26 + (27 * 29)]); // pes low
+                m_m_arr[1][4] = Math.ceil(all_dat[27 + (27 * 29)]); // pres high                
 
                 m_m_arr[0][5] = 0; //wind low
 
                 if (parseFloat(all_dat[12 + (27 * 29)]) > parseFloat(all_dat[15 + (27 * 29)])) //wind high
-                  m_m_arr[1][5] = Math.ceil(all_dat[12 + (27 * 29)]) + 1;
+                  m_m_arr[1][5] = Math.ceil(all_dat[12 + (27 * 29)]);
                 else
-                  m_m_arr[1][5] = Math.ceil(all_dat[15 + (27 * 29)]) + 1;
+                  m_m_arr[1][5] = Math.ceil(all_dat[15 + (27 * 29)]);
                 if (m_m_arr[1][5] < 2) m_m_arr[1][5] = 2;
 
                 m_m_arr[0][6] = m_m_arr[0][5];
                 m_m_arr[1][6] = m_m_arr[1][5];
 
                 m_m_arr[0][7] = 0; //rain
-                m_m_arr[1][7] = Math.ceil(all_dat[18 + (28 * 29)] / 15) + 1;
+                m_m_arr[1][7] = Math.ceil(all_dat[18 + (28 * 29)] / 70);
                 break;
 
               default:
@@ -736,55 +736,60 @@ body {
                   cell += 29;
                 } while (index <= len);
                 if (parseFloat(all_dat[2 + (33 * 29)]) < parseFloat(all_dat[20 + (33 * 29)])) //temp low
-                  m_m_arr[0][0] = Math.floor(all_dat[2 + (33 * 29)]) - 1;
+                  m_m_arr[0][0] = Math.floor(all_dat[2 + (33 * 29)]);
                 else
-                  m_m_arr[0][0] = Math.floor(all_dat[20 + (33 * 29)]) - 1;
-                
+                  m_m_arr[0][0] = Math.floor(all_dat[20 + (33 * 29)]);
+
                 if (parseFloat(all_dat[3 + (33 * 29)]) > parseFloat(all_dat[21 + (33 * 29)])) //temp high
-                  m_m_arr[1][0] = Math.ceil(all_dat[3 + (33 * 29)]) + 1;
+                  m_m_arr[1][0] = Math.ceil(all_dat[3 + (33 * 29)]);
                 else
-                  m_m_arr[1][0] = Math.ceil(all_dat[21 + (33 * 29)]) + 1;
-                if(m_m_arr[1][0]>100)m_m_arr[1][0] = 50;
+                  m_m_arr[1][0] = Math.ceil(all_dat[21 + (33 * 29)]);
+                if (m_m_arr[1][0] > 100) m_m_arr[1][0] = 50;
 
                 m_m_arr[0][1] = m_m_arr[0][0];
                 m_m_arr[1][1] = m_m_arr[1][0];
-                               
+
 
                 if (parseFloat(all_dat[5 + (33 * 29)]) < parseFloat(all_dat[23 + (33 * 29)])) //hum low
-                  m_m_arr[0][2] = Math.floor(all_dat[5 + (33 * 29)]) - 1;
+                  m_m_arr[0][2] = Math.floor(all_dat[5 + (33 * 29)]);
                 else
-                  m_m_arr[0][2] = Math.floor(all_dat[23 + (33 * 29)]) - 1;
-                if(m_m_arr[0][2]<0)m_m_arr[0][2] = 0;
+                  m_m_arr[0][2] = Math.floor(all_dat[23 + (33 * 29)]);
+                if (m_m_arr[0][2] < 0) m_m_arr[0][2] = 0;
 
                 if (parseFloat(all_dat[6 + (33 * 29)]) > parseFloat(all_dat[24 + (33 * 29)])) //hum high
-                  m_m_arr[1][2] = Math.ceil(all_dat[6 + (33 * 29)]) + 1;
+                  m_m_arr[1][2] = Math.ceil(all_dat[6 + (33 * 29)]);
                 else
-                  m_m_arr[1][2] = Math.ceil(all_dat[24 + (33 * 29)]) + 1;
-                if(m_m_arr[1][2]>100)m_m_arr[1][2] = 100;
+                  m_m_arr[1][2] = Math.ceil(all_dat[24 + (33 * 29)]);
+                if (m_m_arr[1][2] > 100) m_m_arr[1][2] = 100;
 
                 m_m_arr[0][3] = m_m_arr[0][2];
                 m_m_arr[1][3] = m_m_arr[1][2];
 
-                m_m_arr[0][4] = Math.floor(all_dat[26 + (33 * 29)]) - 1; // pes low
-                m_m_arr[1][4] = Math.ceil(all_dat[27 + (33 * 29)]) + 1; // pres high                
+                m_m_arr[0][4] = Math.floor(all_dat[26 + (33 * 29)]); // pes low
+                m_m_arr[1][4] = Math.ceil(all_dat[27 + (33 * 29)]); // pres high                
 
                 m_m_arr[0][5] = 0; //wind low
 
                 if (parseFloat(all_dat[12 + (33 * 29)]) > parseFloat(all_dat[15 + (33 * 29)])) //wind high
-                  m_m_arr[1][5] = Math.ceil(all_dat[12 + (33 * 29)]) + 1;
+                  m_m_arr[1][5] = Math.ceil(all_dat[12 + (33 * 29)]);
                 else
-                  m_m_arr[1][5] = Math.ceil(all_dat[15 + (33 * 29)]) + 1;
+                  m_m_arr[1][5] = Math.ceil(all_dat[15 + (33 * 29)]);
                 if (m_m_arr[1][5] < 2) m_m_arr[1][5] = 2;
 
                 m_m_arr[0][6] = m_m_arr[0][5];
                 m_m_arr[1][6] = m_m_arr[1][5];
 
                 m_m_arr[0][7] = 0; //rain
-                m_m_arr[1][7] = Math.ceil(all_dat[18 + (33 * 29)] / 15) + 1;
+                m_m_arr[1][7] = Math.ceil(all_dat[18 + (33 * 29)] / 70);
 
                 m_len = Math.ceil((len + 1) / 2);
                 break;
             }
+            var count = 7;
+            do {
+              if (m_m_arr[1][count] - m_m_arr[0][count] < 1) m_m_arr[1][count] = m_m_arr[0][count] + 1;
+              count--;
+            } while (count > 0);
             build_history(type, len);
           }
         };
@@ -855,8 +860,16 @@ body {
                 range = Math.ceil(range / 8) * 8;
                 if (max < (range / 2))
                   range = Math.ceil(range / 2);
-              } else
+                if (max < (range / 2))
+                  range = Math.ceil(range / 2);
+              } else {
                 range = Math.ceil(range / 4) * 4;
+                if (max < (range / 2))
+                  range = Math.ceil(range / 2);
+              }
+              if ( (d_set === 2) || (d_set === 3)) {
+                if(range+ min > 100) min = 100-range;
+              }
               draw_graph(plots, range, min, ticks, points, d_set, first);
               temp = new Array();
               temp = myarr[d_set];
@@ -881,8 +894,16 @@ body {
                 range = Math.ceil(range / 8) * 8;
                 if (max < (range / 2))
                   range = Math.ceil(range / 2);
-              } else
+                if (max < (range / 2))
+                  range = Math.ceil(range / 2);
+              } else {
                 range = Math.ceil(range / 4) * 4;
+                if (max < (range / 2))
+                  range = Math.ceil(range / 2);
+              }
+                 if ( (d_set === 2) || (d_set === 3)) {
+                if(range+ min > 100) min = 100-range;
+              }
               draw_graph(plots, range, min, ticks, points, d_set, first);
               temp = new Array();
               temp = myarr[d_set];
@@ -941,19 +962,18 @@ body {
         var ys = 100 / 4;
         var steps = 4;
         var x_step = Math.round(points / ticks);
-        
+
         ctx.fillStyle = "White";
-        
+
         if (num === 0) {
           w = 700;
           h = 600;
           steps = 8;
           y_inc = range / 8;
-          ys = h / 8;          
+          ys = h / 8;
           ctx.fillRect(0, 0, 800, 780);
-        } 
-        else        
-          ctx.fillRect(0, 0, 400, 170); 
+        } else
+          ctx.fillRect(0, 0, 400, 170);
         ctx.fillStyle = "black";
         ctx.beginPath();
         ctx.lineWidth = 1;
@@ -1001,7 +1021,7 @@ body {
         ctx.fillText(titles[t_index], x + (w / 2), 17);
         ctx.fillText(axis_x_label[sm], x + (w / 2), yl + 28);
         ctx.font = "11px Arial";
-        
+
         ctx.strokeStyle = "black";
         ctx.fillStyle = "black";
       }
@@ -1061,7 +1081,7 @@ body {
         var xs = w / p;
         var xm = x + (xs * marker);
         var hm = y + h;
-          if(i < p_data[0]) p_data[0] = i;
+        if (i < p_data[0]) p_data[0] = i;
         y1 = y + (y_inc * (i - p_data[0]));
         ctx.lineWidth = 2;
         ctx.beginPath();
@@ -1069,7 +1089,7 @@ body {
         do {
           s++;
           x += xs;
-          if(i < p_data[s]) p_data[s] = i;
+          if (i < p_data[s]) p_data[s] = i;
           y1 = y + (y_inc * (i - p_data[s]));
           if (y1 > (y + h))
             ctx.moveTo(x, y + h);
@@ -1139,12 +1159,20 @@ body {
             min = m_m_arr[0][h_c];
             max = m_m_arr[1][h_c];
             range = max - min;
-            if (plots === 0)
+            if (plots === 0) {
               range = Math.ceil(range / 8) * 8;
-                if (max < (range / 2))
-                  range = Math.ceil(range / 2);
-            else
+              if (max < (range / 2))
+                range = Math.ceil(range / 2);
+              if (max < (range / 2))
+                range = Math.ceil(range / 2);
+            } else {
               range = Math.ceil(range / 4) * 4;
+              if (max < (range / 2))
+                range = Math.ceil(range / 2);
+            }
+               if ( (h_c === 2) || (h_c === 3)) {
+                if(range+ min > 100) min = 100-range;
+              }
             draw_graph(plots, range, min, ticks, points, h_c, first);
             temp = new Array();
             temp = myarr[h_c];
@@ -1165,12 +1193,21 @@ body {
             min = m_m_arr[0][h_c];
             max = m_m_arr[1][h_c];
             range = max - min;
-            if (plots === 0)
+            if (plots === 0) {
               range = Math.ceil(range / 8) * 8;
-                if (max < (range / 2))
-                  range = Math.ceil(range / 2);
-            else
+              if (max < (range / 2))
+                range = Math.ceil(range / 2);
+              if (max < (range / 2))
+                range = Math.ceil(range / 2);
+            } else {
               range = Math.ceil(range / 4) * 4;
+              if (max < (range / 2))
+                range = Math.ceil(range / 2);
+            }
+            
+               if ( (h_c === 2) || (h_c === 3)) {
+                if(range+ min > 100) min = 100-range;
+              }
             draw_graph(plots, range, min, ticks, points, h_c, first);
             temp = new Array();
             temp = myarr[h_c];
