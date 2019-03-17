@@ -28,7 +28,7 @@ F0 "Rain" 50
 F1 "Rain.sch" 50
 $EndSheet
 $Sheet
-S 3900 3800 900  1300
+S 3800 3800 900  1300
 U 5C8D1A7C
 F0 "Anenometer" 50
 F1 "Anenometer.sch" 50
