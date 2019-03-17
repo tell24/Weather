@@ -128,6 +128,7 @@
       var r_col = "#8cc8e8";
       var PI = 3.1416;
       var rad = 57.2958;
+      var rain_scale = 137;
       var marker = 0;
       var mark = true;
       var c = document.getElementById("canvas");
@@ -379,15 +380,19 @@
         win.textAlign = "center";
         win.fillStyle = "Black";
         win.font = "14px Arial";
-        win.fillText("now", 370, 335);
+        win.fillText("rate", 370, 310);
+        win.fillText(" of ", 370, 325);
+        win.fillText("fall", 370, 340);
+        win.fillText("/hr", 370, 355);
+        win.fillText("total", 620, 320);
         win.fillText("this", 620, 335);
         win.fillText(" hr ", 620, 350);
         win.fillText("Rain Fall ( mm )", 500, L2 + 80);
       }
 
       function rain_plot(now, total, win) {
-        now /= (70 / 60);
-        total /= 70;
+        now /= (rain_scale / 60);
+        total /= rain_scale;
         var n_scale = Math.ceil(now + 0.5);
         var t_scale = Math.ceil(total + 0.5);
         var n_ticks = Math.ceil(n_scale / 5);
@@ -572,7 +577,7 @@
                   myarr[4][index] = all_dat[cell + 24]; //pres
                   myarr[5][index] = all_dat[cell + 9]; //wind
                   myarr[6][index] = all_dat[cell + 6]; //gust
-                  myarr[7][index] = all_dat[cell + 15] / 70; //rain mm
+                  myarr[7][index] = all_dat[cell + 15] / rain_scale; //rain mm
                   myarr[8][index] = all_dat[cell + 1]; //in low temp
                   myarr[9][index] = all_dat[cell + 19]; //out low temp
                   myarr[10][index] = all_dat[cell + 4]; //out low hum
@@ -626,7 +631,7 @@
                 m_m_arr[1][6] = m_m_arr[1][5];
 
                 m_m_arr[0][7] = 0; //rain
-                m_m_arr[1][7] = Math.ceil(all_dat[17 + (62 * 29)] / 70);
+                m_m_arr[1][7] = Math.ceil(all_dat[17 + (62 * 29)] / rain_scale);
                 break;
 
               case "day":
@@ -642,7 +647,7 @@
                   myarr[4][index] = all_dat[cell + 24]; //pres
                   myarr[5][index] = all_dat[cell + 6]; //wind
                   myarr[6][index] = all_dat[cell + 9]; //gust
-                  myarr[7][index] = all_dat[cell + 16] / 70; //rain mm
+                  myarr[7][index] = all_dat[cell + 16] / rain_scale; //rain mm
                   myarr[8][index] = all_dat[cell + 1]; //in low temp
                   myarr[9][index] = all_dat[cell + 19]; //out low temp
                   myarr[10][index] = all_dat[cell + 4]; //out low hum
@@ -698,7 +703,7 @@
                 m_m_arr[1][6] = m_m_arr[1][5];
 
                 m_m_arr[0][7] = 0; //rain
-                m_m_arr[1][7] = Math.ceil(all_dat[18 + (28 * 29)] / 70);
+                m_m_arr[1][7] = Math.ceil(all_dat[18 + (28 * 29)] / rain_scale);
                 break;
 
               default:
@@ -724,7 +729,7 @@
                   myarr[4][index] = all_dat[cell + 24]; //pres
                   myarr[5][index] = all_dat[cell + 6]; //wind
                   myarr[6][index] = all_dat[cell + 9]; //gust
-                  myarr[7][index] = all_dat[cell + 16] / 70; //rain
+                  myarr[7][index] = all_dat[cell + 16] / rain_scale; //rain
                   myarr[8][index] = all_dat[cell + 1]; //in low temp
                   myarr[9][index] = all_dat[cell + 19]; //out low temp
                   myarr[10][index] = all_dat[cell + 4]; //out low hum
@@ -778,7 +783,7 @@
                 m_m_arr[1][6] = m_m_arr[1][5];
 
                 m_m_arr[0][7] = 0; //rain
-                m_m_arr[1][7] = Math.ceil(all_dat[18 + (33 * 29)] / 70);
+                m_m_arr[1][7] = Math.ceil(all_dat[18 + (33 * 29)] / rain_scale);
 
                 m_len = Math.ceil((len + 1) / 2);
                 break;
@@ -865,8 +870,8 @@
                 if (max < (range / 2))
                   range = Math.ceil(range / 2);
               }
-              if ( (d_set === 2) || (d_set === 3)) {
-                if(range+ min > 100) min = 100-range;
+              if ((d_set === 2) || (d_set === 3)) {
+                if (range + min > 100) min = 100 - range;
               }
               draw_graph(plots, range, min, ticks, points, d_set, first);
               temp = new Array();
@@ -899,8 +904,8 @@
                 if (max < (range / 2))
                   range = Math.ceil(range / 2);
               }
-                 if ( (d_set === 2) || (d_set === 3)) {
-                if(range+ min > 100) min = 100-range;
+              if ((d_set === 2) || (d_set === 3)) {
+                if (range + min > 100) min = 100 - range;
               }
               draw_graph(plots, range, min, ticks, points, d_set, first);
               temp = new Array();
@@ -1168,13 +1173,20 @@
               if (max < (range / 2))
                 range = Math.ceil(range / 2);
             }
-               if ( (h_c === 2) || (h_c === 3)) {
-                if(range+ min > 100) min = 100-range;
-              }
+            if ((h_c === 2) || (h_c === 3)) {
+              if (range + min > 100) min = 100 - range;
+            }
             draw_graph(plots, range, min, ticks, points, h_c, first);
             temp = new Array();
             temp = myarr[h_c];
-            fill_chart(0, plots, temp, range, min, points, h_c);
+            if (h_c === 4)  {
+              fill_chart(0, plots, temp, range, min, points, h_c);
+            }
+            
+             if (h_c === 7) {              
+                fill_chart(0, plots, temp, range, min, points, h_c);
+             }
+            
             if ((h_c === 0) || (h_c === 2) || (h_c === 5)) {
               h_c++;
               temp = new Array();
@@ -1202,16 +1214,21 @@
               if (max < (range / 2))
                 range = Math.ceil(range / 2);
             }
-            
-               if ( (h_c === 2) || (h_c === 3)) {
-                if(range+ min > 100) min = 100-range;
-              }
+
+            if ((h_c === 2) || (h_c === 3)) {
+              if (range + min > 100) min = 100 - range;
+            }
             draw_graph(plots, range, min, ticks, points, h_c, first);
             temp = new Array();
             temp = myarr[h_c];
-            if ((h_c === 4) || (h_c === 7)) {
+            if (h_c === 4)  {
               fill_chart(0, plots, temp, range, min, points, h_c);
             }
+            
+             if (h_c === 7) {              
+                fill_chart(0, plots, temp, range, min, points, h_c);
+             }
+            
             if (h_c === 5) {
               fill_chart(0, plots, temp, range, min, points, h_c);
               h_c++;

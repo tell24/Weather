@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html><head><meta name="GCD" content="YTk3ODQ3ZWZhN2I4NzZmMzBkNTEwYjJl4645ea7619f5809322b4eb4b71d25ed4"/>
+<html><head><meta name="GCD" content="YTk3ODQ3ZWZhN2I4NzZmMzBkNTEwYjJl8cfd87437e5b679ae5535be697e06213"/>
   <meta charset="utf-8">
   <title>Test</title>
   <meta name="generator" content="Google Web Designer 5.0.4.0226">
@@ -381,7 +381,11 @@ body {
         win.textAlign = "center";
         win.fillStyle = "Black";
         win.font = "14px Arial";
-        win.fillText("now", 370, 335);
+        win.fillText("rate", 370, 310);
+        win.fillText(" of ", 370, 325);
+        win.fillText("fall", 370, 340);
+        win.fillText("/hr", 370, 355);
+        win.fillText("total", 620, 320);
         win.fillText("this", 620, 335);
         win.fillText(" hr ", 620, 350);
         win.fillText("Rain Fall ( mm )", 500, L2 + 80);
@@ -867,8 +871,8 @@ body {
                 if (max < (range / 2))
                   range = Math.ceil(range / 2);
               }
-              if ( (d_set === 2) || (d_set === 3)) {
-                if(range+ min > 100) min = 100-range;
+              if ((d_set === 2) || (d_set === 3)) {
+                if (range + min > 100) min = 100 - range;
               }
               draw_graph(plots, range, min, ticks, points, d_set, first);
               temp = new Array();
@@ -901,8 +905,8 @@ body {
                 if (max < (range / 2))
                   range = Math.ceil(range / 2);
               }
-                 if ( (d_set === 2) || (d_set === 3)) {
-                if(range+ min > 100) min = 100-range;
+              if ((d_set === 2) || (d_set === 3)) {
+                if (range + min > 100) min = 100 - range;
               }
               draw_graph(plots, range, min, ticks, points, d_set, first);
               temp = new Array();
@@ -1170,9 +1174,9 @@ body {
               if (max < (range / 2))
                 range = Math.ceil(range / 2);
             }
-               if ( (h_c === 2) || (h_c === 3)) {
-                if(range+ min > 100) min = 100-range;
-              }
+            if ((h_c === 2) || (h_c === 3)) {
+              if (range + min > 100) min = 100 - range;
+            }
             draw_graph(plots, range, min, ticks, points, h_c, first);
             temp = new Array();
             temp = myarr[h_c];
@@ -1204,10 +1208,10 @@ body {
               if (max < (range / 2))
                 range = Math.ceil(range / 2);
             }
-            
-               if ( (h_c === 2) || (h_c === 3)) {
-                if(range+ min > 100) min = 100-range;
-              }
+
+            if ((h_c === 2) || (h_c === 3)) {
+              if (range + min > 100) min = 100 - range;
+            }
             draw_graph(plots, range, min, ticks, points, h_c, first);
             temp = new Array();
             temp = myarr[h_c];
