@@ -21,7 +21,7 @@ F0 "External Power Supply" 50
 F1 "ExtPSU.sch" 50
 $EndSheet
 $Sheet
-S 1650 3200 950  1050
+S 1750 4850 950  1050
 U 5C8F7C88
 F0 "Internal Power Supply" 50
 F1 "IntPSU.sch" 50
@@ -33,7 +33,7 @@ F0 "External ESP8266" 50
 F1 "ExtMCU.sch" 50
 $EndSheet
 $Sheet
-S 3500 3100 800  1100
+S 3600 4750 800  1100
 U 5C8F7DEC
 F0 "Internal ESP8266" 50
 F1 "IntMCU.sch" 50
@@ -45,19 +45,19 @@ F0 "External Temp/Hum Sensor" 50
 F1 "THSenExt.sch" 50
 $EndSheet
 $Sheet
-S 5200 3100 1100 1100
+S 5300 4750 1100 1100
 U 5C8F7F8F
 F0 "Internal Temp/Hum Sensor" 50
 F1 "THSenInt.sch" 50
 $EndSheet
 $Sheet
-S 6950 1150 900  1100
+S 7000 1200 900  1100
 U 5C8F8005
 F0 "Rain Fall Sensor" 50
 F1 "RainSen.sch" 50
 $EndSheet
 $Sheet
-S 8500 1150 1000 1100
+S 8700 1200 1000 1100
 U 5C8F80D4
 F0 "Anenometer Sensor" 50
 F1 "Anenometer.sch" 50
