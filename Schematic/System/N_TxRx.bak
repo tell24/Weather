@@ -1,0 +1,61 @@
+EESchema Schematic File Version 4
+LIBS:System-cache
+EELAYER 29 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 11 14
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L Transistor_FET:AO3401 Q?
+U 1 1 5C8F913C
+P 3950 3100
+F 0 "Q?" V 4293 3100 50  0000 C CNN
+F 1 "AO3401" V 4202 3100 50  0000 C CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 4150 3025 50  0001 L CIN
+F 3 "" H 3950 3100 50  0001 L CNN
+	1    3950 3100
+	0    1    -1   0   
+$EndComp
+$Comp
+L Transistor_FET:AO3401 Q?
+U 1 1 5C900ECB
+P 4650 4300
+F 0 "Q?" H 4856 4346 50  0000 L CNN
+F 1 "AO3401" H 4856 4255 50  0000 L CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 4850 4225 50  0001 L CIN
+F 3 "" H 4650 4300 50  0001 L CNN
+	1    4650 4300
+	1    0    0    1   
+$EndComp
+$Comp
+L Transistor_FET:BSS138 Q?
+U 1 1 5C904FFF
+P 3150 4500
+F 0 "Q?" H 3356 4546 50  0000 L CNN
+F 1 "BSS138" H 3356 4455 50  0000 L CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 3350 4425 50  0001 L CIN
+F 3 "https://www.fairchildsemi.com/datasheets/BS/BSS138.pdf" H 3150 4500 50  0001 L CNN
+	1    3150 4500
+	1    0    0    -1  
+$EndComp
+$Comp
+L Amplifier_Operational:LM321 U?
+U 1 1 5C8F90C7
+P 3800 1800
+F 0 "U?" H 3800 2281 50  0000 C CNN
+F 1 "LM321" H 3800 2190 50  0000 C CNN
+F 2 "Package_TO_SOT_SMD:SOT-23-5" H 3800 1800 50  0001 C CNN
+F 3 "http://www.ti.com/lit/ds/symlink/lm321.pdf" H 3800 1800 50  0001 C CNN
+	1    3800 1800
+	-1   0    0    -1  
+$EndComp
+$EndSCHEMATC

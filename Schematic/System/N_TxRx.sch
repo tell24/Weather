@@ -1,0 +1,204 @@
+EESchema Schematic File Version 4
+LIBS:System-cache
+EELAYER 29 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 11 14
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L Transistor_FET:AO3401 Q?
+U 1 1 5C8F913C
+P 3950 3100
+F 0 "Q?" V 4293 3100 50  0000 C CNN
+F 1 "AO3401" V 4202 3100 50  0000 C CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 4150 3025 50  0001 L CIN
+F 3 "" H 3950 3100 50  0001 L CNN
+	1    3950 3100
+	0    1    -1   0   
+$EndComp
+$Comp
+L Transistor_FET:AO3401 Q?
+U 1 1 5C900ECB
+P 4650 4300
+F 0 "Q?" H 4856 4346 50  0000 L CNN
+F 1 "AO3401" H 4856 4255 50  0000 L CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 4850 4225 50  0001 L CIN
+F 3 "" H 4650 4300 50  0001 L CNN
+	1    4650 4300
+	1    0    0    1   
+$EndComp
+$Comp
+L Transistor_FET:BSS138 Q?
+U 1 1 5C904FFF
+P 3150 4500
+F 0 "Q?" H 3356 4546 50  0000 L CNN
+F 1 "BSS138" H 3356 4455 50  0000 L CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 3350 4425 50  0001 L CIN
+F 3 "https://www.fairchildsemi.com/datasheets/BS/BSS138.pdf" H 3150 4500 50  0001 L CNN
+	1    3150 4500
+	1    0    0    -1  
+$EndComp
+$Comp
+L Amplifier_Operational:LM321 U?
+U 1 1 5C8F90C7
+P 3800 1800
+F 0 "U?" H 3800 2281 50  0000 C CNN
+F 1 "LM321" H 3800 2190 50  0000 C CNN
+F 2 "Package_TO_SOT_SMD:SOT-23-5" H 3800 1800 50  0001 C CNN
+F 3 "http://www.ti.com/lit/ds/symlink/lm321.pdf" H 3800 1800 50  0001 C CNN
+	1    3800 1800
+	-1   0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5C90C2DD
+P 2400 4500
+F 0 "R?" V 2193 4500 50  0000 C CNN
+F 1 "R" V 2284 4500 50  0000 C CNN
+F 2 "" V 2330 4500 50  0001 C CNN
+F 3 "~" H 2400 4500 50  0001 C CNN
+	1    2400 4500
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5C90E169
+P 3000 5050
+F 0 "R?" H 2930 5004 50  0000 R CNN
+F 1 "R" H 2930 5095 50  0000 R CNN
+F 2 "" V 2930 5050 50  0001 C CNN
+F 3 "~" H 3000 5050 50  0001 C CNN
+	1    3000 5050
+	-1   0    0    1   
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5C90F143
+P 3750 5000
+F 0 "R?" H 3820 5046 50  0000 L CNN
+F 1 "R" H 3820 4955 50  0000 L CNN
+F 2 "" V 3680 5000 50  0001 C CNN
+F 3 "~" H 3750 5000 50  0001 C CNN
+	1    3750 5000
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5C9100FA
+P 3100 3150
+F 0 "R?" H 3170 3196 50  0000 L CNN
+F 1 "R" H 3170 3105 50  0000 L CNN
+F 2 "" V 3030 3150 50  0001 C CNN
+F 3 "~" H 3100 3150 50  0001 C CNN
+	1    3100 3150
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5C9120FF
+P 5650 4550
+F 0 "R?" H 5720 4596 50  0000 L CNN
+F 1 "R" H 5720 4505 50  0000 L CNN
+F 2 "" V 5580 4550 50  0001 C CNN
+F 3 "~" H 5650 4550 50  0001 C CNN
+	1    5650 4550
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5C912BAF
+P 2250 3150
+F 0 "R?" H 2320 3196 50  0000 L CNN
+F 1 "R" H 2320 3105 50  0000 L CNN
+F 2 "" V 2180 3150 50  0001 C CNN
+F 3 "~" H 2250 3150 50  0001 C CNN
+	1    2250 3150
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5C913744
+P 3550 3700
+F 0 "R?" H 3620 3746 50  0000 L CNN
+F 1 "R" H 3620 3655 50  0000 L CNN
+F 2 "" V 3480 3700 50  0001 C CNN
+F 3 "~" H 3550 3700 50  0001 C CNN
+	1    3550 3700
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5C91429E
+P 1750 3550
+F 0 "R?" H 1820 3596 50  0000 L CNN
+F 1 "R" H 1820 3505 50  0000 L CNN
+F 2 "" V 1680 3550 50  0001 C CNN
+F 3 "~" H 1750 3550 50  0001 C CNN
+	1    1750 3550
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5C914922
+P 5100 1700
+F 0 "R?" V 4893 1700 50  0000 C CNN
+F 1 "R" V 4984 1700 50  0000 C CNN
+F 2 "" V 5030 1700 50  0001 C CNN
+F 3 "~" H 5100 1700 50  0001 C CNN
+	1    5100 1700
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5C9162AE
+P 4800 2150
+F 0 "R?" H 4870 2196 50  0000 L CNN
+F 1 "R" H 4870 2105 50  0000 L CNN
+F 2 "" V 4730 2150 50  0001 C CNN
+F 3 "~" H 4800 2150 50  0001 C CNN
+	1    4800 2150
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5C919740
+P 5450 2150
+F 0 "R?" H 5520 2196 50  0000 L CNN
+F 1 "R" H 5520 2105 50  0000 L CNN
+F 2 "" V 5380 2150 50  0001 C CNN
+F 3 "~" H 5450 2150 50  0001 C CNN
+	1    5450 2150
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:D D?
+U 1 1 5C91A5F5
+P 4700 1150
+F 0 "D?" H 4700 1366 50  0000 C CNN
+F 1 "D" H 4700 1275 50  0000 C CNN
+F 2 "" H 4700 1150 50  0001 C CNN
+F 3 "~" H 4700 1150 50  0001 C CNN
+	1    4700 1150
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:D D?
+U 1 1 5C91BE51
+P 5800 1100
+F 0 "D?" H 5800 1316 50  0000 C CNN
+F 1 "D" H 5800 1225 50  0000 C CNN
+F 2 "" H 5800 1100 50  0001 C CNN
+F 3 "~" H 5800 1100 50  0001 C CNN
+	1    5800 1100
+	1    0    0    -1  
+$EndComp
+$EndSCHEMATC
