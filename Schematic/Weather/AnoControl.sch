@@ -1,10 +1,9 @@
 EESchema Schematic File Version 4
-LIBS:System-cache
 EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 2 14
+Sheet 6 7
 Title ""
 Date ""
 Rev ""
@@ -14,4 +13,10 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
+Text HLabel 2500 2000 0    50   Input ~ 0
+J6_P1
+Text HLabel 2500 2200 0    50   Input ~ 0
+J6_P2
+Text HLabel 2500 2400 0    50   Input ~ 0
+J6_P3
 $EndSCHEMATC
