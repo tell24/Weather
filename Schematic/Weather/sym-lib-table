@@ -1,3 +1,4 @@
 (sym_lib_table
   (lib (name MyComponents)(type Legacy)(uri ${KIPRJMOD}/MyComponents.lib)(options "")(descr ""))
+  (lib (name Weather-rescue)(type Legacy)(uri ${KIPRJMOD}/Weather-rescue.lib)(options "")(descr ""))
 )
