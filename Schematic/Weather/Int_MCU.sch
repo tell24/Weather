@@ -27,10 +27,10 @@ J3_P3
 Text HLabel 8350 2500 2    50   Input ~ 0
 J3_P4
 $Comp
-L Weather-rescue:ESP-01v090-ESP8266 U2
+L Weather-rescue:ESP-01v090-ESP8266 U?
 U 1 1 5C9306F6
 P 5800 2650
-AR Path="/5C9306F6" Ref="U2"  Part="1" 
+AR Path="/5C9306F6" Ref="U?"  Part="1" 
 AR Path="/5C9253D5/5C9306F6" Ref="U2"  Part="1" 
 F 0 "U2" H 5800 3165 50  0000 C CNN
 F 1 "ESP-01v090" H 5800 3074 50  0000 C CNN

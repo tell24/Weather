@@ -21,10 +21,10 @@ J5_P2
 Text HLabel 2500 2500 0    50   Input ~ 0
 J5_P3
 $Comp
-L MyComponents:PowerBrick PSU?
+L MyComponents:PowerBrick PSU2
 U 1 1 5C96411B
 P 4050 2100
-F 0 "PSU?" H 4678 2121 50  0000 L CNN
+F 0 "PSU2" H 4678 2121 50  0000 L CNN
 F 1 "PowerBrick" H 4678 2030 50  0000 L CNN
 F 2 "" H 4250 1800 50  0001 C CNN
 F 3 "" H 4250 1800 50  0001 C CNN
@@ -32,10 +32,10 @@ F 3 "" H 4250 1800 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L MyComponents:PowerBrick PSU?
+L MyComponents:PowerBrick PSU3
 U 1 1 5C9656A9
 P 4050 2600
-F 0 "PSU?" H 4678 2621 50  0000 L CNN
+F 0 "PSU3" H 4678 2621 50  0000 L CNN
 F 1 "PowerBrick" H 4678 2530 50  0000 L CNN
 F 2 "" H 4250 2300 50  0001 C CNN
 F 3 "" H 4250 2300 50  0001 C CNN
