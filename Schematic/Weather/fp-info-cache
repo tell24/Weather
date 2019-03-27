@@ -1,4 +1,4 @@
-15822129180579272
+15815914375935696
 Battery
 BatteryHolder_Bulgin_BX0036_1xC
 Bulgin Battery Holder, BX0036, Battery Type C (https://www.bulgin.com/products/pub/media/bulgin/data/Battery_holders.pdf)
@@ -44085,34 +44085,6 @@ EMI Filter
 0
 19
 4
-footprint
-BMP180
-
-
-0
-5
-5
-footprint
-ESP-01
-
-
-0
-8
-8
-footprint
-HTU21
-
-
-0
-4
-4
-footprint
-PowerBrick
-
-
-0
-2
-2
 Fuse
 Fuseholder_Blade_ATO_Littelfuse_Pudenz_2_Pin
 Fuseholder ATO Blade littelfuse Pudenz 2 Pin
