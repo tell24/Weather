@@ -46,7 +46,7 @@ AR Path="/5C950A1B" Ref="U?"  Part="1"
 AR Path="/5C93D4CF/5C950A1B" Ref="U4"  Part="1" 
 F 0 "U4" H 5550 4165 50  0000 C CNN
 F 1 "ESP-01v090" H 5550 4074 50  0000 C CNN
-F 2 "" H 5550 3650 50  0001 C CNN
+F 2 "footprint:ESP-01" H 5550 3650 50  0001 C CNN
 F 3 "http://l0l.org.uk/2014/12/esp8266-modules-hardware-guide-gotta-catch-em-all/" H 5550 3650 50  0001 C CNN
 	1    5550 3650
 	1    0    0    -1  
@@ -57,7 +57,7 @@ U 1 1 5C964519
 P 3100 3100
 F 0 "J1" H 3050 2350 50  0000 L CNN
 F 1 "4_Way_Wire" H 2850 2200 50  0000 L CNN
-F 2 "" H 3000 3150 50  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical" H 3000 3150 50  0001 C CNN
 F 3 "" H 3000 3150 50  0001 C CNN
 	1    3100 3100
 	1    0    0    -1  
@@ -68,7 +68,7 @@ U 1 1 5C951D08
 P 3200 1950
 F 0 "U3" V 2700 2000 60  0000 R CNN
 F 1 "AMS1117" V 2600 2200 60  0000 R CNN
-F 2 "" H 3200 1950 60  0000 C CNN
+F 2 "Package_TO_SOT_SMD:SOT-223-3_TabPin2" H 3200 1950 60  0001 C CNN
 F 3 "" H 3200 1950 60  0000 C CNN
 	1    3200 1950
 	0    -1   -1   0   
