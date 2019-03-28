@@ -23,10 +23,10 @@ J4_P3
 Text HLabel 2650 2200 0    50   Input ~ 0
 J4_P4
 $Comp
-L Weather-rescue:HTU21-MyComponents MOD1
+L Weather-rescue:HTU21-MyComponents MOD?
 U 1 1 5C959FE9
 P 5000 2850
-AR Path="/5C959FE9" Ref="MOD1"  Part="1" 
+AR Path="/5C959FE9" Ref="MOD?"  Part="1" 
 AR Path="/5C9254A0/5C959FE9" Ref="MOD1"  Part="1" 
 F 0 "MOD1" H 5628 2846 50  0000 L CNN
 F 1 "HTU21" H 5628 2755 50  0000 L CNN

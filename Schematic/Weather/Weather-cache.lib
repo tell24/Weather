@@ -98,6 +98,20 @@ X ~ 2 0 -150 50 U 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
+# MyComponents_3_Way_Wire
+#
+DEF MyComponents_3_Way_Wire J 0 40 Y Y 1 F N
+F0 "J" -50 -300 50 H V C CNN
+F1 "MyComponents_3_Way_Wire" 0 100 50 H V C CNN
+F2 "" 0 0 50 H I C CNN
+F3 "" 0 0 50 H I C CNN
+DRAW
+X P1 1 -100 0 100 R 50 50 1 1 I
+X P2 2 -100 -100 100 R 50 50 1 1 I
+X P3 3 -100 -200 100 R 50 50 1 1 I
+ENDDRAW
+ENDDEF
+#
 # MyComponents_4_Way_Wire
 #
 DEF MyComponents_4_Way_Wire J 0 40 Y Y 1 F N
