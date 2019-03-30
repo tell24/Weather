@@ -38,10 +38,4 @@ Text HLabel 2850 4200 0    50   Input ~ 0
 J13_P4
 Text HLabel 2850 4400 0    50   Input ~ 0
 J13_P5
-Text HLabel 2850 4600 0    50   Input ~ 0
-J13_P6
-Text HLabel 2850 4800 0    50   Input ~ 0
-J13_P7
-Text HLabel 2850 5000 0    50   Input ~ 0
-J13_P8
 $EndSCHEMATC
