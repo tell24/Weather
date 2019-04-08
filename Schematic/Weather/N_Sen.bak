@@ -4,7 +4,7 @@ EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 9 11
+Sheet 9 13
 Title ""
 Date ""
 Rev ""
@@ -483,7 +483,7 @@ U 1 1 5CA34377
 P 8350 3350
 F 0 "H1" H 8450 3399 50  0000 L CNN
 F 1 "MountingHole_Pad" H 8450 3308 50  0000 L CNN
-F 2 "Connector_Wire:SolderWirePad_1x01_Drill1.2mm" H 8350 3350 50  0001 C CNN
+F 2 "Connector_Wire:SolderWirePad_1x01_Drill0.8mm" H 8350 3350 50  0001 C CNN
 F 3 "~" H 8350 3350 50  0001 C CNN
 	1    8350 3350
 	1    0    0    -1  
@@ -494,7 +494,7 @@ U 1 1 5CA34DBD
 P 8350 3850
 F 0 "H3" H 8450 3899 50  0000 L CNN
 F 1 "MountingHole_Pad" H 8450 3808 50  0000 L CNN
-F 2 "Connector_Wire:SolderWirePad_1x01_Drill1.2mm" H 8350 3850 50  0001 C CNN
+F 2 "Connector_Wire:SolderWirePad_1x01_Drill0.8mm" H 8350 3850 50  0001 C CNN
 F 3 "~" H 8350 3850 50  0001 C CNN
 	1    8350 3850
 	1    0    0    -1  
@@ -505,7 +505,7 @@ U 1 1 5CA4F9CF
 P 8350 3550
 F 0 "H2" H 8250 3507 50  0000 R CNN
 F 1 "MountingHole_Pad" H 8250 3598 50  0000 R CNN
-F 2 "Connector_Wire:SolderWirePad_1x01_Drill1.2mm" H 8350 3550 50  0001 C CNN
+F 2 "Connector_Wire:SolderWirePad_1x01_Drill0.8mm" H 8350 3550 50  0001 C CNN
 F 3 "~" H 8350 3550 50  0001 C CNN
 	1    8350 3550
 	-1   0    0    1   
@@ -517,7 +517,7 @@ U 1 1 5CA5112A
 P 8350 4050
 F 0 "H4" H 8250 4007 50  0000 R CNN
 F 1 "MountingHole_Pad" H 8250 4098 50  0000 R CNN
-F 2 "Connector_Wire:SolderWirePad_1x01_Drill1.2mm" H 8350 4050 50  0001 C CNN
+F 2 "Connector_Wire:SolderWirePad_1x01_Drill0.8mm" H 8350 4050 50  0001 C CNN
 F 3 "~" H 8350 4050 50  0001 C CNN
 	1    8350 4050
 	-1   0    0    1   

@@ -4,7 +4,7 @@ EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 6 11
+Sheet 11 13
 Title ""
 Date ""
 Rev ""
@@ -48,4 +48,24 @@ Text HLabel 2850 5550 0    50   Input ~ 0
 J14_P4
 Text HLabel 2850 5750 0    50   Input ~ 0
 J14_P5
+Text HLabel 8000 3450 0    50   Input ~ 0
+J21_P1
+Text HLabel 8000 3600 0    50   Input ~ 0
+J21_P2
+Text HLabel 8000 3750 0    50   Input ~ 0
+J21_P3
+Text HLabel 8000 3900 0    50   Input ~ 0
+J21_P4
+Text HLabel 8000 4050 0    50   Input ~ 0
+J21_P5
+Text HLabel 8000 4500 0    50   Input ~ 0
+J22_P1
+Text HLabel 8000 4650 0    50   Input ~ 0
+J22_P2
+Text HLabel 8000 4800 0    50   Input ~ 0
+J22_P3
+Text HLabel 8000 4950 0    50   Input ~ 0
+J22_P4
+Text HLabel 8000 5100 0    50   Input ~ 0
+J22_P5
 $EndSCHEMATC
