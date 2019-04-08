@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html><head><meta name="GCD" content="YTk3ODQ3ZWZhN2I4NzZmMzBkNTEwYjJl8cfd87437e5b679ae5535be697e06213"/>
+<html><head><meta name="GCD" content="YTk3ODQ3ZWZhN2I4NzZmMzBkNTEwYjJl98945a03e22693f5f6e8812a1f31589d"/>
   <meta charset="utf-8">
-  <title>Test</title>
+  <title>Weather</title>
   <meta name="generator" content="Google Web Designer 5.0.4.0226">
   <style type="text/css" id="gwd-text-style">.sidenav {
     height: 100%;
@@ -130,6 +130,7 @@ body {
       var r_col = "#8cc8e8";
       var PI = 3.1416;
       var rad = 57.2958;
+      var rain_scale = 137;
       var marker = 0;
       var mark = true;
       var c = document.getElementById("canvas");
@@ -392,8 +393,8 @@ body {
       }
 
       function rain_plot(now, total, win) {
-        now /= (70 / 60);
-        total /= 70;
+        now /= (rain_scale / 60);
+        total /= rain_scale;
         var n_scale = Math.ceil(now + 0.5);
         var t_scale = Math.ceil(total + 0.5);
         var n_ticks = Math.ceil(n_scale / 5);
@@ -578,7 +579,7 @@ body {
                   myarr[4][index] = all_dat[cell + 24]; //pres
                   myarr[5][index] = all_dat[cell + 9]; //wind
                   myarr[6][index] = all_dat[cell + 6]; //gust
-                  myarr[7][index] = all_dat[cell + 15] / 70; //rain mm
+                  myarr[7][index] = all_dat[cell + 15] / rain_scale; //rain mm
                   myarr[8][index] = all_dat[cell + 1]; //in low temp
                   myarr[9][index] = all_dat[cell + 19]; //out low temp
                   myarr[10][index] = all_dat[cell + 4]; //out low hum
@@ -632,7 +633,7 @@ body {
                 m_m_arr[1][6] = m_m_arr[1][5];
 
                 m_m_arr[0][7] = 0; //rain
-                m_m_arr[1][7] = Math.ceil(all_dat[17 + (62 * 29)] / 70);
+                m_m_arr[1][7] = Math.ceil(all_dat[17 + (62 * 29)] / rain_scale);
                 break;
 
               case "day":
@@ -648,7 +649,7 @@ body {
                   myarr[4][index] = all_dat[cell + 24]; //pres
                   myarr[5][index] = all_dat[cell + 6]; //wind
                   myarr[6][index] = all_dat[cell + 9]; //gust
-                  myarr[7][index] = all_dat[cell + 16] / 70; //rain mm
+                  myarr[7][index] = all_dat[cell + 16] / rain_scale; //rain mm
                   myarr[8][index] = all_dat[cell + 1]; //in low temp
                   myarr[9][index] = all_dat[cell + 19]; //out low temp
                   myarr[10][index] = all_dat[cell + 4]; //out low hum
@@ -704,7 +705,7 @@ body {
                 m_m_arr[1][6] = m_m_arr[1][5];
 
                 m_m_arr[0][7] = 0; //rain
-                m_m_arr[1][7] = Math.ceil(all_dat[18 + (28 * 29)] / 70);
+                m_m_arr[1][7] = Math.ceil(all_dat[18 + (28 * 29)] / rain_scale);
                 break;
 
               default:
@@ -730,7 +731,7 @@ body {
                   myarr[4][index] = all_dat[cell + 24]; //pres
                   myarr[5][index] = all_dat[cell + 6]; //wind
                   myarr[6][index] = all_dat[cell + 9]; //gust
-                  myarr[7][index] = all_dat[cell + 16] / 70; //rain
+                  myarr[7][index] = all_dat[cell + 16] / rain_scale; //rain
                   myarr[8][index] = all_dat[cell + 1]; //in low temp
                   myarr[9][index] = all_dat[cell + 19]; //out low temp
                   myarr[10][index] = all_dat[cell + 4]; //out low hum
@@ -784,7 +785,7 @@ body {
                 m_m_arr[1][6] = m_m_arr[1][5];
 
                 m_m_arr[0][7] = 0; //rain
-                m_m_arr[1][7] = Math.ceil(all_dat[18 + (33 * 29)] / 70);
+                m_m_arr[1][7] = Math.ceil(all_dat[18 + (33 * 29)] / rain_scale);
 
                 m_len = Math.ceil((len + 1) / 2);
                 break;
@@ -1180,7 +1181,14 @@ body {
             draw_graph(plots, range, min, ticks, points, h_c, first);
             temp = new Array();
             temp = myarr[h_c];
-            fill_chart(0, plots, temp, range, min, points, h_c);
+            if (h_c === 4) {
+              fill_chart(0, plots, temp, range, min, points, h_c);
+            }
+
+            if (h_c === 7) {
+              fill_chart(0, plots, temp, range, min, points, h_c);
+            }
+
             if ((h_c === 0) || (h_c === 2) || (h_c === 5)) {
               h_c++;
               temp = new Array();
@@ -1215,9 +1223,14 @@ body {
             draw_graph(plots, range, min, ticks, points, h_c, first);
             temp = new Array();
             temp = myarr[h_c];
-            if ((h_c === 4) || (h_c === 7)) {
+            if (h_c === 4) {
               fill_chart(0, plots, temp, range, min, points, h_c);
             }
+
+            if (h_c === 7) {
+              fill_chart(0, plots, temp, range, min, points, h_c);
+            }
+
             if (h_c === 5) {
               fill_chart(0, plots, temp, range, min, points, h_c);
               h_c++;
