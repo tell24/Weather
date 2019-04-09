@@ -52,7 +52,7 @@ Wire Wire Line
 Wire Wire Line
 	8150 2650 8350 2650
 Wire Wire Line
-	2150 2850 2500 2850
+	2150 2850 2250 2850
 Wire Wire Line
 	2500 2850 2500 3350
 Wire Wire Line
@@ -95,7 +95,7 @@ F 3 "~" H 3950 3200 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	2150 2500 2500 2500
+	2150 2500 2250 2500
 $Comp
 L Device:CP C1
 U 1 1 5C944F87
@@ -202,4 +202,32 @@ Text Label 8200 2500 0    50   ~ 0
 5v
 Text Label 8200 2950 0    50   ~ 0
 GND
+$Comp
+L Mechanical:MountingHole_Pad H17
+U 1 1 5CAD0AF5
+P 2250 2400
+F 0 "H17" H 2350 2449 50  0000 L CNN
+F 1 "MountingHole_Pad" H 2350 2358 50  0000 L CNN
+F 2 "" H 2250 2400 50  0001 C CNN
+F 3 "~" H 2250 2400 50  0001 C CNN
+	1    2250 2400
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole_Pad H18
+U 1 1 5CAD120E
+P 2250 2750
+F 0 "H18" H 2350 2799 50  0000 L CNN
+F 1 "MountingHole_Pad" H 2350 2708 50  0000 L CNN
+F 2 "" H 2250 2750 50  0001 C CNN
+F 3 "~" H 2250 2750 50  0001 C CNN
+	1    2250 2750
+	1    0    0    -1  
+$EndComp
+Connection ~ 2250 2850
+Wire Wire Line
+	2250 2850 2500 2850
+Connection ~ 2250 2500
+Wire Wire Line
+	2250 2500 2500 2500
 $EndSCHEMATC
