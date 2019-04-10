@@ -4,7 +4,7 @@ EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 14 15
+Sheet 13 15
 Title ""
 Date ""
 Rev ""
@@ -15,9 +15,9 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 Text HLabel 2600 3750 0    50   Input ~ 0
-J2_P1
+J0_P1
 Text HLabel 2600 3400 0    50   Input ~ 0
-J2_P2
+J0_P2
 Text HLabel 7000 4700 3    50   Input ~ 0
 J3_P1
 Text HLabel 6850 4700 3    50   Input ~ 0
@@ -219,10 +219,10 @@ Wire Wire Line
 Wire Wire Line
 	7450 3600 7450 4250
 $Comp
-L Connector_Generic:Conn_02x04_Odd_Even J23
+L Connector_Generic:Conn_02x04_Odd_Even J3
 U 1 1 5CB2F470
 P 6550 3700
-F 0 "J23" H 6600 4017 50  0000 C CNN
+F 0 "J3" H 6600 4017 50  0000 C CNN
 F 1 "Conn_02x04_Odd_Even" H 6600 3926 50  0000 C CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_2x04_P2.54mm_Vertical" H 6550 3700 50  0001 C CNN
 F 3 "~" H 6550 3700 50  0001 C CNN
@@ -251,10 +251,10 @@ Connection ~ 6250 3700
 Wire Wire Line
 	6250 3700 5300 3700
 $Comp
-L Connector:Conn_01x04_Female J25
+L Connector:Conn_01x04_Female J2
 U 1 1 5CAF2DD7
 P 7200 2900
-F 0 "J25" H 7228 2876 50  0000 L CNN
+F 0 "J2" H 7228 2876 50  0000 L CNN
 F 1 "Conn_01x04_Female" H 7228 2785 50  0000 L CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical" H 7200 2900 50  0001 C CNN
 F 3 "~" H 7200 2900 50  0001 C CNN
@@ -325,10 +325,10 @@ Wire Wire Line
 	6550 1800 7950 1800
 Connection ~ 6550 3000
 $Comp
-L Connector:Conn_01x05_Female J24
+L Connector:Conn_01x05_Female J1
 U 1 1 5CB40D1B
 P 7200 2350
-F 0 "J24" H 7228 2376 50  0000 L CNN
+F 0 "J1" H 7050 2050 50  0000 L CNN
 F 1 "Conn_01x05_Female" H 7228 2285 50  0000 L CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical" H 7200 2350 50  0001 C CNN
 F 3 "~" H 7200 2350 50  0001 C CNN

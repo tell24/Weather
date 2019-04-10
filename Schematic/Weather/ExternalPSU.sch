@@ -64,10 +64,10 @@ Wire Wire Line
 Wire Wire Line
 	3950 2500 2500 2500
 $Comp
-L MyComponents:3_Way_Wire J3
+L MyComponents:3_Way_Wire J7
 U 1 1 5CB57954
 P 3300 1350
-F 0 "J3" H 3469 1311 50  0000 L CNN
+F 0 "J7" H 3469 1311 50  0000 L CNN
 F 1 "3_Way_Wire" H 3469 1220 50  0000 L CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" H 3300 1350 50  0001 C CNN
 F 3 "" H 3300 1350 50  0001 C CNN

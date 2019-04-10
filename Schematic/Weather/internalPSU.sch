@@ -15,9 +15,9 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 Text HLabel 2000 2000 0    50   Input ~ 0
-J1_P1
+J0_P1
 Text HLabel 2000 1750 0    50   Input ~ 0
-J1_P2
+J0_P2
 $Comp
 L power:GND #PWR01
 U 1 1 5C92A263

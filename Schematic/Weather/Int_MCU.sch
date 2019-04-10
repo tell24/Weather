@@ -40,10 +40,10 @@ F 3 "http://l0l.org.uk/2014/12/esp8266-modules-hardware-guide-gotta-catch-em-all
 	1    0    0    -1  
 $EndComp
 $Comp
-L Connector_Generic:Conn_02x04_Odd_Even J1
+L Connector_Generic:Conn_02x04_Odd_Even J6
 U 1 1 5CB1B851
 P 5000 3700
-F 0 "J1" H 5050 4017 50  0000 C CNN
+F 0 "J6" H 5050 4017 50  0000 C CNN
 F 1 "Conn_02x04_Odd_Even" H 5050 3926 50  0000 C CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_2x04_P2.54mm_Vertical" H 5000 3700 50  0001 C CNN
 F 3 "~" H 5000 3700 50  0001 C CNN

@@ -4,7 +4,7 @@ EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 8 15
+Sheet 14 15
 Title ""
 Date ""
 Rev ""
@@ -14,14 +14,14 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
-Text HLabel 2850 2800 0    50   Input ~ 0
-J12_P1
-Text HLabel 2850 3000 0    50   Input ~ 0
-J12_P2
-Text HLabel 2850 3200 0    50   Input ~ 0
-J12_P3
-Text HLabel 2850 3400 0    50   Input ~ 0
-J12_P4
+Text HLabel 4850 2700 0    50   Input ~ 0
+J18_P1
+Text HLabel 4850 2900 0    50   Input ~ 0
+J18_P2
+Text HLabel 4850 3100 0    50   Input ~ 0
+J18_P3
+Text HLabel 4850 3300 0    50   Input ~ 0
+J18_P4
 $Comp
 L MyComponents:HTU21 MOD2
 U 1 1 5CB467F0
@@ -34,10 +34,10 @@ F 3 "" H 7600 2600 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L MyComponents:4_Way_Wire J8
+L MyComponents:4_Way_Wire J18
 U 1 1 5CB4EF7C
 P 5700 2700
-F 0 "J8" H 5869 2461 50  0000 L CNN
+F 0 "J18" H 5869 2461 50  0000 L CNN
 F 1 "4_Way_Wire" H 5869 2370 50  0000 L CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical" H 5600 2750 50  0001 C CNN
 F 3 "" H 5600 2750 50  0001 C CNN

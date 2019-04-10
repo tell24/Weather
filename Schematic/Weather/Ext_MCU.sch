@@ -22,21 +22,21 @@ Text HLabel 2650 3500 0    50   Input ~ 0
 J8_P3
 Text HLabel 2650 3700 0    50   Input ~ 0
 J8_P4
-Text HLabel 7850 2650 0    50   Input ~ 0
+Text HLabel 2600 4400 0    50   Input ~ 0
 J9_P1
-Text HLabel 7850 2850 0    50   Input ~ 0
+Text HLabel 2600 4600 0    50   Input ~ 0
 J9_P2
-Text HLabel 7850 3050 0    50   Input ~ 0
+Text HLabel 2600 4800 0    50   Input ~ 0
 J9_P3
-Text HLabel 7850 3250 0    50   Input ~ 0
+Text HLabel 2600 5000 0    50   Input ~ 0
 J9_P4
-Text HLabel 7850 3650 0    50   Input ~ 0
+Text HLabel 2600 5400 0    50   Input ~ 0
 J10_P1
-Text HLabel 7850 3850 0    50   Input ~ 0
+Text HLabel 2600 5600 0    50   Input ~ 0
 J10_p2
-Text HLabel 7850 4050 0    50   Input ~ 0
+Text HLabel 2600 5800 0    50   Input ~ 0
 J10_P3
-Text HLabel 7850 4250 0    50   Input ~ 0
+Text HLabel 2600 6000 0    50   Input ~ 0
 J10_P4
 $Comp
 L Weather-rescue:ESP-01v090-ESP8266 U?
@@ -52,10 +52,10 @@ F 3 "http://l0l.org.uk/2014/12/esp8266-modules-hardware-guide-gotta-catch-em-all
 	1    0    0    -1  
 $EndComp
 $Comp
-L MyComponents:4_Way_Wire J4
+L MyComponents:4_Way_Wire J14
 U 1 1 5C964519
 P 3100 3100
-F 0 "J4" H 3050 2350 50  0000 L CNN
+F 0 "J14" H 3050 2350 50  0000 L CNN
 F 1 "4_Way_Wire" H 2850 2200 50  0000 L CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical" H 3000 3150 50  0001 C CNN
 F 3 "" H 3000 3150 50  0001 C CNN
@@ -99,10 +99,10 @@ Wire Wire Line
 Wire Wire Line
 	4300 3800 4600 3800
 $Comp
-L MyComponents:4_Way_Wire J5
+L MyComponents:4_Way_Wire J15
 U 1 1 5CB477D0
 P 3150 4400
-F 0 "J5" H 3319 4161 50  0000 L CNN
+F 0 "J15" H 3319 4161 50  0000 L CNN
 F 1 "4_Way_Wire" H 3319 4070 50  0000 L CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical" H 3050 4450 50  0001 C CNN
 F 3 "" H 3050 4450 50  0001 C CNN
@@ -110,10 +110,10 @@ F 3 "" H 3050 4450 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L MyComponents:4_Way_Wire J6
+L MyComponents:4_Way_Wire J16
 U 1 1 5CB50010
 P 3150 5400
-F 0 "J6" H 3319 5161 50  0000 L CNN
+F 0 "J16" H 3319 5161 50  0000 L CNN
 F 1 "4_Way_Wire" H 3319 5070 50  0000 L CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical" H 3050 5450 50  0001 C CNN
 F 3 "" H 3050 5450 50  0001 C CNN
