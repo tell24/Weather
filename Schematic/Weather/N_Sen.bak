@@ -4,7 +4,7 @@ EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 9 14
+Sheet 9 15
 Title ""
 Date ""
 Rev ""
@@ -45,10 +45,10 @@ F 3 "https://www.fairchildsemi.com/datasheets/BS/BSS138.pdf" H 6200 4800 50  000
 	1    0    0    -1  
 $EndComp
 $Comp
-L Amplifier_Operational:LM321 U5
+L Amplifier_Operational:LM321 U4
 U 1 1 5C8F90C7
 P 6050 2150
-F 0 "U5" H 6050 2631 50  0000 C CNN
+F 0 "U4" H 6050 2631 50  0000 C CNN
 F 1 "LM321" H 6050 2540 50  0000 C CNN
 F 2 "Package_TO_SOT_SMD:SOT-23-5" H 6050 2150 50  0001 C CNN
 F 3 "http://www.ti.com/lit/ds/symlink/lm321.pdf" H 6050 2150 50  0001 C CNN
@@ -56,10 +56,10 @@ F 3 "http://www.ti.com/lit/ds/symlink/lm321.pdf" H 6050 2150 50  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L Device:R R3
+L Device:R R1
 U 1 1 5C90C2DD
 P 5450 4800
-F 0 "R3" V 5243 4800 50  0000 C CNN
+F 0 "R1" V 5243 4800 50  0000 C CNN
 F 1 "2.2K" V 5334 4800 50  0000 C CNN
 F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P2.54mm_Vertical" V 5380 4800 50  0001 C CNN
 F 3 "~" H 5450 4800 50  0001 C CNN
@@ -67,10 +67,10 @@ F 3 "~" H 5450 4800 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L Device:R R6
+L Device:R R4
 U 1 1 5C90E169
 P 5850 5250
-F 0 "R6" H 5780 5204 50  0000 R CNN
+F 0 "R4" H 5780 5204 50  0000 R CNN
 F 1 "5.1K" H 5780 5295 50  0000 R CNN
 F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P2.54mm_Vertical" V 5780 5250 50  0001 C CNN
 F 3 "~" H 5850 5250 50  0001 C CNN
@@ -78,10 +78,10 @@ F 3 "~" H 5850 5250 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L Device:R R14
+L Device:R R12
 U 1 1 5C90F143
 P 7350 4900
-F 0 "R14" H 7420 4946 50  0000 L CNN
+F 0 "R12" H 7420 4946 50  0000 L CNN
 F 1 "680" H 7420 4855 50  0000 L CNN
 F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P2.54mm_Vertical" V 7280 4900 50  0001 C CNN
 F 3 "~" H 7350 4900 50  0001 C CNN
@@ -89,10 +89,10 @@ F 3 "~" H 7350 4900 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:R R12
+L Device:R R10
 U 1 1 5C9100FA
 P 7050 3900
-F 0 "R12" H 7120 3946 50  0000 L CNN
+F 0 "R10" H 7120 3946 50  0000 L CNN
 F 1 "20K" H 7120 3855 50  0000 L CNN
 F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P2.54mm_Vertical" V 6980 3900 50  0001 C CNN
 F 3 "~" H 7050 3900 50  0001 C CNN
@@ -100,10 +100,10 @@ F 3 "~" H 7050 3900 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:R R8
+L Device:R R6
 U 1 1 5C913744
 P 6300 4150
-F 0 "R8" H 6370 4196 50  0000 L CNN
+F 0 "R6" H 6370 4196 50  0000 L CNN
 F 1 "10K" H 6370 4105 50  0000 L CNN
 F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P2.54mm_Vertical" V 6230 4150 50  0001 C CNN
 F 3 "~" H 6300 4150 50  0001 C CNN
@@ -111,10 +111,10 @@ F 3 "~" H 6300 4150 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:R R5
+L Device:R R3
 U 1 1 5C91429E
 P 5750 3700
-F 0 "R5" H 5820 3746 50  0000 L CNN
+F 0 "R3" H 5820 3746 50  0000 L CNN
 F 1 "2.2k" H 5820 3655 50  0000 L CNN
 F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P2.54mm_Vertical" V 5680 3700 50  0001 C CNN
 F 3 "~" H 5750 3700 50  0001 C CNN
@@ -122,10 +122,10 @@ F 3 "~" H 5750 3700 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:R R9
+L Device:R R7
 U 1 1 5C919740
 P 6400 1700
-F 0 "R9" H 6470 1746 50  0000 L CNN
+F 0 "R7" H 6470 1746 50  0000 L CNN
 F 1 "4.7K" H 6470 1655 50  0000 L CNN
 F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P2.54mm_Vertical" V 6330 1700 50  0001 C CNN
 F 3 "~" H 6400 1700 50  0001 C CNN
@@ -155,10 +155,10 @@ F 3 "~" H 7200 2400 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L Device:R R4
+L Device:R R2
 U 1 1 5C902560
 P 5500 2150
-F 0 "R4" V 5293 2150 50  0000 C CNN
+F 0 "R2" V 5293 2150 50  0000 C CNN
 F 1 "4.7K" V 5384 2150 50  0000 C CNN
 F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P2.54mm_Vertical" V 5430 2150 50  0001 C CNN
 F 3 "~" H 5500 2150 50  0001 C CNN
@@ -213,10 +213,10 @@ $EndComp
 Wire Wire Line
 	7350 5650 7950 5650
 $Comp
-L Device:R R13
+L Device:R R11
 U 1 1 5C9120FF
 P 7050 4900
-F 0 "R13" H 7120 4946 50  0000 L CNN
+F 0 "R11" H 7120 4946 50  0000 L CNN
 F 1 "20K" H 7120 4855 50  0000 L CNN
 F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P2.54mm_Vertical" V 6980 4900 50  0001 C CNN
 F 3 "~" H 7050 4900 50  0001 C CNN
@@ -241,10 +241,10 @@ Connection ~ 7050 4250
 Wire Wire Line
 	6150 1350 6150 1850
 $Comp
-L Device:R R16
+L Device:R R14
 U 1 1 5C914922
 P 7750 2250
-F 0 "R16" V 7543 2250 50  0000 C CNN
+F 0 "R14" V 7543 2250 50  0000 C CNN
 F 1 "3.3k" V 7634 2250 50  0000 C CNN
 F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P2.54mm_Vertical" V 7680 2250 50  0001 C CNN
 F 3 "~" H 7750 2250 50  0001 C CNN
@@ -254,10 +254,10 @@ $EndComp
 Wire Wire Line
 	7400 2550 7300 2550
 $Comp
-L Device:R R10
+L Device:R R8
 U 1 1 5C96EBEA
 P 6400 2650
-F 0 "R10" H 6470 2696 50  0000 L CNN
+F 0 "R8" H 6470 2696 50  0000 L CNN
 F 1 "4.7K" H 6470 2605 50  0000 L CNN
 F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P2.54mm_Vertical" V 6330 2650 50  0001 C CNN
 F 3 "~" H 6400 2650 50  0001 C CNN
@@ -302,10 +302,10 @@ Wire Wire Line
 	7400 2250 7600 2250
 Connection ~ 7400 2250
 $Comp
-L Device:C C4
+L Device:C C1
 U 1 1 5C96A149
 P 6900 2250
-F 0 "C4" V 6648 2250 50  0000 C CNN
+F 0 "C1" V 6648 2250 50  0000 C CNN
 F 1 "0.1uF" V 6739 2250 50  0000 C CNN
 F 2 "Capacitor_THT:C_Disc_D3.8mm_W2.6mm_P2.50mm" H 6938 2100 50  0001 C CNN
 F 3 "~" H 6900 2250 50  0001 C CNN
@@ -321,10 +321,10 @@ Wire Wire Line
 Text Label 5800 3450 0    50   ~ 0
 24v
 $Comp
-L Device:R R11
+L Device:R R9
 U 1 1 5C96E23C
 P 6600 2250
-F 0 "R11" V 6393 2250 50  0000 C CNN
+F 0 "R9" V 6393 2250 50  0000 C CNN
 F 1 "4.7K" V 6484 2250 50  0000 C CNN
 F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P2.54mm_Vertical" V 6530 2250 50  0001 C CNN
 F 3 "~" H 6600 2250 50  0001 C CNN
@@ -342,10 +342,10 @@ Wire Wire Line
 	6400 2850 7300 2850
 Connection ~ 6400 2850
 $Comp
-L Device:R R7
+L Device:R R5
 U 1 1 5C97DE0F
 P 5900 2500
-F 0 "R7" V 5693 2500 50  0000 C CNN
+F 0 "R5" V 5693 2500 50  0000 C CNN
 F 1 "4.7K" V 5784 2500 50  0000 C CNN
 F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P2.54mm_Vertical" V 5830 2500 50  0001 C CNN
 F 3 "~" H 5900 2500 50  0001 C CNN
@@ -390,10 +390,10 @@ Connection ~ 7350 3450
 Wire Wire Line
 	7700 3450 7700 3650
 $Comp
-L Device:R R15
+L Device:R R13
 U 1 1 5C912BAF
 P 7700 3800
-F 0 "R15" H 7770 3846 50  0000 L CNN
+F 0 "R13" H 7770 3846 50  0000 L CNN
 F 1 "47K" H 7770 3755 50  0000 L CNN
 F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P2.54mm_Vertical" V 7630 3800 50  0001 C CNN
 F 3 "~" H 7700 3800 50  0001 C CNN
@@ -416,10 +416,10 @@ Wire Wire Line
 Wire Wire Line
 	4750 1350 6150 1350
 $Comp
-L MyComponents:3_Way_Wire J3
+L MyComponents:3_Way_Wire J10
 U 1 1 5C9F0115
 P 3650 2000
-F 0 "J3" H 3500 1600 50  0000 L CNN
+F 0 "J10" H 3500 1600 50  0000 L CNN
 F 1 "3_Way_Wire" H 3450 1450 50  0000 L CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" H 3650 2000 50  0001 C CNN
 F 3 "" H 3650 2000 50  0001 C CNN
@@ -435,10 +435,10 @@ Wire Wire Line
 	3550 2000 4600 2000
 Connection ~ 4600 2850
 $Comp
-L MyComponents:3_Way_Wire J2
+L MyComponents:3_Way_Wire J9
 U 1 1 5C9F0A63
 P 3600 3350
-F 0 "J2" H 3500 2950 50  0000 L CNN
+F 0 "J9" H 3500 2950 50  0000 L CNN
 F 1 "3_Way_Wire" H 3450 2800 50  0000 L CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" H 3600 3350 50  0001 C CNN
 F 3 "" H 3600 3350 50  0001 C CNN
@@ -478,10 +478,10 @@ Wire Wire Line
 Connection ~ 3500 3450
 Connection ~ 5750 3450
 $Comp
-L Mechanical:MountingHole_Pad H1
+L Mechanical:MountingHole_Pad H3
 U 1 1 5CA34377
 P 8350 3350
-F 0 "H1" H 8450 3399 50  0000 L CNN
+F 0 "H3" H 8450 3399 50  0000 L CNN
 F 1 "MountingHole_Pad" H 8450 3308 50  0000 L CNN
 F 2 "Connector_Wire:SolderWirePad_1x01_Drill0.8mm" H 8350 3350 50  0001 C CNN
 F 3 "~" H 8350 3350 50  0001 C CNN
@@ -489,10 +489,10 @@ F 3 "~" H 8350 3350 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Mechanical:MountingHole_Pad H3
+L Mechanical:MountingHole_Pad H5
 U 1 1 5CA34DBD
 P 8350 3850
-F 0 "H3" H 8450 3899 50  0000 L CNN
+F 0 "H5" H 8450 3899 50  0000 L CNN
 F 1 "MountingHole_Pad" H 8450 3808 50  0000 L CNN
 F 2 "Connector_Wire:SolderWirePad_1x01_Drill0.8mm" H 8350 3850 50  0001 C CNN
 F 3 "~" H 8350 3850 50  0001 C CNN
@@ -500,10 +500,10 @@ F 3 "~" H 8350 3850 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Mechanical:MountingHole_Pad H2
+L Mechanical:MountingHole_Pad H4
 U 1 1 5CA4F9CF
 P 8350 3550
-F 0 "H2" H 8250 3507 50  0000 R CNN
+F 0 "H4" H 8250 3507 50  0000 R CNN
 F 1 "MountingHole_Pad" H 8250 3598 50  0000 R CNN
 F 2 "Connector_Wire:SolderWirePad_1x01_Drill0.8mm" H 8350 3550 50  0001 C CNN
 F 3 "~" H 8350 3550 50  0001 C CNN
@@ -512,10 +512,10 @@ F 3 "~" H 8350 3550 50  0001 C CNN
 $EndComp
 Connection ~ 8350 3450
 $Comp
-L Mechanical:MountingHole_Pad H4
+L Mechanical:MountingHole_Pad H6
 U 1 1 5CA5112A
 P 8350 4050
-F 0 "H4" H 8250 4007 50  0000 R CNN
+F 0 "H6" H 8250 4007 50  0000 R CNN
 F 1 "MountingHole_Pad" H 8250 4098 50  0000 R CNN
 F 2 "Connector_Wire:SolderWirePad_1x01_Drill0.8mm" H 8350 4050 50  0001 C CNN
 F 3 "~" H 8350 4050 50  0001 C CNN

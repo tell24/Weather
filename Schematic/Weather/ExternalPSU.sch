@@ -4,7 +4,7 @@ EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 5 14
+Sheet 5 15
 Title ""
 Date ""
 Rev ""
@@ -43,8 +43,6 @@ F 3 "" H 4250 2300 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	2500 2500 3950 2500
-Wire Wire Line
 	2500 2250 3500 2250
 Wire Wire Line
 	3500 2250 3500 2000
@@ -63,4 +61,17 @@ Wire Wire Line
 Connection ~ 3750 2750
 Wire Wire Line
 	3750 2750 3950 2750
+Wire Wire Line
+	3950 2500 2500 2500
+$Comp
+L MyComponents:3_Way_Wire J3
+U 1 1 5CB57954
+P 3300 1350
+F 0 "J3" H 3469 1311 50  0000 L CNN
+F 1 "3_Way_Wire" H 3469 1220 50  0000 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" H 3300 1350 50  0001 C CNN
+F 3 "" H 3300 1350 50  0001 C CNN
+	1    3300 1350
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
