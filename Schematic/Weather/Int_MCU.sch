@@ -4,7 +4,7 @@ EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 3 13
+Sheet 3 14
 Title ""
 Date ""
 Rev ""
@@ -14,220 +14,136 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
-Text HLabel 2150 2850 0    50   Input ~ 0
-J2_P1
-Text HLabel 2150 2500 0    50   Input ~ 0
-J2_P2
-Text HLabel 8350 2950 2    50   Input ~ 0
+Text HLabel 4700 4500 3    50   Input ~ 0
+J3_P6
+Text HLabel 4850 4500 3    50   Input ~ 0
+J3_P5
+Text HLabel 5450 4500 3    50   Input ~ 0
 J3_P1
-Text HLabel 8350 2800 2    50   Input ~ 0
+Text HLabel 5300 4500 3    50   Input ~ 0
 J3_P2
-Text HLabel 8350 2650 2    50   Input ~ 0
+Text HLabel 5150 4500 3    50   Input ~ 0
 J3_P3
-Text HLabel 8350 2500 2    50   Input ~ 0
+Text HLabel 5000 4500 3    50   Input ~ 0
 J3_P4
 $Comp
 L Weather-rescue:ESP-01v090-ESP8266 U?
 U 1 1 5C9306F6
-P 5800 2650
+P 5150 2500
 AR Path="/5C9306F6" Ref="U?"  Part="1" 
 AR Path="/5C9253D5/5C9306F6" Ref="U2"  Part="1" 
-F 0 "U2" H 5800 3165 50  0000 C CNN
-F 1 "ESP-01v090" H 5800 3074 50  0000 C CNN
-F 2 "footprint:ESP-01" H 5800 2650 50  0001 C CNN
-F 3 "http://l0l.org.uk/2014/12/esp8266-modules-hardware-guide-gotta-catch-em-all/" H 5800 2650 50  0001 C CNN
-	1    5800 2650
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	7850 2500 7850 2950
-Wire Wire Line
-	7850 2950 8350 2950
-Wire Wire Line
-	8000 2700 8000 2800
-Wire Wire Line
-	8000 2800 8350 2800
-Wire Wire Line
-	8150 2600 8150 2650
-Wire Wire Line
-	8150 2650 8350 2650
-Wire Wire Line
-	2150 2850 2250 2850
-Wire Wire Line
-	2500 2850 2500 3350
-Wire Wire Line
-	2500 3350 3550 3350
-Wire Wire Line
-	7850 3350 7850 2950
-Connection ~ 7850 2950
-$Comp
-L MyComponents:AMS1117 U1
-U 1 1 5C938BB3
-P 3100 1600
-F 0 "U1" V 2600 1550 60  0000 L CNN
-F 1 "AMS1117" V 3600 1400 60  0000 L CNN
-F 2 "Package_TO_SOT_SMD:SOT-223-3_TabPin2" H 3100 1600 60  0001 C CNN
-F 3 "" H 3100 1600 60  0000 C CNN
-	1    3100 1600
-	0    -1   -1   0   
-$EndComp
-Wire Wire Line
-	3550 1850 3550 3350
-Wire Wire Line
-	3750 2800 3750 2300
-Wire Wire Line
-	3750 1600 3550 1600
-Wire Wire Line
-	2500 2500 2500 1000
-Wire Wire Line
-	2500 1000 3550 1000
-Wire Wire Line
-	3550 1000 3550 1350
-$Comp
-L Device:C C2
-U 1 1 5C941E83
-P 3950 3200
-F 0 "C2" H 4065 3246 50  0000 L CNN
-F 1 "0.1uF" H 4065 3155 50  0000 L CNN
-F 2 "Capacitor_THT:C_Disc_D3.8mm_W2.6mm_P2.50mm" H 3988 3050 50  0001 C CNN
-F 3 "~" H 3950 3200 50  0001 C CNN
-	1    3950 3200
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	2150 2500 2250 2500
-$Comp
-L Device:CP C1
-U 1 1 5C944F87
-P 2500 2700
-F 0 "C1" H 2618 2746 50  0000 L CNN
-F 1 "47uF" H 2618 2655 50  0000 L CNN
-F 2 "Capacitor_THT:CP_Radial_Tantal_D5.0mm_P2.50mm" H 2538 2550 50  0001 C CNN
-F 3 "~" H 2500 2700 50  0001 C CNN
-	1    2500 2700
-	1    0    0    -1  
-$EndComp
-Connection ~ 2500 2850
-$Comp
-L Device:CP C3
-U 1 1 5C945952
-P 4350 3200
-F 0 "C3" H 4468 3246 50  0000 L CNN
-F 1 "47uF" H 4468 3155 50  0000 L CNN
-F 2 "Capacitor_THT:CP_Radial_Tantal_D5.0mm_P2.50mm" H 4388 3050 50  0001 C CNN
-F 3 "~" H 4350 3200 50  0001 C CNN
-	1    4350 3200
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	6750 2500 7850 2500
-Wire Wire Line
-	6750 2700 8000 2700
-Wire Wire Line
-	6750 2600 8150 2600
-Connection ~ 3950 3350
-Wire Wire Line
-	3950 3350 4350 3350
-Wire Wire Line
-	3750 2800 3950 2800
-Wire Wire Line
-	3550 3350 3950 3350
-Connection ~ 3550 3350
-Wire Wire Line
-	4350 3350 7850 3350
-Connection ~ 4350 3350
-Wire Wire Line
-	4350 3050 4350 2800
-Connection ~ 4350 2800
-Wire Wire Line
-	4350 2800 4850 2800
-Wire Wire Line
-	3950 3050 3950 2800
-Connection ~ 3950 2800
-Wire Wire Line
-	3950 2800 4350 2800
-Text Label 3000 1500 0    50   ~ 0
-3.3v
-$Comp
-L Device:R R2
-U 1 1 5C9520C8
-P 4300 2450
-F 0 "R2" H 4370 2496 50  0000 L CNN
-F 1 "4.7K" H 4370 2405 50  0000 L CNN
-F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 4230 2450 50  0001 C CNN
-F 3 "~" H 4300 2450 50  0001 C CNN
-	1    4300 2450
+F 0 "U2" H 5150 3015 50  0000 C CNN
+F 1 "ESP-01v090" H 5150 2924 50  0000 C CNN
+F 2 "footprint:ESP-01" H 5150 2500 50  0001 C CNN
+F 3 "http://l0l.org.uk/2014/12/esp8266-modules-hardware-guide-gotta-catch-em-all/" H 5150 2500 50  0001 C CNN
+	1    5150 2500
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:R R1
-U 1 1 5C953C46
-P 4050 2450
-F 0 "R1" H 4120 2496 50  0000 L CNN
-F 1 "10k" H 4120 2405 50  0000 L CNN
-F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 3980 2450 50  0001 C CNN
-F 3 "~" H 4050 2450 50  0001 C CNN
-	1    4050 2450
+L Connector_Generic:Conn_02x04_Odd_Even J10
+U 1 1 5CB1B851
+P 5000 3700
+F 0 "J10" H 5050 4017 50  0000 C CNN
+F 1 "Conn_02x04_Odd_Even" H 5050 3926 50  0000 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_2x04_P2.54mm_Vertical" H 5000 3700 50  0001 C CNN
+F 3 "~" H 5000 3700 50  0001 C CNN
+	1    5000 3700
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	4300 2300 4050 2300
+	3700 3600 3700 2350
 Wire Wire Line
-	4050 2300 3750 2300
-Connection ~ 4050 2300
-Connection ~ 3750 2300
+	3700 2350 4200 2350
 Wire Wire Line
-	3750 2300 3750 1600
+	4800 3700 4600 3700
 Wire Wire Line
-	4300 2600 4850 2600
+	3800 3700 3800 2450
 Wire Wire Line
-	4050 2700 4850 2700
+	3800 2450 4200 2450
 Wire Wire Line
-	4050 2600 4050 2700
+	4800 3800 4500 3800
 Wire Wire Line
-	2500 2550 2500 2500
-Connection ~ 2500 2500
+	3900 3800 3900 2550
 Wire Wire Line
-	3550 1350 8150 1350
+	3900 2550 4200 2550
 Wire Wire Line
-	8150 1350 8150 2500
+	4800 3900 4400 3900
 Wire Wire Line
-	8150 2500 8350 2500
-Connection ~ 3550 1350
-Text Label 8200 2650 0    50   ~ 0
-SCL
-Text Label 8200 2800 0    50   ~ 0
-SDA
-Text Label 8200 2500 0    50   ~ 0
-5v
-Text Label 8200 2950 0    50   ~ 0
-GND
-$Comp
-L Mechanical:MountingHole_Pad H17
-U 1 1 5CAD0AF5
-P 2250 2400
-F 0 "H17" H 2350 2449 50  0000 L CNN
-F 1 "MountingHole_Pad" H 2350 2358 50  0000 L CNN
-F 2 "" H 2250 2400 50  0001 C CNN
-F 3 "~" H 2250 2400 50  0001 C CNN
-	1    2250 2400
-	1    0    0    -1  
-$EndComp
-$Comp
-L Mechanical:MountingHole_Pad H18
-U 1 1 5CAD120E
-P 2250 2750
-F 0 "H18" H 2350 2799 50  0000 L CNN
-F 1 "MountingHole_Pad" H 2350 2708 50  0000 L CNN
-F 2 "" H 2250 2750 50  0001 C CNN
-F 3 "~" H 2250 2750 50  0001 C CNN
-	1    2250 2750
-	1    0    0    -1  
-$EndComp
-Connection ~ 2250 2850
+	4050 3900 4050 2650
 Wire Wire Line
-	2250 2850 2500 2850
-Connection ~ 2250 2500
+	4050 2650 4200 2650
 Wire Wire Line
-	2250 2500 2500 2500
+	6100 2650 6250 2650
+Wire Wire Line
+	6250 2650 6250 3900
+Wire Wire Line
+	6250 3900 5300 3900
+Wire Wire Line
+	6100 2550 6350 2550
+Wire Wire Line
+	6350 2550 6350 3800
+Wire Wire Line
+	6350 3800 5300 3800
+Wire Wire Line
+	6100 2450 6450 2450
+Wire Wire Line
+	6450 2450 6450 3700
+Wire Wire Line
+	6450 3700 5300 3700
+Wire Wire Line
+	6100 2350 6550 2350
+Wire Wire Line
+	6550 2350 6550 3600
+Wire Wire Line
+	6550 3600 5300 3600
+Wire Wire Line
+	4800 3600 3700 3600
+Wire Wire Line
+	4700 4500 4700 4350
+Wire Wire Line
+	4700 4350 4400 4350
+Wire Wire Line
+	4400 4350 4400 3900
+Connection ~ 4400 3900
+Wire Wire Line
+	4400 3900 4050 3900
+Wire Wire Line
+	4850 4500 4850 4350
+Wire Wire Line
+	4850 4350 6350 4350
+Wire Wire Line
+	6350 4350 6350 3800
+Connection ~ 6350 3800
+Wire Wire Line
+	5000 4500 5000 4250
+Wire Wire Line
+	5000 4250 4500 4250
+Wire Wire Line
+	4500 4250 4500 3800
+Connection ~ 4500 3800
+Wire Wire Line
+	4500 3800 3900 3800
+Wire Wire Line
+	5150 4500 5150 4250
+Wire Wire Line
+	5150 4250 6450 4250
+Wire Wire Line
+	6450 4250 6450 3700
+Connection ~ 6450 3700
+Wire Wire Line
+	5300 4500 5300 4150
+Wire Wire Line
+	5300 4150 4600 4150
+Wire Wire Line
+	4600 4150 4600 3700
+Connection ~ 4600 3700
+Wire Wire Line
+	4600 3700 3800 3700
+Wire Wire Line
+	5450 4500 5450 4450
+Wire Wire Line
+	5450 4450 6550 4450
+Wire Wire Line
+	6550 4450 6550 3600
+Connection ~ 6550 3600
 $EndSCHEMATC

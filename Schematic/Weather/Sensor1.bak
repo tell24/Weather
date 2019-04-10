@@ -4,7 +4,7 @@ EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 4 13
+Sheet 4 14
 Title ""
 Date ""
 Rev ""
@@ -51,10 +51,10 @@ Wire Wire Line
 Wire Wire Line
 	4350 3950 4350 3000
 $Comp
-L Connector:Conn_01x04_Male J?
+L Connector:Conn_01x04_Male J13
 U 1 1 5CAF11D2
 P 6950 3000
-F 0 "J?" H 7000 3200 50  0000 C CNN
+F 0 "J13" H 7000 3200 50  0000 C CNN
 F 1 "Conn_01x04_Male" H 7150 3350 50  0000 C CNN
 F 2 "" H 6950 3000 50  0001 C CNN
 F 3 "~" H 6950 3000 50  0001 C CNN
@@ -62,26 +62,15 @@ F 3 "~" H 6950 3000 50  0001 C CNN
 	1    0    0    1   
 $EndComp
 $Comp
-L Connector:Conn_01x05_Female J?
-U 1 1 5CAF2250
-P 5100 1000
-F 0 "J?" H 4992 575 50  0000 C CNN
-F 1 "Conn_01x05_Female" H 4992 666 50  0000 C CNN
-F 2 "" H 5100 1000 50  0001 C CNN
-F 3 "~" H 5100 1000 50  0001 C CNN
-	1    5100 1000
-	-1   0    0    1   
-$EndComp
-$Comp
-L Connector:Conn_01x05_Male J?
+L Connector:Conn_01x05_Male J14
 U 1 1 5CAF34CD
-P 6250 1000
-F 0 "J?" H 6358 1381 50  0000 C CNN
-F 1 "Conn_01x05_Male" H 6358 1290 50  0000 C CNN
-F 2 "" H 6250 1000 50  0001 C CNN
-F 3 "~" H 6250 1000 50  0001 C CNN
-	1    6250 1000
-	1    0    0    -1  
+P 6950 4050
+F 0 "J14" H 7100 4400 50  0000 R CNN
+F 1 "Conn_01x05_Male" H 7600 4650 50  0000 R CNN
+F 2 "" H 6950 4050 50  0001 C CNN
+F 3 "~" H 6950 4050 50  0001 C CNN
+	1    6950 4050
+	1    0    0    1   
 $EndComp
 Wire Wire Line
 	5250 3950 4350 3950
@@ -116,10 +105,10 @@ F 3 "" H 7850 2350 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Connector:Conn_01x04_Female J?
+L Connector:Conn_01x04_Female J11
 U 1 1 5CAF0516
 P 6700 3000
-F 0 "J?" H 6550 2700 50  0000 L CNN
+F 0 "J11" H 6550 2700 50  0000 L CNN
 F 1 "Conn_01x04_Female" H 5950 2600 50  0000 L CNN
 F 2 "" H 6700 3000 50  0001 C CNN
 F 3 "~" H 6700 3000 50  0001 C CNN
@@ -162,4 +151,15 @@ Wire Wire Line
 	4350 2650 4350 3000
 Wire Wire Line
 	5000 2800 6500 2800
+$Comp
+L Connector:Conn_01x05_Female J12
+U 1 1 5CAF2250
+P 6750 4050
+F 0 "J12" H 6650 3700 50  0000 C CNN
+F 1 "Conn_01x05_Female" H 6350 3550 50  0000 C CNN
+F 2 "" H 6750 4050 50  0001 C CNN
+F 3 "~" H 6750 4050 50  0001 C CNN
+	1    6750 4050
+	1    0    0    1   
+$EndComp
 $EndSCHEMATC
