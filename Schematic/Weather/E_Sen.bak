@@ -14,14 +14,6 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
-Text HLabel 3200 1950 0    50   Input ~ 0
-J13_P1
-Text HLabel 3200 2050 0    50   Input ~ 0
-J23_P2
-Text HLabel 3200 2150 0    50   Input ~ 0
-J23_P3
-Text HLabel 3200 3400 0    50   Input ~ 0
-J24_P2
 $Comp
 L Weather-rescue:AO3401-Transistor_FET Q?
 U 1 1 5CAEF083
@@ -207,8 +199,6 @@ Wire Wire Line
 Connection ~ 6300 5600
 Wire Wire Line
 	6300 4250 6300 4550
-Wire Wire Line
-	5750 3400 6100 3400
 Wire Wire Line
 	5750 3500 5750 3400
 Wire Wire Line
@@ -404,8 +394,6 @@ Wire Wire Line
 Wire Wire Line
 	6350 2450 6350 2200
 Connection ~ 6350 2200
-Text HLabel 3200 3500 0    50   Input ~ 0
-J24_P3
 Wire Wire Line
 	5750 3800 5750 3900
 Wire Wire Line
@@ -459,71 +447,18 @@ Wire Wire Line
 	4600 2800 4600 3300
 Wire Wire Line
 	4750 1300 6150 1300
-$Comp
-L MyComponents:3_Way_Wire J?
-U 1 1 5CAEF15D
-P 3650 1950
-AR Path="/5C952539/5CAEF15D" Ref="J?"  Part="1" 
-AR Path="/5CAC04D1/5CAEF15D" Ref="J23"  Part="1" 
-F 0 "J23" H 3500 1550 50  0000 L CNN
-F 1 "3_Way_Wire" H 3450 1400 50  0000 L CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" H 3650 1950 50  0001 C CNN
-F 3 "" H 3650 1950 50  0001 C CNN
-	1    3650 1950
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	4600 1950 4600 2800
-Wire Wire Line
-	3200 1950 3550 1950
-Connection ~ 3550 1950
-Wire Wire Line
-	3550 1950 4600 1950
 Connection ~ 4600 2800
-$Comp
-L MyComponents:3_Way_Wire J?
-U 1 1 5CAEF168
-P 3600 3300
-AR Path="/5C952539/5CAEF168" Ref="J?"  Part="1" 
-AR Path="/5CAC04D1/5CAEF168" Ref="J24"  Part="1" 
-F 0 "J24" H 3500 2900 50  0000 L CNN
-F 1 "3_Way_Wire" H 3450 2750 50  0000 L CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" H 3600 3300 50  0001 C CNN
-F 3 "" H 3600 3300 50  0001 C CNN
-	1    3600 3300
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	3500 3300 4600 3300
 Connection ~ 4600 3300
 Wire Wire Line
 	4600 3300 4600 5600
 Wire Wire Line
 	4750 2050 4750 1300
 Wire Wire Line
-	3200 2050 3550 2050
-Connection ~ 3550 2050
-Wire Wire Line
-	3550 2050 4750 2050
-Wire Wire Line
 	4900 2100 4900 2150
 Wire Wire Line
-	4900 2150 3550 2150
-Wire Wire Line
-	3200 2150 3550 2150
-Connection ~ 3550 2150
-Wire Wire Line
-	3200 3500 3500 3500
-Wire Wire Line
-	3500 3500 5300 3500
-Wire Wire Line
 	5300 3500 5300 4750
-Connection ~ 3500 3500
-Wire Wire Line
-	3200 3400 3500 3400
-Wire Wire Line
-	3500 3400 5750 3400
-Connection ~ 3500 3400
 Connection ~ 5750 3400
 $Comp
 L Mechanical:MountingHole_Pad H?
@@ -581,4 +516,69 @@ $EndComp
 Connection ~ 8350 3900
 Wire Wire Line
 	7950 3900 8350 3900
+Wire Wire Line
+	5750 3400 6100 3400
+Connection ~ 3500 3400
+Wire Wire Line
+	3500 3400 5750 3400
+Wire Wire Line
+	3200 3400 3500 3400
+Connection ~ 3500 3500
+Wire Wire Line
+	3500 3500 5300 3500
+Wire Wire Line
+	3200 3500 3500 3500
+Connection ~ 3550 2150
+Wire Wire Line
+	3200 2150 3550 2150
+Wire Wire Line
+	4900 2150 3550 2150
+Wire Wire Line
+	3550 2050 4750 2050
+Connection ~ 3550 2050
+Wire Wire Line
+	3200 2050 3550 2050
+Wire Wire Line
+	3500 3300 4600 3300
+$Comp
+L MyComponents:3_Way_Wire J?
+U 1 1 5CAEF168
+P 3600 3300
+AR Path="/5C952539/5CAEF168" Ref="J?"  Part="1" 
+AR Path="/5CAC04D1/5CAEF168" Ref="J24"  Part="1" 
+F 0 "J24" H 3500 2900 50  0000 L CNN
+F 1 "3_Way_Wire" H 3450 2750 50  0000 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" H 3600 3300 50  0001 C CNN
+F 3 "" H 3600 3300 50  0001 C CNN
+	1    3600 3300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3550 1950 4600 1950
+Connection ~ 3550 1950
+Wire Wire Line
+	3200 1950 3550 1950
+$Comp
+L MyComponents:3_Way_Wire J?
+U 1 1 5CAEF15D
+P 3650 1950
+AR Path="/5C952539/5CAEF15D" Ref="J?"  Part="1" 
+AR Path="/5CAC04D1/5CAEF15D" Ref="J23"  Part="1" 
+F 0 "J23" H 3500 1550 50  0000 L CNN
+F 1 "3_Way_Wire" H 3450 1400 50  0000 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" H 3650 1950 50  0001 C CNN
+F 3 "" H 3650 1950 50  0001 C CNN
+	1    3650 1950
+	1    0    0    -1  
+$EndComp
+Text HLabel 3200 3500 0    50   Input ~ 0
+J24_P3
+Text HLabel 3200 3400 0    50   Input ~ 0
+J24_P2
+Text HLabel 3200 2150 0    50   Input ~ 0
+J23_P3
+Text HLabel 3200 2050 0    50   Input ~ 0
+J23_P2
+Text HLabel 3200 1950 0    50   Input ~ 0
+J23_P1
 $EndSCHEMATC
