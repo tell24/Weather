@@ -4,7 +4,7 @@ EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 13 15
+Sheet 11 15
 Title ""
 Date ""
 Rev ""
@@ -254,8 +254,8 @@ $Comp
 L Connector:Conn_01x04_Female J2
 U 1 1 5CAF2DD7
 P 7200 2900
-F 0 "J2" H 7228 2876 50  0000 L CNN
-F 1 "Conn_01x04_Female" H 7228 2785 50  0000 L CNN
+F 0 "J2" H 7100 2600 50  0000 L CNN
+F 1 "Conn_01x04_Female" H 6700 3150 50  0000 L CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical" H 7200 2900 50  0001 C CNN
 F 3 "~" H 7200 2900 50  0001 C CNN
 	1    7200 2900
@@ -276,14 +276,7 @@ Wire Wire Line
 	7450 3250 7450 3600
 Connection ~ 7450 3600
 Wire Wire Line
-	7300 3800 7300 3200
-Wire Wire Line
-	7300 3200 6850 3200
-Wire Wire Line
-	6850 3200 6850 3100
-Wire Wire Line
 	6850 3100 7000 3100
-Connection ~ 7300 3800
 Wire Wire Line
 	7150 3700 7150 3300
 Wire Wire Line
@@ -297,42 +290,38 @@ Wire Wire Line
 	5750 1900 5750 2800
 Wire Wire Line
 	4800 4250 7000 4250
-Text HLabel 7950 1400 2    50   Input ~ 0
-J17_P1
-Text HLabel 7950 1600 2    50   Input ~ 0
-J17_P2
-Text HLabel 7950 1800 2    50   Input ~ 0
-J17_P3
-Text HLabel 7950 2000 2    50   Input ~ 0
-J17_P4
-Wire Wire Line
-	5750 1900 5750 1400
-Wire Wire Line
-	5750 1400 7950 1400
-Connection ~ 5750 1900
-Wire Wire Line
-	6700 2900 6700 1600
-Wire Wire Line
-	6700 1600 7950 1600
-Connection ~ 6700 2900
-Wire Wire Line
-	6800 3100 6800 2000
-Wire Wire Line
-	6800 2000 7950 2000
-Wire Wire Line
-	6550 3000 6550 1800
-Wire Wire Line
-	6550 1800 7950 1800
-Connection ~ 6550 3000
+Text HLabel 8950 1400 2    50   Input ~ 0
+J1_P1
+Text HLabel 8950 1600 2    50   Input ~ 0
+J1_P2
+Text HLabel 8950 1800 2    50   Input ~ 0
+J1_P3
+Text HLabel 8950 2000 2    50   Input ~ 0
+J1_P4
 $Comp
 L Connector:Conn_01x05_Female J1
 U 1 1 5CB40D1B
-P 7200 2350
-F 0 "J1" H 7050 2050 50  0000 L CNN
-F 1 "Conn_01x05_Female" H 7228 2285 50  0000 L CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical" H 7200 2350 50  0001 C CNN
-F 3 "~" H 7200 2350 50  0001 C CNN
-	1    7200 2350
+P 7200 1650
+F 0 "J1" H 7050 1350 50  0000 L CNN
+F 1 "Conn_01x05_Female" H 6600 1200 50  0000 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical" H 7200 1650 50  0001 C CNN
+F 3 "~" H 7200 1650 50  0001 C CNN
+	1    7200 1650
 	1    0    0    -1  
 $EndComp
+Text HLabel 9000 3300 2    50   Input ~ 0
+J2_P1
+Text HLabel 9000 3500 2    50   Input ~ 0
+J2_P2
+Text HLabel 9000 3700 2    50   Input ~ 0
+J2_P3
+Text HLabel 9000 3900 2    50   Input ~ 0
+J2_P4
+Connection ~ 7300 3800
+Wire Wire Line
+	7300 3800 7300 3400
+Wire Wire Line
+	6850 3400 7300 3400
+Wire Wire Line
+	6850 3100 6850 3400
 $EndSCHEMATC

@@ -15,11 +15,11 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 Text HLabel 2500 2000 0    50   Input ~ 0
-J5_P1
+J7_P1
 Text HLabel 2500 2250 0    50   Input ~ 0
-J5_P2
+J7_P2
 Text HLabel 2500 2500 0    50   Input ~ 0
-J5_P3
+J7_P3
 $Comp
 L MyComponents:PowerBrick PSU2
 U 1 1 5C96411B
@@ -43,35 +43,40 @@ F 3 "" H 4250 2300 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	2500 2250 3500 2250
-Wire Wire Line
-	3500 2250 3500 2000
-Wire Wire Line
-	3500 2000 3950 2000
-Wire Wire Line
-	2500 2000 3000 2000
-Wire Wire Line
-	3000 2000 3000 2750
-Wire Wire Line
-	3000 2750 3750 2750
+	2500 2250 2750 2250
 Wire Wire Line
 	3950 2250 3750 2250
 Wire Wire Line
 	3750 2250 3750 2750
-Connection ~ 3750 2750
 Wire Wire Line
 	3750 2750 3950 2750
 Wire Wire Line
-	3950 2500 2500 2500
+	3950 2500 2750 2500
 $Comp
 L MyComponents:3_Way_Wire J7
 U 1 1 5CB57954
-P 3300 1350
-F 0 "J7" H 3469 1311 50  0000 L CNN
-F 1 "3_Way_Wire" H 3469 1220 50  0000 L CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" H 3300 1350 50  0001 C CNN
-F 3 "" H 3300 1350 50  0001 C CNN
-	1    3300 1350
+P 2850 2150
+F 0 "J7" H 2850 2400 50  0000 L CNN
+F 1 "3_Way_Wire" H 2750 2500 50  0000 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" H 2850 2150 50  0001 C CNN
+F 3 "" H 2850 2150 50  0001 C CNN
+	1    2850 2150
 	1    0    0    -1  
 $EndComp
+Wire Wire Line
+	2750 2250 3750 2250
+Connection ~ 2750 2250
+Connection ~ 3750 2250
+Wire Wire Line
+	2500 2000 2750 2000
+Wire Wire Line
+	2750 2000 2750 2150
+Wire Wire Line
+	3950 2000 2750 2000
+Connection ~ 2750 2000
+Wire Wire Line
+	2750 2350 2750 2500
+Connection ~ 2750 2500
+Wire Wire Line
+	2750 2500 2500 2500
 $EndSCHEMATC

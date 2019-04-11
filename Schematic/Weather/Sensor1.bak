@@ -14,13 +14,13 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
-Text HLabel 3050 2650 0    50   Input ~ 0
+Text HLabel 4350 2650 0    50   Input ~ 0
 J4_P1
-Text HLabel 3050 2800 0    50   Input ~ 0
+Text HLabel 4350 2800 0    50   Input ~ 0
 J4_P2
-Text HLabel 3050 2950 0    50   Input ~ 0
+Text HLabel 4350 2950 0    50   Input ~ 0
 J4_P3
-Text HLabel 3050 3100 0    50   Input ~ 0
+Text HLabel 4350 3100 0    50   Input ~ 0
 J4_P4
 $Comp
 L MyComponents:HTU21 MOD1
@@ -36,12 +36,12 @@ $EndComp
 $Comp
 L MyComponents:4_Way_Wire J4
 U 1 1 5CAF466F
-P 4500 2550
-F 0 "J4" H 4669 2311 50  0000 L CNN
-F 1 "4_Way_Wire" H 4669 2220 50  0000 L CNN
-F 2 "" H 4400 2600 50  0001 C CNN
-F 3 "" H 4400 2600 50  0001 C CNN
-	1    4500 2550
+P 5050 2600
+F 0 "J4" H 5219 2361 50  0000 L CNN
+F 1 "4_Way_Wire" H 5219 2270 50  0000 L CNN
+F 2 "" H 4950 2650 50  0001 C CNN
+F 3 "" H 4950 2650 50  0001 C CNN
+	1    5050 2600
 	1    0    0    -1  
 $EndComp
 $EndSCHEMATC

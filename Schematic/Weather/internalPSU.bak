@@ -14,73 +14,73 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
-Text HLabel 2000 2000 0    50   Input ~ 0
+Text HLabel 4700 3150 0    50   Input ~ 0
 J0_P1
-Text HLabel 2000 1750 0    50   Input ~ 0
+Text HLabel 4700 2900 0    50   Input ~ 0
 J0_P2
 $Comp
 L power:GND #PWR01
 U 1 1 5C92A263
-P 2500 2450
-F 0 "#PWR01" H 2500 2200 50  0001 C CNN
-F 1 "GND" H 2505 2277 50  0000 C CNN
-F 2 "" H 2500 2450 50  0001 C CNN
-F 3 "" H 2500 2450 50  0001 C CNN
-	1    2500 2450
+P 5200 3600
+F 0 "#PWR01" H 5200 3350 50  0001 C CNN
+F 1 "GND" H 5205 3427 50  0000 C CNN
+F 2 "" H 5200 3600 50  0001 C CNN
+F 3 "" H 5200 3600 50  0001 C CNN
+	1    5200 3600
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	2000 2000 2100 2000
+	4700 3150 4800 3150
 Wire Wire Line
-	2500 2000 2500 2450
-Text Label 2500 2250 0    50   ~ 0
+	5200 3150 5200 3600
+Text Label 5200 3400 0    50   ~ 0
 0v
 $Comp
 L MyComponents:PowerBrick PSU1
 U 1 1 5C92F4FB
-P 3000 1850
-F 0 "PSU1" H 3628 1871 50  0000 L CNN
-F 1 "PowerBrick" H 3628 1780 50  0000 L CNN
-F 2 "footprint:PowerBrick" H 3200 1550 50  0001 C CNN
-F 3 "" H 3200 1550 50  0001 C CNN
-	1    3000 1850
+P 5700 3000
+F 0 "PSU1" H 6328 3021 50  0000 L CNN
+F 1 "PowerBrick" H 6328 2930 50  0000 L CNN
+F 2 "footprint:PowerBrick" H 5900 2700 50  0001 C CNN
+F 3 "" H 5900 2700 50  0001 C CNN
+	1    5700 3000
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	2000 1750 2100 1750
+	4700 2900 4800 2900
 Wire Wire Line
-	2900 2000 2500 2000
-Connection ~ 2500 2000
+	5600 3150 5200 3150
+Connection ~ 5200 3150
 $Comp
 L Mechanical:MountingHole_Pad H?
 U 1 1 5CB5C4AF
-P 2100 1650
+P 4800 2800
 AR Path="/5CAF7F5D/5CB5C4AF" Ref="H?"  Part="1" 
 AR Path="/5C9252D8/5CB5C4AF" Ref="H1"  Part="1" 
-F 0 "H1" H 2050 1850 50  0000 L CNN
-F 1 "MountingHole_Pad" H 1500 1950 50  0000 L CNN
-F 2 "Connector_Wire:SolderWirePad_1x01_Drill0.8mm" H 2100 1650 50  0001 C CNN
-F 3 "~" H 2100 1650 50  0001 C CNN
-	1    2100 1650
+F 0 "H1" H 4750 3000 50  0000 L CNN
+F 1 "MountingHole_Pad" H 4200 3100 50  0000 L CNN
+F 2 "Connector_Wire:SolderWirePad_1x01_Drill0.8mm" H 4800 2800 50  0001 C CNN
+F 3 "~" H 4800 2800 50  0001 C CNN
+	1    4800 2800
 	1    0    0    -1  
 $EndComp
 $Comp
 L Mechanical:MountingHole_Pad H?
 U 1 1 5CB5D5F2
-P 2100 2100
+P 4800 3250
 AR Path="/5CAF7F5D/5CB5D5F2" Ref="H?"  Part="1" 
 AR Path="/5C9252D8/5CB5D5F2" Ref="H2"  Part="1" 
-F 0 "H2" H 2100 2300 50  0000 L CNN
-F 1 "MountingHole_Pad" H 2050 2400 50  0000 L CNN
-F 2 "Connector_Wire:SolderWirePad_1x01_Drill0.8mm" H 2100 2100 50  0001 C CNN
-F 3 "~" H 2100 2100 50  0001 C CNN
-	1    2100 2100
+F 0 "H2" H 4800 3450 50  0000 L CNN
+F 1 "MountingHole_Pad" H 4750 3550 50  0000 L CNN
+F 2 "Connector_Wire:SolderWirePad_1x01_Drill0.8mm" H 4800 3250 50  0001 C CNN
+F 3 "~" H 4800 3250 50  0001 C CNN
+	1    4800 3250
 	-1   0    0    1   
 $EndComp
-Connection ~ 2100 2000
+Connection ~ 4800 3150
 Wire Wire Line
-	2100 2000 2500 2000
-Connection ~ 2100 1750
+	4800 3150 5200 3150
+Connection ~ 4800 2900
 Wire Wire Line
-	2100 1750 2900 1750
+	4800 2900 5600 2900
 $EndSCHEMATC

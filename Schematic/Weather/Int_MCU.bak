@@ -15,17 +15,17 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 Text HLabel 4700 4500 3    50   Input ~ 0
-J3_P6
+J6_P6
 Text HLabel 4850 4500 3    50   Input ~ 0
-J3_P5
+J6_P5
 Text HLabel 5450 4500 3    50   Input ~ 0
-J3_P1
+J6_P1
 Text HLabel 5300 4500 3    50   Input ~ 0
-J3_P2
+J6_P2
 Text HLabel 5150 4500 3    50   Input ~ 0
-J3_P3
+J6_P3
 Text HLabel 5000 4500 3    50   Input ~ 0
-J3_P4
+J6_P4
 $Comp
 L Weather-rescue:ESP-01v090-ESP8266 U?
 U 1 1 5C9306F6

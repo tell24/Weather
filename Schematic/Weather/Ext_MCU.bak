@@ -15,29 +15,29 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 Text HLabel 2650 3100 0    50   Input ~ 0
-J8_P1
+J14_P1
 Text HLabel 2650 3300 0    50   Input ~ 0
-J8_P2
+J14_P2
 Text HLabel 2650 3500 0    50   Input ~ 0
-J8_P3
+J14_P3
 Text HLabel 2650 3700 0    50   Input ~ 0
-J8_P4
+J14_P4
 Text HLabel 2600 4400 0    50   Input ~ 0
-J9_P1
+J15_P1
 Text HLabel 2600 4600 0    50   Input ~ 0
-J9_P2
+J15_P2
 Text HLabel 2600 4800 0    50   Input ~ 0
-J9_P3
+J15_P3
 Text HLabel 2600 5000 0    50   Input ~ 0
-J9_P4
+J15_P4
 Text HLabel 2600 5400 0    50   Input ~ 0
-J10_P1
+J16_P1
 Text HLabel 2600 5600 0    50   Input ~ 0
-J10_p2
+J16_p2
 Text HLabel 2600 5800 0    50   Input ~ 0
-J10_P3
+J16_P3
 Text HLabel 2600 6000 0    50   Input ~ 0
-J10_P4
+J16_P4
 $Comp
 L Weather-rescue:ESP-01v090-ESP8266 U?
 U 1 1 5C950A1B
