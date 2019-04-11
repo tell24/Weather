@@ -262,7 +262,7 @@ F 3 "~" H 7200 2900 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	7000 2800 5750 2800
+	7000 2800 6550 2800
 Wire Wire Line
 	5750 1900 4000 1900
 Connection ~ 4000 1900
@@ -324,4 +324,37 @@ Wire Wire Line
 	6850 3400 7300 3400
 Wire Wire Line
 	6850 3100 6850 3400
+Text HLabel 8950 2200 2    50   Input ~ 0
+J1_P5
+Wire Wire Line
+	7300 4400 8750 4400
+Wire Wire Line
+	8750 4400 8750 3900
+Wire Wire Line
+	8750 3900 9000 3900
+Connection ~ 7300 4400
+Wire Wire Line
+	7150 4100 8500 4100
+Wire Wire Line
+	8500 4100 8500 3700
+Wire Wire Line
+	8500 3700 9000 3700
+Connection ~ 7150 4100
+Wire Wire Line
+	7500 3600 8550 3600
+Wire Wire Line
+	8550 3600 8550 3500
+Wire Wire Line
+	8550 3500 9000 3500
+Wire Wire Line
+	6550 2800 6550 2450
+Wire Wire Line
+	6550 2450 8050 2450
+Wire Wire Line
+	8050 2450 8050 3300
+Wire Wire Line
+	8050 3300 9000 3300
+Connection ~ 6550 2800
+Wire Wire Line
+	6550 2800 5750 2800
 $EndSCHEMATC

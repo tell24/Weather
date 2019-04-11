@@ -30,27 +30,14 @@ Text HLabel 2600 4800 0    50   Input ~ 0
 J15_P3
 Text HLabel 2600 5000 0    50   Input ~ 0
 J15_P4
-Text HLabel 2600 5400 0    50   Input ~ 0
+Text HLabel 2600 5700 0    50   Input ~ 0
 J16_P1
-Text HLabel 2600 5600 0    50   Input ~ 0
+Text HLabel 2600 5900 0    50   Input ~ 0
 J16_p2
-Text HLabel 2600 5800 0    50   Input ~ 0
+Text HLabel 2600 6100 0    50   Input ~ 0
 J16_P3
-Text HLabel 2600 6000 0    50   Input ~ 0
+Text HLabel 2600 6300 0    50   Input ~ 0
 J16_P4
-$Comp
-L Weather-rescue:ESP-01v090-ESP8266 U?
-U 1 1 5C950A1B
-P 5550 3650
-AR Path="/5C950A1B" Ref="U?"  Part="1" 
-AR Path="/5C93D4CF/5C950A1B" Ref="U3"  Part="1" 
-F 0 "U3" H 5550 4165 50  0000 C CNN
-F 1 "ESP-01v090" H 5550 4074 50  0000 C CNN
-F 2 "footprint:ESP-01" H 5550 3650 50  0001 C CNN
-F 3 "http://l0l.org.uk/2014/12/esp8266-modules-hardware-guide-gotta-catch-em-all/" H 5550 3650 50  0001 C CNN
-	1    5550 3650
-	1    0    0    -1  
-$EndComp
 $Comp
 L MyComponents:4_Way_Wire J14
 U 1 1 5C964519
@@ -74,36 +61,19 @@ F 3 "" H 3200 1950 60  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 Wire Wire Line
-	6500 3500 6500 2850
-Wire Wire Line
-	6500 2850 3650 2850
-Wire Wire Line
-	3100 2850 3100 3100
-Wire Wire Line
 	3650 2200 3650 2850
-Connection ~ 3650 2850
-Wire Wire Line
-	3650 2850 3100 2850
 Wire Wire Line
 	3650 1700 4000 1700
 Wire Wire Line
 	4000 1700 4000 3600
 Wire Wire Line
-	4000 3600 3100 3600
-Wire Wire Line
-	3100 3600 3100 3700
-Wire Wire Line
 	3650 1950 4300 1950
-Wire Wire Line
-	4300 1950 4300 3800
-Wire Wire Line
-	4300 3800 4600 3800
 $Comp
 L MyComponents:4_Way_Wire J15
 U 1 1 5CB477D0
 P 3150 4400
-F 0 "J15" H 3319 4161 50  0000 L CNN
-F 1 "4_Way_Wire" H 3319 4070 50  0000 L CNN
+F 0 "J15" H 3000 3650 50  0000 L CNN
+F 1 "4_Way_Wire" H 2900 3500 50  0000 L CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical" H 3050 4450 50  0001 C CNN
 F 3 "" H 3050 4450 50  0001 C CNN
 	1    3150 4400
@@ -112,12 +82,147 @@ $EndComp
 $Comp
 L MyComponents:4_Way_Wire J16
 U 1 1 5CB50010
-P 3150 5400
-F 0 "J16" H 3319 5161 50  0000 L CNN
-F 1 "4_Way_Wire" H 3319 5070 50  0000 L CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical" H 3050 5450 50  0001 C CNN
-F 3 "" H 3050 5450 50  0001 C CNN
-	1    3150 5400
+P 3150 5700
+F 0 "J16" H 3000 4950 50  0000 L CNN
+F 1 "4_Way_Wire" H 2900 4850 50  0000 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical" H 3050 5750 50  0001 C CNN
+F 3 "" H 3050 5750 50  0001 C CNN
+	1    3150 5700
 	1    0    0    -1  
 $EndComp
+Wire Wire Line
+	3000 3100 3000 2850
+Wire Wire Line
+	3000 2850 3650 2850
+Wire Wire Line
+	3000 3700 3000 3600
+Wire Wire Line
+	3000 3600 4000 3600
+$Comp
+L ESP8266:ESP-12 U3
+U 1 1 5CB467A8
+P 5950 2650
+F 0 "U3" H 5950 3731 50  0000 C CNN
+F 1 "ESP-12" H 5950 3640 50  0000 C CNN
+F 2 "" H 5950 2650 50  0001 C CNN
+F 3 "http://l0l.org.uk/2014/12/esp8266-modules-hardware-guide-gotta-catch-em-all/" H 5950 2650 50  0001 C CNN
+	1    5950 2650
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4300 1950 4300 1750
+Wire Wire Line
+	4300 1750 5950 1750
+Wire Wire Line
+	4000 3600 5950 3600
+Wire Wire Line
+	5950 3600 5950 3550
+Connection ~ 4000 3600
+Wire Wire Line
+	5050 2850 4250 2850
+Wire Wire Line
+	4250 2850 4250 3200
+Wire Wire Line
+	4250 3200 3000 3200
+Wire Wire Line
+	3000 3200 3000 3300
+Wire Wire Line
+	3000 3500 3000 3400
+Wire Wire Line
+	3000 3400 4400 3400
+Wire Wire Line
+	4400 3400 4400 2950
+Wire Wire Line
+	4400 2950 5050 2950
+Wire Wire Line
+	3650 2850 3650 4250
+Wire Wire Line
+	3650 4250 3050 4250
+Wire Wire Line
+	3050 4250 3050 4400
+Connection ~ 3650 2850
+Wire Wire Line
+	3650 4250 3650 5550
+Wire Wire Line
+	3650 5550 3050 5550
+Wire Wire Line
+	3050 5550 3050 5700
+Connection ~ 3650 4250
+Wire Wire Line
+	4000 3600 4000 4900
+Wire Wire Line
+	4000 4900 3050 4900
+Wire Wire Line
+	3050 4900 3050 5000
+Wire Wire Line
+	4000 4900 4000 6200
+Wire Wire Line
+	4000 6200 3050 6200
+Wire Wire Line
+	3050 6200 3050 6300
+Connection ~ 4000 4900
+Wire Wire Line
+	4250 3200 4250 4500
+Wire Wire Line
+	4250 4500 3050 4500
+Wire Wire Line
+	3050 4500 3050 4600
+Connection ~ 4250 3200
+Wire Wire Line
+	4400 3400 4400 4700
+Wire Wire Line
+	4400 4700 3050 4700
+Wire Wire Line
+	3050 4700 3050 4800
+Connection ~ 4400 3400
+Wire Wire Line
+	4250 4500 4250 5800
+Wire Wire Line
+	4250 5800 3050 5800
+Wire Wire Line
+	3050 5800 3050 5900
+Connection ~ 4250 4500
+Wire Wire Line
+	4400 4700 4400 6000
+Wire Wire Line
+	4400 6000 3050 6000
+Wire Wire Line
+	3050 6000 3050 6100
+Connection ~ 4400 4700
+Wire Wire Line
+	2600 6300 3050 6300
+Connection ~ 3050 6300
+Wire Wire Line
+	2600 6100 3050 6100
+Connection ~ 3050 6100
+Wire Wire Line
+	2600 5900 3050 5900
+Connection ~ 3050 5900
+Wire Wire Line
+	2600 5700 3050 5700
+Connection ~ 3050 5700
+Wire Wire Line
+	2600 5000 3050 5000
+Connection ~ 3050 5000
+Wire Wire Line
+	2600 4800 3050 4800
+Connection ~ 3050 4800
+Wire Wire Line
+	2600 4600 3050 4600
+Connection ~ 3050 4600
+Wire Wire Line
+	2600 4400 3050 4400
+Connection ~ 3050 4400
+Wire Wire Line
+	2650 3100 3000 3100
+Connection ~ 3000 3100
+Wire Wire Line
+	2650 3300 3000 3300
+Connection ~ 3000 3300
+Wire Wire Line
+	2650 3500 3000 3500
+Connection ~ 3000 3500
+Wire Wire Line
+	2650 3700 3000 3700
+Connection ~ 3000 3700
 $EndSCHEMATC
