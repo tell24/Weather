@@ -18,14 +18,6 @@ Text HLabel 2600 3750 0    50   Input ~ 0
 J0_P1
 Text HLabel 2600 3400 0    50   Input ~ 0
 J0_P2
-Text HLabel 7000 4700 3    50   Input ~ 0
-J3_P1
-Text HLabel 6850 4700 3    50   Input ~ 0
-J3_P2
-Text HLabel 6700 4700 3    50   Input ~ 0
-J3_P3
-Text HLabel 6550 4700 3    50   Input ~ 0
-J3_P4
 Wire Wire Line
 	2600 3750 2700 3750
 Wire Wire Line
@@ -162,16 +154,6 @@ Wire Wire Line
 Connection ~ 2700 3400
 Wire Wire Line
 	2700 3400 2950 3400
-Text HLabel 6400 4700 3    50   Input ~ 0
-J3_P5
-Text HLabel 6250 4700 3    50   Input ~ 0
-J3_P6
-Wire Wire Line
-	7450 4250 7000 4250
-Connection ~ 4800 4250
-Wire Wire Line
-	7000 4700 7000 4250
-Connection ~ 7000 4250
 Wire Wire Line
 	4200 2500 5050 2500
 Wire Wire Line
@@ -179,182 +161,236 @@ Wire Wire Line
 Wire Wire Line
 	4850 3700 4800 3700
 Connection ~ 4800 3700
-Wire Wire Line
-	6350 3900 5400 3900
-Wire Wire Line
-	6250 4500 5400 4500
-Wire Wire Line
-	5400 4500 5400 3900
-Wire Wire Line
-	6250 4500 6250 4700
-Connection ~ 5400 3900
-Wire Wire Line
-	5400 3900 4850 3900
-Wire Wire Line
-	6400 4400 6400 4700
-Wire Wire Line
-	6100 4200 6550 4200
-Wire Wire Line
-	6550 4200 6550 4700
-Wire Wire Line
-	6350 3800 6100 3800
-Connection ~ 6100 3800
-Wire Wire Line
-	6100 3800 6100 4200
-Wire Wire Line
-	7300 4400 6400 4400
-Wire Wire Line
-	7300 4400 7300 3800
-Wire Wire Line
-	7300 3800 6850 3800
 Connection ~ 4200 2500
 Wire Wire Line
 	4200 2500 4200 3700
 Wire Wire Line
-	5050 3800 6100 3800
-Wire Wire Line
 	5050 2800 5050 3800
 Wire Wire Line
-	6850 3600 7450 3600
+	5300 2800 5300 3700
+Text HLabel 10250 1600 2    50   Input ~ 0
+J1_P1
+Text HLabel 10250 1800 2    50   Input ~ 0
+J1_P2
+Text HLabel 10250 2000 2    50   Input ~ 0
+J1_P3
+Text HLabel 10250 2400 2    50   Input ~ 0
+J1_P5
+Text HLabel 10300 4050 2    50   Input ~ 0
+J2_P4
+Text HLabel 10300 3850 2    50   Input ~ 0
+J2_P3
+Text HLabel 10300 3650 2    50   Input ~ 0
+J2_P2
+Text HLabel 10300 3450 2    50   Input ~ 0
+J2_P1
+$Comp
+L Connector:Conn_01x05_Female J1
+U 1 1 5CB40D1B
+P 9000 1950
+F 0 "J1" H 8950 2300 50  0000 L CNN
+F 1 "Conn_01x05_Female" H 8750 1500 50  0000 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical" H 9000 1950 50  0001 C CNN
+F 3 "~" H 9000 1950 50  0001 C CNN
+	1    9000 1950
+	1    0    0    -1  
+$EndComp
+Text HLabel 10250 2200 2    50   Input ~ 0
+J1_P4
+Connection ~ 4800 4250
 Wire Wire Line
-	7450 3600 7450 4250
+	4800 4250 7000 4250
+$Comp
+L Connector:Conn_01x04_Female J2
+U 1 1 5CAF2DD7
+P 9050 3700
+F 0 "J2" H 8950 3400 50  0000 L CNN
+F 1 "Conn_01x04_Female" H 8550 3950 50  0000 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical" H 9050 3700 50  0001 C CNN
+F 3 "~" H 9050 3700 50  0001 C CNN
+	1    9050 3700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6250 3700 5300 3700
+Wire Wire Line
+	6250 4000 6250 3700
+Wire Wire Line
+	6850 4000 6250 4000
+Wire Wire Line
+	6850 4700 6850 4000
+Wire Wire Line
+	7150 3700 6850 3700
+Wire Wire Line
+	7150 4100 7150 3700
+Wire Wire Line
+	6700 4100 7150 4100
+Wire Wire Line
+	6700 4700 6700 4100
+Connection ~ 6250 3700
+Wire Wire Line
+	6350 3700 6250 3700
 $Comp
 L Connector_Generic:Conn_02x04_Odd_Even J3
 U 1 1 5CB2F470
 P 6550 3700
 F 0 "J3" H 6600 4017 50  0000 C CNN
-F 1 "Conn_02x04_Odd_Even" H 6600 3926 50  0000 C CNN
+F 1 "Conn_02x04_Odd_Even" H 6900 4100 50  0000 C CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_2x04_P2.54mm_Vertical" H 6550 3700 50  0001 C CNN
 F 3 "~" H 6550 3700 50  0001 C CNN
 	1    6550 3700
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	6350 3700 6250 3700
+	7450 3600 7450 4250
 Wire Wire Line
-	5300 2800 5300 3700
+	6850 3600 7450 3600
 Wire Wire Line
-	6700 4700 6700 4100
+	5050 3800 6100 3800
 Wire Wire Line
-	6700 4100 7150 4100
+	7300 3800 6850 3800
 Wire Wire Line
-	7150 4100 7150 3700
+	7300 4400 7300 3800
 Wire Wire Line
-	7150 3700 6850 3700
+	7300 4400 6400 4400
 Wire Wire Line
-	6850 4700 6850 4000
+	6100 3800 6100 4200
+Connection ~ 6100 3800
 Wire Wire Line
-	6850 4000 6250 4000
+	6350 3800 6100 3800
 Wire Wire Line
-	6250 4000 6250 3700
-Connection ~ 6250 3700
+	6550 4200 6550 4700
 Wire Wire Line
-	6250 3700 5300 3700
-$Comp
-L Connector:Conn_01x04_Female J2
-U 1 1 5CAF2DD7
-P 7200 2900
-F 0 "J2" H 7100 2600 50  0000 L CNN
-F 1 "Conn_01x04_Female" H 6700 3150 50  0000 L CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical" H 7200 2900 50  0001 C CNN
-F 3 "~" H 7200 2900 50  0001 C CNN
-	1    7200 2900
-	1    0    0    -1  
-$EndComp
+	6100 4200 6550 4200
 Wire Wire Line
-	7000 2800 6550 2800
+	6400 4400 6400 4700
 Wire Wire Line
-	5750 1900 4000 1900
+	5400 3900 4850 3900
+Wire Wire Line
+	6250 4500 6250 4700
+Wire Wire Line
+	5400 4500 5400 3900
+Wire Wire Line
+	6250 4500 5400 4500
+Connection ~ 5400 3900
+Wire Wire Line
+	6350 3900 5400 3900
+Wire Wire Line
+	7000 4700 7000 4250
+Connection ~ 7000 4250
+Wire Wire Line
+	7450 4250 7000 4250
+Text HLabel 6250 4700 3    50   Input ~ 0
+J3_P6
+Text HLabel 6400 4700 3    50   Input ~ 0
+J3_P5
+Text HLabel 6550 4700 3    50   Input ~ 0
+J3_P4
+Text HLabel 6700 4700 3    50   Input ~ 0
+J3_P3
+Text HLabel 6850 4700 3    50   Input ~ 0
+J3_P2
+Text HLabel 7000 4700 3    50   Input ~ 0
+J3_P1
+Wire Wire Line
+	10250 1600 8050 1600
+Wire Wire Line
+	8050 1750 8800 1750
+Wire Wire Line
+	8050 1750 8050 3300
+Wire Wire Line
+	8050 3600 8850 3600
+Connection ~ 8050 1750
+Wire Wire Line
+	10300 3450 10300 3300
+Wire Wire Line
+	10300 3300 8050 3300
+Connection ~ 8050 3300
+Wire Wire Line
+	8050 3300 8050 3600
+Wire Wire Line
+	7450 3600 8050 3600
+Connection ~ 7450 3600
+Connection ~ 8050 3600
+Wire Wire Line
+	8800 2050 8500 2050
+Wire Wire Line
+	7700 2050 7700 1900
+Wire Wire Line
+	7700 1900 4000 1900
 Connection ~ 4000 1900
 Wire Wire Line
-	7000 2900 6700 2900
+	8850 3900 8550 3900
 Wire Wire Line
-	6700 2900 6700 3250
+	7700 3900 7700 2050
+Connection ~ 7700 2050
 Wire Wire Line
-	6700 3250 7450 3250
+	10250 2200 9950 2200
 Wire Wire Line
-	7450 3250 7450 3600
-Connection ~ 7450 3600
+	9950 2250 8500 2250
 Wire Wire Line
-	6850 3100 7000 3100
+	8500 2250 8500 2050
+Connection ~ 8500 2050
 Wire Wire Line
-	7150 3700 7150 3300
+	8500 2050 7700 2050
 Wire Wire Line
-	7150 3300 6550 3300
+	10300 4050 8550 4050
 Wire Wire Line
-	6550 3300 6550 3000
+	8550 4050 8550 3900
+Connection ~ 8550 3900
 Wire Wire Line
-	6550 3000 7000 3000
-Connection ~ 7150 3700
+	8550 3900 7700 3900
 Wire Wire Line
-	5750 1900 5750 2800
+	8800 1950 8500 1950
 Wire Wire Line
-	4800 4250 7000 4250
-Text HLabel 8950 1400 2    50   Input ~ 0
-J1_P1
-Text HLabel 8950 1600 2    50   Input ~ 0
-J1_P2
-Text HLabel 8950 1800 2    50   Input ~ 0
-J1_P3
-Text HLabel 8950 2000 2    50   Input ~ 0
-J1_P4
-$Comp
-L Connector:Conn_01x05_Female J1
-U 1 1 5CB40D1B
-P 7200 1650
-F 0 "J1" H 7050 1350 50  0000 L CNN
-F 1 "Conn_01x05_Female" H 6600 1200 50  0000 L CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical" H 7200 1650 50  0001 C CNN
-F 3 "~" H 7200 1650 50  0001 C CNN
-	1    7200 1650
-	1    0    0    -1  
-$EndComp
-Text HLabel 9000 3300 2    50   Input ~ 0
-J2_P1
-Text HLabel 9000 3500 2    50   Input ~ 0
-J2_P2
-Text HLabel 9000 3700 2    50   Input ~ 0
-J2_P3
-Text HLabel 9000 3900 2    50   Input ~ 0
-J2_P4
-Connection ~ 7300 3800
+	6100 1950 6100 3800
 Wire Wire Line
-	7300 3800 7300 3400
+	8800 1850 8400 1850
 Wire Wire Line
-	6850 3400 7300 3400
+	6250 1850 6250 3700
 Wire Wire Line
-	6850 3100 6850 3400
-Text HLabel 8950 2200 2    50   Input ~ 0
-J1_P5
+	8850 3700 8700 3700
 Wire Wire Line
-	7300 4400 8750 4400
+	8400 3700 8400 1850
+Connection ~ 8400 1850
 Wire Wire Line
-	8750 4400 8750 3900
+	8400 1850 6250 1850
 Wire Wire Line
-	8750 3900 9000 3900
-Connection ~ 7300 4400
+	8850 3800 8700 3800
 Wire Wire Line
-	7150 4100 8500 4100
+	8200 3800 8200 1950
+Connection ~ 8200 1950
 Wire Wire Line
-	8500 4100 8500 3700
+	8200 1950 6100 1950
 Wire Wire Line
-	8500 3700 9000 3700
-Connection ~ 7150 4100
+	10300 3650 10300 3500
 Wire Wire Line
-	7500 3600 8550 3600
+	10300 3500 8700 3500
 Wire Wire Line
-	8550 3600 8550 3500
+	8700 3500 8700 3700
+Connection ~ 8700 3700
 Wire Wire Line
-	8550 3500 9000 3500
+	8700 3700 8400 3700
 Wire Wire Line
-	6550 2800 6550 2450
+	10300 3850 8700 3850
 Wire Wire Line
-	6550 2450 8050 2450
+	8700 3850 8700 3800
+Connection ~ 8700 3800
 Wire Wire Line
-	8050 2450 8050 3300
+	8700 3800 8200 3800
 Wire Wire Line
-	8050 3300 9000 3300
-Connection ~ 6550 2800
+	8050 1600 8050 1750
 Wire Wire Line
-	6550 2800 5750 2800
+	9950 2200 9950 2250
+Wire Wire Line
+	10250 1800 8400 1800
+Wire Wire Line
+	8400 1800 8400 1850
+Wire Wire Line
+	10250 2000 8500 2000
+Wire Wire Line
+	8500 2000 8500 1950
+Connection ~ 8500 1950
+Wire Wire Line
+	8500 1950 8200 1950
 $EndSCHEMATC
