@@ -51,7 +51,7 @@ U 1 1 5CAF5E59
 P 4900 3150
 F 0 "J5" H 4800 2250 50  0000 L CNN
 F 1 "5_Way_Wire" H 4800 3400 50  0000 L CNN
-F 2 "" H 4900 3150 50  0001 C CNN
+F 2 "Connector_PinSocket_2.54mm:PinSocket_1x05_P2.54mm_Vertical" H 4900 3150 50  0001 C CNN
 F 3 "" H 4900 3150 50  0001 C CNN
 	1    4900 3150
 	1    0    0    -1  

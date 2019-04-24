@@ -104,7 +104,7 @@ U 1 1 5CB467A8
 P 5950 2650
 F 0 "U3" H 5950 3731 50  0000 C CNN
 F 1 "ESP-12" H 5950 3640 50  0000 C CNN
-F 2 "" H 5950 2650 50  0001 C CNN
+F 2 "footprint:ESP-12_breakout" H 5950 2650 50  0001 C CNN
 F 3 "http://l0l.org.uk/2014/12/esp8266-modules-hardware-guide-gotta-catch-em-all/" H 5950 2650 50  0001 C CNN
 	1    5950 2650
 	1    0    0    -1  

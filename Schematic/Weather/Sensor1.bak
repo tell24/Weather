@@ -39,7 +39,7 @@ U 1 1 5CAF466F
 P 5050 3000
 F 0 "J4" H 5000 2200 50  0000 L CNN
 F 1 "4_Way_Wire" H 4950 3250 50  0000 L CNN
-F 2 "" H 4950 3050 50  0001 C CNN
+F 2 "Connector_PinSocket_2.54mm:PinSocket_1x04_P2.54mm_Vertical" H 4950 3050 50  0001 C CNN
 F 3 "" H 4950 3050 50  0001 C CNN
 	1    5050 3000
 	1    0    0    -1  
