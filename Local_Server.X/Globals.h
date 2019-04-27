@@ -9,6 +9,7 @@
 #define	GLOBALS_H
 
 
+#define SYS_FREQ  80000000
 
 // Defines Ethercard
 
