@@ -22,41 +22,41 @@ my_uart::~my_uart() {
 
 void my_uart::begin(uint16_t baud) {
  //  U2BRG = ((4000000 / 9600) / 16) - 1; // baud 9600
-   U2MODEbits.BRGH = 0;                // Baud Rate = 9600
-    U2BRG = 129;
+   U1MODEbits.BRGH = 0;                // Baud Rate = 9600
+    U1BRG = 259;
      
-    U2MODEbits.SIDL = 0;                // Continue operation in SLEEP mode
+    U1MODEbits.SIDL = 0;                // Continue operation in SLEEP mode
      
-    U2MODEbits.IREN = 0;                // IrDA is disabled
+    U1MODEbits.IREN = 0;                // IrDA is disabled
      
-    U2MODEbits.RTSMD = 0;               // U1RTS pin is in Flow Control mode
+    U1MODEbits.RTSMD = 0;               // U1RTS pin is in Flow Control mode
      
-    U2MODEbits.UEN = 0b00;              // U1TX, U1RX are enabled
+    U1MODEbits.UEN = 0b00;              // U1TX, U1RX are enabled
      
-    U2MODEbits.WAKE = 1;                // Wake-up enabled
+    U1MODEbits.WAKE = 1;                // Wake-up enabled
      
-    U2MODEbits.LPBACK = 0;              // Loopback mode is disabled
+    U1MODEbits.LPBACK = 0;              // Loopback mode is disabled
      
-    U2MODEbits.RXINV = 0;               // U1RX IDLE state is '1'
+    U1MODEbits.RXINV = 0;               // U1RX IDLE state is '1'
      
-    U2MODEbits.PDSEL = 0b00;            // 8-bit data, no parity
+    U1MODEbits.PDSEL = 0b00;            // 8-bit data, no parity
      
-    U2MODEbits.STSEL = 0;               // 1 stop bit
+    U1MODEbits.STSEL = 0;               // 1 stop bit
      
-    U2STAbits.UTXINV = 0;               // U1TX IDLE state is '1'
+    U1STAbits.UTXINV = 0;               // U1TX IDLE state is '1'
      
-    U2MODEbits.ON = 1;                  // UART1 is enabled
+    U1MODEbits.ON = 1;                  // UART1 is enabled
      
-    U2STAbits.URXEN = 1;                // UART1 receiver is enabled
+    U1STAbits.URXEN = 1;                // UART1 receiver is enabled
      
-    U2STAbits.UTXEN = 1;                // UART1 transmitter is enabled
+    U1STAbits.UTXEN = 1;                // UART1 transmitter is enabled
 }
 
 void my_uart::print(char data) {     
-     U2STAbits.UTXEN = 1;                // Make sure transmitter is enabled
+     U1STAbits.UTXEN = 1;                // Make sure transmitter is enabled
     // while(CTS)                       // Optional CTS use
-    while(U2STAbits.UTXBF);             // Wait while buffer is full
-    U2TXREG = data;                        // Transmit character
+    while(U1STAbits.UTXBF);             // Wait while buffer is full
+    U1TXREG = data;                        // Transmit character
 
 }
 

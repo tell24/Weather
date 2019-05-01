@@ -9,6 +9,7 @@
       <itemPath>my_uart.h</itemPath>
       <itemPath>I2C.h</itemPath>
       <itemPath>I2C.cpp</itemPath>
+      <itemPath>eeprom.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -20,12 +21,15 @@
       <itemPath>EthernetClass.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
       <itemPath>my_uart.cpp</itemPath>
+      <itemPath>eeprom.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
                    projectFiles="false">
       <itemPath>Makefile</itemPath>
     </logicalFolder>
+    <itemPath>RTCC.h</itemPath>
+    <itemPath>RTCC.cpp</itemPath>
   </logicalFolder>
   <sourceRootList>
     <Elem>.</Elem>
@@ -234,6 +238,7 @@
         <property key="UART1" value="true"/>
         <property key="UART2" value="true"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="firmware.download.all" value="false"/>
         <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="true"/>

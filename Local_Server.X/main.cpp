@@ -13,6 +13,8 @@
 #include "Globals.h"
 #include "EthernetClass.h"
 #include "my_uart.h"
+#include "eeprom.h"
+#include "RTCC.h"
 
 using namespace std;
 
@@ -26,14 +28,13 @@ using namespace std;
 #pragma config OSCIOFNC = OFF           // CLKO Enable
 #pragma config POSCMOD  = XT            // Primary Oscillator
 #pragma config IESO     = OFF           // Internal/External Switch-over
-#pragma config FSOSCEN  = OFF           // Secondary Oscillator Enable (KLO was off)
+#pragma config FSOSCEN  = ON           // Secondary Oscillator Enable (KLO was off)
 #pragma config FNOSC    = PRIPLL        // Oscillator Selection
 #pragma config CP       = OFF           // Code Protect
 #pragma config BWP      = OFF           // Boot Flash Write Protect
 #pragma config PWP      = OFF           // Program Flash Write Protect
 #pragma config ICESEL   = ICS_PGx1      // ICE/ICD Comm Channel Select
 #pragma config DEBUG    = OFF            // Background Debugger Enable
-
 
 /*
  * 
@@ -1902,10 +1903,26 @@ void homePage() {
 }
 
 int main(int argc, char** argv) {
-    Serial.begin(serial_baud);
+  //  Serial.begin(serial_baud);
    ether.delay(1000);
-    Serial.print("testing\r\n");
-    ether.delay(1000);
+  //  Serial.print("testing\r\n");
+   RTCC rtc;
+   //  0x09000000 = set time to 09 hr, 0 min, 0 sec
+  //0x04050119 =  set date to Wednesday 1 May 2019
+   rtc.init_RTCC();
+   rtc.set_RTCC_time_date(0x09000000 , 0x19050103);
+   
+    eeprom eprom;
+   
+    eprom.init_EEPROM(100000);
+//    uint16_t eeAddress = 64;
+//    uint8_t data[] = {'n','b','w',' ','o','n'};
+//    uint8_t data1[6];
+//    uint8_t numBytes = 6;
+//    eprom.write_EEPROM( eeAddress, &data[0],  numBytes);
+//    ether.delay(10);
+//    eprom.read_EEPROM( eeAddress +1,  &data1[0],  numBytes-1);
+ //   };
 //    int h_s = 0;
 //    int sss[28] = {0};// = new int[35]; 
 //         sss[0] = sizeof(html_0);
