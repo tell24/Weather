@@ -5,6 +5,7 @@
  * Created on 01 May 2019, 17:28
  */
 #include "eeprom.h"
+#include <string.h>
 
 I2C i2c;
 

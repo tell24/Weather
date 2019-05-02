@@ -1991,14 +1991,14 @@ int main(int argc, char** argv) {
                         Serial.println(current.timestamp);
                         if(current.timestamp > 1500000000){
                         Date_Time ts = convert_timestamp(current.timestamp);
-                        Serial.print(ts.hr);Serial.print(":");
-                        Serial.print(ts.min);Serial.print(":");
+                        Serial.print(ts.hr);Serial.print(':');
+                        Serial.print(ts.min);Serial.print(':');
                         Serial.print(ts.sec);Serial.print("   ");
-                        Serial.print(ts.day);Serial.print("-");
-                        Serial.print(ts.month);Serial.print("-");
+                        Serial.print(ts.day);Serial.print('-');
+                        Serial.print(ts.month);Serial.print('-');
                         Serial.println(ts.year);}
                         else Serial.println("no date");
-                    } else Serial.println("false date");;
+                    } else Serial.println("false date");
                     break;
                }
         }
