@@ -39,6 +39,9 @@ using namespace std;
 /*
  * 
  */
+
+const char website[] = "google.com";
+
 const char html_0[] =
 "<!DOCTYPEhtml>"
 "<!-- saved from url=(0016)http://localhost -->\r"
@@ -1540,7 +1543,9 @@ EthernetClass ether;
 // ethernet interface ip address
  uint8_t myip[] = {192, 168, 0, 23};
 // gateway ip address
- uint8_t gwip[] = {192, 168, 0, 1};
+ uint8_t gwip[] = {192, 168, 0, 1};  
+ 
+ uint8_t dnsip[] = { 192, 168, 0, 1};          
 
 uint16_t serial_baud = 9600;
 
@@ -1553,54 +1558,7 @@ data_h history_data;
 my_uart Serial;
 //const char script[] = "https://script.google.com/macros/s/AKfycbznD66uT9RcicnAhSnAuAherAwO9iQ7hssPCfJfrQW3auBDEJ0/exec?value=33,45,67"
 
-
-unsigned int NVMUnlock(unsigned int nvmop) {
-    // Enable Flash Write/Erase Operations and Select
-    // Flash operation to perform
-    NVMCON = nvmop;
-    // Write Keys
-    NVMKEY = 0xAA996655;
-    NVMKEY = 0x556699AA;
-    // Start the operation using the Set Register
-    NVMCONSET = 0x8000;
-    // Wait for operation to complete
-    while (NVMCON & 0x8000);
-
-    // Disable NVM write enable
-    NVMCON &= ~0x0004000;
-    // Return WRERR and LVDERR Error Status Bits
-    return (NVMCON & 0x3000);
-}
-
-unsigned int NVMWriteWord(void* address, unsigned int data) {
-    unsigned int res;
-    asm volatile("di");
-    // Load data into NVMDATA register
-    NVMDATA = data;
-    // Load address to program into NVMADDR register
-    NVMADDR = (unsigned int) address;
-    // Unlock and Write Word
-    res = NVMUnlock(0x4001);
-    asm volatile("ei");
-    // Return Result
-    return res;
-}
-
-unsigned int NVMErasePage(void* address) {
-    unsigned int res;
-    asm volatile("di");
-    // Set NVMADDR to the Start Address of page to erase
-    NVMADDR = (unsigned int) address;
-    // Unlock and Erase Page
-    res = NVMUnlock(0x4004);
-    // Return Result;
-    asm volatile("ei");
-    return res;
-}
-
-unsigned int ReadNVM(unsigned int base, unsigned int offset) {
-    return (*(unsigned int *) (base + (4 * offset)));
-}
+Stash stash;
 
 void read_history(uint32_t record_address, uint16_t samples, uint8_t *data) {
     uint32_t res[5];
@@ -1609,7 +1567,7 @@ void read_history(uint32_t record_address, uint16_t samples, uint8_t *data) {
     do {
         offset_word = 0;
         do {
-            res[offset_word] = ReadNVM(record_address + (i * 20), offset_word);
+  //          res[offset_word] = ReadNVM(record_address + (i * 20), offset_word);
             offset_word++;
         } while (offset_word < 5);
         memcpy(&data, &res, 20);
@@ -1622,9 +1580,20 @@ void write_history(uint32_t record_address, data_h data) {
     uint32_t word_to_store[5];
     memcpy(&word_to_store, &data, 20);
     do {
-        NVMWriteWord((void*) (record_address + (offset_word * 4)), word_to_store[offset_word]);
+  //      NVMWriteWord((void*) (record_address + (offset_word * 4)), word_to_store[offset_word]);
         offset_word++;
     } while (offset_word < 5);
+}
+
+void Get_Time()
+{
+     Serial.println("Get Date...");
+
+   if (!ether.dnsLookup(website))
+    Serial.println("DNS failed");
+    Serial.println("DNS okay");
+    
+    stash.save();
 }
 
 Date_Time convert_timestamp( uint32_t unix)
@@ -1903,18 +1872,19 @@ void homePage() {
 }
 
 int main(int argc, char** argv) {
-  //  Serial.begin(serial_baud);
+
+    Serial.begin(serial_baud);
    ether.delay(1000);
   //  Serial.print("testing\r\n");
-   RTCC rtc;
+ //  RTCC rtc;
    //  0x09000000 = set time to 09 hr, 0 min, 0 sec
   //0x04050119 =  set date to Wednesday 1 May 2019
-   rtc.init_RTCC();
-   rtc.set_RTCC_time_date(0x09000000 , 0x19050103);
+ //  rtc.init_RTCC();
+ //  rtc.set_RTCC_time_date(0x09000000 , 0x19050103);
    
-    eeprom eprom;
+ //   eeprom eprom;
    
-    eprom.init_EEPROM(100000);
+  //  eprom.init_EEPROM(100000);
 //    uint16_t eeAddress = 64;
 //    uint8_t data[] = {'n','b','w',' ','o','n'};
 //    uint8_t data1[6];
@@ -1961,9 +1931,16 @@ int main(int argc, char** argv) {
     if (ether.begin(mymac, 10) == 0) {
     }
     ether.delay(1000);
-    bool connected = ether.staticSetup(myip, gwip);
+    bool connected = ether.staticSetup(myip, gwip, dnsip);
     if (connected)ether.delay(1000);
-
+    
+    
+    Get_Time();
+//    
+//    Serial.print(ether.hisip[0]);Serial.print(':');
+//    Serial.print(ether.hisip[1]);Serial.print(':');
+//    Serial.print(ether.hisip[2]);Serial.print(':');
+//    Serial.print(ether.hisip[3]);Serial.println(' ');
 
     int loop = 1;
     while (loop) {
@@ -1993,12 +1970,15 @@ int main(int argc, char** argv) {
                         Date_Time ts = convert_timestamp(current.timestamp);
                         Serial.print(ts.hr);Serial.print(':');
                         Serial.print(ts.min);Serial.print(':');
-                        Serial.print(ts.sec);Serial.print("   ");
+                        Serial.print(ts.sec);Serial.print((char*)"   ");
                         Serial.print(ts.day);Serial.print('-');
                         Serial.print(ts.month);Serial.print('-');
-                        Serial.println(ts.year);}
-                        else Serial.println("no date");
-                    } else Serial.println("false date");
+                        Serial.println(ts.year);
+                        // Send Data to Cloud
+                        
+                        }
+                        else Serial.println((char*)"no date");
+                    } else Serial.println((char*)"false date");
                     break;
                }
         }

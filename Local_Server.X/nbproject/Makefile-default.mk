@@ -57,17 +57,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=I2C.cpp EthernetClass.cpp main.cpp my_uart.cpp eeprom.cpp RTCC.cpp
+SOURCEFILES_QUOTED_IF_SPACED=EthernetClass.cpp main.cpp my_uart.cpp eeprom.cpp RTCC.cpp I2C.cpp
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/I2C.o ${OBJECTDIR}/EthernetClass.o ${OBJECTDIR}/main.o ${OBJECTDIR}/my_uart.o ${OBJECTDIR}/eeprom.o ${OBJECTDIR}/RTCC.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/I2C.o.d ${OBJECTDIR}/EthernetClass.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/my_uart.o.d ${OBJECTDIR}/eeprom.o.d ${OBJECTDIR}/RTCC.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/EthernetClass.o ${OBJECTDIR}/main.o ${OBJECTDIR}/my_uart.o ${OBJECTDIR}/eeprom.o ${OBJECTDIR}/RTCC.o ${OBJECTDIR}/I2C.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/EthernetClass.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/my_uart.o.d ${OBJECTDIR}/eeprom.o.d ${OBJECTDIR}/RTCC.o.d ${OBJECTDIR}/I2C.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/I2C.o ${OBJECTDIR}/EthernetClass.o ${OBJECTDIR}/main.o ${OBJECTDIR}/my_uart.o ${OBJECTDIR}/eeprom.o ${OBJECTDIR}/RTCC.o
+OBJECTFILES=${OBJECTDIR}/EthernetClass.o ${OBJECTDIR}/main.o ${OBJECTDIR}/my_uart.o ${OBJECTDIR}/eeprom.o ${OBJECTDIR}/RTCC.o ${OBJECTDIR}/I2C.o
 
 # Source Files
-SOURCEFILES=I2C.cpp EthernetClass.cpp main.cpp my_uart.cpp eeprom.cpp RTCC.cpp
+SOURCEFILES=EthernetClass.cpp main.cpp my_uart.cpp eeprom.cpp RTCC.cpp I2C.cpp
 
 
 CFLAGS=
@@ -112,78 +112,78 @@ endif
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: compileCPP
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
-${OBJECTDIR}/I2C.o: I2C.cpp  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/I2C.o.d 
-	@${RM} ${OBJECTDIR}/I2C.o 
-	@${FIXDEPS} "${OBJECTDIR}/I2C.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CPPC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c++ -c -mprocessor=$(MP_PROCESSOR_OPTION)  -frtti -fexceptions -fno-check-new -fenforce-eh-specs -MMD -MF "${OBJECTDIR}/I2C.o.d" -o ${OBJECTDIR}/I2C.o I2C.cpp   -DXPRJ_default=$(CND_CONF)  $(COMPARISON_BUILD) 
-	
 ${OBJECTDIR}/EthernetClass.o: EthernetClass.cpp  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/EthernetClass.o.d 
 	@${RM} ${OBJECTDIR}/EthernetClass.o 
-	@${FIXDEPS} "${OBJECTDIR}/EthernetClass.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CPPC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c++ -c -mprocessor=$(MP_PROCESSOR_OPTION)  -frtti -fexceptions -fno-check-new -fenforce-eh-specs -MMD -MF "${OBJECTDIR}/EthernetClass.o.d" -o ${OBJECTDIR}/EthernetClass.o EthernetClass.cpp   -DXPRJ_default=$(CND_CONF)  $(COMPARISON_BUILD) 
+	@${FIXDEPS} "${OBJECTDIR}/EthernetClass.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CPPC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c++ -c -mprocessor=$(MP_PROCESSOR_OPTION)  -frtti -fexceptions -fno-check-new -fenforce-eh-specs -fno-schedule-insns -fno-schedule-insns2 -MMD -MF "${OBJECTDIR}/EthernetClass.o.d" -o ${OBJECTDIR}/EthernetClass.o EthernetClass.cpp   -DXPRJ_default=$(CND_CONF)  $(COMPARISON_BUILD) 
 	
 ${OBJECTDIR}/main.o: main.cpp  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/main.o.d 
 	@${RM} ${OBJECTDIR}/main.o 
-	@${FIXDEPS} "${OBJECTDIR}/main.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CPPC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c++ -c -mprocessor=$(MP_PROCESSOR_OPTION)  -frtti -fexceptions -fno-check-new -fenforce-eh-specs -MMD -MF "${OBJECTDIR}/main.o.d" -o ${OBJECTDIR}/main.o main.cpp   -DXPRJ_default=$(CND_CONF)  $(COMPARISON_BUILD) 
+	@${FIXDEPS} "${OBJECTDIR}/main.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CPPC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c++ -c -mprocessor=$(MP_PROCESSOR_OPTION)  -frtti -fexceptions -fno-check-new -fenforce-eh-specs -fno-schedule-insns -fno-schedule-insns2 -MMD -MF "${OBJECTDIR}/main.o.d" -o ${OBJECTDIR}/main.o main.cpp   -DXPRJ_default=$(CND_CONF)  $(COMPARISON_BUILD) 
 	
 ${OBJECTDIR}/my_uart.o: my_uart.cpp  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/my_uart.o.d 
 	@${RM} ${OBJECTDIR}/my_uart.o 
-	@${FIXDEPS} "${OBJECTDIR}/my_uart.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CPPC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c++ -c -mprocessor=$(MP_PROCESSOR_OPTION)  -frtti -fexceptions -fno-check-new -fenforce-eh-specs -MMD -MF "${OBJECTDIR}/my_uart.o.d" -o ${OBJECTDIR}/my_uart.o my_uart.cpp   -DXPRJ_default=$(CND_CONF)  $(COMPARISON_BUILD) 
+	@${FIXDEPS} "${OBJECTDIR}/my_uart.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CPPC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c++ -c -mprocessor=$(MP_PROCESSOR_OPTION)  -frtti -fexceptions -fno-check-new -fenforce-eh-specs -fno-schedule-insns -fno-schedule-insns2 -MMD -MF "${OBJECTDIR}/my_uart.o.d" -o ${OBJECTDIR}/my_uart.o my_uart.cpp   -DXPRJ_default=$(CND_CONF)  $(COMPARISON_BUILD) 
 	
 ${OBJECTDIR}/eeprom.o: eeprom.cpp  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/eeprom.o.d 
 	@${RM} ${OBJECTDIR}/eeprom.o 
-	@${FIXDEPS} "${OBJECTDIR}/eeprom.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CPPC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c++ -c -mprocessor=$(MP_PROCESSOR_OPTION)  -frtti -fexceptions -fno-check-new -fenforce-eh-specs -MMD -MF "${OBJECTDIR}/eeprom.o.d" -o ${OBJECTDIR}/eeprom.o eeprom.cpp   -DXPRJ_default=$(CND_CONF)  $(COMPARISON_BUILD) 
+	@${FIXDEPS} "${OBJECTDIR}/eeprom.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CPPC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c++ -c -mprocessor=$(MP_PROCESSOR_OPTION)  -frtti -fexceptions -fno-check-new -fenforce-eh-specs -fno-schedule-insns -fno-schedule-insns2 -MMD -MF "${OBJECTDIR}/eeprom.o.d" -o ${OBJECTDIR}/eeprom.o eeprom.cpp   -DXPRJ_default=$(CND_CONF)  $(COMPARISON_BUILD) 
 	
 ${OBJECTDIR}/RTCC.o: RTCC.cpp  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/RTCC.o.d 
 	@${RM} ${OBJECTDIR}/RTCC.o 
-	@${FIXDEPS} "${OBJECTDIR}/RTCC.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CPPC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c++ -c -mprocessor=$(MP_PROCESSOR_OPTION)  -frtti -fexceptions -fno-check-new -fenforce-eh-specs -MMD -MF "${OBJECTDIR}/RTCC.o.d" -o ${OBJECTDIR}/RTCC.o RTCC.cpp   -DXPRJ_default=$(CND_CONF)  $(COMPARISON_BUILD) 
+	@${FIXDEPS} "${OBJECTDIR}/RTCC.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CPPC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c++ -c -mprocessor=$(MP_PROCESSOR_OPTION)  -frtti -fexceptions -fno-check-new -fenforce-eh-specs -fno-schedule-insns -fno-schedule-insns2 -MMD -MF "${OBJECTDIR}/RTCC.o.d" -o ${OBJECTDIR}/RTCC.o RTCC.cpp   -DXPRJ_default=$(CND_CONF)  $(COMPARISON_BUILD) 
+	
+${OBJECTDIR}/I2C.o: I2C.cpp  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/I2C.o.d 
+	@${RM} ${OBJECTDIR}/I2C.o 
+	@${FIXDEPS} "${OBJECTDIR}/I2C.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CPPC} $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c++ -c -mprocessor=$(MP_PROCESSOR_OPTION)  -frtti -fexceptions -fno-check-new -fenforce-eh-specs -fno-schedule-insns -fno-schedule-insns2 -MMD -MF "${OBJECTDIR}/I2C.o.d" -o ${OBJECTDIR}/I2C.o I2C.cpp   -DXPRJ_default=$(CND_CONF)  $(COMPARISON_BUILD) 
 	
 else
-${OBJECTDIR}/I2C.o: I2C.cpp  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/I2C.o.d 
-	@${RM} ${OBJECTDIR}/I2C.o 
-	@${FIXDEPS} "${OBJECTDIR}/I2C.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CPPC} $(MP_EXTRA_CC_PRE)  -g -x c++ -c -mprocessor=$(MP_PROCESSOR_OPTION)  -frtti -fexceptions -fno-check-new -fenforce-eh-specs -MMD -MF "${OBJECTDIR}/I2C.o.d" -o ${OBJECTDIR}/I2C.o I2C.cpp   -DXPRJ_default=$(CND_CONF)  $(COMPARISON_BUILD) 
-	
 ${OBJECTDIR}/EthernetClass.o: EthernetClass.cpp  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/EthernetClass.o.d 
 	@${RM} ${OBJECTDIR}/EthernetClass.o 
-	@${FIXDEPS} "${OBJECTDIR}/EthernetClass.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CPPC} $(MP_EXTRA_CC_PRE)  -g -x c++ -c -mprocessor=$(MP_PROCESSOR_OPTION)  -frtti -fexceptions -fno-check-new -fenforce-eh-specs -MMD -MF "${OBJECTDIR}/EthernetClass.o.d" -o ${OBJECTDIR}/EthernetClass.o EthernetClass.cpp   -DXPRJ_default=$(CND_CONF)  $(COMPARISON_BUILD) 
+	@${FIXDEPS} "${OBJECTDIR}/EthernetClass.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CPPC} $(MP_EXTRA_CC_PRE)  -g -x c++ -c -mprocessor=$(MP_PROCESSOR_OPTION)  -frtti -fexceptions -fno-check-new -fenforce-eh-specs -fno-schedule-insns -fno-schedule-insns2 -MMD -MF "${OBJECTDIR}/EthernetClass.o.d" -o ${OBJECTDIR}/EthernetClass.o EthernetClass.cpp   -DXPRJ_default=$(CND_CONF)  $(COMPARISON_BUILD) 
 	
 ${OBJECTDIR}/main.o: main.cpp  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/main.o.d 
 	@${RM} ${OBJECTDIR}/main.o 
-	@${FIXDEPS} "${OBJECTDIR}/main.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CPPC} $(MP_EXTRA_CC_PRE)  -g -x c++ -c -mprocessor=$(MP_PROCESSOR_OPTION)  -frtti -fexceptions -fno-check-new -fenforce-eh-specs -MMD -MF "${OBJECTDIR}/main.o.d" -o ${OBJECTDIR}/main.o main.cpp   -DXPRJ_default=$(CND_CONF)  $(COMPARISON_BUILD) 
+	@${FIXDEPS} "${OBJECTDIR}/main.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CPPC} $(MP_EXTRA_CC_PRE)  -g -x c++ -c -mprocessor=$(MP_PROCESSOR_OPTION)  -frtti -fexceptions -fno-check-new -fenforce-eh-specs -fno-schedule-insns -fno-schedule-insns2 -MMD -MF "${OBJECTDIR}/main.o.d" -o ${OBJECTDIR}/main.o main.cpp   -DXPRJ_default=$(CND_CONF)  $(COMPARISON_BUILD) 
 	
 ${OBJECTDIR}/my_uart.o: my_uart.cpp  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/my_uart.o.d 
 	@${RM} ${OBJECTDIR}/my_uart.o 
-	@${FIXDEPS} "${OBJECTDIR}/my_uart.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CPPC} $(MP_EXTRA_CC_PRE)  -g -x c++ -c -mprocessor=$(MP_PROCESSOR_OPTION)  -frtti -fexceptions -fno-check-new -fenforce-eh-specs -MMD -MF "${OBJECTDIR}/my_uart.o.d" -o ${OBJECTDIR}/my_uart.o my_uart.cpp   -DXPRJ_default=$(CND_CONF)  $(COMPARISON_BUILD) 
+	@${FIXDEPS} "${OBJECTDIR}/my_uart.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CPPC} $(MP_EXTRA_CC_PRE)  -g -x c++ -c -mprocessor=$(MP_PROCESSOR_OPTION)  -frtti -fexceptions -fno-check-new -fenforce-eh-specs -fno-schedule-insns -fno-schedule-insns2 -MMD -MF "${OBJECTDIR}/my_uart.o.d" -o ${OBJECTDIR}/my_uart.o my_uart.cpp   -DXPRJ_default=$(CND_CONF)  $(COMPARISON_BUILD) 
 	
 ${OBJECTDIR}/eeprom.o: eeprom.cpp  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/eeprom.o.d 
 	@${RM} ${OBJECTDIR}/eeprom.o 
-	@${FIXDEPS} "${OBJECTDIR}/eeprom.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CPPC} $(MP_EXTRA_CC_PRE)  -g -x c++ -c -mprocessor=$(MP_PROCESSOR_OPTION)  -frtti -fexceptions -fno-check-new -fenforce-eh-specs -MMD -MF "${OBJECTDIR}/eeprom.o.d" -o ${OBJECTDIR}/eeprom.o eeprom.cpp   -DXPRJ_default=$(CND_CONF)  $(COMPARISON_BUILD) 
+	@${FIXDEPS} "${OBJECTDIR}/eeprom.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CPPC} $(MP_EXTRA_CC_PRE)  -g -x c++ -c -mprocessor=$(MP_PROCESSOR_OPTION)  -frtti -fexceptions -fno-check-new -fenforce-eh-specs -fno-schedule-insns -fno-schedule-insns2 -MMD -MF "${OBJECTDIR}/eeprom.o.d" -o ${OBJECTDIR}/eeprom.o eeprom.cpp   -DXPRJ_default=$(CND_CONF)  $(COMPARISON_BUILD) 
 	
 ${OBJECTDIR}/RTCC.o: RTCC.cpp  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/RTCC.o.d 
 	@${RM} ${OBJECTDIR}/RTCC.o 
-	@${FIXDEPS} "${OBJECTDIR}/RTCC.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CPPC} $(MP_EXTRA_CC_PRE)  -g -x c++ -c -mprocessor=$(MP_PROCESSOR_OPTION)  -frtti -fexceptions -fno-check-new -fenforce-eh-specs -MMD -MF "${OBJECTDIR}/RTCC.o.d" -o ${OBJECTDIR}/RTCC.o RTCC.cpp   -DXPRJ_default=$(CND_CONF)  $(COMPARISON_BUILD) 
+	@${FIXDEPS} "${OBJECTDIR}/RTCC.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CPPC} $(MP_EXTRA_CC_PRE)  -g -x c++ -c -mprocessor=$(MP_PROCESSOR_OPTION)  -frtti -fexceptions -fno-check-new -fenforce-eh-specs -fno-schedule-insns -fno-schedule-insns2 -MMD -MF "${OBJECTDIR}/RTCC.o.d" -o ${OBJECTDIR}/RTCC.o RTCC.cpp   -DXPRJ_default=$(CND_CONF)  $(COMPARISON_BUILD) 
+	
+${OBJECTDIR}/I2C.o: I2C.cpp  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/I2C.o.d 
+	@${RM} ${OBJECTDIR}/I2C.o 
+	@${FIXDEPS} "${OBJECTDIR}/I2C.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CPPC} $(MP_EXTRA_CC_PRE)  -g -x c++ -c -mprocessor=$(MP_PROCESSOR_OPTION)  -frtti -fexceptions -fno-check-new -fenforce-eh-specs -fno-schedule-insns -fno-schedule-insns2 -MMD -MF "${OBJECTDIR}/I2C.o.d" -o ${OBJECTDIR}/I2C.o I2C.cpp   -DXPRJ_default=$(CND_CONF)  $(COMPARISON_BUILD) 
 	
 endif
 
