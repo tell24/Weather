@@ -13,6 +13,12 @@
 #ifndef ETHERNETCLASS_H
 #define	ETHERNETCLASS_H
 
+
+#define bitRead(value, bit) (((value) >> (bit)) & 0x01)
+#define bitSet(value, bit) ((value) |= (1UL << (bit)))
+#define bitClear(value, bit) ((value) &= ~(1UL << (bit)))
+#define bitWrite(value, bit, bitvalue) (bitvalue ? bitSet(value, bit) : bitClear(value, bit))
+
 class Print{
     
 };
@@ -60,14 +66,24 @@ class Stash :  private Print, private StashHeader{
 
     static Block bufs[2];
     static uint8_t map[SCRATCH_MAP_SIZE];
-
+    static void load (uint8_t idx, uint8_t blk);
+    static uint8_t allocBlock ();
 public:  
     
-    void save ();
+    void save();
+    uint8_t create ();
+    uint8_t open (uint8_t blk);
+    void prepare (char fmt[], uint16_t len );    
+    static uint16_t length ();
+    void extract (uint16_t offset, uint16_t count, void* buf);
+    void cleanup ();
 private:
 };
 
-class EthernetClass {
+extern Stash stash;
+
+class EthernetClass {  
+
 public:
     EthernetClass();
     EthernetClass(const EthernetClass& orig);
@@ -100,8 +116,12 @@ public:
     uint32_t currentXid;
     bool broadcast_enabled; //!< True if broadcasts 
 
+    uint8_t (*client_tcp_result_cb)(uint8_t,uint8_t,uint16_t,uint16_t); // Pointer to callback function to handle response to current TCP/IP request
+  
+ 
 
-    // end of added when start of webClient
+
+// end of added when start of webClient
 
 
     uint16_t packetReceive();
@@ -127,7 +147,12 @@ public:
     void dnsRequest(const char *hostname, bool fromRam);
     bool checkForDnsAnswer(uint16_t plen);
 
-
+    static void copyout (uint8_t page, const uint8_t* data);
+     static void copyin (uint8_t page, uint8_t* data);
+    uint8_t tcpSend ();
+    
+    uint8_t clientTcpReq (uint8_t (*result_cb)(uint8_t,uint8_t,uint16_t,uint16_t),
+                                 uint16_t (*datafill_cb)(uint8_t),uint16_t port);
 
 private:
     void xferSPI(uint8_t data);
@@ -190,6 +215,10 @@ private:
     uint32_t getBigEndianLong(uint8_t offs);
     uint32_t getSequenceNumber();
     uint8_t clientWaitingDns();
+    uint8_t tcp_result_cb(uint8_t fd, uint8_t status, uint16_t datapos, uint16_t datalen);
+    static uint16_t tcp_datafill_cb(uint8_t fd);
+    
+  
 };
 
 extern EthernetClass ether;

@@ -1560,6 +1560,9 @@ my_uart Serial;
 
 Stash stash;
 
+static uint8_t session;
+
+
 void read_history(uint32_t record_address, uint16_t samples, uint8_t *data) {
     uint32_t res[5];
     uint32_t offset_word = 0;
@@ -1594,6 +1597,13 @@ void Get_Time()
     Serial.println("DNS okay");
     
     stash.save();
+   uint8_t sd = stash.create();
+   char req[] = "HEAD http://google.com HTTP/1.1\r\nHost: google.com\r\n\r\n";
+   int len = sizeof (req) - 1;
+   
+   stash.prepare(req, len);
+   session = ether.tcpSend();
+
 }
 
 Date_Time convert_timestamp( uint32_t unix)

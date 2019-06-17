@@ -18,8 +18,10 @@
 #define BREAKORCONTINUE break;
 #endif
 
- 
+static uint8_t www_fd; // ID of current http request (only one http request at a time - one of the 8 possible concurrent TCP/IP connections) 
 uint8_t dnstid_l; // a counter for transaction ID
+
+
 #define DNSCLIENT_SRC_PORT_H 0xE0
 
 #define DNS_TYPE_A 1
@@ -28,7 +30,6 @@ uint8_t dnstid_l; // a counter for transaction ID
 
 uint8_t Stash::map[SCRATCH_MAP_SIZE];
 Stash::Block Stash::bufs[BUFCOUNT];
-
 
 EthernetClass::EthernetClass() {
 }
@@ -39,15 +40,16 @@ EthernetClass::EthernetClass(const EthernetClass& orig) {
 EthernetClass::~EthernetClass() {
 }
 
+uint8_t* EthernetClass::tcpOffset() {
+    return buffer + 0x36;
+};
 
-    uint8_t* EthernetClass::tcpOffset () { return buffer + 0x36; } ;
+void EthernetClass::xferSPI(uint8_t data) {
 
-void EthernetClass::xferSPI(uint8_t data) {    
-       
     SPI2BUF = data;
     while (!SPI2STATbits.SPITBE | !SPI2STATbits.SPIRBF);
     delay_uS(1);
-   uint8_t dummy = SPI2BUF;
+    uint8_t dummy = SPI2BUF;
 }
 
 void EthernetClass::writeRegByte(uint8_t address, uint8_t data) {
@@ -122,7 +124,7 @@ uint8_t EthernetClass::rxSPI() {
     SPI2STATbits.SPIROV = 0;
     SPI2BUF = 0x00;
     while (!SPI2STATbits.SPITBE);
-     delay_uS(1);
+    delay_uS(1);
     value = SPI2BUF;
     return value;
 }
@@ -314,7 +316,6 @@ uint8_t EthernetClass::client_store_mac(uint8_t *source_ip, uint8_t *mac) {
     copyMac(mac, gPB + ETH_ARP_SRC_MAC_P);
     return 1;
 }
-
 
 void EthernetClass::setGwIp(const uint8_t *gwipaddr) {
     delaycnt = 0; //request gateway ARP lookup
@@ -805,10 +806,10 @@ void EthernetClass::process_dhcp_ack(uint16_t len) {
 }
 
 uint16_t EthernetClass::millis() {
-  uint16_t ret = 0;  
- uint32_t StartTime = _CP0_GET_COUNT();
- ret = (uint16_t) (StartTime / (SYS_FREQ / 1000));
- return ret;
+    uint16_t ret = 0;
+    uint32_t StartTime = _CP0_GET_COUNT();
+    ret = (uint16_t) (StartTime / (SYS_FREQ / 1000));
+    return ret;
 }
 
 void EthernetClass::setSequenceNumber(uint32_t seq) {
@@ -1142,8 +1143,6 @@ void EthernetClass::httpServerReply_with_flags(uint16_t dlen, uint8_t flags) {
     SEQ = SEQ + dlen;
 }
 
-
-
 void EthernetClass::printIp(const char* msg, const uint8_t *buf) {
 
     //Serial.print(msg);
@@ -1162,7 +1161,8 @@ void EthernetClass::printIp(const uint8_t *buf) {
 
 uint8_t EthernetClass::begin(const uint8_t* macaddr, uint8_t csPin) {
     using_dhcp = false;
-    TRISEbits.TRISE5 = 0;delay(100);
+    TRISEbits.TRISE5 = 0;
+    delay(100);
     LATEbits.LATE5 = 0;
     delay(1000);
     copyMac(mymac, macaddr);
@@ -1174,7 +1174,7 @@ bool EthernetClass::staticSetup(const uint8_t* my_ip, const uint8_t* gw_ip, cons
     if (my_ip != 0)
         copyIp(myip, my_ip);
     if (gw_ip != 0)
-        setGwIp(gw_ip); 
+        setGwIp(gw_ip);
     if (dns_ip != 0)
         copyIp(dnsip, dns_ip);
     updateBroadcastAddress();
@@ -1182,31 +1182,30 @@ bool EthernetClass::staticSetup(const uint8_t* my_ip, const uint8_t* gw_ip, cons
     return true;
 }
 
-
 uint8_t EthernetClass::GET_OR_POST(uint16_t position, uint16_t data_len) {
 
     char b[512];
     char request[20];
     uint16_t dl1 = data_len;
-    
+
     memcpy(b, buffer + position, data_len - position);
     int bi = 0;
- //   do{Serial.print(b[bi]);bi++;}while(bi<data_len - position);
-    if (strncmp(b, "GET", 3) == 0) {        
-         uint16_t index = indexof(b, '/', 0);
+    //   do{Serial.print(b[bi]);bi++;}while(bi<data_len - position);
+    if (strncmp(b, "GET", 3) == 0) {
+        uint16_t index = indexof(b, '/', 0);
         uint16_t index1 = indexof(b, ' ', index) + 1;
         memcpy(request, b + index, index1 - index);
         if (strncmp(request, "/data ", 6) == 0) return 5;
         return 1;
     }
-    if (strncmp(b, "POST", 4) == 0) { 
-         uint16_t index = indexof(b, '/', 0);
+    if (strncmp(b, "POST", 4) == 0) {
+        uint16_t index = indexof(b, '/', 0);
         uint16_t index1 = indexof(b, ' ', index) + 1;
         memcpy(request, b + index, index1 - index);
         if (strncmp(request, "/refresh ", 9) == 0) return 2;
-        if (strncmp(request, "/update ", 8) == 0) return 3;  
-        if (strncmp(request, "/data ", 6) == 0) return 4; 
-        
+        if (strncmp(request, "/update ", 8) == 0) return 3;
+        if (strncmp(request, "/data ", 6) == 0) return 4;
+
     }
     return 0;
 }
@@ -1235,15 +1234,13 @@ uint16_t EthernetClass::indexof(char *str, char c, uint16_t start) {
     return 0;
 }
 
-uint8_t EthernetClass::clientWaitingDns () {
-    if(is_lan(myip, dnsip))
+uint8_t EthernetClass::clientWaitingDns() {
+    if (is_lan(myip, dnsip))
         return !has_dns_mac;
     return !(waitgwmac & WGW_HAVE_GW_MAC);
 }
 
-
-
-void EthernetClass::dnsRequest (const char *hostname, bool fromRam) {
+void EthernetClass::dnsRequest(const char *hostname, bool fromRam) {
     ++dnstid_l; // increment for next request, finally wrap
     if (ether.dnsip[0] == 0)
         memset(ether.dnsip, 8, IP_LEN); // use 8.8.8.8 Google DNS as default
@@ -1254,7 +1251,7 @@ void EthernetClass::dnsRequest (const char *hostname, bool fromRam) {
     char c;
     do {
         uint8_t n = 0;
-        for(;;) {
+        for (;;) {
             c = fromRam ? *hostname : *hostname;
             ++hostname;
             if (c == '.' || c == 0)
@@ -1272,20 +1269,20 @@ void EthernetClass::dnsRequest (const char *hostname, bool fromRam) {
     *p++ = DNS_CLASS_IN;
     uint8_t i = p - gPB - UDP_DATA_P;
     gPB[UDP_DATA_P] = i;
-    gPB[UDP_DATA_P+1] = dnstid_l;
-    gPB[UDP_DATA_P+2] = 1; // flags, standard recursive query
-    gPB[UDP_DATA_P+5] = 1; // 1 question
+    gPB[UDP_DATA_P + 1] = dnstid_l;
+    gPB[UDP_DATA_P + 2] = 1; // flags, standard recursive query
+    gPB[UDP_DATA_P + 5] = 1; // 1 question
     ether.udpTransmit(i);
 }
 
-bool EthernetClass::checkForDnsAnswer (uint16_t plen) {
+bool EthernetClass::checkForDnsAnswer(uint16_t plen) {
     uint8_t *p = gPB + UDP_DATA_P; //start of UDP payload
     if (plen < 70 || gPB[UDP_SRC_PORT_L_P] != DNS_PORT || //from DNS source port
             gPB[UDP_DST_PORT_H_P] != DNSCLIENT_SRC_PORT_H || //response to same port as we sent from (MSB)
             gPB[UDP_DST_PORT_L_P] != dnstid_l || //response to same port as we sent from (LSB)
             p[1] != dnstid_l) //message id same as we sent
         return false; //not our DNS response
-    if((p[3] & 0x0F) != 0)
+    if ((p[3] & 0x0F) != 0)
         return true; //DNS response received with error
 
     p += *p; // we encoded the query len into tid
@@ -1310,43 +1307,189 @@ bool EthernetClass::checkForDnsAnswer (uint16_t plen) {
     return false; //No error
 }
 
-bool EthernetClass::dnsLookup (const char* name, bool fromRam) {
+bool EthernetClass::dnsLookup(const char* name, bool fromRam) {
     uint16_t start = millis();
 
-    while(!isLinkUp())
-    {
+    while (!isLinkUp()) {
         if (millis() - start >= 30000)
             return false; //timeout waiting for link
     }
-    while(clientWaitingDns())
-    {
+    while (clientWaitingDns()) {
         packetLoop(packetReceive());
-        if ( millis() - start >= 30000)
+        if (millis() - start >= 30000)
             return false; //timeout waiting for gateway ARP
     }
 
     memset(hisip, 0, IP_LEN);
     ether.dnsRequest(name, fromRam);
 
-    start =  millis();
+    start = millis();
     while (hisip[0] == 0) {
-        if ( millis() - start >= 10000)
+        if (millis() - start >= 10000)
             return false; //timout waiting for dns response
         uint16_t len = packetReceive();
         if (len > 0 && packetLoop(len) == 0) //packet not handled by tcp/ip packet loop
-            if(ether.checkForDnsAnswer(len))
+            if (ether.checkForDnsAnswer(len))
                 return false; //DNS response recieved with error
     }
 
     return true;
 }
 
+void EthernetClass::copyout(uint8_t page, const uint8_t* data) {
+    uint16_t destPos = SCRATCH_START + (page << SCRATCH_PAGE_SHIFT);
+    if (destPos < SCRATCH_START || destPos > SCRATCH_LIMIT - SCRATCH_PAGE_SIZE)
+        return;
+    ether.writeReg(EWRPT, destPos);
+    ether.writeBuf(SCRATCH_PAGE_SIZE, data);
+}
+
+void EthernetClass::copyin(uint8_t page, uint8_t* data) {
+    uint16_t destPos = SCRATCH_START + (page << SCRATCH_PAGE_SHIFT);
+    if (destPos < SCRATCH_START || destPos > SCRATCH_LIMIT - SCRATCH_PAGE_SIZE)
+        return;
+    ether.writeReg(ERDPT, destPos);
+    ether.readBuf(SCRATCH_PAGE_SIZE, data);
+}
+
+
+uint8_t EthernetClass::tcpSend() {
+    www_fd = ether.clientTcpReq(&tcp_result_cb, &tcp_datafill_cb, hisport);
+    return www_fd;
+}
+
+
+
+uint8_t tcp_result_cb(uint8_t fd, uint8_t status, uint16_t datapos, uint16_t datalen) {
+    if (status == 0) {
+        result_fd = fd; // a valid result has been received, remember its session id
+        result_ptr = (char*) ether.buffer + datapos;
+        // result_ptr[datalen] = 0;
+    }
+    return 1;
+}
+
+
+static uint16_t tcp_datafill_cb(uint8_t fd) {
+    uint16_t len = Stash::length();
+    stash.extract(0, len, ether.tcpOffset());
+    stash.cleanup();
+    ether.tcpOffset()[len] = 0;
+#if SERIAL
+    Serial.print("REQUEST: ");
+    Serial.println(len);
+    Serial.println((char*) EtherCard::tcpOffset());
+#endif
+    result_fd = 123; // bogus value
+    return len;
+}
+
+ uint8_t EthernetClass::clientTcpReq(uint8_t(*result_cb)(uint8_t, uint8_t, uint16_t, uint16_t),
+        uint16_t(*datafill_cb)(uint8_t), uint16_t port) {
+    client_tcp_result_cb = result_cb;
+    client_tcp_datafill_cb = datafill_cb;
+    tcp_client_port_h = port >> 8;
+    tcp_client_port_l = port;
+    tcp_client_state = TCP_STATE_SENDSYN; // Flag to packetloop to initiate a TCP/IP session by send a syn
+    tcp_fd = (tcp_fd + 1) & 7;
+    return tcp_fd;
+}
+
+
 // Srash Class
 
 // save the metadata of current block into the first block
-void Stash::save () {
-    load(WRITEBUF, first);
-    memcpy(bufs[WRITEBUF].bytes, (StashHeader*) this, sizeof (StashHeader));
-    if (bufs[READBUF].bnum == first)
-        load(READBUF, 0); // invalidates original in case it was the same block
+
+void Stash::save() {
+    //   load(WRITEBUF, first);
+    //  memcpy(bufs[WRITEBUF].bytes, (StashHeader*) this, sizeof (StashHeader));
+    //  if (bufs[READBUF].bnum == first)
+    //      load(READBUF, 0); // invalidates original in case it was the same block
+}
+
+// load a page/block either into the write or into the readbuffer
+
+void Stash::load(uint8_t idx, uint8_t blk) {
+    if (blk != bufs[idx].bnum) {
+        if (idx == WRITEBUF) {
+            ether.copyout(bufs[idx].bnum, bufs[idx].bytes);
+            if (blk == bufs[READBUF].bnum)
+                bufs[READBUF].bnum = 255; // forget read page if same
+        } else if (blk == bufs[WRITEBUF].bnum) {
+            // special case: read page is same as write buffer
+            memcpy(&bufs[READBUF], &bufs[WRITEBUF], sizeof bufs[0]);
+            return;
+        }
+        bufs[idx].bnum = blk;
+        ether.copyin(bufs[idx].bnum, bufs[idx].bytes);
+    }
+}
+
+
+
+// create a new stash; make it the active stash; return the first block as a handle 
+
+uint8_t Stash::create() {
+    uint8_t blk = allocBlock();
+    load(WRITEBUF, blk);
+    bufs[WRITEBUF].head.count = 0;
+    bufs[WRITEBUF].head.first = bufs[0].head.last = blk;
+    bufs[WRITEBUF].tail = sizeof (StashHeader);
+    bufs[WRITEBUF].next = 0;
+    return open(blk); // you are now the active stash 
+}
+
+uint8_t Stash::allocBlock() {
+    for (uint8_t i = 0; i < sizeof map; ++i)
+        if (map[i] != 0)
+            for (uint8_t j = 0; j < 8; ++j)
+                if (bitRead(map[i], j)) {
+                    bitClear(map[i], j);
+                    return (i << 3) +j;
+                }
+    return 0;
+}
+
+
+// the stashheader part only contains reasonable data if we are the first block
+
+uint8_t Stash::open(uint8_t blk) {
+    curr = blk;
+    offs = sizeof (StashHeader); // goto first byte
+    load(READBUF, curr);
+    memcpy((StashHeader*) this, bufs[READBUF].bytes, sizeof (StashHeader));
+    return curr;
+}
+
+
+// write information about the fmt string and the arguments into special page/block 0    
+// block 0 is initially marked as allocated and never returned by allocateBlock 
+
+void Stash::prepare(char fmt[], uint16_t len) {
+    int i = 0;
+    Stash::load(WRITEBUF, 0);
+    uint16_t* segs = Stash::bufs[WRITEBUF].words;
+    *segs++ = len;
+    *segs++ = (uint16_t) fmt[i++];
+    for (;;) {
+        char c = fmt[i++];
+        if (c == 0)
+            break;
+
+    }
+
+}
+
+uint16_t Stash::length() {
+    stash.load(WRITEBUF, 0);
+    return Stash::bufs[WRITEBUF].words[0];
+}
+
+void Stash::extract(uint16_t offset, uint16_t count, void* buf) {
+
+}
+
+void Stash::cleanup() {
+    Stash::load(WRITEBUF, 0);
+    uint16_t* segs = Stash::bufs[WRITEBUF].words;
 }

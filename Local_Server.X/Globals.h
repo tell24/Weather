@@ -493,7 +493,8 @@ static bool has_dns_mac = false;
 static bool waiting_for_dest_mac = false;
 static bool has_dest_mac = false;
 
-
+static const char* result_ptr; // Pointer to TCP/IP data
+static uint8_t result_fd = 123; // Session id of last reply
 static uint8_t tcpclient_src_port_l = 1; // Source port (LSB) for tcp/ip client connections - increments on each TCP/IP request
 static uint8_t tcp_fd; // a file descriptor, will be encoded into the port
 static uint8_t tcp_client_state; //TCP connection state: 1=Send SYN, 2=SYN sent awaiting SYN+ACK, 3=Established, 4=Not used, 5=Closing, 6=Closed
