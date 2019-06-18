@@ -77,6 +77,8 @@ public:
     static uint16_t length ();
     void extract (uint16_t offset, uint16_t count, void* buf);
     void cleanup ();
+    uint16_t size ();
+    
 private:
 };
 
@@ -153,6 +155,9 @@ public:
     
     uint8_t clientTcpReq (uint8_t (*result_cb)(uint8_t,uint8_t,uint16_t,uint16_t),
                                  uint16_t (*datafill_cb)(uint8_t),uint16_t port);
+    const char* tcpReply (uint8_t fd);
+    static uint8_t tcp_result_cb(uint8_t fd, uint8_t status, uint16_t datapos, uint16_t datalen);
+    static uint16_t tcp_datafill_cb(uint8_t fd);
 
 private:
     void xferSPI(uint8_t data);
@@ -215,8 +220,6 @@ private:
     uint32_t getBigEndianLong(uint8_t offs);
     uint32_t getSequenceNumber();
     uint8_t clientWaitingDns();
-    uint8_t tcp_result_cb(uint8_t fd, uint8_t status, uint16_t datapos, uint16_t datalen);
-    static uint16_t tcp_datafill_cb(uint8_t fd);
     
   
 };

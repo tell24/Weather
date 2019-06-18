@@ -1353,14 +1353,7 @@ void EthernetClass::copyin(uint8_t page, uint8_t* data) {
 }
 
 
-uint8_t EthernetClass::tcpSend() {
-    www_fd = ether.clientTcpReq(&tcp_result_cb, &tcp_datafill_cb, hisport);
-    return www_fd;
-}
-
-
-
-uint8_t tcp_result_cb(uint8_t fd, uint8_t status, uint16_t datapos, uint16_t datalen) {
+uint8_t EthernetClass::tcp_result_cb(uint8_t fd, uint8_t status, uint16_t datapos, uint16_t datalen) {
     if (status == 0) {
         result_fd = fd; // a valid result has been received, remember its session id
         result_ptr = (char*) ether.buffer + datapos;
@@ -1370,7 +1363,14 @@ uint8_t tcp_result_cb(uint8_t fd, uint8_t status, uint16_t datapos, uint16_t dat
 }
 
 
-static uint16_t tcp_datafill_cb(uint8_t fd) {
+
+uint8_t EthernetClass::tcpSend() {
+    www_fd = ether.clientTcpReq(&tcp_result_cb, &tcp_datafill_cb, hisport);
+    return www_fd;
+}
+
+ 
+ uint16_t  EthernetClass::tcp_datafill_cb(uint8_t fd) {
     uint16_t len = Stash::length();
     stash.extract(0, len, ether.tcpOffset());
     stash.cleanup();
@@ -1394,6 +1394,15 @@ static uint16_t tcp_datafill_cb(uint8_t fd) {
     tcp_fd = (tcp_fd + 1) & 7;
     return tcp_fd;
 }
+ 
+ 
+ 
+const char* EthernetClass::tcpReply (uint8_t fd) {
+    if (result_fd != fd)
+        return 0;
+    result_fd = 123; // set to a bogus value to prevent future match
+    return result_ptr;
+}
 
 
 // Srash Class
@@ -1401,10 +1410,10 @@ static uint16_t tcp_datafill_cb(uint8_t fd) {
 // save the metadata of current block into the first block
 
 void Stash::save() {
-    //   load(WRITEBUF, first);
-    //  memcpy(bufs[WRITEBUF].bytes, (StashHeader*) this, sizeof (StashHeader));
-    //  if (bufs[READBUF].bnum == first)
-    //      load(READBUF, 0); // invalidates original in case it was the same block
+       load(WRITEBUF, first);
+      memcpy(bufs[WRITEBUF].bytes, (StashHeader*) this, sizeof (StashHeader));
+      if (bufs[READBUF].bnum == first)
+          load(READBUF, 0); // invalidates original in case it was the same block
 }
 
 // load a page/block either into the write or into the readbuffer
@@ -1492,4 +1501,9 @@ void Stash::extract(uint16_t offset, uint16_t count, void* buf) {
 void Stash::cleanup() {
     Stash::load(WRITEBUF, 0);
     uint16_t* segs = Stash::bufs[WRITEBUF].words;
+}
+
+// fetchbyte(last, 62) is tail, i.e., number of characters in last block 
+uint16_t Stash::size () {
+    return 63 * count + fetchByte(last, 62) - sizeof (StashHeader);
 }

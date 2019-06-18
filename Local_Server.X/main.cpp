@@ -1527,6 +1527,13 @@ const char html_27[] =
 "</div>""\r"
 "</body>""\r"
 "</html>""\r";
+
+
+ const char date_request = "HEAD http://$F HTTP/1.0" "\r\n"
+    "Host: $F" "\r\n"
+    "Content-Length: $D" "\r\n"
+    "\r\n";
+
 // test_data_location
 #define NVR_DAY_ADDRESS  0xBD035000 
 #define NVR_WEEK_ADDRESS  0xBD039000
@@ -1598,11 +1605,28 @@ void Get_Time()
     
     stash.save();
    uint8_t sd = stash.create();
-   char req[] = "HEAD http://google.com HTTP/1.1\r\nHost: google.com\r\n\r\n";
-   int len = sizeof (req) - 1;
-   
-   stash.prepare(req, len);
+ //  char req[] = "HEAD http://google.com HTTP/1.1\r\nHost: google.com\r\n\r\n";
+ //  int len = sizeof (req) - 1;
+ // stash.prepare( req, len);  
+  int stash_size = stash.size();
+   stash.prepare( date_request, website, website, stash_size);
    session = ether.tcpSend();
+   
+int rt = 0;
+  do{
+  uint16_t pos = ether.packetLoop(ether.packetReceive());
+const char* reply = ether.tcpReply(session);
+   // Serial.println(reply);
+  if (reply != 0) {
+    Serial.println("Got a response!");
+    
+    rt = 20000;
+  }
+   rt++;
+ //  Serial.println(rt);
+   
+  }while(rt < 10000);
+
 
 }
 
