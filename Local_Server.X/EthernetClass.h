@@ -73,7 +73,8 @@ public:
     void save();
     uint8_t create ();
     uint8_t open (uint8_t blk);
-    void prepare (char fmt[], uint16_t len );    
+    void prepare (char fmt[], uint16_t len );  
+    void prepare (char fmt[], ...);
     static uint16_t length ();
     void extract (uint16_t offset, uint16_t count, void* buf);
     void cleanup ();

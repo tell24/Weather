@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <stdarg.h>
 #include <xc.h>
 #include "Globals.h"
 #include "my_uart.h"
@@ -1470,7 +1471,6 @@ uint8_t Stash::open(uint8_t blk) {
     return curr;
 }
 
-
 // write information about the fmt string and the arguments into special page/block 0    
 // block 0 is initially marked as allocated and never returned by allocateBlock 
 
@@ -1484,10 +1484,71 @@ void Stash::prepare(char fmt[], uint16_t len) {
         char c = fmt[i++];
         if (c == 0)
             break;
-
     }
-
 }
+
+// write information about the fmt string and the arguments into special page/block 0    
+// block 0 is initially marked as allocated and never returned by allocateBlock 
+void Stash::prepare (char fmt, ...) {
+    Stash::load(WRITEBUF, 0);
+    uint16_t* segs = Stash::bufs[WRITEBUF].words;
+    *segs++ = strlen(fmt);
+#ifdef __AVR__
+    *segs++ = (uint16_t) fmt;
+#else
+    *segs++ = (uint32_t) fmt;
+    *segs++ = (uint32_t) fmt >> 16;
+#endif
+    va_list ap;
+    va_start(ap, fmt);
+    for (;;) {
+        char c = pgm_read_byte(fmt++);
+        if (c == 0)
+            break;
+        if (c == '$') {
+#ifdef __AVR__
+            uint16_t argval = va_arg(ap, uint16_t), arglen = 0;
+#else
+            uint32_t argval = va_arg(ap, int), arglen = 0;
+#endif
+            switch (pgm_read_byte(fmt++)) {
+            case 'D': {
+                char buf[7];
+                wtoa(argval, buf);
+                arglen = strlen(buf);
+                break;
+            }
+            case 'S':
+                arglen = strlen((const char*) argval);
+                break;
+            case 'F':
+                arglen = strlen_P((const char*) argval);
+                break;
+            case 'E': {
+                byte* s = (byte*) argval;
+                char d;
+                while ((d = eeprom_read_byte(s++)) != 0)
+                    ++arglen;
+                break;
+            }
+            case 'H': {
+                Stash stash (argval);
+                arglen = stash.size();
+                break;
+            }
+            }
+#ifdef __AVR__
+            *segs++ = argval;
+#else
+            *segs++ = argval;
+            *segs++ = argval >> 16;
+#endif
+            Stash::bufs[WRITEBUF].words[0] += arglen - 2;
+        }
+    }
+    va_end(ap);
+}
+
 
 uint16_t Stash::length() {
     stash.load(WRITEBUF, 0);

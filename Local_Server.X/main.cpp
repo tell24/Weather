@@ -1529,10 +1529,7 @@ const char html_27[] =
 "</html>""\r";
 
 
- const char date_request = "HEAD http://$F HTTP/1.0" "\r\n"
-    "Host: $F" "\r\n"
-    "Content-Length: $D" "\r\n"
-    "\r\n";
+ 
 
 // test_data_location
 #define NVR_DAY_ADDRESS  0xBD035000 
@@ -1605,9 +1602,15 @@ void Get_Time()
     
     stash.save();
    uint8_t sd = stash.create();
+   
  //  char req[] = "HEAD http://google.com HTTP/1.1\r\nHost: google.com\r\n\r\n";
  //  int len = sizeof (req) - 1;
- // stash.prepare( req, len);  
+ // stash.prepare( req, len); 
+   char date_request = "HEAD http://$F HTTP/1.0" "\r\n"
+    "Host: $F" "\r\n"
+    "Content-Length: $D" "\r\n"
+    "\r\n";
+   
   int stash_size = stash.size();
    stash.prepare( date_request, website, website, stash_size);
    session = ether.tcpSend();
