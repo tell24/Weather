@@ -83,6 +83,7 @@ int main(int argc, char** argv) {
     my_uart_begin();
     DelayMs(100);
 #endif
+    Set_Clock();
 
 
     InitializeBoard();
@@ -147,64 +148,59 @@ int main(int argc, char** argv) {
 
 
 void Set_Clock() {
-    DWORD time1[] = { 1553445875 ,1553993075 ,1553996675, 1572134435 ,1572134735 , 1572138335 }; //SNTPGetUTCSeconds();
-   int  d = 0;
-   DWORD time;// = SNTPGetUTCSeconds();
-    do{
-        time = time1[d];
-    struct tm *mytime;
-    if (time > 100) {
-        char buf[128];
-        my_uart_println_int(time);
-        if(Set_DST(time))
-            time += 3600;
-        mytime = localtime(&time);
-        strftime(buf, 128, "%H:%M:%S on the %d-%m-%Y\n", mytime);
-        int cc = 0;
+   
+    DWORD time; // = SNTPGetUTCSeconds();
+        struct tm *mytime;
+        if (time > 100) {
+            char buf[128];
+            mytime = localtime(&time);
+            
+            strftime(buf, 128, "%H:%M:%S on the %d-%m-%Y       ", mytime);            
+            int cc = 0;
 
-        do {
-        my_uart_print((char)buf[cc]);
-            if (buf[cc] == '\n') break;
-            cc++;
-        } while (cc < 128);
-        process_item = DO_NOTHING;
-    }
-    d++;
-    }while(d < 6);
+            do {
+                my_uart_print((char) buf[cc]);
+                if (buf[cc] == '\n') break;
+                cc++;
+            } while (cc < 128); 
+                       
+            process_item = DO_NOTHING;
 }
-_Bool Set_DST(DWORD time)
-{    
+}
+_Bool Set_DST(DWORD time) {
     struct tm *newtime = localtime(&time);
-    if((newtime->tm_mon > 2 )&&(newtime->tm_mon < 9)) return true; //April to Sept add 1hr
-    if((newtime->tm_mon == 2 )||(newtime->tm_mon ==9))
-    {
-        if((newtime->tm_mday + (6-newtime->tm_wday))>30)
-        {
-            if(newtime->tm_mon == 2)   return true;
-            else   return false; 
-        } 
-        else { 
-            if((newtime->tm_mday + (6-newtime->tm_wday))<30){
-              if(newtime->tm_mon == 9)   return true;
-            else   return false;
+    if ((newtime->tm_mon > 1)&&(newtime->tm_mon < 10)) {
+        if (newtime->tm_mon == 2) {
+            if (newtime->tm_wday == 0) {
+                if ((newtime->tm_mday + (6 - newtime->tm_wday)) >= 31) {
+                    if (newtime->tm_hour >= 1) return true;
+                    else return false;
+                }
+                else return false;
             }
-            else
-            {if(newtime->tm_mon == 2){
-             if((newtime->tm_wday == 0)&&(newtime->tm_hour >=2 )) 
-                  return true; else return false;
-            }
-            else
-            {
-                if((newtime->tm_wday == 0)&&(newtime->tm_hour >=2 )) 
-                  return false; else return true;
+            else {
+                if ((newtime->tm_mday + (6 - newtime->tm_wday)) < 31) {
+                    return false;
+                }
             }
         }
-        }        
+        if (newtime->tm_mon == 9) {
+            if (newtime->tm_wday == 0) {
+                if ((newtime->tm_mday + (6 - newtime->tm_wday)) >= 31) {
+                    if (newtime->tm_hour >= 1) return false;
+                    else return true;
+                } else
+                    return true;
+            } else {
+                if ((newtime->tm_mday + (6 - newtime->tm_wday)) < 31) return true;
+                else
+                    return false;
+            }
+        }
     }
-            
-    return false;
-    
-    
+    return true;
+
+
 }
 
 void DisplayIPValue(IP_ADDR IPVal) {
