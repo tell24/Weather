@@ -22,4 +22,5 @@ Include/HardwareProfile.h  \
  ../Microchip/Include/TCPIP\ Stack/DNS.h  \
  ../Microchip/Include/TCPIP\ Stack/MPFS2.h  \
  ../Microchip/Include/TCPIP\ Stack/SNTP.h  \
-main.h 
+main.h  \
+I2C.h 

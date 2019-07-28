@@ -89,8 +89,8 @@
 #ifdef WIFI_NET_TEST
 #define NTP_SERVER  "ntp" WIFI_NET_TEST_DOMAIN
 #else
-#define NTP_SERVER	"pool.ntp.org"
-//#define NTP_SERVER	"europe.pool.ntp.org"
+//#define NTP_SERVER	"pool.ntp.org"
+#define NTP_SERVER	"europe.pool.ntp.org"
 //#define NTP_SERVER	"asia.pool.ntp.org"
 //#define NTP_SERVER	"oceania.pool.ntp.org"
 //#define NTP_SERVER	"north-america.pool.ntp.org"

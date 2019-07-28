@@ -116,6 +116,18 @@ extern "C" {
 #define putcUART(a)			do{while(BusyUART()); WriteUART(a); while(BusyUART()); }while(0)
 #define putrsUART(a)		putUART1(a)
 
+    
+    
+/*****************************************************************************
+ * Section:  RTCC default time and date
+ *****************************************************************************/
+#define RTCC_DEFAULT_DAY        11      // 11th
+#define RTCC_DEFAULT_MONTH      11      // November
+#define RTCC_DEFAULT_YEAR       11      // 2011
+#define RTCC_DEFAULT_WEEKDAY    01      // Monday
+#define RTCC_DEFAULT_HOUR       10      // 10:10:01
+#define RTCC_DEFAULT_MINUTE     10
+#define RTCC_DEFAULT_SECOND     01
 
 #ifdef	__cplusplus
 }

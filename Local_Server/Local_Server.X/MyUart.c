@@ -50,13 +50,47 @@ void my_uart_println_int(int i) {
 my_uart_println_str(buf); // Transmit one character
 }
 
+void my_uart_print_int(int i) {
+    char buf[10];
+    sprintf(buf, " = %d",i);
+my_uart_print_str(buf); // Transmit one character
+}
+
+void my_uart_println_double(double i) {
+    char buf[20];
+    sprintf(buf, " = %.8f",i);
+my_uart_println_str(buf); // Transmit one character
+}
+
+void my_uart_print_double(double i) {
+    char buf[20];
+    sprintf(buf, " = %.8f",i);
+my_uart_print_str(buf); // Transmit one character
+}
+
 void my_uart_print(char data) {
     U1STAbits.UTXEN = 1; // Make sure transmitter is enabled
     // while(CTS)    
 
     while (U1STAbits.UTXBF); // Wait while buffer is full
 
-    U1TXREG = data; // Transmit character// Optional CTS use
+    U1TXREG = (BYTE)data; // Transmit character// Optional CTS use
 
+}
+
+char HEX_Char[] = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+void my_uart_print_HEX(uint32_t hex)
+{
+    my_uart_print('0');
+    my_uart_print('x');
+    int b = 28;
+    do{
+       uint32_t  c = hex>>b;
+       my_uart_print(HEX_Char[hex>>b & 0x0f]);
+       b-=4;
+    }while(b >= 0);
+    my_uart_print('\r');
+    my_uart_print('\n');
+    
 }
 

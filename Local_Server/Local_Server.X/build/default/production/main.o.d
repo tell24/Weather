@@ -3,7 +3,10 @@ main.c  \
  ../Microchip/Include/../Include/TCPIP\ Stack/UART.h  \
  ../Microchip/Include/Compiler.h  \
 Include/HardwareProfile.h  \
- ../Microchip/Include/TCPIP\ Stack/TCPIP.h  \
+BMP180.h  \
+I2C.h  \
+ HTU21D.h  \
+../Microchip/Include/TCPIP\ Stack/TCPIP.h  \
 Include/TCPIPConfig.h  \
  ../Microchip/Include/TCPIP\ Stack/StackTsk.h  \
  ../Microchip/Include/TCPIP\ Stack/Helpers.h  \

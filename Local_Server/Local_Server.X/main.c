@@ -10,7 +10,10 @@
 #include <stdint.h>
 #include <time.h>
 #include <stdbool.h>
+#include <plib.h>
 #include "../Include/TCPIP Stack/UART.h"
+#include "BMP180.h"
+#include "HTU21D.h"
 
 #define THIS_IS_STACK_APPLICATION
 
@@ -49,7 +52,7 @@ BYTE AN0String[8];
 remotedata outsidedata;
 
 
-
+TempHum internal;
 BYTE process_item;
 
 // Private helper functions.
@@ -57,6 +60,11 @@ BYTE process_item;
 static void InitAppConfig(void);
 static void InitializeBoard(void);
 static void ProcessIO(void);
+
+static DateTime Set_RTCC();
+static void SetAlarm(DateTime alarm);
+static void read_inside_data();
+static TempHum get_Humidity_Temperature();
 
 /*
  * 
@@ -67,6 +75,51 @@ void _general_exception_handler(unsigned cause, unsigned status) {
     Nop();
 }
 
+int i2c_Pressure_read() {
+    // pressure BMP180
+    char status;
+    double T = 0, P = 0;
+    status = BMP180_startTemperature();
+    if (status != 0) {
+        DelayMs(status);
+        status = BMP180_getTemperature(&T);
+
+        if (status != 0) {
+            status = BMP180_startPressure(3);
+            if (status != 0) {
+                DelayMs(status);
+                status = BMP180_getPressure(&P, &T);
+                if (status != 0) {
+                    //      sensor_data.inside_temp = (int)(T * 10);
+                    //            my_uart_println_double(T);
+                    //            my_uart_println_double(P);
+                    //            my_uart_println_double(BMP180_sealevel(P, ALTITUDE));
+
+                    return (int) BMP180_sealevel(P, ALTITUDE);
+                }
+            }
+        }
+    }
+    return 0;
+}
+
+TempHum get_Humidity_Temperature() {
+    TempHum res;
+    res.t = HTU21DF_readTemperature();
+    res.h = HTU21DF_readHumidity();
+    return res;
+}
+
+static void read_inside_data() {
+
+
+
+    //    uint16_t eeAddress = 64;
+    //    uint8_t data[] = {'n','b','w',' ','o','n'};
+    //    uint8_t data1[6];
+    //    uint8_t numBytes = 6;
+    //    eprom.write_EEPROM( eeAddress, &data[0],  numBytes);
+}
 
 
 #define SERVER_PORT	80
@@ -75,19 +128,51 @@ int main(int argc, char** argv) {
 
     static DWORD t = 0;
     static DWORD dwLastIP = 0;
-
-    //   process_item  = DO_NOTHING;
+    DateTime t_d;
+    int pressure;
+    //    process_item  = DO_NOTHING;
     process_item = GET_TIME;
-
-#if defined(STACK_USE_MY_UART)
-    my_uart_begin();
-    DelayMs(100);
-#endif
-    Set_Clock();
-
-
+    //   process_item =SET_ALARM;
+    
     InitializeBoard();
 
+#if defined(STACK_USE_MY_UART)
+//    my_uart_begin();
+//    DelayMs(100);
+//    my_uart_println_str("test");
+#endif
+    my_uart_begin();
+    DelayMs(100);
+    my_uart_println_str("test");
+    DelayMs(100);
+
+    DelayMs(500);
+
+my_uart_println_str("bmp180!");
+    if (!BMP180_begin()) {
+        my_uart_println_str("Couldn't find BMP180!");
+        while (1);
+    }
+
+my_uart_println_str("start pres");
+    pressure = i2c_Pressure_read();
+
+    my_uart_println_int(pressure);
+    
+my_uart_println_str("HTU21DF_begin");
+    DelayMs(100);
+    
+if (!HTU21DF_begin()) {
+        my_uart_println_str("Couldn't find HTU21DF!");
+        while (1);
+    }
+    
+    DelayMs(100);
+    
+my_uart_println_str("start t/h");
+    internal = get_Humidity_Temperature();
+    my_uart_println_double(internal.t);
+    my_uart_println_double(internal.h);
 
     // TickInit();
 
@@ -114,6 +199,15 @@ int main(int argc, char** argv) {
     int post_data_size = 0;
 
     while (1) {
+
+        if ((IFS1bits.RTCCIF == 1)&&(process_item == DO_NOTHING)) {
+            read_inside_data();
+            uint32_t mt = RTCTIME;
+            my_uart_println_str("int Flag");
+            my_uart_print_HEX(mt);
+            IFS1CLR = 0x00008000; // clear RTCC existing event
+        }
+
         // This task performs normal stack task including checking
         // for incoming packet, type of packet and calling
         // appropriate stack entity to process it.
@@ -125,9 +219,18 @@ int main(int argc, char** argv) {
         switch (process_item) {
             case 1: post_data_size = GenericTCPServer(post_data_size);
                 break;
-            case 2: Set_Clock();
+            case 2: t_d = Set_RTCC();
+                if (t_d.d != 0)
+                    process_item = SET_ALARM;
                 break;
-            case 3: break;
+            case 3:
+                SetAlarm(t_d);
+                process_item = DO_NOTHING;
+                break;
+            case 4:
+                putrsUART2("Init\r\n");
+                process_item = DO_NOTHING;
+                break;
         }
         ProcessIO();
 
@@ -145,28 +248,123 @@ int main(int argc, char** argv) {
     return (EXIT_SUCCESS);
 }
 
+DateTime Set_RTCC() {
+
+    DateTime d_t;
+
+    rtccTime tm;
+    rtccDate dt;
+    DWORD time = SNTPGetUTCSeconds();
+    struct tm *mytime;
+    if (time > 100) {
+        char buf[128];
+        mytime = localtime(&time);
+
+        strftime(buf, 128, "%H:%M:%S on the %d-%m-%Y\n", mytime);
+        int cc = 0;
+
+        do {
+            my_uart_print((char) buf[cc]);
+            if (buf[cc] == '\n') break;
+            cc++;
+        } while (cc < 128);
+
+        uint32_t ts = (mRTCCDec2BCD(mytime->tm_hour));
+        ts = ts << 8 | (mRTCCDec2BCD(mytime->tm_min));
+        ts = ts << 8 | (mRTCCDec2BCD(mytime->tm_sec));
+        ts = ts << 8;
+        uint32_t ds = (mRTCCDec2BCD(mytime->tm_year));
+        ds = ds << 8 | (mRTCCDec2BCD(mytime->tm_mon));
+        ds = ds << 8 | (mRTCCDec2BCD(mytime->tm_mday));
+        ds = ds << 8 | (mRTCCDec2BCD(mytime->tm_wday));
+
+        SYSKEY = 0xaa996655; // write first unlock key to SYSKEY
+        SYSKEY = 0x556699aa; // write second unlock key to SYSKEY
+        RTCCONSET = 0x8; // set RTCWREN in RTCCONSET
+        RTCTIME = ts; // safe to update time to 16 hr, 15 min, 33 sec
+        RTCDATE = ds; // update the date to Friday 27 Oct 2006
+        RTCCONCLR = 0x8; // set RTCWREN in RTCCONSET
+
+        process_item = DO_NOTHING;
+        tm.l = RtccGetTime();
+        dt.l = RtccGetDate();
+        mytime->tm_hour = mRTCCBCD2Dec(tm.hour);
+        mytime->tm_min = mRTCCBCD2Dec(tm.min);
+        mytime->tm_sec = mRTCCBCD2Dec(tm.sec);
+        mytime->tm_mday = mRTCCBCD2Dec(dt.mday);
+        mytime->tm_mon = mRTCCBCD2Dec(dt.mon);
+        mytime->tm_year = mRTCCBCD2Dec(dt.year);
+        mytime->tm_wday = mRTCCBCD2Dec(dt.wday);
+
+        strftime(buf, 128, "%H:%M:%S on the %d-%m-%Y\n", mytime);
+        cc = 0;
+
+        do {
+            my_uart_print((char) buf[cc]);
+            if (buf[cc] == '\n') break;
+            cc++;
+        } while (cc < 128);
+
+        time += 90;
+
+        mytime = localtime(&time);
+
+        d_t.t = (mRTCCDec2BCD(mytime->tm_hour));
+        d_t.t = d_t.t << 8 | (mRTCCDec2BCD(mytime->tm_min));
+        d_t.t = d_t.t << 8 | 0;
+        d_t.t = d_t.t << 8;
+        d_t.d = d_t.d << 8 | (mRTCCDec2BCD(mytime->tm_mon));
+        d_t.d = d_t.d << 8 | (mRTCCDec2BCD(mytime->tm_mday));
+        d_t.d = d_t.d << 8 | (mRTCCDec2BCD(mytime->tm_wday));
+
+        strftime(buf, 128, "%H:%M:%S on the %d-%m-%Y\n", mytime);
+        cc = 0;
+
+        do {
+            my_uart_print((char) buf[cc]);
+            if (buf[cc] == '\n') break;
+            cc++;
+        } while (cc < 128);
+
+        //starting critical sequence
+        SYSKEY = 0xaa996655; // write first unlock key to SYSKEY
+        SYSKEY = 0x556699aa; // write second unlock key to SYSKEY
+        RTCCONSET = 0x8; // set RTCWREN in RTCCONSET
 
 
-void Set_Clock() {
-   
-    DWORD time; // = SNTPGetUTCSeconds();
-        struct tm *mytime;
-        if (time > 100) {
-            char buf[128];
-            mytime = localtime(&time);
-            
-            strftime(buf, 128, "%H:%M:%S on the %d-%m-%Y       ", mytime);            
-            int cc = 0;
+        RTCCONCLR = 0x8; // set RTCWREN in RTCCONSET
+        my_uart_println_str("alarm set");
+        IFS1CLR = 0x00008000; // clear RTCC existing event
 
-            do {
-                my_uart_print((char) buf[cc]);
-                if (buf[cc] == '\n') break;
-                cc++;
-            } while (cc < 128); 
-                       
-            process_item = DO_NOTHING;
+        return d_t;
+
+    }
+    d_t.d = 0;
+    d_t.t = 0;
+    return d_t;
 }
+
+void SetAlarm(DateTime alarm) {
+
+    SYSKEY = 0xaa996655; // write first unlock key to SYSKEY
+    SYSKEY = 0x556699aa; // write second unlock key to SYSKEY
+    RTCCONSET = 0x8; // set RTCWREN in RTCCONSET
+    IEC1CLR = 0x00008000; // disable RTCC interrupts
+    RTCCONCLR = 0x8000; // turn off the RTCC
+    while (RTCCON & 0x40); // wait for clock to be turned off
+    IFS1CLR = 0x00008000; // clear RTCC existing event
+    IPC8CLR = 0x1f000000; // clear the priority
+    IPC8SET = 0x0d000000; // Set IPL=3, subpriority 1
+    IEC1SET = 0x00008000; // Enable RTCC interrupts
+    RTCALRMCLR = 0xCFFF; // clear ALRMEN, CHIME, AMASK and ARPT;
+    ALRMTIME = alarm.t & 0xffff0000; // set alarm time to 16 hr, 15 min, 43 sec
+    ALRMDATE = alarm.d; // set alarm date to Friday 27 Oct 2006
+    RTCALRMSET = 0x8000 | 0x00004300; // re-enable the alarm, set alarm mask at once per day
+    RTCCONSET = 0x8000; // turn on the RTCC
+    RTCCONCLR = 0x8; // set RTCWREN in RTCCONSET
+    while (!(RTCCON & 0x40)); // wait for clock to be turned on
 }
+
 _Bool Set_DST(DWORD time) {
     struct tm *newtime = localtime(&time);
     if ((newtime->tm_mon > 1)&&(newtime->tm_mon < 10)) {
@@ -175,10 +373,8 @@ _Bool Set_DST(DWORD time) {
                 if ((newtime->tm_mday + (6 - newtime->tm_wday)) >= 31) {
                     if (newtime->tm_hour >= 1) return true;
                     else return false;
-                }
-                else return false;
-            }
-            else {
+                } else return false;
+            } else {
                 if ((newtime->tm_mday + (6 - newtime->tm_wday)) < 31) {
                     return false;
                 }
@@ -199,8 +395,6 @@ _Bool Set_DST(DWORD time) {
         }
     }
     return true;
-
-
 }
 
 void DisplayIPValue(IP_ADDR IPVal) {
@@ -275,6 +469,8 @@ static void InitializeBoard(void) {
     LED6_TRIS = 0;
     LED7_TRIS = 0;
     LED_PUT(0x00);
+
+    init_I2C(100000);
 }
 
 static ROM BYTE SerializedMACAddress[6] = {MY_DEFAULT_MAC_BYTE1, MY_DEFAULT_MAC_BYTE2, MY_DEFAULT_MAC_BYTE3, MY_DEFAULT_MAC_BYTE4, MY_DEFAULT_MAC_BYTE5, MY_DEFAULT_MAC_BYTE6};
