@@ -3,18 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/E:/Projects/Weather/Local_Server/Local_Server.X/HTU21D.c</file>
-            <file>file:/E:/Projects/Weather/Local_Server/Local_Server.X/MyUart.c</file>
-            <file>file:/E:/Projects/Weather/Local_Server/Local_Server.X/I2C.c</file>
-            <file>file:/E:/Projects/Weather/Local_Server/Local_Server.X/BMP180.h</file>
-            <file>file:/E:/Projects/Weather/Local_Server/Local_Server.X/I2C.h</file>
+            <file>file:/E:/Projects/Weather/Local_Server/Local_Server.X/ST7735.c</file>
             <file>file:/E:/Projects/Weather/Local_Server/Local_Server.X/main.h</file>
-            <file>file:/E:/Projects/Weather/Local_Server/Microchip/TCPIP%20Stack/Delay.c</file>
+            <file>file:/E:/Projects/Weather/Local_Server/Microchip/Include/TCPIP%20Stack/TCP.h</file>
+            <file>file:/E:/Projects/Weather/Local_Server/Local_Server.X/ST7735.h</file>
             <file>file:/E:/Projects/Weather/Local_Server/Local_Server.X/main.c</file>
-            <file>file:/E:/Projects/Weather/Local_Server/Local_Server.X/HTU21D.h</file>
-            <file>file:/E:/Projects/Weather/Local_Server/Local_Server.X/MyUart.h</file>
-            <file>file:/E:/Projects/Weather/Local_Server/Local_Server.X/BMP180.c</file>
-            <file>file:/E:/Projects/Weather/Local_Server/Microchip/TCPIP%20Stack/SNTP.c</file>
         </group>
     </open-files>
 </project-private>

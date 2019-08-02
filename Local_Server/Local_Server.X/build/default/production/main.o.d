@@ -6,9 +6,10 @@ Include/HardwareProfile.h  \
 BMP180.h  \
 I2C.h  \
  HTU21D.h  \
+ST7735.h  \
 ../Microchip/Include/TCPIP\ Stack/TCPIP.h  \
-Include/TCPIPConfig.h  \
- ../Microchip/Include/TCPIP\ Stack/StackTsk.h  \
+ Include/TCPIPConfig.h  \
+../Microchip/Include/TCPIP\ Stack/StackTsk.h  \
  ../Microchip/Include/TCPIP\ Stack/Helpers.h  \
  ../Microchip/Include/TCPIP\ Stack/Delay.h  \
  ../Microchip/Include/TCPIP\ Stack/Tick.h  \

@@ -11,9 +11,11 @@
 #include <time.h>
 #include <stdbool.h>
 #include <plib.h>
+#include <math.h>
 #include "../Include/TCPIP Stack/UART.h"
 #include "BMP180.h"
 #include "HTU21D.h"
+#include "ST7735.h"
 
 #define THIS_IS_STACK_APPLICATION
 
@@ -52,7 +54,7 @@ BYTE AN0String[8];
 remotedata outsidedata;
 
 
-TempHum internal;
+TempHum inside, outside;
 BYTE process_item;
 
 // Private helper functions.
@@ -112,7 +114,7 @@ TempHum get_Humidity_Temperature() {
 
 static void read_inside_data() {
 
-
+     inside = get_Humidity_Temperature();
 
     //    uint16_t eeAddress = 64;
     //    uint8_t data[] = {'n','b','w',' ','o','n'};
@@ -133,46 +135,45 @@ int main(int argc, char** argv) {
     //    process_item  = DO_NOTHING;
     process_item = GET_TIME;
     //   process_item =SET_ALARM;
-    
+
     InitializeBoard();
 
+
 #if defined(STACK_USE_MY_UART)
-//    my_uart_begin();
-//    DelayMs(100);
-//    my_uart_println_str("test");
+    //    my_uart_begin();
+    //    DelayMs(100);
+    //    my_uart_println_str("test");
 #endif
     my_uart_begin();
     DelayMs(100);
     my_uart_println_str("test");
+
+
+
     DelayMs(100);
 
-    DelayMs(500);
-
-my_uart_println_str("bmp180!");
+    my_uart_println_str("bmp180!");
     if (!BMP180_begin()) {
         my_uart_println_str("Couldn't find BMP180!");
         while (1);
     }
 
-my_uart_println_str("start pres");
+    my_uart_println_str("start pres");
     pressure = i2c_Pressure_read();
 
     my_uart_println_int(pressure);
-    
-my_uart_println_str("HTU21DF_begin");
+
+    my_uart_println_str("HTU21DF_begin");
     DelayMs(100);
-    
-if (!HTU21DF_begin()) {
+
+    if (!HTU21DF_begin()) {
         my_uart_println_str("Couldn't find HTU21DF!");
         while (1);
     }
-    
+
     DelayMs(100);
-    
-my_uart_println_str("start t/h");
-    internal = get_Humidity_Temperature();
-    my_uart_println_double(internal.t);
-    my_uart_println_double(internal.h);
+
+    my_uart_println_str("start t/h");
 
     // TickInit();
 
@@ -180,18 +181,14 @@ my_uart_println_str("start t/h");
     MPFSInit();
 #endif
 
-    putrsUART2("MPFSInit\r\n");
     InitAppConfig();
 
-
-    putrsUART2("InitAppConfig\r\n");
 
     // Initialize core stack layers (MAC, ARP, TCP, UDP) and
     // application modules (HTTP, SNMP, etc.)
     StackInit();
 
 
-    putrsUART2("StackInit\r\n");
 
 #if defined(STACK_USE_UART)
     DoUARTConfig();
@@ -201,10 +198,7 @@ my_uart_println_str("start t/h");
     while (1) {
 
         if ((IFS1bits.RTCCIF == 1)&&(process_item == DO_NOTHING)) {
-            read_inside_data();
-            uint32_t mt = RTCTIME;
-            my_uart_println_str("int Flag");
-            my_uart_print_HEX(mt);
+            process_item = UPLOAD_DATA;
             IFS1CLR = 0x00008000; // clear RTCC existing event
         }
 
@@ -217,23 +211,25 @@ my_uart_println_str("start t/h");
         StackApplications();
 
         switch (process_item) {
-            case 1: post_data_size = GenericTCPServer(post_data_size);
+            case GET_INCOMMING: post_data_size = GenericTCPServer(post_data_size);
                 break;
-            case 2: t_d = Set_RTCC();
+            case GET_TIME: t_d = Set_RTCC();
                 if (t_d.d != 0)
                     process_item = SET_ALARM;
                 break;
-            case 3:
+            case SET_ALARM:
                 SetAlarm(t_d);
+                update_clock();
                 process_item = DO_NOTHING;
                 break;
-            case 4:
-                putrsUART2("Init\r\n");
+            case UPLOAD_DATA:
+                read_inside_data();
+                update_clock();
+
                 process_item = DO_NOTHING;
                 break;
         }
         ProcessIO();
-
 
         // If the local IP address has changed (ex: due to DHCP lease change)
         // write the new IP address to the LCD display, UART, and Announce 
@@ -365,7 +361,7 @@ void SetAlarm(DateTime alarm) {
     while (!(RTCCON & 0x40)); // wait for clock to be turned on
 }
 
-_Bool Set_DST(DWORD time) {
+_Bool Is_DST(DWORD time) {
     struct tm *newtime = localtime(&time);
     if ((newtime->tm_mon > 1)&&(newtime->tm_mon < 10)) {
         if (newtime->tm_mon == 2) {
@@ -454,9 +450,10 @@ static void ProcessIO(void) {
 
 static void InitializeBoard(void) {
     // LEDs
-
+    ST7735_TFT_Init();
+    DelayMs(10);
     TRISEbits.TRISE5 = 0;
-    DelayMs(100);
+    DelayMs(1);
     LATEbits.LATE5 = 0;
     DelayMs(1000);
 
@@ -652,4 +649,59 @@ static void InitAppConfig(void) {
     }
 }
 
+uint8_t month[] = {0, 30, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
+void update_clock() {
+    uint8_t min, hour, day, mon, year;
+    struct tm t;
+    rtccTime tm;
+    rtccDate dt;
+    tm.l = RtccGetTime();
+    dt.l = RtccGetDate();
+    hour = mRTCCBCD2Dec(tm.hour);
+    min = mRTCCBCD2Dec(tm.min);
+    day = mRTCCBCD2Dec(dt.mday);
+    mon = mRTCCBCD2Dec(dt.mon) +1;
+    year = mRTCCBCD2Dec(dt.year);
+
+    t.tm_hour = hour;
+    t.tm_min = min;
+    t.tm_sec = 0;
+    t.tm_mday = day;
+    t.tm_mon = mon;
+    t.tm_year = year;
+    time_t t_of_day = mktime(&t);
+    year -=100;
+    if (Is_DST(t_of_day)) {
+        hour++;
+        if (hour == 24) {
+            day++;
+            hour = 0;
+            if (day > month[mon]) {
+                mon++;
+                day = 1;
+            }
+        }
+    }
+
+    char buf[10];
+    sprintf(buf, "%02d:%02d", hour, min);
+    drawtext(4, 0, buf, ST7735_CYAN, ST7735_BLACK, 4);
+    sprintf(buf, "%02d-%02d-%d", day, mon, year);
+    drawtext(16, 40, buf, ST7735_CYAN, ST7735_BLACK, 2);
+    
+    drawFastVLine(63,75,80,ST7735_CYAN);
+    outside.h = 0;
+    outside.t = 0;
+    drawtext(14, 80, "Inside", ST7735_CYAN, ST7735_BLACK, 1);
+    drawtext(75, 80, "Outside", ST7735_CYAN, ST7735_BLACK, 1);
+    sprintf(buf, "%2.1fC", inside.t);
+    drawtext(0, 100, buf, ST7735_CYAN, ST7735_BLACK, 2);
+    sprintf(buf, "%2.1f%s", inside.h, "%");
+    drawtext(0,120, buf, ST7735_CYAN, ST7735_BLACK, 2);
+    sprintf(buf, "%2.1fC", outside.t);
+    drawtext(70, 100, buf, ST7735_CYAN, ST7735_BLACK, 2);
+    sprintf(buf, "%2.1f%s", outside.h, "%");
+    drawtext(70,120, buf, ST7735_CYAN, ST7735_BLACK, 2);
+
+}

@@ -76,6 +76,8 @@
 #elif defined(__C30__) || defined(__C32__)
 	void Delay10us(DWORD dwCount);
 	void DelayMs(WORD ms);
+    void DelayUs(DWORD dwCount);
+    void Delay_Min();
 
 #else
 	#define Delay10us(x)			\

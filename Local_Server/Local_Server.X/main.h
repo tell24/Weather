@@ -16,12 +16,14 @@ extern "C" {
 
 #define SaveAppConfig(a)
 
+#define RAD 57.296
 
     // An actual function defined in MainDemo.c for displaying the current IP 
     // address on the UART and/or LCD.
 
     void DisplayIPValue(IP_ADDR IPVal);
-    _Bool Set_DST(DWORD time);
+    _Bool Is_DST(DWORD time);
+    void update_clock();
     // Define a header structure for validating the AppConfig data structure in EEPROM/Flash
 
     typedef struct Date_Time {
