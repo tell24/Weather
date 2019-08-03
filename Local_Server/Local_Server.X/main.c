@@ -53,7 +53,8 @@ BYTE AN0String[8];
 
 remotedata outsidedata;
 
-
+int TCP_status;
+int post_data_size;
 TempHum inside, outside;
 BYTE process_item;
 
@@ -193,11 +194,12 @@ int main(int argc, char** argv) {
 #if defined(STACK_USE_UART)
     DoUARTConfig();
 #endif
-    int post_data_size = 0;
-
+   post_data_size = 0;
+   TCP_status =0;
+    int ret;
     while (1) {
 
-        if ((IFS1bits.RTCCIF == 1)&&(process_item == DO_NOTHING)) {
+        if ((IFS1bits.RTCCIF == 1)&&(TCP_status <2)) {
             process_item = UPLOAD_DATA;
             IFS1CLR = 0x00008000; // clear RTCC existing event
         }
@@ -211,7 +213,7 @@ int main(int argc, char** argv) {
         StackApplications();
 
         switch (process_item) {
-            case GET_INCOMMING: post_data_size = GenericTCPServer(post_data_size);
+            case GET_INCOMMING: ret = GenericTCPServer(&post_data_size, &TCP_status);
                 break;
             case GET_TIME: t_d = Set_RTCC();
                 if (t_d.d != 0)
@@ -226,7 +228,7 @@ int main(int argc, char** argv) {
                 read_inside_data();
                 update_clock();
 
-                process_item = DO_NOTHING;
+                process_item = GET_INCOMMING;
                 break;
         }
         ProcessIO();

@@ -90,6 +90,7 @@
 
 #include "TCPIPConfig.h"
 #include <string.h>
+#include <stdint.h>
 
 #if defined(STACK_USE_GENERIC_TCP_SERVER_EXAMPLE)
 
@@ -99,7 +100,6 @@
 
 // Defines which port the server will listen on
 #define SERVER_PORT	80
-
 
 /*****************************************************************************
   Function:
@@ -125,103 +125,15 @@
   Returns:
     None
  ***************************************************************************/
-//void GenericTCPServer(void)
-//{
-//	BYTE i;
-//	WORD w, w2;
-//	BYTE AppBuffer[128];
-//	WORD wMaxGet, wMaxPut, wCurrentChunk;
-//	static TCP_SOCKET	MySocket;
-//	static enum _TCPServerState
-//	{
-//		SM_HOME = 0,
-//		SM_LISTENING,
-//        SM_CLOSING,
-//	} TCPServerState = SM_HOME;
-//    
-//            switch(TCPServerState)
-//	{
-//		case SM_HOME:
-//			// Allocate a socket for this server to listen and accept connections on
-//			MySocket = TCPOpen(0, TCP_OPEN_SERVER, SERVER_PORT, TCP_PURPOSE_GENERIC_TCP_SERVER);
-//			if(MySocket == INVALID_SOCKET)
-//                    return;
-//
-//			TCPServerState = SM_LISTENING;
-//			break;
-//
-//		case SM_LISTENING:
-//			// See if anyone is connected to us
-//			if(!TCPIsConnected(MySocket))
-//				return;
-//
-//
-//			// Figure out how many bytes have been received and how many we can transmit.
-//			wMaxGet = TCPIsGetReady(MySocket);	// Get TCP RX FIFO byte count
-//			wMaxPut = TCPIsPutReady(MySocket);	// Get TCP TX FIFO free space
-//
-//			// Make sure we don't take more bytes out of the RX FIFO than we can put into the TX FIFO
-//			if(wMaxPut < wMaxGet)
-//				wMaxGet = wMaxPut;
-//
-//			// Process all bytes that we can
-//			// This is implemented as a loop, processing up to sizeof(AppBuffer) bytes at a time.  
-//			// This limits memory usage while maximizing performance.  Single byte Gets and Puts are a lot slower than multibyte GetArrays and PutArrays.
-//			wCurrentChunk = sizeof(AppBuffer);
-//        //    wCurrentChunk = 12;
-//            
-//            TCPGetArray(MySocket, AppBuffer, wCurrentChunk);
-//			for(w = 0; w < wMaxGet; w += sizeof(AppBuffer))
-//			{
-//				// Make sure the last chunk, which will likely be smaller than sizeof(AppBuffer), is treated correctly.
-//				if(w + sizeof(AppBuffer) > wMaxGet)
-//					wCurrentChunk = wMaxGet - w;
-//
-//				// Transfer the data out of the TCP RX FIFO and into our local processing buffer.
-//				TCPGetArray(MySocket, AppBuffer, wCurrentChunk);
-//				
-//			
-//            
-//				// Perform the "ToUpper" operation on each data byte
-//				for(w2 = 0; w2 < wCurrentChunk; w2++)
-//				{
-//					i = AppBuffer[w2];
-//					if(i >= 'a' && i <= 'z')
-//					{
-//						i -= ('a' - 'A');
-//						AppBuffer[w2] = 'u';// i;
-//					}
-//                    else if(i == 0x1B)   //escape
-//                    {
-//                        TCPServerState = SM_CLOSING;
-//                    }
-//                     my_uart_print((char)AppBuffer[w2]);
-//				}
-//			
-//				// Transfer the data out of our local processing buffer and into the TCP TX FIFO.
-//				TCPPutArray(MySocket, AppBuffer, wCurrentChunk);
-//			}
-//
-//			// No need to perform any flush.  TCP data in TX FIFO will automatically transmit itself after it accumulates for a while.  If you want to decrease latency (at the expense of wasting network bandwidth on TCP overhead), perform and explicit flush via the TCPFlush() API.
-//
-//			break;
-//
-//		case SM_CLOSING:
-//			// Close the socket connection.
-//            TCPClose(MySocket);
-//
-//			TCPServerState = SM_HOME;
-//			break;
-//	}
-//}
 
-int GenericTCPServer(int ds) {
+void GenericTCPServer(int *TCP_status, int *post_data_size) {
     BYTE i, c, lc, lc2;
     WORD w, w2;
     BYTE AppBuffer[128];
     WORD wMaxGet, wMaxPut, wCurrentChunk;
     int POST = 0;
     int a_index = 0;
+    int ds = post_data_size;
     static TCP_SOCKET MySocket;
 
     static enum _TCPServerState {
@@ -238,20 +150,30 @@ int GenericTCPServer(int ds) {
 
     switch (TCPServerState) {
         case SM_HOME:
+            *TCP_status = 0;
             // Allocate a socket for this server to listen and accept connections on
             MySocket = TCPOpen(0, TCP_OPEN_SERVER, SERVER_PORT, TCP_PURPOSE_GENERIC_TCP_SERVER);
-            if (MySocket == INVALID_SOCKET)
-                return;
+            if (MySocket == INVALID_SOCKET) {
+                *TCP_status = 0;
+                //  return 0;
+                ds = 0;
+                break;
+            }
             putrsUART2((ROM char*) "SOCKET OBTAINED...\r\n");
             TCPServerState = SM_LISTENING;
-            break;
+            *TCP_status = 1;
 
         case SM_LISTENING:
             // See if anyone is connected to us
-            if (!TCPIsConnected(MySocket))
-                return;
+            if (!TCPIsConnected(MySocket)) {
+                *TCP_status = 1;
+                break;
+            }
             putrsUART2((ROM char*) "SOCKET CONNECTED...\r\n");
             TCPServerState = SM_GET;
+            *TCP_status = 2;
+            *post_data_size = 0;
+            break;
 
         case SM_GET:
             if (TCPIsGetReady(MySocket)) {
@@ -261,20 +183,24 @@ int GenericTCPServer(int ds) {
                     AppBuffer[a_index] = c;
                     if ((c == 'E') && (lc == 'G')) {
                         TCPServerState = SM_PUT;
+                        *TCP_status = 2;
+                        *post_data_size = 0;
                         break;
                     }
                     lc = c;
                     a_index++;
                 }
-                
-            int ii = 0;
-              do {
+
+                int ii = 0;
+                do {
                     my_uart_print((char) AppBuffer[ii]);
-                    
+
                     ii++;
                 } while (ii < a_index);
                 if (((AppBuffer[0] == 'P')&&(AppBuffer[1] == 'O'))) {
                     TCPServerState = SM_Wait_DataSize;
+                    *TCP_status = 2;
+                    *post_data_size = 0;
                     break;
                 }
             }
@@ -290,15 +216,17 @@ int GenericTCPServer(int ds) {
                 }
             }
             int ii = 0;
-              do {
-                    my_uart_print((char) AppBuffer[ii]);
-                    
-                    ii++;
-                } while (ii < a_index);
+            do {
+                my_uart_print((char) AppBuffer[ii]);
+
+                ii++;
+            } while (ii < a_index);
             if ((AppBuffer[0] == 'C')&&(AppBuffer[1] == 'o')&&(AppBuffer[8] == 'L')) {
                 TCPServerState = SM_DataSize;
+                *TCP_status = 2;
+                *post_data_size = 0;
             }
-            
+
             break;
 
         case SM_DataSize:
@@ -312,8 +240,9 @@ int GenericTCPServer(int ds) {
 
                 if ((AppBuffer[0] == '\r') && (AppBuffer[1] == '\n')) break;
                 AppBuffer[a_index] = 0;
-                ds = atoi(AppBuffer);
                 TCPServerState = SM_Proc_Data;
+                *TCP_status = 2;
+                *post_data_size = atoi(AppBuffer);
             }
             break;
 
@@ -328,31 +257,32 @@ int GenericTCPServer(int ds) {
             }
             if (a_index >= ds) {
                 int ii = 0;
-            //    outsidedata.temp = 0;
-                memcpy(&outsidedata,&AppBuffer,ds);
+                //    outsidedata.temp = 0;
+                memcpy(&outsidedata, &AppBuffer, ds);
                 my_uart_println_int(a_index);
                 my_uart_println_int(ds);
-//                my_uart_println_str("");
-//                my_uart_println_str("");
-//                my_uart_println_str("");
-//                my_uart_println_str("");
-//                do {
-//                    my_uart_println_int( AppBuffer[ii]);
-//                    
-//                    ii++;
-//                } while (ii < a_index);
-//                my_uart_println_str("");
-//                my_uart_println_str("");
-//                my_uart_println_str("");
+                //                my_uart_println_str("");
+                //                my_uart_println_str("");
+                //                my_uart_println_str("");
+                //                my_uart_println_str("");
+                //                do {
+                //                    my_uart_println_int( AppBuffer[ii]);
+                //                    
+                //                    ii++;
+                //                } while (ii < a_index);
+                //                my_uart_println_str("");
+                //                my_uart_println_str("");
+                //                my_uart_println_str("");
                 my_uart_println_str("");
-                 my_uart_println_int(outsidedata.temp);
-                 my_uart_println_int(outsidedata.hum);
-                 my_uart_println_int(outsidedata.wind_speed);
-                 my_uart_println_int(outsidedata.peak_wind_speed);
-                 my_uart_println_int(outsidedata.bearing);
+                my_uart_println_int(outsidedata.temp);
+                my_uart_println_int(outsidedata.hum);
+                my_uart_println_int(outsidedata.wind_speed);
+                my_uart_println_int(outsidedata.peak_wind_speed);
+                my_uart_println_int(outsidedata.bearing);
                 my_uart_println_str("");
                 TCPServerState = SM_POST;
-                ds = 0;
+                *TCP_status = 2;
+                *post_data_size = 0;
             }
             break;
 
@@ -365,7 +295,7 @@ int GenericTCPServer(int ds) {
                         "Pragma: no-cache\r\n"
                         "\r\n";
                 const char wep_page1[] =
-                        "<meta http-equiv='refresh' content='1'/>"
+                        "<meta http-equiv='refresh' content='60'/>"
                         "<title>RBBB server</title>"
                         "<h1>$D$D:$D$D:$D$D</h1>";
                 int ss = sizeof (wep_page);
@@ -391,6 +321,10 @@ int GenericTCPServer(int ds) {
 
 
                 TCPServerState = SM_DIS;
+
+
+                *TCP_status = 2;
+                *post_data_size = 0;
             }
 
             break;
@@ -402,6 +336,8 @@ int GenericTCPServer(int ds) {
             TCPFlush(MySocket);
 
             TCPServerState = SM_DIS;
+            *TCP_status = 2;
+            *post_data_size = 0;
             break;
 
         case SM_DIS:
@@ -409,11 +345,11 @@ int GenericTCPServer(int ds) {
                 //            putrsUART((ROM char*)"SOCKET DIS...\r\n");
                 TCPDisconnect(MySocket);
                 TCPServerState = SM_LISTENING;
-
+                *TCP_status = 0;
+                *post_data_size = 0;
             }
             break;
     }
-    return ds;
 }
 
 #endif //#if defined(STACK_USE_GENERIC_TCP_SERVER_EXAMPLE)
