@@ -67,7 +67,7 @@
 //#define STACK_USE_IP_GLEANING
 //#define STACK_USE_ICMP_SERVER			// Ping query and response capability
 //#define STACK_USE_ICMP_CLIENT			// Ping transmission capability
-//#define STACK_USE_HTTP2_SERVER			// New HTTP server with POST, Cookies, Authentication, etc.
+#define STACK_USE_HTTP2_SERVER			// New HTTP server with POST, Cookies, Authentication, etc.
 //#define STACK_USE_SSL_SERVER			// SSL server socket support (Requires SW300052)
 //#define STACK_USE_SSL_CLIENT			// SSL client socket support (Requires SW300052)
 //#define STACK_USE_AUTO_IP               // Dynamic link-layer IP address automatic configuration protocol

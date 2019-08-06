@@ -189,6 +189,7 @@
       <itemPath>HTU21D.c</itemPath>
       <itemPath>BMP180.c</itemPath>
       <itemPath>ST7735.c</itemPath>
+      <itemPath>WebPage2/data.HEX</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

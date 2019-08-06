@@ -13,6 +13,7 @@ Include/HardwareProfile.h  \
  ../Microchip/Include/TCPIP\ Stack/ENC28J60.h  \
  ../Microchip/Include/TCPIP\ Stack/IP.h  \
  ../Microchip/Include/TCPIP\ Stack/ARP.h  \
+ ../Microchip/Include/TCPIP\ Stack/Hashes.h  \
  ../Microchip/Include/TCPIP\ Stack/XEEPROM.h  \
  ../Microchip/Include/TCPIP\ Stack/SPIFlash.h  \
  ../Microchip/Include/TCPIP\ Stack/SPIRAM.h  \
@@ -21,4 +22,5 @@ Include/HardwareProfile.h  \
  ../Microchip/Include/TCPIP\ Stack/UART.h  \
  ../Microchip/Include/TCPIP\ Stack/DNS.h  \
  ../Microchip/Include/TCPIP\ Stack/MPFS2.h  \
+ ../Microchip/Include/TCPIP\ Stack/HTTP2.h  \
  ../Microchip/Include/TCPIP\ Stack/SNTP.h 

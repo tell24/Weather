@@ -94,3 +94,18 @@ void my_uart_print_HEX(uint32_t hex)
     
 }
 
+
+void my_uart_println_byte(uint8_t hex)
+{
+    my_uart_print('0');
+    my_uart_print('x');
+   int b = 8;
+    do{
+       uint32_t  c = hex>>b;
+       my_uart_print(HEX_Char[hex>>b & 0x0f]);
+       b-=4;
+    }while(b >= 0);
+    my_uart_print('\r');
+    my_uart_print('\n'); 
+}
+

@@ -21,6 +21,7 @@ void my_uart_println_double(int i);
 void my_uart_print_double(int i);
 void my_uart_print(char data);
 void my_uart_print_HEX(uint32_t hex);
+void my_uart_println_byte(uint8_t i);
 
 
 #ifdef	__cplusplus

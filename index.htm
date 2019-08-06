@@ -109,9 +109,8 @@
       active_window = 1;
       sort_update();
     }
+
     window.onload = function() {
-        
-        
 
       var L1 = 130;
       var L2 = 350;
@@ -496,15 +495,14 @@
       }
 
 
-      function update_fields() { 
-        xhr = new XMLHttpRequest();       
-        xhr.responseType = "arraybuffer";
+      function update_fields() {
+        xhr = new XMLHttpRequest();
         var a = '0';
-      //  var url = "https://script.google.com/macros/s/AKfycbzep_6TONHLbfjt1H23_iCb0DMc126LPo3smsun/exec?read=current";
-        var url = "http://192.168.0.40/0";
+        var url = "https://script.google.com/macros/s/AKfycbzep_6TONHLbfjt1H23_iCb0DMc126LPo3smsun/exec?read=current";
         xhr.onreadystatechange = function() {
           if (xhr.readyState == 4) {
-           var dat = new Uint16Array(this.response);
+            var t_r = xhr.responseText;
+            var dat = t_r.split(",");
             var x = document.getElementById("cent_c");
             x.style.display = "block";
             x = document.getElementById("canvas_area_1");
@@ -526,21 +524,21 @@
             clock(ctx);
 
             ctx.fillStyle = "Black";
-            data_plot(0, (dat[1]/10), ctx);
-            data_plot(1, (dat[0]/10), ctx);
-            if ((dat[3]/10) > 100)
-              data_plot(2, ("100"), ctx);
+            data_plot(0, parseFloat(dat[19]), ctx);
+            data_plot(1, parseFloat(dat[1]), ctx);
+            if (parseFloat(dat[22]) > 100)
+              data_plot(2, parseFloat("100"), ctx);
             else
-              data_plot(2, (dat[3]/10), ctx);
-            if ((dat[2]/10) > 100)
-              data_plot(3, ("100"), ctx);
+              data_plot(2, parseFloat(dat[22]), ctx);
+            if (parseFloat(dat[4]) > 100)
+              data_plot(3, parseFloat("100"), ctx);
             else
-              data_plot(3, (dat[2]/10), ctx);
-            data_plot(4, (dat[7]), ctx);
-            data_plot(5, (dat[4]/10), ctx);
-            data_plot(6, (dat[6]), ctx);
-            data_plot(7, (dat[5]/10), ctx);
-            rain_plot((dat[9]), (dat[8]), ctx);
+              data_plot(3, parseFloat(dat[4]), ctx);
+            data_plot(4, parseFloat(dat[25]), ctx);
+            data_plot(5, parseFloat(dat[7]), ctx);
+            data_plot(6, parseFloat(dat[10]), ctx);
+            data_plot(7, parseFloat(dat[13]), ctx);
+            rain_plot(parseFloat(dat[16]), parseFloat(dat[17]), ctx);
 
             var x = document.getElementById("cent_c");
             x.style.display = "block";

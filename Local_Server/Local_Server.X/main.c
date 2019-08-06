@@ -52,9 +52,10 @@ static unsigned short wOriginalAppConfigChecksum; // Checksum of the ROM default
 BYTE AN0String[8];
 
 remotedata outsidedata;
+current WEB_data_0;
 
 int TCP_status;
-int post_data_size;
+DWORD post_data_size;
 TempHum inside, outside;
 BYTE process_item;
 
@@ -115,7 +116,7 @@ TempHum get_Humidity_Temperature() {
 
 static void read_inside_data() {
 
-     inside = get_Humidity_Temperature();
+    inside = get_Humidity_Temperature();
 
     //    uint16_t eeAddress = 64;
     //    uint8_t data[] = {'n','b','w',' ','o','n'};
@@ -141,13 +142,11 @@ int main(int argc, char** argv) {
 
 
 #if defined(STACK_USE_MY_UART)
-    //    my_uart_begin();
-    //    DelayMs(100);
-    //    my_uart_println_str("test");
+        my_uart_begin();
+        DelayMs(100);
+        my_uart_println_str("test");
 #endif
-    my_uart_begin();
-    DelayMs(100);
-    my_uart_println_str("test");
+   
 
 
 
@@ -180,6 +179,33 @@ int main(int argc, char** argv) {
 
 #if defined(STACK_USE_MPFS2)
     MPFSInit();
+//      MPFS_HANDLE f = MPFSOpen("index.htm");
+//                DWORD fs = MPFSGetSize(f);
+//                BYTE dat[512];
+//                char ch;
+//    DWORD send = fs;
+//// 
+//    int ss;
+//     char buf[50];
+//                sprintf(&buf, "Content-Length: %010d\r\n",fs);
+//                ss = 20;
+//                    int count = 0;
+// do {
+//                    if (send > 512) {
+//                        WORD st = MPFSGetArray(f, &dat, 512);
+//                        send -= 512;
+//                    } else break;
+//                    count = 0;
+//                    do{my_uart_print(dat[count++]);}while(count < 512);
+//                } while (true);
+//                
+//                WORD st = MPFSGetArray(f, &dat, send);
+//                
+//                
+//                    count = 0;
+//                do{my_uart_print(dat[count++]);}while(count < send);
+//                MPFSClose(f);
+    
 #endif
 
     InitAppConfig();
@@ -194,12 +220,12 @@ int main(int argc, char** argv) {
 #if defined(STACK_USE_UART)
     DoUARTConfig();
 #endif
-   post_data_size = 0;
-   TCP_status =0;
+    post_data_size = 0;
+    TCP_status = 0;
     int ret;
     while (1) {
 
-        if ((IFS1bits.RTCCIF == 1)&&(TCP_status <2)) {
+        if ((IFS1bits.RTCCIF == 1)&&(TCP_status < 2)) {
             process_item = UPLOAD_DATA;
             IFS1CLR = 0x00008000; // clear RTCC existing event
         }
@@ -213,7 +239,8 @@ int main(int argc, char** argv) {
         StackApplications();
 
         switch (process_item) {
-            case GET_INCOMMING: ret = GenericTCPServer(&post_data_size, &TCP_status);
+            case GET_INCOMMING: 
+                ret = GenericTCPServer( &TCP_status , &post_data_size);
                 break;
             case GET_TIME: t_d = Set_RTCC();
                 if (t_d.d != 0)
@@ -221,8 +248,7 @@ int main(int argc, char** argv) {
                 break;
             case SET_ALARM:
                 SetAlarm(t_d);
-                update_clock();
-                process_item = DO_NOTHING;
+                process_item = UPLOAD_DATA;
                 break;
             case UPLOAD_DATA:
                 read_inside_data();
@@ -663,7 +689,7 @@ void update_clock() {
     hour = mRTCCBCD2Dec(tm.hour);
     min = mRTCCBCD2Dec(tm.min);
     day = mRTCCBCD2Dec(dt.mday);
-    mon = mRTCCBCD2Dec(dt.mon) +1;
+    mon = mRTCCBCD2Dec(dt.mon) + 1;
     year = mRTCCBCD2Dec(dt.year);
 
     t.tm_hour = hour;
@@ -673,7 +699,7 @@ void update_clock() {
     t.tm_mon = mon;
     t.tm_year = year;
     time_t t_of_day = mktime(&t);
-    year -=100;
+    year -= 100;
     if (Is_DST(t_of_day)) {
         hour++;
         if (hour == 24) {
@@ -691,8 +717,8 @@ void update_clock() {
     drawtext(4, 0, buf, ST7735_CYAN, ST7735_BLACK, 4);
     sprintf(buf, "%02d-%02d-%d", day, mon, year);
     drawtext(16, 40, buf, ST7735_CYAN, ST7735_BLACK, 2);
-    
-    drawFastVLine(63,75,80,ST7735_CYAN);
+
+    drawFastVLine(63, 75, 80, ST7735_CYAN);
     outside.h = 0;
     outside.t = 0;
     drawtext(14, 80, "Inside", ST7735_CYAN, ST7735_BLACK, 1);
@@ -700,10 +726,10 @@ void update_clock() {
     sprintf(buf, "%2.1fC", inside.t);
     drawtext(0, 100, buf, ST7735_CYAN, ST7735_BLACK, 2);
     sprintf(buf, "%2.1f%s", inside.h, "%");
-    drawtext(0,120, buf, ST7735_CYAN, ST7735_BLACK, 2);
+    drawtext(0, 120, buf, ST7735_CYAN, ST7735_BLACK, 2);
     sprintf(buf, "%2.1fC", outside.t);
     drawtext(70, 100, buf, ST7735_CYAN, ST7735_BLACK, 2);
     sprintf(buf, "%2.1f%s", outside.h, "%");
-    drawtext(70,120, buf, ST7735_CYAN, ST7735_BLACK, 2);
+    drawtext(70, 120, buf, ST7735_CYAN, ST7735_BLACK, 2);
 
 }

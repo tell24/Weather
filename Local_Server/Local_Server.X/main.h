@@ -52,8 +52,22 @@ extern "C" {
         int bearing;
         unsigned char checksum;
     } remotedata;
+    
+      typedef struct data_packet1 {
+        signed short out_temp;
+        signed short in_temp;
+        signed short out_hum;
+        signed short in_hum;
+        signed short wind_speed;
+        signed short peak_wind_speed;
+        signed short bearing;
+        signed short pressure;
+        signed short rainfall;
+        signed short rainfall_rate;
+    } current;
 
     extern remotedata outsidedata __attribute__((far));
+    extern current WEB_data_0 __attribute__((far));
 
 #define DO_NOTHING     0 
 #define GET_INCOMMING  1
