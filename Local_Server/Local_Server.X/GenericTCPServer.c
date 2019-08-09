@@ -133,7 +133,7 @@ void GenericTCPServer(int *TCP_status, DWORD *post_data_size) {
     WORD wMaxGet, wMaxPut, wCurrentChunk;
     int POST = 0;
     int a_index = 0;
-    DWORD ds = post_data_size;
+    DWORD ds = *post_data_size;
     static TCP_SOCKET MySocket;
 
     static enum _TCPServerState {
@@ -160,17 +160,18 @@ void GenericTCPServer(int *TCP_status, DWORD *post_data_size) {
                 ds = 0;
                 break;
             }
-            //      putrsUART2((ROM char*) "SOCKET OBTAINED...\r\n");
+            putrsUART2((ROM char*) "SOCKET OBTAINED...\r\n");
             TCPServerState = SM_LISTENING;
             *TCP_status = 1;
 
         case SM_LISTENING:
             // See if anyone is connected to us
             if (!TCPIsConnected(MySocket)) {
-                *TCP_status = 1;
+                *TCP_status = 0;
+                TCPServerState = SM_LISTENING;
                 break;
             }
-            //        putrsUART2((ROM char*) "SOCKET CONNECTED...\r\n");
+            putrsUART2((ROM char*) "SOCKET CONNECTED...\r\n");
             TCPServerState = SM_GET;
             *TCP_status = 2;
             *post_data_size = 0;
@@ -178,9 +179,14 @@ void GenericTCPServer(int *TCP_status, DWORD *post_data_size) {
             break;
 
         case SM_GET:
+            if (!TCPIsConnected(MySocket)) {
+                putrsUART2((ROM char*) "SOCKET BROKEN...\r\n");
+                *TCP_status = 1;
+                break;
+            }
             if (TCPIsGetReady(MySocket)) {
 
-                // 	putrsUART((ROM char*)"SOCKET GET READY...\r\n");
+                putrsUART((ROM char*) "SOCKET GET READY...\r\n");
                 while (TCPGet(MySocket, &c)) {
 
                     AppBuffer[a_index] = c;
@@ -200,7 +206,8 @@ void GenericTCPServer(int *TCP_status, DWORD *post_data_size) {
                             break;
                         case '2':
                             break;
-                        case '3':
+                        case 'f':
+                            TCPServerState = SM_POST;
                             break;
                         default:
                             TCPServerState = SM_HOMEPAGE;
@@ -266,27 +273,17 @@ void GenericTCPServer(int *TCP_status, DWORD *post_data_size) {
                 int ii = 0;
                 //    outsidedata.temp = 0;
                 memcpy(&outsidedata, &AppBuffer, ds);
-                my_uart_println_int(a_index);
-                my_uart_println_int(ds);
-                //                my_uart_println_str("");
-                //                my_uart_println_str("");
-                //                my_uart_println_str("");
-                //                my_uart_println_str("");
-                //                do {
-                //                    my_uart_println_int( AppBuffer[ii]);
-                //                    
-                //                    ii++;
-                //                } while (ii < a_index);
-                //                my_uart_println_str("");
-                //                my_uart_println_str("");
-                //                my_uart_println_str("");
                 my_uart_println_str("");
                 my_uart_println_int(outsidedata.temp);
                 my_uart_println_int(outsidedata.hum);
                 my_uart_println_int(outsidedata.wind_speed);
                 my_uart_println_int(outsidedata.peak_wind_speed);
                 my_uart_println_int(outsidedata.bearing);
+                my_uart_println_int(outsidedata.rain);
                 my_uart_println_str("");
+                
+                outside.t = (double)outsidedata.temp/10;
+                outside.h = (double)outsidedata.hum/10;
                 TCPServerState = SM_POST;
                 *TCP_status = 2;
                 *post_data_size = 0;
@@ -308,6 +305,7 @@ void GenericTCPServer(int *TCP_status, DWORD *post_data_size) {
                     TCPPutROMString(MySocket, (ROM BYTE*) "Content-Type: text/html\r\n");
                     TCPPutROMArray(MySocket, &buf, 28);
                     TCPPutROMString(MySocket, (ROM BYTE*) "Pragma: no-cache\r\n");
+                    TCPPutROMString(MySocket, (ROM BYTE*) "Connection: close\r\n");
                     TCPPutROMString(MySocket, (ROM BYTE*) "\r\n");
                     TCPFlush(MySocket);
                 }
@@ -360,22 +358,26 @@ void GenericTCPServer(int *TCP_status, DWORD *post_data_size) {
         int rainfall;
         int rainfall_rate;
                  */
-                WEB_data_0.out_temp = 248;
-                WEB_data_0.in_temp = 194;
-                WEB_data_0.out_hum = 860;
-                WEB_data_0.in_hum = 506;
-                WEB_data_0.wind_speed = 100;
-                WEB_data_0.peak_wind_speed = 177;
-                WEB_data_0.bearing = 50;
-                WEB_data_0.pressure = 1009;
-                WEB_data_0.rainfall = 200;
-                WEB_data_0.rainfall_rate = 30;
+
+                struct tm;
+                rtccTime tm;
+                tm.l = RtccGetTime();
+                WEB_data_0.out_temp = outsidedata.temp;
+                WEB_data_0.in_temp = inside.t * 10;
+                WEB_data_0.out_hum = outsidedata.hum;
+                WEB_data_0.in_hum = inside.h * 10;
+                WEB_data_0.wind_speed = outsidedata.wind_speed;
+                WEB_data_0.peak_wind_speed = outsidedata.peak_wind_speed;
+                WEB_data_0.bearing = outsidedata.bearing;
+                WEB_data_0.pressure = pressure;
+                WEB_data_0.rainfall = outsidedata.rain;
+                WEB_data_0.rainfall_rate = outsidedata.rain;
 
 
                 TCPPutROMString(MySocket, (ROM BYTE*) "HTTP/1.1 200 OK\r\n");
                 TCPPutROMString(MySocket, (ROM BYTE*) "Content-Type: application/zip \r\n");
-
                 TCPPutROMString(MySocket, (ROM BYTE*) "Content-Length: 20\r\n");
+                TCPPutROMString(MySocket, (ROM BYTE*) "Connection: close\r\n");
                 TCPPutROMString(MySocket, (ROM BYTE*) "\r\n");
                 memcpy(&buf, &WEB_data_0, 20);
                 TCPPutROMArray(MySocket, &buf, 20);
@@ -390,8 +392,11 @@ void GenericTCPServer(int *TCP_status, DWORD *post_data_size) {
             break;
 
         case SM_POST:
+
+            putrsUART((ROM char*) "SOCKET POST...\r\n");
             TCPPutROMString(MySocket, (ROM BYTE*) "HTTP/1.1 200 OK\r\n");
             TCPPutROMString(MySocket, (ROM BYTE*) "Content-Type: text/html\r\n");
+            TCPPutROMString(MySocket, (ROM BYTE*) "Connection: close\r\n");
             TCPPutROMString(MySocket, (ROM BYTE*) "\r\n");
             TCPFlush(MySocket);
 
@@ -402,9 +407,11 @@ void GenericTCPServer(int *TCP_status, DWORD *post_data_size) {
 
         case SM_DIS:
             if (TCPIsPutReady(MySocket)) {
-                //       putrsUART((ROM char*) "SOCKET DIS...\r\n");
+                putrsUART((ROM char*) "SOCKET DIS...\r\n");
                 TCPDisconnect(MySocket);
-                TCPServerState = SM_LISTENING;
+                TCPClose(MySocket);
+                DelayMs(100);
+                TCPServerState = SM_HOME;
                 *TCP_status = 0;
                 *post_data_size = 0;
             }

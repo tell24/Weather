@@ -57,6 +57,7 @@ current WEB_data_0;
 int TCP_status;
 DWORD post_data_size;
 TempHum inside, outside;
+signed short pressure;
 BYTE process_item;
 
 // Private helper functions.
@@ -69,7 +70,7 @@ static DateTime Set_RTCC();
 static void SetAlarm(DateTime alarm);
 static void read_inside_data();
 static TempHum get_Humidity_Temperature();
-
+static signed short i2c_Pressure_read();
 /*
  * 
  */
@@ -79,7 +80,7 @@ void _general_exception_handler(unsigned cause, unsigned status) {
     Nop();
 }
 
-int i2c_Pressure_read() {
+signed short i2c_Pressure_read() {
     // pressure BMP180
     char status;
     double T = 0, P = 0;
@@ -117,7 +118,7 @@ TempHum get_Humidity_Temperature() {
 static void read_inside_data() {
 
     inside = get_Humidity_Temperature();
-
+    pressure = i2c_Pressure_read();
     //    uint16_t eeAddress = 64;
     //    uint8_t data[] = {'n','b','w',' ','o','n'};
     //    uint8_t data1[6];
@@ -159,7 +160,6 @@ int main(int argc, char** argv) {
     }
 
     my_uart_println_str("start pres");
-    pressure = i2c_Pressure_read();
 
     my_uart_println_int(pressure);
 
@@ -251,6 +251,7 @@ int main(int argc, char** argv) {
                 process_item = UPLOAD_DATA;
                 break;
             case UPLOAD_DATA:
+                putrsUART2((ROM char*) "Read Data...\r\n");
                 read_inside_data();
                 update_clock();
 
@@ -719,8 +720,6 @@ void update_clock() {
     drawtext(16, 40, buf, ST7735_CYAN, ST7735_BLACK, 2);
 
     drawFastVLine(63, 75, 80, ST7735_CYAN);
-    outside.h = 0;
-    outside.t = 0;
     drawtext(14, 80, "Inside", ST7735_CYAN, ST7735_BLACK, 1);
     drawtext(75, 80, "Outside", ST7735_CYAN, ST7735_BLACK, 1);
     sprintf(buf, "%2.1fC", inside.t);

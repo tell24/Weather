@@ -45,11 +45,12 @@ extern "C" {
     } NVM_VALIDATION_STRUCT;
 
     typedef struct data_packet {
-        int temp;
-        int hum;
-        int wind_speed;
-        int peak_wind_speed;
-        int bearing;
+        signed short temp;
+        signed short hum;
+        signed short wind_speed;
+        signed short peak_wind_speed;
+        signed short rain;
+        signed short bearing;
         unsigned char checksum;
     } remotedata;
     
@@ -68,6 +69,9 @@ extern "C" {
 
     extern remotedata outsidedata __attribute__((far));
     extern current WEB_data_0 __attribute__((far));
+    
+extern TempHum inside, outside;
+extern signed short pressure;
 
 #define DO_NOTHING     0 
 #define GET_INCOMMING  1

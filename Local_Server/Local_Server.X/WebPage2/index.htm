@@ -544,12 +544,12 @@
 
             var x = document.getElementById("cent_c");
             x.style.display = "block";
-
+			xhr = null;
           }
         };
         xhr.open("GET", url);
         xhr.send(null);
-      }
+	}
 
       // Start History Page
       function update_history() {
@@ -1378,6 +1378,7 @@
       var myVar = setInterval(sort_update, 30000);
       active_window = 0;
       make_array();
+      sort_update();
       sort_update();
     }
   </script>
