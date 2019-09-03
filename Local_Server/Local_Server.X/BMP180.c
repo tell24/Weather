@@ -1,7 +1,7 @@
 #include <math.h>
 #include "BMP180.h"
 #include <stdbool.h>
-#include "MyUart.h"
+//#include "MyUart.h"
 
 char BMP180_begin()
 // Initialize library for subsequent pressure measurements
@@ -39,31 +39,7 @@ char BMP180_begin()
 
         // Example from http://wmrx00.sourceforge.net/Arduino/BMP180-Calcs.pdf
         // AC1 = 7911; AC2 = -934; AC3 = -14306; AC4 = 31567; AC5 = 25671; AC6 = 18974;
-        // VB1 = 5498; VB2 = 46; MB = -32768; MC = -11075; MD = 2432;
-
-        
-//                my_uart_print_str("AC1: ");
-//                my_uart_println_int(AC1);
-//                my_uart_print_str("AC2: ");
-//                my_uart_println_int(AC2);
-//                my_uart_print_str("AC3: ");
-//                my_uart_println_int(AC3);
-//                my_uart_print_str("AC4: ");
-//                my_uart_println_int(AC4);
-//                my_uart_print_str("AC5: ");
-//                my_uart_println_int(AC5);
-//                my_uart_print_str("AC6: ");
-//                my_uart_println_int(AC6);
-//                my_uart_print_str("VB1: ");
-//                my_uart_println_int(VB1);
-//                my_uart_print_str("VB2: ");
-//                my_uart_println_int(VB2);
-//                my_uart_print_str("MB: ");
-//                my_uart_println_int(MB);
-//                my_uart_print_str("MC: ");
-//                my_uart_println_int(MC);
-//                my_uart_print_str("MD: ");
-//                my_uart_println_int(MD);
+        // VB1 = 5498; VB2 = 46; MB = -32768; MC = -11075; MD = 2432;       
 
 
         // Compute floating-point polynominals:
@@ -85,52 +61,9 @@ char BMP180_begin()
         p1 = 1.0 - 7357.0 * pow(2, -20);
         p2 = 3038.0 * 100.0 * pow(2, -36);
 
-        /*
-        Serial.println();
-        Serial.print("c3: "); Serial.println(c3);
-        Serial.print("c4: "); Serial.println(c4);
-        Serial.print("c5: "); Serial.println(c5);
-        Serial.print("c6: "); Serial.println(c6);
-        Serial.print("b1: "); Serial.println(b1);
-        Serial.print("mc: "); Serial.println(mc);
-        Serial.print("md: "); Serial.println(md);
-        Serial.print("x0: "); Serial.println(x0);
-        Serial.print("x1: "); Serial.println(x1);
-        Serial.print("x2: "); Serial.println(x2);
-        Serial.print("y0: "); Serial.println(y0);
-        Serial.print("y1: "); Serial.println(y1);
-        Serial.print("y2: "); Serial.println(y2);
-        Serial.print("p0: "); Serial.println(p0);
-        Serial.print("p1: "); Serial.println(p1);
-        Serial.print("p2: "); Serial.println(p2);
-         */
-
         // Success!
         return (1);
     } else {
-
-        //        my_uart_print_str("AC1: ");
-        //        my_uart_println_int(AC1);
-        //        my_uart_print_str("AC2: ");
-        //        my_uart_println_int(AC2);
-        //        my_uart_print_str("AC3: ");
-        //        my_uart_println_int(AC3);
-        //        my_uart_print_str("AC4: ");
-        //        my_uart_println_int(AC4);
-        //        my_uart_print_str("AC5: ");
-        //        my_uart_println_int(AC5);
-        //        my_uart_print_str("AC6: ");
-        //        my_uart_println_int(AC6);
-        //        my_uart_print_str("VB1: ");
-        //        my_uart_println_int(VB1);
-        //        my_uart_print_str("VB2: ");
-        //        my_uart_println_int(VB2);
-        //        my_uart_print_str("MB: ");
-        //        my_uart_println_int(MB);
-        //        my_uart_print_str("MC: ");
-        //        my_uart_println_int(MC);
-        //        my_uart_print_str("MD: ");
-        //        my_uart_println_int(MD);
         // Error reading calibration data; bad component or connection?
         return (0);
     }
@@ -349,29 +282,7 @@ char BMP180_getPressure(double *P, double *T)
         x = (x2 * pow(s, 2)) + (x1 * s) + x0;
         y = (y2 * pow(s, 2)) + (y1 * s) + y0;
         z = (pu - x) / y;
-        *P = (p2 * pow(z, 2)) + (p1 * z) + p0;
-
-//        my_uart_print_str("d[0]: ");
-//        my_uart_println_int(data[0]);
-//        my_uart_print_str("d[1]: ");
-//        my_uart_println_int(data[1]);
-//        my_uart_print_str("d[2]: ");
-//        my_uart_println_int(data[2]);
-//        my_uart_print_str("pu: ");
-//        my_uart_println_double(pu);
-//        my_uart_print_str("T: ");
-//        my_uart_println_double(T);
-//        my_uart_print_str("s: ");
-//        my_uart_println_double(s);
-//        my_uart_print_str("x: ");
-//        my_uart_println_double(x);
-//        my_uart_print_str("y: ");
-//        my_uart_println_double(y);
-//        my_uart_print_str("z: ");
-//        my_uart_println_double(z);
-//        my_uart_print_str("P: ");
-//        my_uart_println_double(P);
-        
+        *P = (p2 * pow(z, 2)) + (p1 * z) + p0;        
     }
     return (result);
 }

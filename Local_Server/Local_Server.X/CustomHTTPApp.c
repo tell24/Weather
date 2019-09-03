@@ -60,11 +60,6 @@
 #include "TCPIP Stack/TCPIP.h"
 #include "main.h"		// Needed for SaveAppConfig() prototype
 
-
-#if defined(STACK_USE_MY_UART)
-#include "MyUart.h"
-#endif
-
 /****************************************************************************
   Section:
 	Function Prototypes and Memory Globalizers
@@ -285,19 +280,6 @@ HTTP_IO_RESULT HTTPExecutePost(void)
 {
 	// Resolve which function to use and pass along
 	BYTE filename[20];
-    
-    
-   if(memcmp(curHTTP.ptrData +2,"mydata",6)){
-   char pd[150];
-   memcpy(pd,curHTTP.data,150);   
-   putrsUART2("\r\ndat\r\n");
-   int i = 0;
-   do{
-   my_uart_print((char)pd[i]);
-   i++;
-   }while(i < 150);
-		return HTTP_IO_NEED_DATA;}
-    
 	
 	// Load the file name
 	// Make sure BYTE filename[] above is large enough for your longest name
@@ -307,7 +289,7 @@ HTTP_IO_RESULT HTTPExecutePost(void)
 	if(!memcmppgm2ram(filename, "forms.htm", 9))
 		return HTTPPostLCD();
 #endif
-    
+
 #if defined(STACK_USE_HTTP_MD5_DEMO)
 	if(!memcmppgm2ram(filename, "upload.htm", 10))
 		return HTTPPostMD5();

@@ -89,334 +89,123 @@
 #define __GENERICTCPSERVER_C
 
 #include "TCPIPConfig.h"
-#include <string.h>
-#include <stdint.h>
 
 #if defined(STACK_USE_GENERIC_TCP_SERVER_EXAMPLE)
 
 #include "TCPIP Stack/TCPIP.h"
-#include "main.h"
 
 
 // Defines which port the server will listen on
-#define SERVER_PORT	80
+#define SERVER_PORT	9760
+
 
 /*****************************************************************************
   Function:
-    void GenericTCPServer(void)
+	void GenericTCPServer(void)
 
   Summary:
-    Implements a simple ToUpper TCP Server.
+	Implements a simple ToUpper TCP Server.
 
   Description:
-    This function implements a simple TCP server.  The function is invoked
-    periodically by the stack to listen for incoming connections.  When a 
-    connection is made, the server reads all incoming data, transforms it
-    to uppercase, and echos it back.
+	This function implements a simple TCP server.  The function is invoked
+	periodically by the stack to listen for incoming connections.  When a 
+	connection is made, the server reads all incoming data, transforms it
+	to uppercase, and echos it back.
 	
-    This example can be used as a model for many TCP server applications.
+	This example can be used as a model for many TCP server applications.
 
   Precondition:
-    TCP is initialized.
+	TCP is initialized.
 
   Parameters:
-    None
+	None
 
   Returns:
-    None
- ***************************************************************************/
+  	None
+  ***************************************************************************/
+void GenericTCPServer(void)
+{
+	BYTE i;
+	WORD w, w2;
+	BYTE AppBuffer[32];
+	WORD wMaxGet, wMaxPut, wCurrentChunk;
+	static TCP_SOCKET	MySocket;
+	static enum _TCPServerState
+	{
+		SM_HOME = 0,
+		SM_LISTENING,
+        SM_CLOSING,
+	} TCPServerState = SM_HOME;
 
-void GenericTCPServer(int *TCP_status, DWORD *post_data_size) {
-    BYTE i, c, lc, lc2;
-    WORD w, w2;
-    BYTE AppBuffer[512];
-    WORD wMaxGet, wMaxPut, wCurrentChunk;
-    int POST = 0;
-    int a_index = 0;
-    DWORD ds = *post_data_size;
-    static TCP_SOCKET MySocket;
+	switch(TCPServerState)
+	{
+		case SM_HOME:
+			// Allocate a socket for this server to listen and accept connections on
+			MySocket = TCPOpen(0, TCP_OPEN_SERVER, SERVER_PORT, TCP_PURPOSE_GENERIC_TCP_SERVER);
+			if(MySocket == INVALID_SOCKET)
+				return;
 
-    static enum _TCPServerState {
-        SM_HOME = 0,
-        SM_LISTENING,
-        SM_GET,
-        SM_HOMEPAGE,
-        SM_CURRENT,
-        SM_DIS,
-        SM_POST,
-        SM_Wait_DataSize,
-        SM_DataSize,
-        SM_Proc_Data
-    } TCPServerState = SM_HOME;
+			TCPServerState = SM_LISTENING;
+			break;
 
-    switch (TCPServerState) {
-        case SM_HOME:
-            *TCP_status = 0;
-            // Allocate a socket for this server to listen and accept connections on
-            MySocket = TCPOpen(0, TCP_OPEN_SERVER, SERVER_PORT, TCP_PURPOSE_GENERIC_TCP_SERVER);
-            if (MySocket == INVALID_SOCKET) {
-                *TCP_status = 0;
-                //  return 0;
-                ds = 0;
-                break;
-            }
-            putrsUART2((ROM char*) "SOCKET OBTAINED...\r\n");
-            TCPServerState = SM_LISTENING;
-            *TCP_status = 1;
+		case SM_LISTENING:
+			// See if anyone is connected to us
+			if(!TCPIsConnected(MySocket))
+				return;
 
-        case SM_LISTENING:
-            // See if anyone is connected to us
-            if (!TCPIsConnected(MySocket)) {
-                *TCP_status = 0;
-                TCPServerState = SM_LISTENING;
-                break;
-            }
-            putrsUART2((ROM char*) "SOCKET CONNECTED...\r\n");
-            TCPServerState = SM_GET;
-            *TCP_status = 2;
-            *post_data_size = 0;
 
-            break;
+			// Figure out how many bytes have been received and how many we can transmit.
+			wMaxGet = TCPIsGetReady(MySocket);	// Get TCP RX FIFO byte count
+			wMaxPut = TCPIsPutReady(MySocket);	// Get TCP TX FIFO free space
 
-        case SM_GET:
-            if (!TCPIsConnected(MySocket)) {
-                putrsUART2((ROM char*) "SOCKET BROKEN...\r\n");
-                *TCP_status = 1;
-                break;
-            }
-            if (TCPIsGetReady(MySocket)) {
+			// Make sure we don't take more bytes out of the RX FIFO than we can put into the TX FIFO
+			if(wMaxPut < wMaxGet)
+				wMaxGet = wMaxPut;
 
-                putrsUART((ROM char*) "SOCKET GET READY...\r\n");
-                while (TCPGet(MySocket, &c)) {
+			// Process all bytes that we can
+			// This is implemented as a loop, processing up to sizeof(AppBuffer) bytes at a time.  
+			// This limits memory usage while maximizing performance.  Single byte Gets and Puts are a lot slower than multibyte GetArrays and PutArrays.
+			wCurrentChunk = sizeof(AppBuffer);
+			for(w = 0; w < wMaxGet; w += sizeof(AppBuffer))
+			{
+				// Make sure the last chunk, which will likely be smaller than sizeof(AppBuffer), is treated correctly.
+				if(w + sizeof(AppBuffer) > wMaxGet)
+					wCurrentChunk = wMaxGet - w;
 
-                    AppBuffer[a_index] = c;
-                    a_index++;
-                }
-
-                if (((AppBuffer[0] == 'G')&&(AppBuffer[1] == 'E'))) {
-
-                    switch (AppBuffer[5]) {
-                        case ' ':
-                            TCPServerState = SM_HOMEPAGE;
-                            break;
-                        case '0':
-                            TCPServerState = SM_CURRENT;
-                            break;
-                        case '1':
-                            break;
-                        case '2':
-                            break;
-                        case 'f':
-                            TCPServerState = SM_POST;
-                            break;
-                        default:
-                            TCPServerState = SM_HOMEPAGE;
-                            break;
+				// Transfer the data out of the TCP RX FIFO and into our local processing buffer.
+				TCPGetArray(MySocket, AppBuffer, wCurrentChunk);
+				
+				// Perform the "ToUpper" operation on each data byte
+				for(w2 = 0; w2 < wCurrentChunk; w2++)
+				{
+					i = AppBuffer[w2];
+                    putrsUART2(i);
+					if(i >= 'a' && i <= 'z')
+					{
+						i -= ('a' - 'A');
+						AppBuffer[w2] = i;
+					}
+                    else if(i == 0x1B)   //escape
+                    {
+                        TCPServerState = SM_CLOSING;
                     }
-                    *TCP_status = 2;
-                    *post_data_size = 0;
-                    break;
-                }
-                if (((AppBuffer[0] == 'P')&&(AppBuffer[1] == 'O'))) {
-                    TCPServerState = SM_Wait_DataSize;
-                    *TCP_status = 2;
-                    *post_data_size = 0;
-                    break;
-                }
-            }
-            break;
+				}
+				
+				// Transfer the data out of our local processing buffer and into the TCP TX FIFO.
+				TCPPutArray(MySocket, AppBuffer, wCurrentChunk);
+			}
 
-        case SM_Wait_DataSize:
-            if (TCPIsGetReady(MySocket)) {
-                a_index = 0;
-                // 	putrsUART((ROM char*)"SOCKET GET READY...\r\n");
-                while (TCPGet(MySocket, &c)) {
-                    AppBuffer[a_index] = c;
-                    a_index++;
-                }
-            }
-            if ((AppBuffer[0] == 'C')&&(AppBuffer[1] == 'o')&&(AppBuffer[8] == 'L')) {
-                TCPServerState = SM_DataSize;
-                *TCP_status = 2;
-                *post_data_size = 0;
-            }
+			// No need to perform any flush.  TCP data in TX FIFO will automatically transmit itself after it accumulates for a while.  If you want to decrease latency (at the expense of wasting network bandwidth on TCP overhead), perform and explicit flush via the TCPFlush() API.
 
-            break;
+			break;
 
-        case SM_DataSize:
-            if (TCPIsGetReady(MySocket)) {
-                a_index = 0;
-                // 	putrsUART((ROM char*)"SOCKET GET READY...\r\n");
-                while (TCPGet(MySocket, &c)) {
-                    AppBuffer[a_index] = c;
-                    a_index++;
-                }
+		case SM_CLOSING:
+			// Close the socket connection.
+            TCPClose(MySocket);
 
-                if ((AppBuffer[0] == '\r') && (AppBuffer[1] == '\n')) break;
-                AppBuffer[a_index] = 0;
-                TCPServerState = SM_Proc_Data;
-                *TCP_status = 2;
-                *post_data_size = atoi(AppBuffer);
-            }
-            break;
-
-        case SM_Proc_Data:
-            if (TCPIsGetReady(MySocket)) {
-                a_index = 0;
-                // 	putrsUART((ROM char*)"SOCKET GET READY...\r\n");
-                while (TCPGet(MySocket, &c)) {
-                    AppBuffer[a_index] = (BYTE) c;
-                    a_index++;
-                }
-            }
-            if (a_index >= ds) {
-                int ii = 0;
-                //    outsidedata.temp = 0;
-                memcpy(&outsidedata, &AppBuffer, ds);
-                my_uart_println_str("");
-                my_uart_println_int(outsidedata.temp);
-                my_uart_println_int(outsidedata.hum);
-                my_uart_println_int(outsidedata.wind_speed);
-                my_uart_println_int(outsidedata.peak_wind_speed);
-                my_uart_println_int(outsidedata.bearing);
-                my_uart_println_int(outsidedata.rain);
-                my_uart_println_str("");
-                
-                outside.t = (double)outsidedata.temp/10;
-                outside.h = (double)outsidedata.hum/10;
-                TCPServerState = SM_POST;
-                *TCP_status = 2;
-                *post_data_size = 0;
-            }
-            break;
-
-        case SM_HOMEPAGE:
-            //  putrsUART2((ROM char*) "SOCKET PUT...\r\n");
-            if (TCPIsPutReady(MySocket)) {
-                DWORD offset = *post_data_size;
-                MPFS_HANDLE f = MPFSOpen("index.htm");
-                DWORD fs = MPFSGetSize(f);
-                DWORD sent = fs - offset;
-                MPFSSeek(f, offset, MPFS_SEEK_FORWARD);
-                if (offset == 0) {
-                    char buf[30];
-                    sprintf(&buf, "Content-Length: %010d\r\n", fs);
-                    TCPPutROMString(MySocket, (ROM BYTE*) "HTTP/1.1 200 OK\r\n");
-                    TCPPutROMString(MySocket, (ROM BYTE*) "Content-Type: text/html\r\n");
-                    TCPPutROMArray(MySocket, &buf, 28);
-                    TCPPutROMString(MySocket, (ROM BYTE*) "Pragma: no-cache\r\n");
-                    TCPPutROMString(MySocket, (ROM BYTE*) "Connection: close\r\n");
-                    TCPPutROMString(MySocket, (ROM BYTE*) "\r\n");
-                    TCPFlush(MySocket);
-                }
-                do {
-                    if (sent > 256) {
-                        if (TCPIsPutReady(MySocket) < 256) {
-                            *post_data_size = offset;
-                            MPFSClose(f);
-                            return;
-                        }
-                        WORD st = MPFSGetArray(f, &AppBuffer, 256);
-                        sent -= 256;
-                        offset += 256;
-                        TCPPutROMArray(MySocket, &AppBuffer, 256);
-                        TCPFlush(MySocket);
-                        *post_data_size = offset;
-                    } else break;
-                } while (true);
-                if (TCPIsPutReady(MySocket) < 256) {
-                    *post_data_size = offset;
-                    MPFSClose(f);
-                    return;
-                }
-                if (sent > 0) {
-                    WORD st = MPFSGetArray(f, &AppBuffer, sent);
-                    TCPPutROMArray(MySocket, &AppBuffer, sent);
-                    TCPFlush(MySocket);
-                }
-                MPFSClose(f);
-
-                TCPServerState = SM_DIS;
-
-                *TCP_status = 2;
-                *post_data_size = 0;
-            }
-            break;
-
-        case SM_CURRENT:
-            if (TCPIsPutReady(MySocket)) {
-                char buf[100];
-                /*
-                  int out_temp;
-        int in_temp;
-        int out_hum;
-        int in_hum;
-        int wind_speed;
-        int peak_wind_speed;
-        int bearing;
-        int pressure;
-        int rainfall;
-        int rainfall_rate;
-                 */
-
-                struct tm;
-                rtccTime tm;
-                tm.l = RtccGetTime();
-                WEB_data_0.out_temp = outsidedata.temp;
-                WEB_data_0.in_temp = inside.t * 10;
-                WEB_data_0.out_hum = outsidedata.hum;
-                WEB_data_0.in_hum = inside.h * 10;
-                WEB_data_0.wind_speed = outsidedata.wind_speed;
-                WEB_data_0.peak_wind_speed = outsidedata.peak_wind_speed;
-                WEB_data_0.bearing = outsidedata.bearing;
-                WEB_data_0.pressure = pressure;
-                WEB_data_0.rainfall = outsidedata.rain;
-                WEB_data_0.rainfall_rate = outsidedata.rain;
-
-
-                TCPPutROMString(MySocket, (ROM BYTE*) "HTTP/1.1 200 OK\r\n");
-                TCPPutROMString(MySocket, (ROM BYTE*) "Content-Type: application/zip \r\n");
-                TCPPutROMString(MySocket, (ROM BYTE*) "Content-Length: 20\r\n");
-                TCPPutROMString(MySocket, (ROM BYTE*) "Connection: close\r\n");
-                TCPPutROMString(MySocket, (ROM BYTE*) "\r\n");
-                memcpy(&buf, &WEB_data_0, 20);
-                TCPPutROMArray(MySocket, &buf, 20);
-                TCPFlush(MySocket);
-            }
-
-
-            TCPServerState = SM_DIS;
-
-            *TCP_status = 2;
-            *post_data_size = 0;
-            break;
-
-        case SM_POST:
-
-            putrsUART((ROM char*) "SOCKET POST...\r\n");
-            TCPPutROMString(MySocket, (ROM BYTE*) "HTTP/1.1 200 OK\r\n");
-            TCPPutROMString(MySocket, (ROM BYTE*) "Content-Type: text/html\r\n");
-            TCPPutROMString(MySocket, (ROM BYTE*) "Connection: close\r\n");
-            TCPPutROMString(MySocket, (ROM BYTE*) "\r\n");
-            TCPFlush(MySocket);
-
-            TCPServerState = SM_DIS;
-            *TCP_status = 2;
-            *post_data_size = 0;
-            break;
-
-        case SM_DIS:
-            if (TCPIsPutReady(MySocket)) {
-                putrsUART((ROM char*) "SOCKET DIS...\r\n");
-                TCPDisconnect(MySocket);
-                TCPClose(MySocket);
-                DelayMs(100);
-                TCPServerState = SM_HOME;
-                *TCP_status = 0;
-                *post_data_size = 0;
-            }
-            break;
-    }
+			TCPServerState = SM_HOME;
+			break;
+	}
 }
 
 #endif //#if defined(STACK_USE_GENERIC_TCP_SERVER_EXAMPLE)

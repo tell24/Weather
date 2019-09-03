@@ -53,7 +53,7 @@
 #include "TCPIP Stack/TCPIP.h"
 
 
-
+#if !defined(__18CXX) || defined(HI_TECH_C)
 void DelayMs(WORD ms)
 {
     unsigned char i;
@@ -66,31 +66,15 @@ void DelayMs(WORD ms)
         }
     }
 }
+#endif	//#if !defined(__18CXX) || defined(HI_TECH_C)
 
 
-
+#if defined(__C30__) || defined(__C32__)
 void Delay10us(DWORD dwCount)
 {
 	volatile DWORD _dcnt;
 
-	_dcnt = dwCount*((DWORD)(0.00001/(8.0/GetInstructionClock())/10));
-	while(_dcnt--)
-	{
-		#if defined(__C32__)
-			Nop();
-			Nop();
-			Nop();
-			Nop();
-		#endif
-	}
-}
-
-
-void DelayUs(DWORD dwCount)
-{
-	volatile DWORD _dcnt;
-
-	_dcnt = dwCount*((DWORD)(0.0000005/(1.0/GetInstructionClock())/10));
+	_dcnt = dwCount*((DWORD)(0.00001/(1.0/GetInstructionClock())/10));
 	while(_dcnt--)
 	{
 		#if defined(__C32__)
@@ -100,17 +84,4 @@ void DelayUs(DWORD dwCount)
 		#endif
 	}
 }
-
-
-void Delay_Min()
-{
-	volatile DWORD _dcnt = 1;// dwCount*((DWORD)(0.0000005/(1.0/GetInstructionClock())/10));
-	while(_dcnt--)
-	{
-		#if defined(__C32__)
-			Nop();
-			Nop();
-			Nop();
-		#endif
-	}
-}
+#endif

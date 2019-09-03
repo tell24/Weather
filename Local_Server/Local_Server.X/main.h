@@ -1,94 +1,172 @@
-/* 
- * File:   main.h
- * Author: terry
+/*********************************************************************
  *
- * Created on 04 July 2019, 16:00
- */
+ *                  Headers for TCPIP Demo App
+ *
+ *********************************************************************
+ * FileName:        MainDemo.h
+ * Dependencies:    Compiler.h
+ * Processor:       PIC18, PIC24F, PIC24H, dsPIC30F, dsPIC33F, PIC32
+ * Compiler:        Microchip C32 v1.05 or higher
+ *					Microchip C30 v3.12 or higher
+ *					Microchip C18 v3.30 or higher
+ *					HI-TECH PICC-18 PRO 9.63PL2 or higher
+ * Company:         Microchip Technology, Inc.
+ *
+ * Software License Agreement
+ *
+ * Copyright (C) 2002-2010 Microchip Technology Inc.  All rights
+ * reserved.
+ *
+ * Microchip licenses to you the right to use, modify, copy, and
+ * distribute:
+ * (i)  the Software when embedded on a Microchip microcontroller or
+ *      digital signal controller product ("Device") which is
+ *      integrated into Licensee's product; or
+ * (ii) ONLY the Software driver source files ENC28J60.c, ENC28J60.h,
+ *		ENCX24J600.c and ENCX24J600.h ported to a non-Microchip device
+ *		used in conjunction with a Microchip ethernet controller for
+ *		the sole purpose of interfacing with the ethernet controller.
+ *
+ * You should refer to the license agreement accompanying this
+ * Software for additional information regarding your rights and
+ * obligations.
+ *
+ * THE SOFTWARE AND DOCUMENTATION ARE PROVIDED "AS IS" WITHOUT
+ * WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT
+ * LIMITATION, ANY WARRANTY OF MERCHANTABILITY, FITNESS FOR A
+ * PARTICULAR PURPOSE, TITLE AND NON-INFRINGEMENT. IN NO EVENT SHALL
+ * MICROCHIP BE LIABLE FOR ANY INCIDENTAL, SPECIAL, INDIRECT OR
+ * CONSEQUENTIAL DAMAGES, LOST PROFITS OR LOST DATA, COST OF
+ * PROCUREMENT OF SUBSTITUTE GOODS, TECHNOLOGY OR SERVICES, ANY CLAIMS
+ * BY THIRD PARTIES (INCLUDING BUT NOT LIMITED TO ANY DEFENSE
+ * THEREOF), ANY CLAIMS FOR INDEMNITY OR CONTRIBUTION, OR OTHER
+ * SIMILAR COSTS, WHETHER ASSERTED ON THE BASIS OF CONTRACT, TORT
+ * (INCLUDING NEGLIGENCE), BREACH OF WARRANTY, OR OTHERWISE.
+ *
+ *
+ * Author               Date    Comment
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * E. Wood				4/26/08 Copied from MainDemo.c
+ ********************************************************************/
+#ifndef _MAIN_H
+#define _MAIN_H
 
-#include "I2C.h"
-
-#ifndef MAIN_H
-#define	MAIN_H
-
-#ifdef	__cplusplus
-extern "C" {
-#endif
-
+#define BAUD_RATE       (19200)		// bps
 #define SaveAppConfig(a)
-
 #define RAD 57.296
 
-    // An actual function defined in MainDemo.c for displaying the current IP 
-    // address on the UART and/or LCD.
-
-    void DisplayIPValue(IP_ADDR IPVal);
-    _Bool Is_DST(DWORD time);
-    void update_clock();
-    // Define a header structure for validating the AppConfig data structure in EEPROM/Flash
-
-    typedef struct Date_Time {
-        int16_t d;
-        int16_t t;
-    } DateTime;
-    
-   
-    
-    typedef struct Temp_Hum {
-        double t;
-        double h;
-    } TempHum;
-
-    typedef struct {
-        unsigned short wConfigurationLength; // Number of bytes saved in EEPROM/Flash (sizeof(APP_CONFIG))
-        unsigned short wOriginalChecksum; // Checksum of the original AppConfig defaults as loaded from ROM (to detect when to wipe the EEPROM/Flash record of AppConfig due to a stack change, such as when switching from Ethernet to Wi-Fi)
-        unsigned short wCurrentChecksum; // Checksum of the current EEPROM/Flash data.  This protects against using corrupt values if power failure occurs while writing them and helps detect coding errors in which some other task writes to the EEPROM in the AppConfig area.
-    } NVM_VALIDATION_STRUCT;
-
-    typedef struct data_packet {
-        signed short temp;
-        signed short hum;
-        signed short wind_speed;
-        signed short peak_wind_speed;
-        signed short rain;
-        signed short bearing;
-        unsigned char checksum;
-    } remotedata;
-    
-      typedef struct data_packet1 {
-        signed short out_temp;
-        signed short in_temp;
-        signed short out_hum;
-        signed short in_hum;
-        signed short wind_speed;
-        signed short peak_wind_speed;
-        signed short bearing;
-        signed short pressure;
-        signed short rainfall;
-        signed short rainfall_rate;
-    } current;
-
-    extern remotedata outsidedata __attribute__((far));
-    extern current WEB_data_0 __attribute__((far));
-    
-extern TempHum inside, outside;
-extern signed short pressure;
 
 #define DO_NOTHING     0 
 #define GET_INCOMMING  1
 #define GET_TIME       2
 #define SET_ALARM      3
-#define UPLOAD_DATA    4
-    
-    
+#define SET_TIME_ALARM 4
+#define READ_DATA      5
+#define UPLOAD_CURRENT 6
+#define UPLOAD_HISTORY 7
+#define STOP_SERVER    8
+#define STARTUP        9
+
+#define CURRENT_DATA   0
+#define HISTORY_DATA   1
 
 #define mRTCCBCD2Dec(BCD)   (((BCD>>4)*10)+(BCD & 0x0f))    
 #define mRTCCDec2BCD(Dec)  ((Dec/10)<<4)|(Dec % 10)
 
-    extern BYTE process_item;
 
-#ifdef	__cplusplus
-}
-#endif
+// Define a header structure for validating the AppConfig data structure in EEPROM/Flash
 
-#endif	/* MAIN_H */
+typedef struct {
+    unsigned short wConfigurationLength; // Number of bytes saved in EEPROM/Flash (sizeof(APP_CONFIG))
+    unsigned short wOriginalChecksum; // Checksum of the original AppConfig defaults as loaded from ROM (to detect when to wipe the EEPROM/Flash record of AppConfig due to a stack change, such as when switching from Ethernet to Wi-Fi)
+    unsigned short wCurrentChecksum; // Checksum of the current EEPROM/Flash data.  This protects against using corrupt values if power failure occurs while writing them and helps detect coding errors in which some other task writes to the EEPROM in the AppConfig area.
+} NVM_VALIDATION_STRUCT;
 
+typedef struct Date_Time {
+    DWORD d;
+    DWORD t;
+} DateTime;
+
+typedef struct RTCC_Date_Time {
+    rtccTime t;
+    rtccDate d;
+} RTCCDateTime;
+
+typedef struct Temp_Hum {
+    double t;
+    double h;
+} TempHum;
+
+typedef struct data_packet {
+    signed short temp;
+    signed short hum;
+    signed short wind_speed;
+    signed short peak_wind_speed;
+    signed short rain;
+    signed short bearing;
+    unsigned char checksum;
+} remotedata;
+
+typedef struct data_packet1 {
+    signed short out_temp;
+    signed short in_temp;
+    signed short out_hum;
+    signed short in_hum;
+    signed short wind_speed;
+    signed short peak_wind_speed;
+    signed short bearing;
+    signed short pressure;
+    signed short rainfall;
+    signed short rainfall_rate;
+    DWORD timestamp;
+} current;
+
+
+typedef struct data_packet2 {
+    signed short out_temp_H;
+    signed short out_temp_L;
+    signed short in_temp_H;
+    signed short in_temp_L;
+    signed short out_hum_H;
+    signed short out_hum_L;
+    signed short in_hum_H;
+    signed short in_hum_L;
+    signed short wind_speed;
+    signed short peak_wind_speed;
+    signed short bearing;
+    signed short pressure_H;
+    signed short pressure_L;
+    signed short rainfall;
+    DWORD timestamp;
+} history_packet;
+
+extern RTCCDateTime DataTime;
+extern remotedata outsidedata __attribute__((far));
+extern current WEB_data_0 __attribute__((far));
+extern current ThisHour[60] __attribute__((far));
+extern history_packet History __attribute__((far));
+
+
+extern TempHum inside, outside;
+extern unsigned short pressure;
+
+extern BYTE AN0String[8];
+extern BYTE process_item;
+
+
+_Bool Is_DST(DWORD time);
+RTCCDateTime update_clock();
+
+//
+void my_uart_begin();
+void my_uart_print(char data);
+void my_uart_print_str(char *str);
+void my_uart_println_str(char *str);
+void my_uart_println_int(int i);
+void my_uart_print_int(int i);
+void my_uart_println_double(double i);
+void my_uart_print_HEX(uint32_t hex);
+void DoUARTConfig(void);
+
+
+#endif // _MAIN_H

@@ -593,7 +593,6 @@ void TCPInit(void)
   *****************************************************************************/
 TCP_SOCKET TCPOpen(DWORD dwRemoteHost, BYTE vRemoteHostType, WORD wPort, BYTE vSocketPurpose)
 {
-    dwRemoteHost = 0x2800A8C0;
 	TCP_SOCKET hTCP;
 
 	// Find an available socket that matches the specified socket type
@@ -1048,7 +1047,6 @@ void TCPFlush(TCP_SOCKET hTCP)
 {
 	if(hTCP >= TCP_SOCKET_COUNT)
     {
-        
         return;
     }
     
@@ -1061,9 +1059,7 @@ void TCPFlush(TCP_SOCKET hTCP)
 	{
 		// Send the TCP segment with all unacked bytes
 		SendTCP(ACK, SENDTCP_RESET_TIMERS);
-        
 	}
-      
 }
 
 

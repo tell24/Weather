@@ -1,9 +1,65 @@
-/* 
- * File:   main.c
- * Author: terry
+/*********************************************************************
  *
- * Created on 03 July 2019, 15:14
+ *  Main Application Entry Point and TCP/IP Stack Demo
+ *  Module for Microchip TCP/IP Stack
+ *   -Demonstrates how to call and use the Microchip TCP/IP stack
+ *   -Reference: Microchip TCP/IP Stack Help (TCPIP Stack Help.chm)1150
+
+ *
+ *********************************************************************
+ * FileName:        Main.c
+ * Dependencies:    TCPIP.h
+ * Processor:       PIC18, PIC24F, PIC24H, dsPIC30F, dsPIC33F, PIC32
+ * Compiler:        Microchip C32 v1.11b or higher
+ *                  Microchip C30 v3.24 or higher
+ *                  Microchip C18 v3.36 or higher
+ * Company:         Microchip Technology, Inc.
+ *
+ * Software License Agreement
+ *
+ * Copyright (C) 2002-2010 Microchip Technology Inc.  All rights
+ * reserved.
+ *
+ * Microchip licenses to you the right to use, modify, copy, and
+ * distribute:
+ * (i)  the Software when embedded on a Microchip microcontroller or
+ *      digital signal controller product ("Device") which is
+ *      integrated into Licensee's product; or
+ * (ii) ONLY the Software driver source files ENC28J60.c, ENC28J60.h,
+ *      ENCX24J600.c and ENCX24J600.h ported to a non-Microchip device
+ *      used in conjunction with a Microchip ethernet controller for
+ *      the sole purpose of interfacing with the ethernet controller.
+ *
+ * You should refer to the license agreement accompanying this
+ * Software for additional information regarding your rights and
+ * obligations.
+ *
+ * THE SOFTWARE AND DOCUMENTATION ARE PROVIDED "AS IS" WITHOUT
+ * WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT
+ * LIMITATION, ANY WARRANTY OF MERCHANTABILITY, FITNESS FOR A
+ * PARTICULAR PURPOSE, TITLE AND NON-INFRINGEMENT. IN NO EVENT SHALL
+ * MICROCHIP BE LIABLE FOR ANY INCIDENTAL, SPECIAL, INDIRECT OR
+ * CONSEQUENTIAL DAMAGES, LOST PROFITS OR LOST DATA, COST OF
+ * PROCUREMENT OF SUBSTITUTE GOODS, TECHNOLOGY OR SERVICES, ANY CLAIMS
+ * BY THIRD PARTIES (INCLUDING BUT NOT LIMITED TO ANY DEFENSE
+ * THEREOF), ANY CLAIMS FOR INDEMNITY OR CONTRIBUTION, OR OTHER
+ * SIMILAR COSTS, WHETHER ASSERTED ON THE BASIS OF CONTRACT, TORT
+ * (INCLUDING NEGLIGENCE), BREACH OF WARRANTY, OR OTHERWISE.
+ *
+ * File Description:
+ * Change History:
+ * Rev   Description
+ * ----  -----------------------------------------
+ * 1.0   Initial release
+ * V5.36 ---- STACK_USE_MPFS support has been removed 
+ ********************************************************************/
+/*
+ * This macro uniquely defines this file as the main entry point.
+ * There should only be one such definition in the entire project,
+ * and this file must define the AppConfig variable as described below.
  */
+#define THIS_IS_STACK_APPLICATION
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,16 +72,22 @@
 #include "BMP180.h"
 #include "HTU21D.h"
 #include "ST7735.h"
-
-#define THIS_IS_STACK_APPLICATION
-
+#include "eeprom.h"
 // Include all headers for any enabled TCPIP Stack functions
 #include "TCPIP Stack/TCPIP.h"
-#include "main.h"
 
 #if defined(STACK_USE_MY_UART)
-#include "MyUart.h"
+//#include "MyUart.h"
+#undef STACK_USE_UART
 #endif
+
+// Include functions specific to this stack application
+#include "main.h"
+
+// Used for Wi-Fi assertions
+#define WF_MODULE_NUMBER   WF_MODULE_MAIN_DEMO
+
+#define SERVER_PORT	80
 
 #pragma config FPLLMUL  = MUL_20        // PLL Multiplier
 #pragma config FPLLIDIV = DIV_2         // PLL Input Divider
@@ -46,19 +108,28 @@
 #pragma config DEBUG    = OFF            // Background Debugger Enable
 
 
+#define HOUR_OFFSET  1860
 // Declare AppConfig structure and some other supporting stack variables
 APP_CONFIG AppConfig;
 static unsigned short wOriginalAppConfigChecksum; // Checksum of the ROM defaults for AppConfig
 BYTE AN0String[8];
 
+
+static ROM BYTE SerializedMACAddress[6] = {MY_DEFAULT_MAC_BYTE1, MY_DEFAULT_MAC_BYTE2, MY_DEFAULT_MAC_BYTE3, MY_DEFAULT_MAC_BYTE4, MY_DEFAULT_MAC_BYTE5, MY_DEFAULT_MAC_BYTE6};
+
+uint8_t month[] = {0, 30, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 remotedata outsidedata;
 current WEB_data_0;
+RTCCDateTime DataTime;
+current ThisHour[60];
+history_packet History;
 
 int TCP_status;
 DWORD post_data_size;
 TempHum inside, outside;
-signed short pressure;
+unsigned short pressure;
 BYTE process_item;
+uint8_t old_min;
 
 // Private helper functions.
 // These may or may not be present in all applications.
@@ -66,21 +137,26 @@ static void InitAppConfig(void);
 static void InitializeBoard(void);
 static void ProcessIO(void);
 
+static void DisplayIPValue(IP_ADDR IPVal);
+void TCPServer(int *TCP_status, DWORD *post_data_size, MPFS_HANDLE *f);
+BYTE TCPClient(BYTE type);
 static DateTime Set_RTCC();
 static void SetAlarm(DateTime alarm);
 static void read_inside_data();
 static TempHum get_Humidity_Temperature();
-static signed short i2c_Pressure_read();
-/*
- * 
- */
+static double i2c_Pressure_read();
+static _Bool save_data(RTCCDateTime tim);
+
+
+#if defined(__C32__)
 
 void _general_exception_handler(unsigned cause, unsigned status) {
     Nop();
     Nop();
 }
+#endif
 
-signed short i2c_Pressure_read() {
+double i2c_Pressure_read() {
     // pressure BMP180
     char status;
     double T = 0, P = 0;
@@ -95,12 +171,11 @@ signed short i2c_Pressure_read() {
                 DelayMs(status);
                 status = BMP180_getPressure(&P, &T);
                 if (status != 0) {
-                    //      sensor_data.inside_temp = (int)(T * 10);
-                    //            my_uart_println_double(T);
-                    //            my_uart_println_double(P);
-                    //            my_uart_println_double(BMP180_sealevel(P, ALTITUDE));
+                    //    my_uart_println_double(T);
+                    //    my_uart_println_double(P);
+                    //    my_uart_println_double(BMP180_sealevel(P, ALTITUDE));
 
-                    return (int) BMP180_sealevel(P, ALTITUDE);
+                    return BMP180_sealevel(P, ALTITUDE);
                 }
             }
         }
@@ -118,173 +193,69 @@ TempHum get_Humidity_Temperature() {
 static void read_inside_data() {
 
     inside = get_Humidity_Temperature();
-    pressure = i2c_Pressure_read();
-    //    uint16_t eeAddress = 64;
-    //    uint8_t data[] = {'n','b','w',' ','o','n'};
-    //    uint8_t data1[6];
-    //    uint8_t numBytes = 6;
-    //    eprom.write_EEPROM( eeAddress, &data[0],  numBytes);
+    pressure = (unsigned short) i2c_Pressure_read();
 }
 
+static _Bool save_data(RTCCDateTime tim) {
 
-#define SERVER_PORT	80
-
-int main(int argc, char** argv) {
-
-    static DWORD t = 0;
-    static DWORD dwLastIP = 0;
-    DateTime t_d;
-    int pressure;
-    //    process_item  = DO_NOTHING;
-    process_item = GET_TIME;
-    //   process_item =SET_ALARM;
-
-    InitializeBoard();
-
-
-#if defined(STACK_USE_MY_UART)
-        my_uart_begin();
-        DelayMs(100);
-        my_uart_println_str("test");
-#endif
-   
-
-
-
-    DelayMs(100);
-
-    my_uart_println_str("bmp180!");
-    if (!BMP180_begin()) {
-        my_uart_println_str("Couldn't find BMP180!");
-        while (1);
-    }
-
-    my_uart_println_str("start pres");
-
-    my_uart_println_int(pressure);
-
-    my_uart_println_str("HTU21DF_begin");
-    DelayMs(100);
-
-    if (!HTU21DF_begin()) {
-        my_uart_println_str("Couldn't find HTU21DF!");
-        while (1);
-    }
-
-    DelayMs(100);
-
-    my_uart_println_str("start t/h");
-
-    // TickInit();
-
-#if defined(STACK_USE_MPFS2)
-    MPFSInit();
-//      MPFS_HANDLE f = MPFSOpen("index.htm");
-//                DWORD fs = MPFSGetSize(f);
-//                BYTE dat[512];
-//                char ch;
-//    DWORD send = fs;
-//// 
-//    int ss;
-//     char buf[50];
-//                sprintf(&buf, "Content-Length: %010d\r\n",fs);
-//                ss = 20;
-//                    int count = 0;
-// do {
-//                    if (send > 512) {
-//                        WORD st = MPFSGetArray(f, &dat, 512);
-//                        send -= 512;
-//                    } else break;
-//                    count = 0;
-//                    do{my_uart_print(dat[count++]);}while(count < 512);
-//                } while (true);
-//                
-//                WORD st = MPFSGetArray(f, &dat, send);
-//                
-//                
-//                    count = 0;
-//                do{my_uart_print(dat[count++]);}while(count < send);
-//                MPFSClose(f);
-    
-#endif
-
-    InitAppConfig();
-
-
-    // Initialize core stack layers (MAC, ARP, TCP, UDP) and
-    // application modules (HTTP, SNMP, etc.)
-    StackInit();
-
-
-
-#if defined(STACK_USE_UART)
-    DoUARTConfig();
-#endif
-    post_data_size = 0;
-    TCP_status = 0;
-    int ret;
-    while (1) {
-
-        if ((IFS1bits.RTCCIF == 1)&&(TCP_status < 2)) {
-            process_item = UPLOAD_DATA;
-            IFS1CLR = 0x00008000; // clear RTCC existing event
+    // Save min data to eeprom
+    if (tim.t.min != 0) {
+        write_EEPROM(tim.t.min * 32, &WEB_data_0, 20);
+        ThisHour[tim.t.min] = WEB_data_0;
+        return true;
+    } else {
+        int i = 0;
+        current av;
+        int itl = 100, ith = -100, otl = 100, oth = -100, ihl = 100, ihh = 0, ohl = 100, ohh = 0, pl = 1100, ph = 100, w = 0, pw = 0, b = 0, r = 0;
+        for (i = 0; i < 60; i++) {
+            av = ThisHour[i];
+            if (av.in_temp > ith)ith = av.in_temp;
+            if (av.in_temp < itl)itl = av.in_temp;
+            if (av.in_hum > ihh)ihh = av.in_hum;
+            if (av.in_hum < ihl)ihl = av.in_hum;
+            if (av.out_temp > oth)oth = av.out_temp;
+            if (av.out_temp < otl)otl = av.out_temp;
+            if (av.out_hum > ohh)ohh = av.out_hum;
+            if (av.out_hum < ohl)ohl = av.out_hum;
+            if (av.pressure > ph)ph = av.pressure;
+            if (av.pressure < pl)pl = av.pressure;
+            if (av.peak_wind_speed > pw)pw = av.peak_wind_speed;
+            w += av.wind_speed;
+            b += av.bearing;
+            r += av.rainfall;
         }
+        History.in_temp_H = ith;
+        History.in_temp_L = itl;
+        History.out_temp_H = oth;
+        History.out_temp_L = otl;
+        History.in_hum_H = ihh;
+        History.in_hum_L = ihl;
+        History.out_hum_H = ohh;
+        History.out_hum_L = ohl;
+        History.pressure_H = ph;
+        History.pressure_L = pl;
+        History.wind_speed = pw;
+        History.peak_wind_speed = (signed short) (w / 60);
+        History.bearing = (signed short) (b / 60);
+        History.rainfall = (signed short) (r / 60);
 
-        // This task performs normal stack task including checking
-        // for incoming packet, type of packet and calling
-        // appropriate stack entity to process it.
-        StackTask();
-
-        // This tasks invokes each of the core stack application tasks
-        StackApplications();
-
-        switch (process_item) {
-            case GET_INCOMMING: 
-                ret = GenericTCPServer( &TCP_status , &post_data_size);
-                break;
-            case GET_TIME: t_d = Set_RTCC();
-                if (t_d.d != 0)
-                    process_item = SET_ALARM;
-                break;
-            case SET_ALARM:
-                SetAlarm(t_d);
-                process_item = UPLOAD_DATA;
-                break;
-            case UPLOAD_DATA:
-                putrsUART2((ROM char*) "Read Data...\r\n");
-                read_inside_data();
-                update_clock();
-
-                process_item = GET_INCOMMING;
-                break;
-        }
-        ProcessIO();
-
-        // If the local IP address has changed (ex: due to DHCP lease change)
-        // write the new IP address to the LCD display, UART, and Announce 
-        // service
-        if (dwLastIP != AppConfig.MyIPAddr.Val) {
-            dwLastIP = AppConfig.MyIPAddr.Val;
-            DisplayIPValue(AppConfig.MyIPAddr);
-        }
+        write_EEPROM(tim.t.min * 32, &WEB_data_0, 20);
+        write_EEPROM(HOUR_OFFSET + (tim.d.mday * 32 * 24) +(tim.t.hour * 32), &History, 32);
 
     }
 
-    return (EXIT_SUCCESS);
+        return false;
 }
 
 DateTime Set_RTCC() {
-
     DateTime d_t;
-
-    rtccTime tm;
+    rtccTime tim;
     rtccDate dt;
-    DWORD time = SNTPGetUTCSeconds();
     struct tm *mytime;
+    DWORD time = SNTPGetUTCSeconds();
     if (time > 100) {
         char buf[128];
         mytime = localtime(&time);
-
         strftime(buf, 128, "%H:%M:%S on the %d-%m-%Y\n", mytime);
         int cc = 0;
 
@@ -302,20 +273,25 @@ DateTime Set_RTCC() {
         ds = ds << 8 | (mRTCCDec2BCD(mytime->tm_mon));
         ds = ds << 8 | (mRTCCDec2BCD(mytime->tm_mday));
         ds = ds << 8 | (mRTCCDec2BCD(mytime->tm_wday));
+        my_uart_println_str("t1");
+        my_uart_print_HEX(ts);
+        my_uart_print_HEX(ds);
 
         SYSKEY = 0xaa996655; // write first unlock key to SYSKEY
         SYSKEY = 0x556699aa; // write second unlock key to SYSKEY
         RTCCONSET = 0x8; // set RTCWREN in RTCCONSET
         RTCTIME = ts; // safe to update time to 16 hr, 15 min, 33 sec
         RTCDATE = ds; // update the date to Friday 27 Oct 2006
-        RTCCONCLR = 0x8; // set RTCWREN in RTCCONSET
-
-        process_item = DO_NOTHING;
-        tm.l = RtccGetTime();
+        IEC1CLR = 0x00008000; // disable RTCC interrupts
+        RTCCONSET = 0x8000; // turn on the RTCC
+        RTCCONCLR = 0x8; // set RTCWREN in RTCCONSET  
+        while (!(RTCCON & 0x40)); // wait for clock to be turned on  
+        //   process_item = DO_NOTHING;
+        tim.l = RtccGetTime();
         dt.l = RtccGetDate();
-        mytime->tm_hour = mRTCCBCD2Dec(tm.hour);
-        mytime->tm_min = mRTCCBCD2Dec(tm.min);
-        mytime->tm_sec = mRTCCBCD2Dec(tm.sec);
+        mytime->tm_hour = mRTCCBCD2Dec(tim.hour);
+        mytime->tm_min = mRTCCBCD2Dec(tim.min);
+        mytime->tm_sec = mRTCCBCD2Dec(tim.sec);
         mytime->tm_mday = mRTCCBCD2Dec(dt.mday);
         mytime->tm_mon = mRTCCBCD2Dec(dt.mon);
         mytime->tm_year = mRTCCBCD2Dec(dt.year);
@@ -333,14 +309,27 @@ DateTime Set_RTCC() {
         time += 90;
 
         mytime = localtime(&time);
+        old_min = mytime->tm_min;
+        ts = (mRTCCDec2BCD(mytime->tm_hour));
+        ts = ts << 8 | (mRTCCDec2BCD(mytime->tm_min));
+        ts = ts << 8 | (mRTCCDec2BCD(mytime->tm_sec));
+        ts = ts << 8;
+        ds = (mRTCCDec2BCD(mytime->tm_year));
+        ds = ds << 8 | (mRTCCDec2BCD(mytime->tm_mon));
+        ds = ds << 8 | (mRTCCDec2BCD(mytime->tm_mday));
+        ds = ds << 8 | (mRTCCDec2BCD(mytime->tm_wday));
 
-        d_t.t = (mRTCCDec2BCD(mytime->tm_hour));
-        d_t.t = d_t.t << 8 | (mRTCCDec2BCD(mytime->tm_min));
-        d_t.t = d_t.t << 8 | 0;
-        d_t.t = d_t.t << 8;
-        d_t.d = d_t.d << 8 | (mRTCCDec2BCD(mytime->tm_mon));
-        d_t.d = d_t.d << 8 | (mRTCCDec2BCD(mytime->tm_mday));
-        d_t.d = d_t.d << 8 | (mRTCCDec2BCD(mytime->tm_wday));
+        d_t.t = ts;
+        d_t.d = ds;
+
+
+        my_uart_println_str("t2");
+        my_uart_print_HEX(ts);
+        my_uart_print_HEX(ds);
+
+        my_uart_println_str("t3");
+        my_uart_print_HEX(d_t.t);
+        my_uart_print_HEX(d_t.d);
 
         strftime(buf, 128, "%H:%M:%S on the %d-%m-%Y\n", mytime);
         cc = 0;
@@ -351,16 +340,6 @@ DateTime Set_RTCC() {
             cc++;
         } while (cc < 128);
 
-        //starting critical sequence
-        SYSKEY = 0xaa996655; // write first unlock key to SYSKEY
-        SYSKEY = 0x556699aa; // write second unlock key to SYSKEY
-        RTCCONSET = 0x8; // set RTCWREN in RTCCONSET
-
-
-        RTCCONCLR = 0x8; // set RTCWREN in RTCCONSET
-        my_uart_println_str("alarm set");
-        IFS1CLR = 0x00008000; // clear RTCC existing event
-
         return d_t;
 
     }
@@ -368,27 +347,30 @@ DateTime Set_RTCC() {
     d_t.t = 0;
     return d_t;
 }
-
-void SetAlarm(DateTime alarm) {
-
-    SYSKEY = 0xaa996655; // write first unlock key to SYSKEY
-    SYSKEY = 0x556699aa; // write second unlock key to SYSKEY
-    RTCCONSET = 0x8; // set RTCWREN in RTCCONSET
-    IEC1CLR = 0x00008000; // disable RTCC interrupts
-    RTCCONCLR = 0x8000; // turn off the RTCC
-    while (RTCCON & 0x40); // wait for clock to be turned off
-    IFS1CLR = 0x00008000; // clear RTCC existing event
-    IPC8CLR = 0x1f000000; // clear the priority
-    IPC8SET = 0x0d000000; // Set IPL=3, subpriority 1
-    IEC1SET = 0x00008000; // Enable RTCC interrupts
-    RTCALRMCLR = 0xCFFF; // clear ALRMEN, CHIME, AMASK and ARPT;
-    ALRMTIME = alarm.t & 0xffff0000; // set alarm time to 16 hr, 15 min, 43 sec
-    ALRMDATE = alarm.d; // set alarm date to Friday 27 Oct 2006
-    RTCALRMSET = 0x8000 | 0x00004300; // re-enable the alarm, set alarm mask at once per day
-    RTCCONSET = 0x8000; // turn on the RTCC
-    RTCCONCLR = 0x8; // set RTCWREN in RTCCONSET
-    while (!(RTCCON & 0x40)); // wait for clock to be turned on
-}
+//
+//void SetAlarm(DateTime alarm) {
+//
+//    //   SYSKEY = 0xaa996655; // write first unlock key to SYSKEY
+//    //   SYSKEY = 0x556699aa; // write second unlock key to SYSKEY
+//    RTCCONSET = 0x8; // set RTCWREN in RTCCONSET  
+//    RTCCONCLR = 0x8000; // turn off the RTCC 
+//    while (RTCCON & 0x40); // wait for clock to be turned off
+//    IEC1CLR = 0x00008000; // disable RTCC interrupts
+//    IFS1CLR = 0x00008000; // clear RTCC existing event
+//    IPC8CLR = 0x1f000000; // clear the priority
+//    IPC8SET = 0x0d000000; // Set IPL=5, subpriority 1
+//    IEC1SET = 0x00008000; // Enable RTCC interrupts
+//    RTCALRMCLR = 0xCFFF; // clear ALRMEN, CHIME, AMASK and ARPT;
+//    ALRMTIME = alarm.t & 0xffff0000; // set alarm time to 16 hr, 15 min, 43 sec
+//    ALRMDATE = alarm.d; // set alarm date to Friday 27 Oct 2006
+//    RTCALRMSET = 0x8000 | 0x00004300; // re-enable the alarm, set alarm mask at once per day
+//    RTCCONSET = 0x8000; // turn on the RTCC
+//    RTCCONCLR = 0x8; // set RTCWREN in RTCCONSET
+//    while (!(RTCCON & 0x40)); // wait for clock to be turned on
+//    
+//    my_uart_print_HEX(alarm.t & 0xffff0000);
+//    my_uart_print_HEX(alarm.d);
+//}
 
 _Bool Is_DST(DWORD time) {
     struct tm *newtime = localtime(&time);
@@ -422,265 +404,20 @@ _Bool Is_DST(DWORD time) {
     return true;
 }
 
-void DisplayIPValue(IP_ADDR IPVal) {
-    // printf("%u.%u.%u.%u", IPVal.v[0], IPVal.v[1], IPVal.v[2], IPVal.v[3]);
-#if defined (__dsPIC33E__) || defined (__PIC24E__)
-    static BYTE IPDigit[4]; /* Needs to be declared as static to avoid the array getting optimized by C30 v3.30 compiler for dsPIC33E/PIC24E. 
-                                                   Otherwise the LCD displays corrupted IP address on Explorer 16. To be fixed in the future compiler release*/
-#else
-    BYTE IPDigit[4];
-#endif
-    BYTE i;
-#ifdef USE_LCD
-    BYTE j;
-    BYTE LCDPos = 16;
-#endif
+_Bool Is_It_Time() {
+    uint8_t new_min;
+    rtccTime tm;
+    tm.l = RtccGetTime();
+    new_min = mRTCCBCD2Dec(tm.min);
+    if (old_min != new_min) {
 
-    for (i = 0; i < sizeof (IP_ADDR); i++) {
-        uitoa((WORD) IPVal.v[i], IPDigit);
-
-#if defined(STACK_USE_MY_UART)
-        putrsUART2(IPDigit);
-        putrsUART2(".");
-#endif
-
-#ifdef USE_LCD
-        for (j = 0; j < strlen((char*) IPDigit); j++) {
-            LCDText[LCDPos++] = IPDigit[j];
-        }
-        if (i == sizeof (IP_ADDR) - 1)
-            break;
-        LCDText[LCDPos++] = '.';
-#else
-        if (i == sizeof (IP_ADDR) - 1) {
-            my_uart_print('\r');
-            my_uart_print('\n');
-            break;
-        }
-#endif
-
-#if defined(STACK_USE_UART)
-        while (BusyUART());
-        WriteUART('.');
-#endif
+        old_min = new_min;
+        return true;
     }
-
-#ifdef USE_LCD
-    if (LCDPos < 32u)
-        LCDText[LCDPos] = 0;
-    LCDUpdate();
-#endif
+    return false;
 }
 
-// Processes A/D data from the potentiometer
-
-static void ProcessIO(void) {
-}
-
-static void InitializeBoard(void) {
-    // LEDs
-    ST7735_TFT_Init();
-    DelayMs(10);
-    TRISEbits.TRISE5 = 0;
-    DelayMs(1);
-    LATEbits.LATE5 = 0;
-    DelayMs(1000);
-
-    LED0_TRIS = 0;
-    LED1_TRIS = 0;
-    LED2_TRIS = 0;
-    LED3_TRIS = 0;
-    LED4_TRIS = 0;
-    LED5_TRIS = 0;
-    LED6_TRIS = 0;
-    LED7_TRIS = 0;
-    LED_PUT(0x00);
-
-    init_I2C(100000);
-}
-
-static ROM BYTE SerializedMACAddress[6] = {MY_DEFAULT_MAC_BYTE1, MY_DEFAULT_MAC_BYTE2, MY_DEFAULT_MAC_BYTE3, MY_DEFAULT_MAC_BYTE4, MY_DEFAULT_MAC_BYTE5, MY_DEFAULT_MAC_BYTE6};
-
-static void InitAppConfig(void) {
-
-#if defined(EEPROM_CS_TRIS) || defined(SPIFLASH_CS_TRIS)
-    unsigned char vNeedToSaveDefaults = 0;
-#endif
-
-    while (1) {
-        // Start out zeroing all AppConfig bytes to ensure all fields are 
-        // deterministic for checksum generation
-        memset((void*) &AppConfig, 0x00, sizeof (AppConfig));
-
-        AppConfig.Flags.bIsDHCPEnabled = TRUE;
-        AppConfig.Flags.bInConfigMode = TRUE;
-        memcpypgm2ram((void*) &AppConfig.MyMACAddr, (ROM void*) SerializedMACAddress, sizeof (AppConfig.MyMACAddr));
-        //        {
-        //            _prog_addressT MACAddressAddress;
-        //            MACAddressAddress.next = 0x157F8;
-        //            _memcpy_p2d24((char*)&AppConfig.MyMACAddr, MACAddressAddress, sizeof(AppConfig.MyMACAddr));
-        //        }
-        AppConfig.MyIPAddr.Val = MY_DEFAULT_IP_ADDR_BYTE1 | MY_DEFAULT_IP_ADDR_BYTE2 << 8ul | MY_DEFAULT_IP_ADDR_BYTE3 << 16ul | MY_DEFAULT_IP_ADDR_BYTE4 << 24ul;
-        AppConfig.DefaultIPAddr.Val = AppConfig.MyIPAddr.Val;
-        AppConfig.MyMask.Val = MY_DEFAULT_MASK_BYTE1 | MY_DEFAULT_MASK_BYTE2 << 8ul | MY_DEFAULT_MASK_BYTE3 << 16ul | MY_DEFAULT_MASK_BYTE4 << 24ul;
-        AppConfig.DefaultMask.Val = AppConfig.MyMask.Val;
-        AppConfig.MyGateway.Val = MY_DEFAULT_GATE_BYTE1 | MY_DEFAULT_GATE_BYTE2 << 8ul | MY_DEFAULT_GATE_BYTE3 << 16ul | MY_DEFAULT_GATE_BYTE4 << 24ul;
-        AppConfig.PrimaryDNSServer.Val = MY_DEFAULT_PRIMARY_DNS_BYTE1 | MY_DEFAULT_PRIMARY_DNS_BYTE2 << 8ul | MY_DEFAULT_PRIMARY_DNS_BYTE3 << 16ul | MY_DEFAULT_PRIMARY_DNS_BYTE4 << 24ul;
-        AppConfig.SecondaryDNSServer.Val = MY_DEFAULT_SECONDARY_DNS_BYTE1 | MY_DEFAULT_SECONDARY_DNS_BYTE2 << 8ul | MY_DEFAULT_SECONDARY_DNS_BYTE3 << 16ul | MY_DEFAULT_SECONDARY_DNS_BYTE4 << 24ul;
-
-
-        // SNMP Community String configuration
-#if defined(STACK_USE_SNMP_SERVER)
-        {
-            BYTE i;
-            static ROM char * ROM cReadCommunities[] = SNMP_READ_COMMUNITIES;
-            static ROM char * ROM cWriteCommunities[] = SNMP_WRITE_COMMUNITIES;
-            ROM char * strCommunity;
-
-            for (i = 0; i < SNMP_MAX_COMMUNITY_SUPPORT; i++) {
-                // Get a pointer to the next community string
-                strCommunity = cReadCommunities[i];
-                if (i >= sizeof (cReadCommunities) / sizeof (cReadCommunities[0]))
-                    strCommunity = "";
-
-                // Ensure we don't buffer overflow.  If your code gets stuck here, 
-                // it means your SNMP_COMMUNITY_MAX_LEN definition in TCPIPConfig.h 
-                // is either too small or one of your community string lengths 
-                // (SNMP_READ_COMMUNITIES) are too large.  Fix either.
-                if (strlenpgm(strCommunity) >= sizeof (AppConfig.readCommunity[0]))
-                    while (1);
-
-                // Copy string into AppConfig
-                strcpypgm2ram((char*) AppConfig.readCommunity[i], strCommunity);
-
-                // Get a pointer to the next community string
-                strCommunity = cWriteCommunities[i];
-                if (i >= sizeof (cWriteCommunities) / sizeof (cWriteCommunities[0]))
-                    strCommunity = "";
-
-                // Ensure we don't buffer overflow.  If your code gets stuck here, 
-                // it means your SNMP_COMMUNITY_MAX_LEN definition in TCPIPConfig.h 
-                // is either too small or one of your community string lengths 
-                // (SNMP_WRITE_COMMUNITIES) are too large.  Fix either.
-                if (strlenpgm(strCommunity) >= sizeof (AppConfig.writeCommunity[0]))
-                    while (1);
-
-                // Copy string into AppConfig
-                strcpypgm2ram((char*) AppConfig.writeCommunity[i], strCommunity);
-            }
-        }
-#endif
-
-        // Load the default NetBIOS Host Name
-        memcpypgm2ram(AppConfig.NetBIOSName, (ROM void*) MY_DEFAULT_HOST_NAME, 16);
-        FormatNetBIOSName(AppConfig.NetBIOSName);
-
-#if defined(WF_CS_TRIS)
-        // Load the default SSID Name
-        WF_ASSERT(sizeof (MY_DEFAULT_SSID_NAME) - 1 <= sizeof (AppConfig.MySSID));
-        memcpypgm2ram(AppConfig.MySSID, (ROM void*) MY_DEFAULT_SSID_NAME, sizeof (MY_DEFAULT_SSID_NAME));
-        AppConfig.SsidLength = sizeof (MY_DEFAULT_SSID_NAME) - 1;
-
-        AppConfig.SecurityMode = MY_DEFAULT_WIFI_SECURITY_MODE;
-
-#if (MY_DEFAULT_WIFI_SECURITY_MODE == WF_SECURITY_OPEN)
-        memset(AppConfig.SecurityKey, 0x00, sizeof (AppConfig.SecurityKey));
-        AppConfig.SecurityKeyLength = 0;
-
-#elif MY_DEFAULT_WIFI_SECURITY_MODE == WF_SECURITY_WEP_40
-        AppConfig.WepKeyIndex = MY_DEFAULT_WEP_KEY_INDEX;
-        memcpypgm2ram(AppConfig.SecurityKey, (ROM void*) MY_DEFAULT_WEP_KEYS_40, sizeof (MY_DEFAULT_WEP_KEYS_40) - 1);
-        AppConfig.SecurityKeyLength = sizeof (MY_DEFAULT_WEP_KEYS_40) - 1;
-
-#elif MY_DEFAULT_WIFI_SECURITY_MODE == WF_SECURITY_WEP_104
-        AppConfig.WepKeyIndex = MY_DEFAULT_WEP_KEY_INDEX;
-        memcpypgm2ram(AppConfig.SecurityKey, (ROM void*) MY_DEFAULT_WEP_KEYS_104, sizeof (MY_DEFAULT_WEP_KEYS_104) - 1);
-        AppConfig.SecurityKeyLength = sizeof (MY_DEFAULT_WEP_KEYS_104) - 1;
-
-#elif (MY_DEFAULT_WIFI_SECURITY_MODE == WF_SECURITY_WPA_WITH_KEY)       || \
-                  (MY_DEFAULT_WIFI_SECURITY_MODE == WF_SECURITY_WPA2_WITH_KEY)      || \
-                  (MY_DEFAULT_WIFI_SECURITY_MODE == WF_SECURITY_WPA_AUTO_WITH_KEY)
-        memcpypgm2ram(AppConfig.SecurityKey, (ROM void*) MY_DEFAULT_PSK, sizeof (MY_DEFAULT_PSK) - 1);
-        AppConfig.SecurityKeyLength = sizeof (MY_DEFAULT_PSK) - 1;
-
-#elif (MY_DEFAULT_WIFI_SECURITY_MODE == WF_SECURITY_WPA_WITH_PASS_PHRASE)     || \
-                  (MY_DEFAULT_WIFI_SECURITY_MODE == WF_SECURITY_WPA2_WITH_PASS_PHRASE)    || \
-                  (MY_DEFAULT_WIFI_SECURITY_MODE == WF_SECURITY_WPA_AUTO_WITH_PASS_PHRASE)
-        memcpypgm2ram(AppConfig.SecurityKey, (ROM void*) MY_DEFAULT_PSK_PHRASE, sizeof (MY_DEFAULT_PSK_PHRASE) - 1);
-        AppConfig.SecurityKeyLength = sizeof (MY_DEFAULT_PSK_PHRASE) - 1;
-#elif (MY_DEFAULT_WIFI_SECURITY_MODE == WF_SECURITY_WPS_PUSH_BUTTON)
-        memset(AppConfig.SecurityKey, 0x00, sizeof (AppConfig.SecurityKey));
-        AppConfig.SecurityKeyLength = 0;
-#elif (MY_DEFAULT_WIFI_SECURITY_MODE == WF_SECURITY_WPS_PIN)
-        memcpypgm2ram(AppConfig.SecurityKey, (ROM void*) MY_DEFAULT_WPS_PIN, sizeof (MY_DEFAULT_WPS_PIN) - 1);
-        AppConfig.SecurityKeyLength = sizeof (MY_DEFAULT_WPS_PIN) - 1;
-#else 
-#error "No security defined"
-#endif /* MY_DEFAULT_WIFI_SECURITY_MODE */
-
-#endif
-
-        // Compute the checksum of the AppConfig defaults as loaded from ROM
-        wOriginalAppConfigChecksum = CalcIPChecksum((BYTE*) & AppConfig, sizeof (AppConfig));
-
-#if defined(EEPROM_CS_TRIS) || defined(SPIFLASH_CS_TRIS)
-        {
-            NVM_VALIDATION_STRUCT NVMValidationStruct;
-
-            // Check to see if we have a flag set indicating that we need to 
-            // save the ROM default AppConfig values.
-            if (vNeedToSaveDefaults)
-                SaveAppConfig(&AppConfig);
-
-            // Read the NVMValidation record and AppConfig struct out of EEPROM/Flash
-#if defined(EEPROM_CS_TRIS)
-            {
-                XEEReadArray(0x0000, (BYTE*) & NVMValidationStruct, sizeof (NVMValidationStruct));
-                XEEReadArray(sizeof (NVMValidationStruct), (BYTE*) & AppConfig, sizeof (AppConfig));
-            }
-#elif defined(SPIFLASH_CS_TRIS)
-            {
-                SPIFlashReadArray(0x0000, (BYTE*) & NVMValidationStruct, sizeof (NVMValidationStruct));
-                SPIFlashReadArray(sizeof (NVMValidationStruct), (BYTE*) & AppConfig, sizeof (AppConfig));
-            }
-#endif
-
-            // Check EEPROM/Flash validitity.  If it isn't valid, set a flag so 
-            // that we will save the ROM default values on the next loop 
-            // iteration.
-            if ((NVMValidationStruct.wConfigurationLength != sizeof (AppConfig)) ||
-                    (NVMValidationStruct.wOriginalChecksum != wOriginalAppConfigChecksum) ||
-                    (NVMValidationStruct.wCurrentChecksum != CalcIPChecksum((BYTE*) & AppConfig, sizeof (AppConfig)))) {
-                // Check to ensure that the vNeedToSaveDefaults flag is zero, 
-                // indicating that this is the first iteration through the do 
-                // loop.  If we have already saved the defaults once and the 
-                // EEPROM/Flash still doesn't pass the validity check, then it 
-                // means we aren't successfully reading or writing to the 
-                // EEPROM/Flash.  This means you have a hardware error and/or 
-                // SPI configuration error.
-                if (vNeedToSaveDefaults) {
-                    while (1);
-                }
-
-                // Set flag and restart loop to load ROM defaults and save them
-                vNeedToSaveDefaults = 1;
-                continue;
-            }
-
-            // If we get down here, it means the EEPROM/Flash has valid contents 
-            // and either matches the ROM defaults or previously matched and 
-            // was run-time reconfigured by the user.  In this case, we shall 
-            // use the contents loaded from EEPROM/Flash.
-            break;
-        }
-#endif
-        break;
-    }
-}
-
-uint8_t month[] = {0, 30, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-
-void update_clock() {
+RTCCDateTime update_clock() {
     uint8_t min, hour, day, mon, year;
     struct tm t;
     rtccTime tm;
@@ -730,5 +467,427 @@ void update_clock() {
     drawtext(70, 100, buf, ST7735_CYAN, ST7735_BLACK, 2);
     sprintf(buf, "%2.1f%s", outside.h, "%");
     drawtext(70, 120, buf, ST7735_CYAN, ST7735_BLACK, 2);
+
+
+    RTCCDateTime now;
+    now.d = dt;
+    now.t = tm;
+    return now;
+}
+
+
+
+//
+// Main application entry point.
+//
+
+int main(void) {
+    static DWORD t = 0;
+    static DWORD dwLastIP = 0;
+
+    DateTime t_d;
+    //   process_item = GET_INCOMMING;
+    //    process_item  = DO_NOTHING;
+    //process_item = STARTUP;
+
+    process_item = SET_TIME_ALARM;
+
+    // Initialize application specific hardware
+    InitializeBoard();
+
+    if (!BMP180_begin()) {
+        my_uart_println_str("Couldn't find BMP180!");
+        while (1);
+    }
+
+    DelayMs(100);
+
+    if (!HTU21DF_begin()) {
+        my_uart_println_str("Couldn't find HTU21DF!");
+        while (1);
+    }
+
+    read_inside_data();
+
+    my_uart_println_int(pressure);
+    my_uart_println_double(inside.t);
+    my_uart_println_double(inside.h);
+
+
+    // Initialize stack-related hardware components that may be 
+    // required by the UART configuration routines
+    TickInit();
+#if defined(STACK_USE_MPFS2)
+    MPFSInit();
+#endif
+
+    // Initialize Stack and application related NV variables into AppConfig.
+    InitAppConfig();
+
+    // Initialize core stack layers (MAC, ARP, TCP, UDP) and
+    // application modules (HTTP, SNMP, etc.)
+    StackInit();
+
+    post_data_size = 0;
+    TCP_status = 0;
+    int ret;
+    int nl = 0;
+    MPFS_HANDLE f;
+    DWORD hFatID;
+    DWORD reg;
+    while (1) {
+        // This task performs normal stack task including checking
+        // for incoming packet, type of packet and calling
+        // appropriate stack entity to process it.
+        StackTask();
+
+        // This tasks invokes each of the core stack application tasks
+        StackApplications();
+
+        switch (process_item) {
+            case GET_INCOMMING:
+                TCPServer(&TCP_status, &post_data_size, &f);
+                break;
+            case SET_TIME_ALARM: t_d = Set_RTCC();
+                if (t_d.d != 0) {
+                    DelayMs(2000);
+                    process_item = STARTUP;
+                    my_uart_println_str((ROM char*) "a");
+                }
+                break;
+            case READ_DATA:
+                my_uart_println_str("Read Data...\r\n");
+                read_inside_data();
+                if(save_data(update_clock()))
+                    process_item = UPLOAD_CURRENT;
+                else
+                    process_item = UPLOAD_HISTORY;
+                break;
+            case UPLOAD_CURRENT:
+                //     my_uart_println_str("UPLOAD...\r\n");
+                if (TCPClient(CURRENT_DATA) == 1) process_item = GET_INCOMMING;
+                break;
+            case UPLOAD_HISTORY:
+                //     my_uart_println_str("UPLOAD...\r\n");
+                if (TCPClient(HISTORY_DATA) == 1) process_item = GET_INCOMMING;
+                break;
+            case STOP_SERVER:
+                TCP_status = 10;
+                TCPServer(&TCP_status, &post_data_size, &f);
+                if (TCP_status == 0)process_item = READ_DATA;
+                break;
+            case STARTUP:
+                process_item = GET_INCOMMING;
+                break;
+        }
+
+        ProcessIO();
+    }
+}
+
+// Writes an IP address to the LCD display and the UART as available
+
+void DisplayIPValue(IP_ADDR IPVal) {
+    // printf("%u.%u.%u.%u", IPVal.v[0], IPVal.v[1], IPVal.v[2], IPVal.v[3]);
+
+    BYTE IPDigit[4];
+
+    BYTE i;
+
+
+    for (i = 0; i < sizeof (IP_ADDR); i++) {
+        uitoa((WORD) IPVal.v[i], IPDigit);
+
+#if defined(STACK_USE_UART)
+        putrsUART((char *) IPDigit);
+#endif
+
+
+        if (i == sizeof (IP_ADDR) - 1)
+            break;
+
+#if defined(STACK_USE_UART)
+        while (BusyUART());
+        WriteUART('.');
+#endif
+    }
+
+
+}
+
+// Processes A/D data from the potentiometer
+
+static void ProcessIO(void) {
+#if defined(__C30__) || defined(__C32__)
+    // Convert potentiometer result into ASCII string
+    //  uitoa((WORD) ADC1BUF0, AN0String);
+#endif
+    if (TCP_status == 1)
+        if (Is_It_Time()) process_item = STOP_SERVER;
+}
+
+/****************************************************************************
+  Function:
+    static void InitializeBoard(void)
+
+  Description:
+    This routine initializes the hardware.  It is a generic initialization
+    routine for many of the Microchip development boards, using definitions
+    in HardwareProfile.h to determine specific initialization.
+
+  Precondition:
+    None
+
+  Parameters:
+    None - None
+
+  Returns:
+    None
+
+  Remarks:
+    None
+ ***************************************************************************/
+static void InitializeBoard(void) {
+    // LEDs
+    LED0_TRIS = 0;
+    LED1_TRIS = 0;
+    LED2_TRIS = 0;
+    LED3_TRIS = 0;
+    LED4_TRIS = 0;
+    LED5_TRIS = 0;
+    LED6_TRIS = 0;
+    LED7_TRIS = 0;
+    LED_PUT(0x00);
+
+    ST7735_TFT_Init();
+    DelayMs(10);
+    TRISEbits.TRISE5 = 0;
+    DelayMs(1);
+    LATEbits.LATE5 = 0;
+    DelayMs(1000);
+    my_uart_begin();
+    init_I2C(100000);
+
+#if defined(__PIC32MX__)
+    {
+        // Enable multi-vectored interrupts
+        INTEnableSystemMultiVectoredInt();
+
+        // Enable optimal performance
+        SYSTEMConfigPerformance(GetSystemClock());
+        mOSCSetPBDIV(OSC_PB_DIV_1); // Use 1:1 CPU Core:Peripheral clocks
+
+        // Disable JTAG port so we get our I/O pins back, but first
+        // wait 50ms so if you want to reprogram the part with 
+        // JTAG, you'll still have a tiny window before JTAG goes away.
+        // The PIC32 Starter Kit debuggers use JTAG and therefore must not 
+        // disable JTAG.
+        DelayMs(50);
+#if !defined(__MPLAB_DEBUGGER_PIC32MXSK) && !defined(__MPLAB_DEBUGGER_FS2)
+        DDPCONbits.JTAGEN = 0;
+#endif
+        LED_PUT(0x00); // Turn the LEDs off
+
+        CNPUESET = 0x00098000; // Turn on weak pull ups on CN15, CN16, CN19 (RD5, RD7, RD13), which is connected to buttons on PIC32 Starter Kit boards
+    }
+#endif
+
+
+    AD1CHS = 0; // Input to AN0 (potentiometer)
+    AD1PCFGbits.PCFG4 = 0; // Disable digital input on AN4 (TC1047A temp sensor)
+
+    AD1PCFGbits.PCFG5 = 0; // Disable digital input on AN5 (potentiometer)
+
+
+    // ADC
+    AD1CON1 = 0x84E4; // Turn on, auto sample start, auto-convert, 12 bit mode (on parts with a 12bit A/D)
+    AD1CON2 = 0x0404; // AVdd, AVss, int every 2 conversions, MUXA only, scan
+    AD1CON3 = 0x1003; // 16 Tad auto-sample, Tad = 3*Tcy
+
+    AD1CSSL = 1 << 5; // Scan pot
+
+
+    // UART
+#if defined(STACK_USE_UART)
+
+    UARTTX_TRIS = 0;
+    UARTRX_TRIS = 1;
+    UMODE = 0x8000; // Set UARTEN.  Note: this must be done before setting UTXEN
+
+
+    USTA = 0x00001400; // RXEN set, TXEN set
+#define CLOSEST_UBRG_VALUE ((GetPeripheralClock()+8ul*BAUD_RATE)/16/BAUD_RATE-1)
+#define BAUD_ACTUAL (GetPeripheralClock()/16/(CLOSEST_UBRG_VALUE+1))
+
+
+#define BAUD_ERROR ((BAUD_ACTUAL > BAUD_RATE) ? BAUD_ACTUAL-BAUD_RATE : BAUD_RATE-BAUD_ACTUAL)
+#define BAUD_ERROR_PRECENT    ((BAUD_ERROR*100+BAUD_RATE/2)/BAUD_RATE)
+#if (BAUD_ERROR_PRECENT > 3)
+#warning UART frequency error is worse than 3%
+#elif (BAUD_ERROR_PRECENT > 2)
+#warning UART frequency error is worse than 2%
+#endif
+
+    UBRG = CLOSEST_UBRG_VALUE;
+#endif
+
+
+    // Deassert all chip select lines so there isn't any problem with 
+    // initialization order.  Ex: When ENC28J60 is on SPI2 with Explorer 16, 
+    // MAX3232 ROUT2 pin will drive RF12/U2CTS ENC28J60 CS line asserted, 
+    // preventing proper 25LC256 EEPROM operation.
+#if defined(ENC_CS_TRIS)
+    ENC_CS_IO = 1;
+    ENC_CS_TRIS = 0;
+#endif
+
+
+}
+
+/*********************************************************************
+ * Function:        void InitAppConfig(void)
+ *
+ * PreCondition:    MPFSInit() is already called.
+ *
+ * Input:           None
+ *
+ * Output:          Write/Read non-volatile config variables.
+ *
+ * Side Effects:    None
+ *
+ * Overview:        None
+ *
+ * Note:            None
+ ********************************************************************/
+// MAC Address Serialization using a MPLAB PM3 Programmer and 
+// Serialized Quick Turn Programming (SQTP). 
+// The advantage of using SQTP for programming the MAC Address is it
+// allows you to auto-increment the MAC address without recompiling 
+// the code for each unit.  To use SQTP, the MAC address must be fixed
+// at a specific location in program memory.  Uncomment these two pragmas
+// that locate the MAC address at 0x1FFF0.  Syntax below is for MPLAB C 
+// Compiler for PIC18 MCUs. Syntax will vary for other compilers.
+//#pragma romdata MACROM=0x1FFF0
+//static ROM BYTE SerializedMACAddress[6] = {MY_DEFAULT_MAC_BYTE1, MY_DEFAULT_MAC_BYTE2, MY_DEFAULT_MAC_BYTE3, MY_DEFAULT_MAC_BYTE4, MY_DEFAULT_MAC_BYTE5, MY_DEFAULT_MAC_BYTE6};
+//#pragma romdata
+
+static void InitAppConfig(void) {
+
+    while (1) {
+        // Start out zeroing all AppConfig bytes to ensure all fields are 
+        // deterministic for checksum generation
+        memset((void*) &AppConfig, 0x00, sizeof (AppConfig));
+
+        AppConfig.Flags.bIsDHCPEnabled = TRUE;
+        AppConfig.Flags.bInConfigMode = TRUE;
+        memcpypgm2ram((void*) &AppConfig.MyMACAddr, (ROM void*) SerializedMACAddress, sizeof (AppConfig.MyMACAddr));
+        //        {
+        //            _prog_addressT MACAddressAddress;
+        //            MACAddressAddress.next = 0x157F8;
+        //            _memcpy_p2d24((char*)&AppConfig.MyMACAddr, MACAddressAddress, sizeof(AppConfig.MyMACAddr));
+        //        }
+        AppConfig.MyIPAddr.Val = MY_DEFAULT_IP_ADDR_BYTE1 | MY_DEFAULT_IP_ADDR_BYTE2 << 8ul | MY_DEFAULT_IP_ADDR_BYTE3 << 16ul | MY_DEFAULT_IP_ADDR_BYTE4 << 24ul;
+        AppConfig.DefaultIPAddr.Val = AppConfig.MyIPAddr.Val;
+        AppConfig.MyMask.Val = MY_DEFAULT_MASK_BYTE1 | MY_DEFAULT_MASK_BYTE2 << 8ul | MY_DEFAULT_MASK_BYTE3 << 16ul | MY_DEFAULT_MASK_BYTE4 << 24ul;
+        AppConfig.DefaultMask.Val = AppConfig.MyMask.Val;
+        AppConfig.MyGateway.Val = MY_DEFAULT_GATE_BYTE1 | MY_DEFAULT_GATE_BYTE2 << 8ul | MY_DEFAULT_GATE_BYTE3 << 16ul | MY_DEFAULT_GATE_BYTE4 << 24ul;
+        AppConfig.PrimaryDNSServer.Val = MY_DEFAULT_PRIMARY_DNS_BYTE1 | MY_DEFAULT_PRIMARY_DNS_BYTE2 << 8ul | MY_DEFAULT_PRIMARY_DNS_BYTE3 << 16ul | MY_DEFAULT_PRIMARY_DNS_BYTE4 << 24ul;
+        AppConfig.SecondaryDNSServer.Val = MY_DEFAULT_SECONDARY_DNS_BYTE1 | MY_DEFAULT_SECONDARY_DNS_BYTE2 << 8ul | MY_DEFAULT_SECONDARY_DNS_BYTE3 << 16ul | MY_DEFAULT_SECONDARY_DNS_BYTE4 << 24ul;
+
+
+
+
+        // Load the default NetBIOS Host Name
+        memcpypgm2ram(AppConfig.NetBIOSName, (ROM void*) MY_DEFAULT_HOST_NAME, 16);
+        FormatNetBIOSName(AppConfig.NetBIOSName);
+
+
+
+        // Compute the checksum of the AppConfig defaults as loaded from ROM
+        wOriginalAppConfigChecksum = CalcIPChecksum((BYTE*) & AppConfig, sizeof (AppConfig));
+
+
+        break;
+    }
+}
+
+
+//UART
+
+void my_uart_begin() {
+    U1MODEbits.BRGH = 0; // Baud Rate = 9600
+    U1BRG = 259; // baud 19200
+    //   U1BRG = (uint8_t) ((GetSystemClock()  / 4800) / 16) - 1; // baud 19200
+    U1MODEbits.SIDL = 0; // Continue operation in SLEEP mode
+    U1MODEbits.IREN = 0; // IrDA is disabled
+    U1MODEbits.RTSMD = 0; // U1RTS pin is in Flow Control mode
+    U1MODEbits.UEN = 0b00; // U1TX, U1RX are enabled
+    U1MODEbits.WAKE = 1; // Wake-up enabled
+    U1MODEbits.LPBACK = 0; // Loopback mode is disabled
+    U1MODEbits.RXINV = 0; // U1RX IDLE state is '1'
+    U1MODEbits.PDSEL = 0b00; // 8-bit data, no parity
+    U1MODEbits.STSEL = 0; // 1 stop bit
+    U1STAbits.UTXINV = 0; // U1TX IDLE state is '1'
+    U1MODEbits.ON = 1; // UART1 is enabled
+    U1STAbits.URXEN = 0; // UART1 receiver is enabled
+    U1STAbits.UTXEN = 1; // UART1 transmitter is enabled
+}
+
+void my_uart_print(char data) {
+    U1STAbits.UTXEN = 1; // Make sure transmitter is enabled
+    // while(CTS)    
+
+    while (U1STAbits.UTXBF); // Wait while buffer is full
+
+    U1TXREG = (BYTE) data; // Transmit character// Optional CTS use
+
+}
+
+void my_uart_print_str(char *str) {
+    while (*str) {
+        my_uart_print(*str); // Transmit one character
+        str++; // Go to next character in string
+    }
+}
+
+void my_uart_println_str(char *str) {
+    while (*str) {
+        my_uart_print(*str); // Transmit one character
+        str++; // Go to next character in string
+    }
+    my_uart_print('\r');
+    my_uart_print('\n');
+}
+
+void my_uart_println_int(int i) {
+    char buf[10];
+    sprintf(buf, "%d", i);
+    my_uart_println_str(buf); // Transmit one character
+}
+
+void my_uart_print_int(int i) {
+    char buf[10];
+    sprintf(buf, "%d", i);
+    my_uart_print_str(buf); // Transmit one character
+}
+
+void my_uart_println_double(double i) {
+    char buf[20];
+    sprintf(buf, " = %.8f", i);
+    my_uart_println_str(buf); // Transmit one character
+}
+
+void my_uart_print_HEX(uint32_t hex) {
+    char HEX_Char[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+    my_uart_print('0');
+    my_uart_print('x');
+    int b = 28;
+    do {
+        uint32_t c = hex>>b;
+        my_uart_print(HEX_Char[hex >> b & 0x0f]);
+        b -= 4;
+    } while (b >= 0);
+    my_uart_print('\r');
+    my_uart_print('\n');
 
 }

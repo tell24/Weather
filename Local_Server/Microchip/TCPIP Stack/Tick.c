@@ -199,7 +199,6 @@ static void GetTickCopy(void)
 	} while(IFS0bits.T1IF);
 	IEC0bits.T1IE = 1;				// Enable interrupt
 #else	// PIC32
-    int lb = 0;
 	do
 	{
 		DWORD dwTempTicks;
@@ -238,8 +237,6 @@ static void GetTickCopy(void)
 		vTickReading[3] = ((BYTE*)&dwTempTicks)[1];
 		vTickReading[4] = ((BYTE*)&dwTempTicks)[2];
 		vTickReading[5] = ((BYTE*)&dwTempTicks)[3];
-        lb++;
-        if(lb> 20)IFS0bits.T1IF = 0;
 	} while(IFS0bits.T1IF);
 	IEC0SET = _IEC0_T1IE_MASK;		// Enable interrupt
 #endif

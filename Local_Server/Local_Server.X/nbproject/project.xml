@@ -4,7 +4,7 @@
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/make-project/1">
             <name>Local_Server</name>
-            <creation-uuid>dd5c9412-ef1c-4016-9cd6-f8831dad55d9</creation-uuid>
+            <creation-uuid>a7811b52-ddb4-49c5-aee4-68a9f28b4778</creation-uuid>
             <make-project-type>0</make-project-type>
             <c-extensions>c</c-extensions>
             <cpp-extensions/>
@@ -14,9 +14,9 @@
             <make-dep-projects/>
             <sourceRootList>
                 <sourceRootElem>.</sourceRootElem>
-                <sourceRootElem>../Microchip</sourceRootElem>
-                <sourceRootElem>../TCPIP</sourceRootElem>
-                <sourceRootElem>../../../First Try backup/Local_Server.X/Include</sourceRootElem>
+                <sourceRootElem>../Microchip/Include</sourceRootElem>
+                <sourceRootElem>../Microchip/TCPIP Stack</sourceRootElem>
+                <sourceRootElem>../Microchip/Common</sourceRootElem>
             </sourceRootList>
             <confList>
                 <confElem>

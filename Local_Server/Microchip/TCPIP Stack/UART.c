@@ -150,7 +150,7 @@ BYTE ReadStringUART(BYTE *Dest, BYTE BufferLen)
 	}
 
 
-#elif defined(__C30__) // PIC24F, PIC24H, dsPIC30, dsPIC33
+#elif defined(__C30__)  // PIC24F, PIC24H, dsPIC30, dsPIC33
 
 /***************************************************************************
 * Function Name     : putsUART2                                            *
@@ -198,7 +198,7 @@ void putsUART2(unsigned int *buffer)
 * Return Value      : unsigned int number of data bytes yet to be received    * 
 ******************************************************************************/
 
-unsigned int getsUART2(unsigned int length,unsigned int *buffer,
+unsigned int getsUART1(unsigned int length,unsigned int *buffer,
                        unsigned int uart_data_wait)
 
 {
@@ -207,7 +207,7 @@ unsigned int getsUART2(unsigned int length,unsigned int *buffer,
 
     while(length)                         /* read till length is 0 */
     {
-        while(!DataRdyUART2())
+        while(!DataRdyUART1())
         {
             if(wait < uart_data_wait)
                 wait++ ;                  /*wait for more data */
@@ -215,10 +215,10 @@ unsigned int getsUART2(unsigned int length,unsigned int *buffer,
                 return(length);           /*Time out- Return words/bytes to be read */
         }
         wait=0;
-        if(U2MODEbits.PDSEL == 3)         /* check if TX/RX is 8bits or 9bits */
-            *buffer++ = U2RXREG;          /* data word from HW buffer to SW buffer */
+        if(U1MODEbits.PDSEL == 3)         /* check if TX/RX is 8bits or 9bits */
+            *buffer++ = U1RXREG;          /* data word from HW buffer to SW buffer */
 		else
-            *temp_ptr++ = U2RXREG & 0xFF; /* data byte from HW buffer to SW buffer */
+            *temp_ptr++ = U1RXREG & 0xFF; /* data byte from HW buffer to SW buffer */
 
         length--;
     }
@@ -236,9 +236,9 @@ unsigned int getsUART2(unsigned int length,unsigned int *buffer,
 * Return Value      : char if any data available in buffer           *
 *********************************************************************/
 
-char DataRdyUART2(void)
+char DataRdyUART1(void)
 {
-    return(U2STAbits.URXDA);
+    return(U1STAbits.URXDA);
 }
 
 
@@ -250,9 +250,9 @@ char DataRdyUART2(void)
 * Return Value      : char info whether transmission is in progress      *
 *************************************************************************/
 
-char BusyUART2(void)
+char BusyUART1(void)
 {  
-    return(!U2STAbits.TRMT);
+    return(!U1STAbits.TRMT);
 }
 
 
@@ -263,12 +263,12 @@ char BusyUART2(void)
 * Return Value      : unsigned int value from UxRXREG receive buffer       * 
 ***************************************************************************/
 
-unsigned int ReadUART2(void)
+unsigned int ReadUART1(void)
 {
-    if(U2MODEbits.PDSEL == 3)
-        return (U2RXREG);
+    if(U1MODEbits.PDSEL == 3)
+        return (U1RXREG);
     else
-        return (U2RXREG & 0xFF);
+        return (U1RXREG & 0xFF);
 }
 
 
@@ -279,62 +279,13 @@ unsigned int ReadUART2(void)
 * Return Value      : None                                           *
 *********************************************************************/
 
-void WriteUART2(unsigned int data)
+void WriteUART1(unsigned int data)
 {
-    if(U2MODEbits.PDSEL == 3)
-        U2TXREG = data;
+    if(U1MODEbits.PDSEL == 3)
+        U1TXREG = data;
     else
-        U2TXREG = data & 0xFF;  
+        U1TXREG = data & 0xFF;  
 }
-
-
-#elif defined(__C32__) // PIC32
-
-/***************************************************************************
-* Function Name     : putsUART2                                            *
-* Description       : This function puts the data string to be transmitted *
-*                     into the transmit buffer (till NULL character)       * 
-* Parameters        : unsigned int * address of the string buffer to be    *
-*                     transmitted                                          *
-* Return Value      : None                                                 *  
-***************************************************************************/
-//
-//void putsUART1(unsigned char *buffer)
-//{
-//    char * temp_ptr = (char *) buffer;
-//
-//    /* transmit till NULL character is encountered */
-//
-//    if(U1MODEbits.PDSEL == 3)        /* check if TX is 8bits or 9bits */
-//    {
-//        while(*buffer != '\0') 
-//        {
-//            while(U1STAbits.UTXBF); /* wait if the buffer is full */
-//            U1TXREG = *buffer++;    /* transfer data word to TX reg */
-//        }
-//    }
-//    else
-//    {
-//        while(*temp_ptr != '\0')
-//        {
-//            while(U2STAbits.UTXBF);  /* wait if the buffer is full */
-//            U1TXREG = *temp_ptr++;   /* transfer data byte to TX reg */
-//        }
-//    }
-//}
-//
-
-
-
-
-void putUART1(char *str) {
-    while (*str) {
-        char c = (char) *str;
-        my_uart_print(c); // Transmit one character
-        str++; // Go to next character in string
-    }
-}
-
 
 #endif
 
