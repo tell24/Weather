@@ -67,8 +67,8 @@
 #define STOP_SERVER    8
 #define STARTUP        9
 
-#define CURRENT_DATA   0
-#define HISTORY_DATA   1
+#define CURRENT_DATA   1
+#define HISTORY_DATA   2
 
 #define mRTCCBCD2Dec(BCD)   (((BCD>>4)*10)+(BCD & 0x0f))    
 #define mRTCCDec2BCD(Dec)  ((Dec/10)<<4)|(Dec % 10)

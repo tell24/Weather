@@ -200,8 +200,10 @@ static _Bool save_data(RTCCDateTime tim) {
 
     // Save min data to eeprom
     if (tim.t.min != 0) {
+        WEB_data_0.timestamp = tim.d. + tim.t.min;
         write_EEPROM(tim.t.min * 32, &WEB_data_0, 20);
         ThisHour[tim.t.min] = WEB_data_0;
+        
         return true;
     } else {
         int i = 0;
@@ -238,6 +240,7 @@ static _Bool save_data(RTCCDateTime tim) {
         History.peak_wind_speed = (signed short) (w / 60);
         History.bearing = (signed short) (b / 60);
         History.rainfall = (signed short) (r / 60);
+        
 
         write_EEPROM(tim.t.min * 32, &WEB_data_0, 20);
         write_EEPROM(HOUR_OFFSET + (tim.d.mday * 32 * 24) +(tim.t.hour * 32), &History, 32);

@@ -176,47 +176,47 @@ Microchip PIC32 Memory-Usage Report
 kseg0 Program-Memory Usage
 section                    address  length [bytes]      (dec)  Description
 -------                 ----------  -------------------------  -----------
-.text                   0x9d000008        0x12114       74004  App's exec code 
-.rodata                 0x9d01211c         0x1b44        6980  Read-only const 
-.text                   0x9d013c60         0xe648       58952  App's exec code 
-.dinit                  0x9d0222a8          0xb60        2912   
-.text                   0x9d022e08         0x70a8       28840  App's exec code 
-.rodata                 0x9d029eb0          0x58c        1420  Read-only const 
-.text                   0x9d02a43c          0x350         848  App's exec code 
-.text.pow               0x9d02a78c          0x18c         396   
-.text                   0x9d02a918          0x3f0        1008  App's exec code 
-.rodata                 0x9d02ad08          0x104         260  Read-only const 
-.rodata                 0x9d02ae10          0x100         256  Read-only const 
-.text                   0x9d02af10           0xf0         240  App's exec code 
-.rodata                 0x9d02b000           0xe8         232  Read-only const 
-.text                   0x9d02b0e8          0x1b8         440  App's exec code 
-.text.general_exception 0x9d02b2a0           0xd0         208   
-.text                   0x9d02b370          0x378         888  App's exec code 
-.rodata                 0x9d02b6e8          0x110         272  Read-only const 
-.text.SoftReset         0x9d02b7f8           0x78         120   
-.rodata                 0x9d02b870          0x148         328  Read-only const 
-.text.__unorddf2        0x9d02b9b8           0x64         100   
-.text                   0x9d02ba1c          0x154         340  App's exec code 
-.text.putsUART1         0x9d02bb70           0x4c          76   
-.text.putsUART2         0x9d02bbbc           0x4c          76   
-.text                   0x9d02bc08           0x3c          60  App's exec code 
-.text.INTEnableSystemMu 0x9d02bc44           0x34          52   
-.rodata                 0x9d02bc78           0x28          40  Read-only const 
-.text                   0x9d02bca0           0x4c          76  App's exec code 
-.text.INTRestoreInterru 0x9d02bcec           0x1c          28   
-.rodata                 0x9d02bd08           0x48          72  Read-only const 
-.text                   0x9d02bd50           0x18          24  App's exec code 
-.text.CheKseg0CacheOff  0x9d02bd68           0x18          24   
-.text.CheKseg0CacheOn   0x9d02bd80           0x18          24   
-.rodata                 0x9d02bd98           0x3c          60  Read-only const 
-.text                   0x9d02bdd4           0x1c          28  App's exec code 
-.rodata                 0x9d02bdf0           0x10          16  Read-only const 
-.text                   0x9d02be00           0x30          48  App's exec code 
-.rodata                 0x9d02be30            0x8           8  Read-only const 
-.text.INTDisableInterru 0x9d02be38            0x8           8   
-.text.INTEnableInterrup 0x9d02be40            0x8           8   
-.rodata                 0x9d02be48            0x8           8  Read-only const 
-      Total kseg0_program_mem used  :     0x2be44      179780  68.6% of 0x40000
+.text                   0x9d000008        0x12128       74024  App's exec code 
+.rodata                 0x9d012130         0x1b44        6980  Read-only const 
+.text                   0x9d013c74         0xe648       58952  App's exec code 
+.dinit                  0x9d0222bc          0xb60        2912   
+.text                   0x9d022e1c         0x7114       28948  App's exec code 
+.rodata                 0x9d029f30          0x58c        1420  Read-only const 
+.text                   0x9d02a4bc          0x350         848  App's exec code 
+.text.pow               0x9d02a80c          0x18c         396   
+.text                   0x9d02a998          0x3f0        1008  App's exec code 
+.rodata                 0x9d02ad88          0x104         260  Read-only const 
+.rodata                 0x9d02ae90          0x100         256  Read-only const 
+.text                   0x9d02af90           0xf0         240  App's exec code 
+.rodata                 0x9d02b080           0xe8         232  Read-only const 
+.text                   0x9d02b168          0x1b8         440  App's exec code 
+.text.general_exception 0x9d02b320           0xd0         208   
+.text                   0x9d02b3f0          0x378         888  App's exec code 
+.rodata                 0x9d02b768          0x110         272  Read-only const 
+.text.SoftReset         0x9d02b878           0x78         120   
+.rodata                 0x9d02b8f0          0x14c         332  Read-only const 
+.text.__unorddf2        0x9d02ba3c           0x64         100   
+.text                   0x9d02baa0          0x154         340  App's exec code 
+.text.putsUART1         0x9d02bbf4           0x4c          76   
+.text.putsUART2         0x9d02bc40           0x4c          76   
+.text                   0x9d02bc8c           0x3c          60  App's exec code 
+.text.INTEnableSystemMu 0x9d02bcc8           0x34          52   
+.rodata                 0x9d02bd00           0x28          40  Read-only const 
+.text                   0x9d02bd28           0x4c          76  App's exec code 
+.text.INTRestoreInterru 0x9d02bd74           0x1c          28   
+.rodata                 0x9d02bd90           0x48          72  Read-only const 
+.text                   0x9d02bdd8           0x18          24  App's exec code 
+.text.CheKseg0CacheOff  0x9d02bdf0           0x18          24   
+.text.CheKseg0CacheOn   0x9d02be08           0x18          24   
+.rodata                 0x9d02be20           0x3c          60  Read-only const 
+.text                   0x9d02be5c           0x1c          28  App's exec code 
+.rodata                 0x9d02be78           0x10          16  Read-only const 
+.text                   0x9d02be88           0x30          48  App's exec code 
+.rodata                 0x9d02beb8            0x8           8  Read-only const 
+.text.INTDisableInterru 0x9d02bec0            0x8           8   
+.text.INTEnableInterrup 0x9d02bec8            0x8           8   
+.rodata                 0x9d02bed0            0x8           8  Read-only const 
+      Total kseg0_program_mem used  :     0x2bec8      179912  68.6% of 0x40000
 
 kseg0 Boot-Memory Usage
 section                    address  length [bytes]      (dec)  Description
@@ -237,7 +237,7 @@ section                    address  length [bytes]      (dec)  Description
 .bev_excpt              0xbfc00380           0x10          16  BEV-Exception 
          Total kseg1_boot_mem used  :       0x204         516  44.2% of 0x490
         --------------------------------------------------------------------------
-         Total Program Memory used  :     0x2c060      180320  66.8% of 0x41e00
+         Total Program Memory used  :     0x2c0e4      180452  66.9% of 0x41e00
         --------------------------------------------------------------------------
 
 
@@ -1497,89 +1497,89 @@ LOAD c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.
  .debug_pubnames
                 0x00001768       0x21 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libe.a(_unorddf2.o)
 
-.debug_info     0x00000000    0x56b2f
+.debug_info     0x00000000    0x56b5c
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000     0x116e build/default/production/_ext/221508487/debug_ram_buffer.o
  .debug_info    0x0000116e     0x15e5 build/default/production/TCPServer.o
  .debug_info    0x00002753     0x24d3 build/default/production/ST7735.o
- .debug_info    0x00004c26     0x3a0c build/default/production/main.o
- .debug_info    0x00008632     0x14e7 build/default/production/I2C.o
- .debug_info    0x00009b19      0xf7d build/default/production/MPFSImg2.o
- .debug_info    0x0000aa96     0x1457 build/default/production/rtcc.o
- .debug_info    0x0000beed     0x10d0 build/default/production/HTU21D.o
- .debug_info    0x0000cfbd     0x172e build/default/production/BMP180.o
- .debug_info    0x0000e6eb      0xf45 build/default/production/CustomHTTPApp.o
- .debug_info    0x0000f630     0x1396 build/default/production/TCPClient.o
- .debug_info    0x000109c6      0xf59 build/default/production/_ext/867694782/Announce.o
- .debug_info    0x0001191f      0xf58 build/default/production/_ext/867694782/ARCFOUR.o
- .debug_info    0x00012877     0x1981 build/default/production/_ext/867694782/ARP.o
- .debug_info    0x000141f8      0xf57 build/default/production/_ext/867694782/AutoIP.o
- .debug_info    0x0001514f      0xf5c build/default/production/_ext/867694782/BerkeleyAPI.o
- .debug_info    0x000160ab      0xf57 build/default/production/_ext/867694782/BigInt.o
- .debug_info    0x00017002      0xfeb build/default/production/_ext/867694782/Delay.o
- .debug_info    0x00017fed     0x1f3f build/default/production/_ext/867694782/DHCP.o
- .debug_info    0x00019f2c     0x20b8 build/default/production/_ext/867694782/DHCPs.o
- .debug_info    0x0001bfe4     0x1ba2 build/default/production/_ext/867694782/DNS.o
- .debug_info    0x0001db86      0xf55 build/default/production/_ext/867694782/DNSs.o
- .debug_info    0x0001eadb     0x1d37 build/default/production/_ext/867694782/DynDNS.o
- .debug_info    0x00020812     0x3a56 build/default/production/_ext/867694782/ENC28J60.o
- .debug_info    0x00024268      0xf5b build/default/production/_ext/867694782/ENCX24J600.o
- .debug_info    0x000251c3      0xf59 build/default/production/_ext/867694782/ETH97J60.o
- .debug_info    0x0002611c      0xf5f build/default/production/_ext/867694782/ETHPIC32ExtPhy.o
- .debug_info    0x0002707b      0xf66 build/default/production/_ext/867694782/ETHPIC32ExtPhyDP83640.o
- .debug_info    0x00027fe1      0xf66 build/default/production/_ext/867694782/ETHPIC32ExtPhyDP83848.o
- .debug_info    0x00028f47      0xf67 build/default/production/_ext/867694782/ETHPIC32ExtPhySMSC8700.o
- .debug_info    0x00029eae      0xf67 build/default/production/_ext/867694782/ETHPIC32ExtPhySMSC8720.o
- .debug_info    0x0002ae15      0xf5f build/default/production/_ext/867694782/ETHPIC32IntMac.o
- .debug_info    0x0002bd74      0xf6c build/default/production/_ext/867694782/eth_pic32_ext_phy_rtl8201FL.o
- .debug_info    0x0002cce0      0xf5b build/default/production/_ext/867694782/FileSystem.o
- .debug_info    0x0002dc3b      0xf54 build/default/production/_ext/867694782/FTP.o
- .debug_info    0x0002eb8f      0xf57 build/default/production/_ext/867694782/Hashes.o
- .debug_info    0x0002fae6     0x1ff2 build/default/production/_ext/867694782/Helpers.o
- .debug_info    0x00031ad8      0xf56 build/default/production/_ext/867694782/HTTP2.o
- .debug_info    0x00032a2e      0xf55 build/default/production/_ext/867694782/ICMP.o
- .debug_info    0x00033983     0x1933 build/default/production/_ext/867694782/IP.o
- .debug_info    0x000352b6     0x170d build/default/production/_ext/867694782/MPFS2.o
- .debug_info    0x000369c3      0xf55 build/default/production/_ext/867694782/NBNS.o
- .debug_info    0x00037918      0xf57 build/default/production/_ext/867694782/Random.o
- .debug_info    0x0003886f      0xf57 build/default/production/_ext/867694782/Reboot.o
- .debug_info    0x000397c6      0xf54 build/default/production/_ext/867694782/RSA.o
- .debug_info    0x0003a71a      0xf55 build/default/production/_ext/867694782/SMTP.o
- .debug_info    0x0003b66f      0xf55 build/default/production/_ext/867694782/SNMP.o
- .debug_info    0x0003c5c4      0xf57 build/default/production/_ext/867694782/SNMPv3.o
- .debug_info    0x0003d51b      0xf5a build/default/production/_ext/867694782/SNMPv3USM.o
- .debug_info    0x0003e475     0x12d7 build/default/production/_ext/867694782/SNTP.o
- .debug_info    0x0003f74c      0xf5a build/default/production/_ext/867694782/SPIEEPROM.o
- .debug_info    0x000406a6      0xf59 build/default/production/_ext/867694782/SPIFlash.o
- .debug_info    0x000415ff      0xf57 build/default/production/_ext/867694782/SPIRAM.o
- .debug_info    0x00042556      0xf54 build/default/production/_ext/867694782/SSL.o
- .debug_info    0x000434aa     0x1842 build/default/production/_ext/867694782/StackTsk.o
- .debug_info    0x00044cec     0x300a build/default/production/_ext/867694782/TCP.o
- .debug_info    0x00047cf6      0xf63 build/default/production/_ext/867694782/TCPPerformanceTest.o
- .debug_info    0x00048c59      0xf57 build/default/production/_ext/867694782/Telnet.o
- .debug_info    0x00049bb0      0xf56 build/default/production/_ext/867694782/TFTPc.o
- .debug_info    0x0004ab06     0x186a build/default/production/_ext/867694782/Tick.o
- .debug_info    0x0004c370     0x1240 build/default/production/_ext/867694782/UART.o
- .debug_info    0x0004d5b0      0xf5f build/default/production/_ext/867694782/UART2TCPBridge.o
- .debug_info    0x0004e50f     0x1ffe build/default/production/_ext/867694782/UDP.o
- .debug_info    0x0005050d      0xf63 build/default/production/_ext/867694782/UDPPerformanceTest.o
- .debug_info    0x00051470      0xf5f build/default/production/_ext/867694782/ZeroconfHelper.o
- .debug_info    0x000523cf      0xf62 build/default/production/_ext/867694782/ZeroconfLinkLocal.o
- .debug_info    0x00053331      0xf65 build/default/production/_ext/867694782/ZeroconfMulticastDNS.o
- .debug_info    0x00054296     0x1060 build/default/production/eeprom.o
- .debug_info    0x000552f6      0x783 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1\libgcc.a(_udivdi3.o)
- .debug_info    0x00055a79      0x7c0 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1\libgcc.a(_umoddi3.o)
- .debug_info    0x00056239      0x19b c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1\libgcc.a(floatunsidf.o)
- .debug_info    0x000563d4       0xd7 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libm.a(w_pow.o)
- .debug_info    0x000564ab        0x0 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libm.a(s_lib_ver.o)
- .debug_info    0x000564ab       0xc7 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(soft_reset_lib.o)
- .debug_info    0x00056572       0xd4 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(pcache.o)
- .debug_info    0x00056646       0xcb c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(int_disable_interrupts_lib.o)
- .debug_info    0x00056711       0xcb c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(int_restore_interrupts_lib.o)
- .debug_info    0x000567dc       0xd1 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(int_enable_mv_int_lib.o)
- .debug_info    0x000568ad       0xd4 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(puts_uartx_lib_legacy.o)
- .debug_info    0x00056981       0xc9 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(int_enable_interrupts_lib.o)
- .debug_info    0x00056a4a       0xe5 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libe.a(_unorddf2.o)
+ .debug_info    0x00004c26     0x3a0f build/default/production/main.o
+ .debug_info    0x00008635     0x14e7 build/default/production/I2C.o
+ .debug_info    0x00009b1c      0xf7d build/default/production/MPFSImg2.o
+ .debug_info    0x0000aa99     0x1457 build/default/production/rtcc.o
+ .debug_info    0x0000bef0     0x10d0 build/default/production/HTU21D.o
+ .debug_info    0x0000cfc0     0x172e build/default/production/BMP180.o
+ .debug_info    0x0000e6ee      0xf45 build/default/production/CustomHTTPApp.o
+ .debug_info    0x0000f633     0x13c0 build/default/production/TCPClient.o
+ .debug_info    0x000109f3      0xf59 build/default/production/_ext/867694782/Announce.o
+ .debug_info    0x0001194c      0xf58 build/default/production/_ext/867694782/ARCFOUR.o
+ .debug_info    0x000128a4     0x1981 build/default/production/_ext/867694782/ARP.o
+ .debug_info    0x00014225      0xf57 build/default/production/_ext/867694782/AutoIP.o
+ .debug_info    0x0001517c      0xf5c build/default/production/_ext/867694782/BerkeleyAPI.o
+ .debug_info    0x000160d8      0xf57 build/default/production/_ext/867694782/BigInt.o
+ .debug_info    0x0001702f      0xfeb build/default/production/_ext/867694782/Delay.o
+ .debug_info    0x0001801a     0x1f3f build/default/production/_ext/867694782/DHCP.o
+ .debug_info    0x00019f59     0x20b8 build/default/production/_ext/867694782/DHCPs.o
+ .debug_info    0x0001c011     0x1ba2 build/default/production/_ext/867694782/DNS.o
+ .debug_info    0x0001dbb3      0xf55 build/default/production/_ext/867694782/DNSs.o
+ .debug_info    0x0001eb08     0x1d37 build/default/production/_ext/867694782/DynDNS.o
+ .debug_info    0x0002083f     0x3a56 build/default/production/_ext/867694782/ENC28J60.o
+ .debug_info    0x00024295      0xf5b build/default/production/_ext/867694782/ENCX24J600.o
+ .debug_info    0x000251f0      0xf59 build/default/production/_ext/867694782/ETH97J60.o
+ .debug_info    0x00026149      0xf5f build/default/production/_ext/867694782/ETHPIC32ExtPhy.o
+ .debug_info    0x000270a8      0xf66 build/default/production/_ext/867694782/ETHPIC32ExtPhyDP83640.o
+ .debug_info    0x0002800e      0xf66 build/default/production/_ext/867694782/ETHPIC32ExtPhyDP83848.o
+ .debug_info    0x00028f74      0xf67 build/default/production/_ext/867694782/ETHPIC32ExtPhySMSC8700.o
+ .debug_info    0x00029edb      0xf67 build/default/production/_ext/867694782/ETHPIC32ExtPhySMSC8720.o
+ .debug_info    0x0002ae42      0xf5f build/default/production/_ext/867694782/ETHPIC32IntMac.o
+ .debug_info    0x0002bda1      0xf6c build/default/production/_ext/867694782/eth_pic32_ext_phy_rtl8201FL.o
+ .debug_info    0x0002cd0d      0xf5b build/default/production/_ext/867694782/FileSystem.o
+ .debug_info    0x0002dc68      0xf54 build/default/production/_ext/867694782/FTP.o
+ .debug_info    0x0002ebbc      0xf57 build/default/production/_ext/867694782/Hashes.o
+ .debug_info    0x0002fb13     0x1ff2 build/default/production/_ext/867694782/Helpers.o
+ .debug_info    0x00031b05      0xf56 build/default/production/_ext/867694782/HTTP2.o
+ .debug_info    0x00032a5b      0xf55 build/default/production/_ext/867694782/ICMP.o
+ .debug_info    0x000339b0     0x1933 build/default/production/_ext/867694782/IP.o
+ .debug_info    0x000352e3     0x170d build/default/production/_ext/867694782/MPFS2.o
+ .debug_info    0x000369f0      0xf55 build/default/production/_ext/867694782/NBNS.o
+ .debug_info    0x00037945      0xf57 build/default/production/_ext/867694782/Random.o
+ .debug_info    0x0003889c      0xf57 build/default/production/_ext/867694782/Reboot.o
+ .debug_info    0x000397f3      0xf54 build/default/production/_ext/867694782/RSA.o
+ .debug_info    0x0003a747      0xf55 build/default/production/_ext/867694782/SMTP.o
+ .debug_info    0x0003b69c      0xf55 build/default/production/_ext/867694782/SNMP.o
+ .debug_info    0x0003c5f1      0xf57 build/default/production/_ext/867694782/SNMPv3.o
+ .debug_info    0x0003d548      0xf5a build/default/production/_ext/867694782/SNMPv3USM.o
+ .debug_info    0x0003e4a2     0x12d7 build/default/production/_ext/867694782/SNTP.o
+ .debug_info    0x0003f779      0xf5a build/default/production/_ext/867694782/SPIEEPROM.o
+ .debug_info    0x000406d3      0xf59 build/default/production/_ext/867694782/SPIFlash.o
+ .debug_info    0x0004162c      0xf57 build/default/production/_ext/867694782/SPIRAM.o
+ .debug_info    0x00042583      0xf54 build/default/production/_ext/867694782/SSL.o
+ .debug_info    0x000434d7     0x1842 build/default/production/_ext/867694782/StackTsk.o
+ .debug_info    0x00044d19     0x300a build/default/production/_ext/867694782/TCP.o
+ .debug_info    0x00047d23      0xf63 build/default/production/_ext/867694782/TCPPerformanceTest.o
+ .debug_info    0x00048c86      0xf57 build/default/production/_ext/867694782/Telnet.o
+ .debug_info    0x00049bdd      0xf56 build/default/production/_ext/867694782/TFTPc.o
+ .debug_info    0x0004ab33     0x186a build/default/production/_ext/867694782/Tick.o
+ .debug_info    0x0004c39d     0x1240 build/default/production/_ext/867694782/UART.o
+ .debug_info    0x0004d5dd      0xf5f build/default/production/_ext/867694782/UART2TCPBridge.o
+ .debug_info    0x0004e53c     0x1ffe build/default/production/_ext/867694782/UDP.o
+ .debug_info    0x0005053a      0xf63 build/default/production/_ext/867694782/UDPPerformanceTest.o
+ .debug_info    0x0005149d      0xf5f build/default/production/_ext/867694782/ZeroconfHelper.o
+ .debug_info    0x000523fc      0xf62 build/default/production/_ext/867694782/ZeroconfLinkLocal.o
+ .debug_info    0x0005335e      0xf65 build/default/production/_ext/867694782/ZeroconfMulticastDNS.o
+ .debug_info    0x000542c3     0x1060 build/default/production/eeprom.o
+ .debug_info    0x00055323      0x783 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1\libgcc.a(_udivdi3.o)
+ .debug_info    0x00055aa6      0x7c0 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1\libgcc.a(_umoddi3.o)
+ .debug_info    0x00056266      0x19b c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1\libgcc.a(floatunsidf.o)
+ .debug_info    0x00056401       0xd7 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libm.a(w_pow.o)
+ .debug_info    0x000564d8        0x0 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libm.a(s_lib_ver.o)
+ .debug_info    0x000564d8       0xc7 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(soft_reset_lib.o)
+ .debug_info    0x0005659f       0xd4 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(pcache.o)
+ .debug_info    0x00056673       0xcb c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(int_disable_interrupts_lib.o)
+ .debug_info    0x0005673e       0xcb c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(int_restore_interrupts_lib.o)
+ .debug_info    0x00056809       0xd1 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(int_enable_mv_int_lib.o)
+ .debug_info    0x000568da       0xd4 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(puts_uartx_lib_legacy.o)
+ .debug_info    0x000569ae       0xc9 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(int_enable_interrupts_lib.o)
+ .debug_info    0x00056a77       0xe5 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libe.a(_unorddf2.o)
 
 .debug_abbrev   0x00000000     0x7c32
  *(.debug_abbrev)
@@ -1665,89 +1665,89 @@ LOAD c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.
  .debug_abbrev  0x00007bdb       0x25 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(int_enable_interrupts_lib.o)
  .debug_abbrev  0x00007c00       0x32 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libe.a(_unorddf2.o)
 
-.debug_line     0x00000000     0x9743
+.debug_line     0x00000000     0x974f
  *(.debug_line)
  .debug_line    0x00000000      0x1d0 build/default/production/_ext/221508487/debug_ram_buffer.o
  .debug_line    0x000001d0      0x2fd build/default/production/TCPServer.o
  .debug_line    0x000004cd      0x4b0 build/default/production/ST7735.o
- .debug_line    0x0000097d      0x6f4 build/default/production/main.o
- .debug_line    0x00001071      0x252 build/default/production/I2C.o
- .debug_line    0x000012c3      0x162 build/default/production/MPFSImg2.o
- .debug_line    0x00001425      0x2dd build/default/production/rtcc.o
- .debug_line    0x00001702      0x24a build/default/production/HTU21D.o
- .debug_line    0x0000194c      0x2ff build/default/production/BMP180.o
- .debug_line    0x00001c4b      0x154 build/default/production/CustomHTTPApp.o
- .debug_line    0x00001d9f      0x20a build/default/production/TCPClient.o
- .debug_line    0x00001fa9      0x154 build/default/production/_ext/867694782/Announce.o
- .debug_line    0x000020fd      0x154 build/default/production/_ext/867694782/ARCFOUR.o
- .debug_line    0x00002251      0x254 build/default/production/_ext/867694782/ARP.o
- .debug_line    0x000024a5      0x154 build/default/production/_ext/867694782/AutoIP.o
- .debug_line    0x000025f9      0x154 build/default/production/_ext/867694782/BerkeleyAPI.o
- .debug_line    0x0000274d      0x154 build/default/production/_ext/867694782/BigInt.o
- .debug_line    0x000028a1      0x19c build/default/production/_ext/867694782/Delay.o
- .debug_line    0x00002a3d      0x41a build/default/production/_ext/867694782/DHCP.o
- .debug_line    0x00002e57      0x3fd build/default/production/_ext/867694782/DHCPs.o
- .debug_line    0x00003254      0x330 build/default/production/_ext/867694782/DNS.o
- .debug_line    0x00003584      0x154 build/default/production/_ext/867694782/DNSs.o
- .debug_line    0x000036d8      0x3d9 build/default/production/_ext/867694782/DynDNS.o
- .debug_line    0x00003ab1      0x5ad build/default/production/_ext/867694782/ENC28J60.o
- .debug_line    0x0000405e      0x154 build/default/production/_ext/867694782/ENCX24J600.o
- .debug_line    0x000041b2      0x154 build/default/production/_ext/867694782/ETH97J60.o
- .debug_line    0x00004306      0x154 build/default/production/_ext/867694782/ETHPIC32ExtPhy.o
- .debug_line    0x0000445a      0x154 build/default/production/_ext/867694782/ETHPIC32ExtPhyDP83640.o
- .debug_line    0x000045ae      0x154 build/default/production/_ext/867694782/ETHPIC32ExtPhyDP83848.o
- .debug_line    0x00004702      0x154 build/default/production/_ext/867694782/ETHPIC32ExtPhySMSC8700.o
- .debug_line    0x00004856      0x154 build/default/production/_ext/867694782/ETHPIC32ExtPhySMSC8720.o
- .debug_line    0x000049aa      0x154 build/default/production/_ext/867694782/ETHPIC32IntMac.o
- .debug_line    0x00004afe      0x154 build/default/production/_ext/867694782/eth_pic32_ext_phy_rtl8201FL.o
- .debug_line    0x00004c52      0x154 build/default/production/_ext/867694782/FileSystem.o
- .debug_line    0x00004da6      0x154 build/default/production/_ext/867694782/FTP.o
- .debug_line    0x00004efa      0x154 build/default/production/_ext/867694782/Hashes.o
- .debug_line    0x0000504e      0x413 build/default/production/_ext/867694782/Helpers.o
- .debug_line    0x00005461      0x154 build/default/production/_ext/867694782/HTTP2.o
- .debug_line    0x000055b5      0x154 build/default/production/_ext/867694782/ICMP.o
- .debug_line    0x00005709      0x208 build/default/production/_ext/867694782/IP.o
- .debug_line    0x00005911      0x383 build/default/production/_ext/867694782/MPFS2.o
- .debug_line    0x00005c94      0x154 build/default/production/_ext/867694782/NBNS.o
- .debug_line    0x00005de8      0x154 build/default/production/_ext/867694782/Random.o
- .debug_line    0x00005f3c      0x154 build/default/production/_ext/867694782/Reboot.o
- .debug_line    0x00006090      0x154 build/default/production/_ext/867694782/RSA.o
- .debug_line    0x000061e4      0x154 build/default/production/_ext/867694782/SMTP.o
- .debug_line    0x00006338      0x154 build/default/production/_ext/867694782/SNMP.o
- .debug_line    0x0000648c      0x154 build/default/production/_ext/867694782/SNMPv3.o
- .debug_line    0x000065e0      0x154 build/default/production/_ext/867694782/SNMPv3USM.o
- .debug_line    0x00006734      0x21d build/default/production/_ext/867694782/SNTP.o
- .debug_line    0x00006951      0x154 build/default/production/_ext/867694782/SPIEEPROM.o
- .debug_line    0x00006aa5      0x154 build/default/production/_ext/867694782/SPIFlash.o
- .debug_line    0x00006bf9      0x154 build/default/production/_ext/867694782/SPIRAM.o
- .debug_line    0x00006d4d      0x154 build/default/production/_ext/867694782/SSL.o
- .debug_line    0x00006ea1      0x226 build/default/production/_ext/867694782/StackTsk.o
- .debug_line    0x000070c7      0xb86 build/default/production/_ext/867694782/TCP.o
- .debug_line    0x00007c4d      0x154 build/default/production/_ext/867694782/TCPPerformanceTest.o
- .debug_line    0x00007da1      0x154 build/default/production/_ext/867694782/Telnet.o
- .debug_line    0x00007ef5      0x154 build/default/production/_ext/867694782/TFTPc.o
- .debug_line    0x00008049      0x1e8 build/default/production/_ext/867694782/Tick.o
- .debug_line    0x00008231      0x19a build/default/production/_ext/867694782/UART.o
- .debug_line    0x000083cb      0x154 build/default/production/_ext/867694782/UART2TCPBridge.o
- .debug_line    0x0000851f      0x393 build/default/production/_ext/867694782/UDP.o
- .debug_line    0x000088b2      0x154 build/default/production/_ext/867694782/UDPPerformanceTest.o
- .debug_line    0x00008a06      0x154 build/default/production/_ext/867694782/ZeroconfHelper.o
- .debug_line    0x00008b5a      0x154 build/default/production/_ext/867694782/ZeroconfLinkLocal.o
- .debug_line    0x00008cae      0x154 build/default/production/_ext/867694782/ZeroconfMulticastDNS.o
- .debug_line    0x00008e02      0x227 build/default/production/eeprom.o
- .debug_line    0x00009029      0x112 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1\libgcc.a(_udivdi3.o)
- .debug_line    0x0000913b      0x128 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1\libgcc.a(_umoddi3.o)
- .debug_line    0x00009263       0x6c c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1\libgcc.a(floatunsidf.o)
- .debug_line    0x000092cf       0x90 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libm.a(w_pow.o)
- .debug_line    0x0000935f        0x0 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libm.a(s_lib_ver.o)
- .debug_line    0x0000935f       0xbb c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(soft_reset_lib.o)
- .debug_line    0x0000941a       0x62 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(pcache.o)
- .debug_line    0x0000947c       0x73 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(int_disable_interrupts_lib.o)
- .debug_line    0x000094ef       0x73 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(int_restore_interrupts_lib.o)
- .debug_line    0x00009562       0x6e c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(int_enable_mv_int_lib.o)
- .debug_line    0x000095d0       0x6f c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(puts_uartx_lib_legacy.o)
- .debug_line    0x0000963f       0x72 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(int_enable_interrupts_lib.o)
- .debug_line    0x000096b1       0x92 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libe.a(_unorddf2.o)
+ .debug_line    0x0000097d      0x6f6 build/default/production/main.o
+ .debug_line    0x00001073      0x252 build/default/production/I2C.o
+ .debug_line    0x000012c5      0x162 build/default/production/MPFSImg2.o
+ .debug_line    0x00001427      0x2dd build/default/production/rtcc.o
+ .debug_line    0x00001704      0x24a build/default/production/HTU21D.o
+ .debug_line    0x0000194e      0x2ff build/default/production/BMP180.o
+ .debug_line    0x00001c4d      0x154 build/default/production/CustomHTTPApp.o
+ .debug_line    0x00001da1      0x214 build/default/production/TCPClient.o
+ .debug_line    0x00001fb5      0x154 build/default/production/_ext/867694782/Announce.o
+ .debug_line    0x00002109      0x154 build/default/production/_ext/867694782/ARCFOUR.o
+ .debug_line    0x0000225d      0x254 build/default/production/_ext/867694782/ARP.o
+ .debug_line    0x000024b1      0x154 build/default/production/_ext/867694782/AutoIP.o
+ .debug_line    0x00002605      0x154 build/default/production/_ext/867694782/BerkeleyAPI.o
+ .debug_line    0x00002759      0x154 build/default/production/_ext/867694782/BigInt.o
+ .debug_line    0x000028ad      0x19c build/default/production/_ext/867694782/Delay.o
+ .debug_line    0x00002a49      0x41a build/default/production/_ext/867694782/DHCP.o
+ .debug_line    0x00002e63      0x3fd build/default/production/_ext/867694782/DHCPs.o
+ .debug_line    0x00003260      0x330 build/default/production/_ext/867694782/DNS.o
+ .debug_line    0x00003590      0x154 build/default/production/_ext/867694782/DNSs.o
+ .debug_line    0x000036e4      0x3d9 build/default/production/_ext/867694782/DynDNS.o
+ .debug_line    0x00003abd      0x5ad build/default/production/_ext/867694782/ENC28J60.o
+ .debug_line    0x0000406a      0x154 build/default/production/_ext/867694782/ENCX24J600.o
+ .debug_line    0x000041be      0x154 build/default/production/_ext/867694782/ETH97J60.o
+ .debug_line    0x00004312      0x154 build/default/production/_ext/867694782/ETHPIC32ExtPhy.o
+ .debug_line    0x00004466      0x154 build/default/production/_ext/867694782/ETHPIC32ExtPhyDP83640.o
+ .debug_line    0x000045ba      0x154 build/default/production/_ext/867694782/ETHPIC32ExtPhyDP83848.o
+ .debug_line    0x0000470e      0x154 build/default/production/_ext/867694782/ETHPIC32ExtPhySMSC8700.o
+ .debug_line    0x00004862      0x154 build/default/production/_ext/867694782/ETHPIC32ExtPhySMSC8720.o
+ .debug_line    0x000049b6      0x154 build/default/production/_ext/867694782/ETHPIC32IntMac.o
+ .debug_line    0x00004b0a      0x154 build/default/production/_ext/867694782/eth_pic32_ext_phy_rtl8201FL.o
+ .debug_line    0x00004c5e      0x154 build/default/production/_ext/867694782/FileSystem.o
+ .debug_line    0x00004db2      0x154 build/default/production/_ext/867694782/FTP.o
+ .debug_line    0x00004f06      0x154 build/default/production/_ext/867694782/Hashes.o
+ .debug_line    0x0000505a      0x413 build/default/production/_ext/867694782/Helpers.o
+ .debug_line    0x0000546d      0x154 build/default/production/_ext/867694782/HTTP2.o
+ .debug_line    0x000055c1      0x154 build/default/production/_ext/867694782/ICMP.o
+ .debug_line    0x00005715      0x208 build/default/production/_ext/867694782/IP.o
+ .debug_line    0x0000591d      0x383 build/default/production/_ext/867694782/MPFS2.o
+ .debug_line    0x00005ca0      0x154 build/default/production/_ext/867694782/NBNS.o
+ .debug_line    0x00005df4      0x154 build/default/production/_ext/867694782/Random.o
+ .debug_line    0x00005f48      0x154 build/default/production/_ext/867694782/Reboot.o
+ .debug_line    0x0000609c      0x154 build/default/production/_ext/867694782/RSA.o
+ .debug_line    0x000061f0      0x154 build/default/production/_ext/867694782/SMTP.o
+ .debug_line    0x00006344      0x154 build/default/production/_ext/867694782/SNMP.o
+ .debug_line    0x00006498      0x154 build/default/production/_ext/867694782/SNMPv3.o
+ .debug_line    0x000065ec      0x154 build/default/production/_ext/867694782/SNMPv3USM.o
+ .debug_line    0x00006740      0x21d build/default/production/_ext/867694782/SNTP.o
+ .debug_line    0x0000695d      0x154 build/default/production/_ext/867694782/SPIEEPROM.o
+ .debug_line    0x00006ab1      0x154 build/default/production/_ext/867694782/SPIFlash.o
+ .debug_line    0x00006c05      0x154 build/default/production/_ext/867694782/SPIRAM.o
+ .debug_line    0x00006d59      0x154 build/default/production/_ext/867694782/SSL.o
+ .debug_line    0x00006ead      0x226 build/default/production/_ext/867694782/StackTsk.o
+ .debug_line    0x000070d3      0xb86 build/default/production/_ext/867694782/TCP.o
+ .debug_line    0x00007c59      0x154 build/default/production/_ext/867694782/TCPPerformanceTest.o
+ .debug_line    0x00007dad      0x154 build/default/production/_ext/867694782/Telnet.o
+ .debug_line    0x00007f01      0x154 build/default/production/_ext/867694782/TFTPc.o
+ .debug_line    0x00008055      0x1e8 build/default/production/_ext/867694782/Tick.o
+ .debug_line    0x0000823d      0x19a build/default/production/_ext/867694782/UART.o
+ .debug_line    0x000083d7      0x154 build/default/production/_ext/867694782/UART2TCPBridge.o
+ .debug_line    0x0000852b      0x393 build/default/production/_ext/867694782/UDP.o
+ .debug_line    0x000088be      0x154 build/default/production/_ext/867694782/UDPPerformanceTest.o
+ .debug_line    0x00008a12      0x154 build/default/production/_ext/867694782/ZeroconfHelper.o
+ .debug_line    0x00008b66      0x154 build/default/production/_ext/867694782/ZeroconfLinkLocal.o
+ .debug_line    0x00008cba      0x154 build/default/production/_ext/867694782/ZeroconfMulticastDNS.o
+ .debug_line    0x00008e0e      0x227 build/default/production/eeprom.o
+ .debug_line    0x00009035      0x112 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1\libgcc.a(_udivdi3.o)
+ .debug_line    0x00009147      0x128 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1\libgcc.a(_umoddi3.o)
+ .debug_line    0x0000926f       0x6c c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1\libgcc.a(floatunsidf.o)
+ .debug_line    0x000092db       0x90 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libm.a(w_pow.o)
+ .debug_line    0x0000936b        0x0 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libm.a(s_lib_ver.o)
+ .debug_line    0x0000936b       0xbb c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(soft_reset_lib.o)
+ .debug_line    0x00009426       0x62 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(pcache.o)
+ .debug_line    0x00009488       0x73 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(int_disable_interrupts_lib.o)
+ .debug_line    0x000094fb       0x73 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(int_restore_interrupts_lib.o)
+ .debug_line    0x0000956e       0x6e c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(int_enable_mv_int_lib.o)
+ .debug_line    0x000095dc       0x6f c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(puts_uartx_lib_legacy.o)
+ .debug_line    0x0000964b       0x72 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(int_enable_interrupts_lib.o)
+ .debug_line    0x000096bd       0x92 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libe.a(_unorddf2.o)
 
 .debug_frame    0x00000000     0x21b4
  *(.debug_frame)
@@ -3494,7 +3494,7 @@ LOAD data_init
 .data%z341      0x00000000        0x0
  .data          0x00000000        0x0 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib/crt0.o
 
-.text           0x9d000008    0x12114
+.text           0x9d000008    0x12128
  .text          0x9d000008     0x8684 build/default/production/_ext/867694782/TCP.o
                 0x9d000134                TCPInit
                 0x9d00048c                TCPOpen
@@ -3556,572 +3556,572 @@ LOAD data_init
                 0x9d00b354                Color565
                 0x9d00b3a8                pushColor
                 0x9d00b440                ST7735_TFT_Init
- .text          0x9d00b564     0x2950 build/default/production/main.o
+ .text          0x9d00b564     0x2964 build/default/production/main.o
                 0x9d00b564                _general_exception_handler
-                0x9d00c7d0                Is_DST
-                0x9d00c9b0                Is_It_Time
-                0x9d00ca64                update_clock
-                0x9d00cf80                main
-                0x9d00da64                my_uart_begin
-                0x9d00db7c                my_uart_print
-                0x9d00dbe0                my_uart_print_str
-                0x9d00dc44                my_uart_println_str
-                0x9d00dcc0                my_uart_println_int
-                0x9d00dd18                my_uart_print_int
-                0x9d00dd70                my_uart_println_double
-                0x9d00ddd0                my_uart_print_HEX
- .text          0x9d00deb4     0x2590 build/default/production/_ext/867694782/ENC28J60.o
-                0x9d00deb4                MACInit
-                0x9d00e220                MACIsLinked
-                0x9d00e268                MACIsTxReady
-                0x9d00e2b4                MACDiscardRx
-                0x9d00e35c                MACGetFreeRxSize
-                0x9d00e4cc                MACGetHeader
-                0x9d00e6b4                MACPutHeader
-                0x9d00e7ac                MACFlush
-                0x9d00eac0                MACSetReadPtrInRx
-                0x9d00eb54                MACSetWritePtr
-                0x9d00ebec                MACSetReadPtr
-                0x9d00ec84                MACCalcRxChecksum
-                0x9d00ed98                CalcIPBufferChecksum
-                0x9d00ef40                MACMemCopyAsync
-                0x9d00f3f0                MACIsMemCopyDone
-                0x9d00f43c                MACGet
-                0x9d00f4e8                MACGetArray
-                0x9d00f76c                MACPut
-                0x9d00f828                MACPutArray
-                0x9d00fd80                ReadPHYReg
-                0x9d010150                WritePHYReg
-                0x9d010274                MACPowerDown
-                0x9d010314                MACPowerUp
-                0x9d010388                SetCLKOUT
-                0x9d0103e4                GetCLKOUT
- .text          0x9d010444     0x1cd8 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(_doprnt.o)
-                0x9d011638                vfprintf
-                0x9d0120e4                _io_exit
+                0x9d00c7e4                Is_DST
+                0x9d00c9c4                Is_It_Time
+                0x9d00ca78                update_clock
+                0x9d00cf94                main
+                0x9d00da78                my_uart_begin
+                0x9d00db90                my_uart_print
+                0x9d00dbf4                my_uart_print_str
+                0x9d00dc58                my_uart_println_str
+                0x9d00dcd4                my_uart_println_int
+                0x9d00dd2c                my_uart_print_int
+                0x9d00dd84                my_uart_println_double
+                0x9d00dde4                my_uart_print_HEX
+ .text          0x9d00dec8     0x2590 build/default/production/_ext/867694782/ENC28J60.o
+                0x9d00dec8                MACInit
+                0x9d00e234                MACIsLinked
+                0x9d00e27c                MACIsTxReady
+                0x9d00e2c8                MACDiscardRx
+                0x9d00e370                MACGetFreeRxSize
+                0x9d00e4e0                MACGetHeader
+                0x9d00e6c8                MACPutHeader
+                0x9d00e7c0                MACFlush
+                0x9d00ead4                MACSetReadPtrInRx
+                0x9d00eb68                MACSetWritePtr
+                0x9d00ec00                MACSetReadPtr
+                0x9d00ec98                MACCalcRxChecksum
+                0x9d00edac                CalcIPBufferChecksum
+                0x9d00ef54                MACMemCopyAsync
+                0x9d00f404                MACIsMemCopyDone
+                0x9d00f450                MACGet
+                0x9d00f4fc                MACGetArray
+                0x9d00f780                MACPut
+                0x9d00f83c                MACPutArray
+                0x9d00fd94                ReadPHYReg
+                0x9d010164                WritePHYReg
+                0x9d010288                MACPowerDown
+                0x9d010328                MACPowerUp
+                0x9d01039c                SetCLKOUT
+                0x9d0103f8                GetCLKOUT
+ .text          0x9d010458     0x1cd8 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(_doprnt.o)
+                0x9d01164c                vfprintf
+                0x9d0120f8                _io_exit
 
-.rodata         0x9d01211c     0x1b44
- .rodata        0x9d01211c     0x1b44 build/default/production/MPFSImg2.o
-                0x9d01211c                MPFS_Start
+.rodata         0x9d012130     0x1b44
+ .rodata        0x9d012130     0x1b44 build/default/production/MPFSImg2.o
+                0x9d012130                MPFS_Start
 
-.text           0x9d013c60     0xe648
- .text          0x9d013c60     0x199c build/default/production/_ext/867694782/DHCPs.o
-                0x9d013c60                DHCPServerTask
-                0x9d015574                DHCPServer_Disable
-                0x9d0155c8                DHCPServer_Enable
- .text          0x9d0155fc     0x1998 build/default/production/_ext/867694782/DHCP.o
-                0x9d0155fc                DHCPInit
-                0x9d015700                DHCPDisable
-                0x9d015770                DHCPEnable
-                0x9d0157e0                DHCPIsEnabled
-                0x9d015818                DHCPIsBound
-                0x9d015854                DHCPStateChanged
-                0x9d0158b8                DHCPIsServerDetected
-                0x9d0158f4                DHCPTempIPAddr
-                0x9d015930                DHCPTask
- .text          0x9d016f94     0x18ac build/default/production/_ext/867694782/DynDNS.o
-                0x9d016f94                DDNSInit
-                0x9d017038                DDNSTask
-                0x9d018724                DDNSForceUpdate
-                0x9d018768                DDNSSetService
-                0x9d0187f0                DDNSGetLastIP
-                0x9d01881c                DDNSGetLastStatus
- .text          0x9d018840     0x16c8 build/default/production/_ext/867694782/MPFS2.o
-                0x9d018840                MPFSInit
-                0x9d0188c4                MPFSOpen
-                0x9d018be0                MPFSOpenID
-                0x9d018d50                MPFSClose
-                0x9d018db8                MPFSGet
-                0x9d018fdc                MPFSGetArray
-                0x9d019268                MPFSGetLong
-                0x9d0192c0                MPFSSeek
-                0x9d019794                MPFSGetTimestamp
-                0x9d019850                MPFSGetMicrotime
-                0x9d01990c                MPFSGetFlags
-                0x9d0199c8                MPFSGetSize
-                0x9d019a84                MPFSGetBytesRem
-                0x9d019b20                MPFSGetStartAddr
-                0x9d019bdc                MPFSGetEndAddr
-                0x9d019ca8                MPFSGetFilename
-                0x9d019da8                MPFSGetPosition
-                0x9d019e14                MPFSGetID
- .text          0x9d019f08     0x147c build/default/production/_ext/867694782/Helpers.o
-                0x9d019f08                LFSRSeedRand
-                0x9d019f8c                LFSRRand
-                0x9d01a004                GenerateRandomDWORD
-                0x9d01a260                StringToIPAddress
-                0x9d01a610                Base64Encode
-                0x9d01a8c8                uitoa
-                0x9d01a9f4                ultoa
-                0x9d01ab1c                hexatob
-                0x9d01ac10                btohexa_high
-                0x9d01ac74                btohexa_low
-                0x9d01acd8                stricmppgm2ram
-                0x9d01ae44                swaps
-                0x9d01ae90                swapl
-                0x9d01af78                CalcIPChecksum
-                0x9d01b060                strupr
-                0x9d01b0fc                FormatNetBIOSName
-                0x9d01b1c4                strnchr
-                0x9d01b278                strncpy_m
- .text          0x9d01b384     0x12e0 build/default/production/_ext/867694782/UDP.o
-                0x9d01b384                UDPInit
-                0x9d01b3f4                UDPOpenEx
-                0x9d01b648                UDPTask
-                0x9d01bb8c                UDPIsOpened
-                0x9d01bbdc                UDPClose
-                0x9d01bc84                UDPSetTxBuffer
-                0x9d01bcd0                UDPSetRxBuffer
-                0x9d01bd20                UDPIsPutReady
-                0x9d01bdac                UDPPut
-                0x9d01be38                UDPPutArray
-                0x9d01bee0                UDPPutString
-                0x9d01bf38                UDPFlush
-                0x9d01c0f8                UDPIsGetReady
-                0x9d01c188                UDPGet
-                0x9d01c20c                UDPGetArray
-                0x9d01c2cc                UDPDiscard
-                0x9d01c32c                UDPProcess
- .text          0x9d01c664     0x12d8 build/default/production/rtcc.o
-                0x9d01c664                RTCCProcessEvents
-                0x9d01cf74                RTCCInit
-                0x9d01d050                RTCCSet
-                0x9d01d15c                RTCCUnlock
-                0x9d01d1a8                RTCCSetBinSec
-                0x9d01d26c                RTCCSetBinMin
-                0x9d01d334                RTCCSetBinHour
-                0x9d01d3fc                RTCCCalculateWeekDay
-                0x9d01d5ac                RTCCSetBinDay
-                0x9d01d74c                RTCCSetBinMonth
-                0x9d01d814                RTCCSetBinYear
- .text          0x9d01d93c     0x1128 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libm.a(dp32.o)
-                0x9d01d93c                dpsub
-                0x9d01d93c                __subdf3
-                0x9d01d944                dpadd
-                0x9d01d944                __adddf3
-                0x9d01dd68                __muldf3
-                0x9d01dd68                dpmul
-                0x9d01e090                dpdiv
-                0x9d01e090                __divdf3
-                0x9d01e544                litodp
-                0x9d01e544                __floatsidf
-                0x9d01e5b8                ultodp
-                0x9d01e608                __extendsfdf2
-                0x9d01e608                fptodp
-                0x9d01e6ac                dptofp
-                0x9d01e6ac                __truncdfsf2
-                0x9d01e7a4                dptoli
-                0x9d01e7a4                __fixdfsi
-                0x9d01e82c                dptoul
-                0x9d01e82c                __fixunsdfsi
-                0x9d01e8b0                __ltdf2
-                0x9d01e8b0                __gtdf2
-                0x9d01e8b0                __eqdf2
-                0x9d01e8b0                __gedf2
-                0x9d01e8b0                __ledf2
-                0x9d01e8b0                __nedf2
-                0x9d01e8b0                dpcmp
-                0x9d01e9d4                __negdf2
-                0x9d01e9ec                dpfabs
-                0x9d01e9ec                fabs
-                0x9d01ea08                dpnan
-                0x9d01ea08                nan
- .text          0x9d01ea64      0xf48 build/default/production/_ext/867694782/DNS.o
-                0x9d01ea64                DNSBeginUsage
-                0x9d01eab8                DNSEndUsage
-                0x9d01eb28                DNSResolve
-                0x9d01ebbc                DNSIsResolved
- .text          0x9d01f9ac      0xf18 build/default/production/BMP180.o
-                0x9d01f9ac                BMP180_begin
-                0x9d01fd5c                readInt
-                0x9d01fdf8                readUInt
-                0x9d01fe94                readBytes
-                0x9d01ffbc                writeBytes
-                0x9d02012c                BMP180_startTemperature
-                0x9d020198                BMP180_getTemperature
-                0x9d020314                BMP180_startPressure
-                0x9d020440                BMP180_getPressure
-                0x9d020748                BMP180_sealevel
-                0x9d0207f4                BMP180_altitude
-                0x9d0208a0                BMP180_getError
- .text          0x9d0208c4      0xe54 build/default/production/TCPServer.o
-                0x9d0208c4                TCPServer
- .text          0x9d021718      0xb90 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(malloc.o)
-                0x9d021718                malloc_trim
-                0x9d021828                free
-                0x9d021ab0                malloc
+.text           0x9d013c74     0xe648
+ .text          0x9d013c74     0x199c build/default/production/_ext/867694782/DHCPs.o
+                0x9d013c74                DHCPServerTask
+                0x9d015588                DHCPServer_Disable
+                0x9d0155dc                DHCPServer_Enable
+ .text          0x9d015610     0x1998 build/default/production/_ext/867694782/DHCP.o
+                0x9d015610                DHCPInit
+                0x9d015714                DHCPDisable
+                0x9d015784                DHCPEnable
+                0x9d0157f4                DHCPIsEnabled
+                0x9d01582c                DHCPIsBound
+                0x9d015868                DHCPStateChanged
+                0x9d0158cc                DHCPIsServerDetected
+                0x9d015908                DHCPTempIPAddr
+                0x9d015944                DHCPTask
+ .text          0x9d016fa8     0x18ac build/default/production/_ext/867694782/DynDNS.o
+                0x9d016fa8                DDNSInit
+                0x9d01704c                DDNSTask
+                0x9d018738                DDNSForceUpdate
+                0x9d01877c                DDNSSetService
+                0x9d018804                DDNSGetLastIP
+                0x9d018830                DDNSGetLastStatus
+ .text          0x9d018854     0x16c8 build/default/production/_ext/867694782/MPFS2.o
+                0x9d018854                MPFSInit
+                0x9d0188d8                MPFSOpen
+                0x9d018bf4                MPFSOpenID
+                0x9d018d64                MPFSClose
+                0x9d018dcc                MPFSGet
+                0x9d018ff0                MPFSGetArray
+                0x9d01927c                MPFSGetLong
+                0x9d0192d4                MPFSSeek
+                0x9d0197a8                MPFSGetTimestamp
+                0x9d019864                MPFSGetMicrotime
+                0x9d019920                MPFSGetFlags
+                0x9d0199dc                MPFSGetSize
+                0x9d019a98                MPFSGetBytesRem
+                0x9d019b34                MPFSGetStartAddr
+                0x9d019bf0                MPFSGetEndAddr
+                0x9d019cbc                MPFSGetFilename
+                0x9d019dbc                MPFSGetPosition
+                0x9d019e28                MPFSGetID
+ .text          0x9d019f1c     0x147c build/default/production/_ext/867694782/Helpers.o
+                0x9d019f1c                LFSRSeedRand
+                0x9d019fa0                LFSRRand
+                0x9d01a018                GenerateRandomDWORD
+                0x9d01a274                StringToIPAddress
+                0x9d01a624                Base64Encode
+                0x9d01a8dc                uitoa
+                0x9d01aa08                ultoa
+                0x9d01ab30                hexatob
+                0x9d01ac24                btohexa_high
+                0x9d01ac88                btohexa_low
+                0x9d01acec                stricmppgm2ram
+                0x9d01ae58                swaps
+                0x9d01aea4                swapl
+                0x9d01af8c                CalcIPChecksum
+                0x9d01b074                strupr
+                0x9d01b110                FormatNetBIOSName
+                0x9d01b1d8                strnchr
+                0x9d01b28c                strncpy_m
+ .text          0x9d01b398     0x12e0 build/default/production/_ext/867694782/UDP.o
+                0x9d01b398                UDPInit
+                0x9d01b408                UDPOpenEx
+                0x9d01b65c                UDPTask
+                0x9d01bba0                UDPIsOpened
+                0x9d01bbf0                UDPClose
+                0x9d01bc98                UDPSetTxBuffer
+                0x9d01bce4                UDPSetRxBuffer
+                0x9d01bd34                UDPIsPutReady
+                0x9d01bdc0                UDPPut
+                0x9d01be4c                UDPPutArray
+                0x9d01bef4                UDPPutString
+                0x9d01bf4c                UDPFlush
+                0x9d01c10c                UDPIsGetReady
+                0x9d01c19c                UDPGet
+                0x9d01c220                UDPGetArray
+                0x9d01c2e0                UDPDiscard
+                0x9d01c340                UDPProcess
+ .text          0x9d01c678     0x12d8 build/default/production/rtcc.o
+                0x9d01c678                RTCCProcessEvents
+                0x9d01cf88                RTCCInit
+                0x9d01d064                RTCCSet
+                0x9d01d170                RTCCUnlock
+                0x9d01d1bc                RTCCSetBinSec
+                0x9d01d280                RTCCSetBinMin
+                0x9d01d348                RTCCSetBinHour
+                0x9d01d410                RTCCCalculateWeekDay
+                0x9d01d5c0                RTCCSetBinDay
+                0x9d01d760                RTCCSetBinMonth
+                0x9d01d828                RTCCSetBinYear
+ .text          0x9d01d950     0x1128 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libm.a(dp32.o)
+                0x9d01d950                dpsub
+                0x9d01d950                __subdf3
+                0x9d01d958                dpadd
+                0x9d01d958                __adddf3
+                0x9d01dd7c                __muldf3
+                0x9d01dd7c                dpmul
+                0x9d01e0a4                dpdiv
+                0x9d01e0a4                __divdf3
+                0x9d01e558                litodp
+                0x9d01e558                __floatsidf
+                0x9d01e5cc                ultodp
+                0x9d01e61c                __extendsfdf2
+                0x9d01e61c                fptodp
+                0x9d01e6c0                dptofp
+                0x9d01e6c0                __truncdfsf2
+                0x9d01e7b8                dptoli
+                0x9d01e7b8                __fixdfsi
+                0x9d01e840                dptoul
+                0x9d01e840                __fixunsdfsi
+                0x9d01e8c4                __ltdf2
+                0x9d01e8c4                __gtdf2
+                0x9d01e8c4                __eqdf2
+                0x9d01e8c4                __gedf2
+                0x9d01e8c4                __ledf2
+                0x9d01e8c4                __nedf2
+                0x9d01e8c4                dpcmp
+                0x9d01e9e8                __negdf2
+                0x9d01ea00                dpfabs
+                0x9d01ea00                fabs
+                0x9d01ea1c                dpnan
+                0x9d01ea1c                nan
+ .text          0x9d01ea78      0xf48 build/default/production/_ext/867694782/DNS.o
+                0x9d01ea78                DNSBeginUsage
+                0x9d01eacc                DNSEndUsage
+                0x9d01eb3c                DNSResolve
+                0x9d01ebd0                DNSIsResolved
+ .text          0x9d01f9c0      0xf18 build/default/production/BMP180.o
+                0x9d01f9c0                BMP180_begin
+                0x9d01fd70                readInt
+                0x9d01fe0c                readUInt
+                0x9d01fea8                readBytes
+                0x9d01ffd0                writeBytes
+                0x9d020140                BMP180_startTemperature
+                0x9d0201ac                BMP180_getTemperature
+                0x9d020328                BMP180_startPressure
+                0x9d020454                BMP180_getPressure
+                0x9d02075c                BMP180_sealevel
+                0x9d020808                BMP180_altitude
+                0x9d0208b4                BMP180_getError
+ .text          0x9d0208d8      0xe54 build/default/production/TCPServer.o
+                0x9d0208d8                TCPServer
+ .text          0x9d02172c      0xb90 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(malloc.o)
+                0x9d02172c                malloc_trim
+                0x9d02183c                free
+                0x9d021ac4                malloc
 
-.dinit          0x9d0222a8      0xb60
- .dinit         0x9d0222a8      0xb60 data_init
+.dinit          0x9d0222bc      0xb60
+ .dinit         0x9d0222bc      0xb60 data_init
 
-.text           0x9d022e08     0x70a8
- .text          0x9d022e08      0xb28 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(strftime.o)
-                0x9d022e08                strftime
- .text          0x9d023930      0xa0c c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(localtime.o)
-                0x9d023d4c                tzset
-                0x9d023e64                localtime_r
-                0x9d023ea4                localtime
-                0x9d023efc                mktime
- .text          0x9d02433c      0x640 build/default/production/_ext/867694782/ARP.o
-                0x9d02433c                ARPSendPkt
-                0x9d0244dc                ARPInit
-                0x9d024568                ARPProcess
-                0x9d02472c                ARPResolve
-                0x9d024810                ARPIsResolved
-                0x9d0248f0                SwapARPPacket
- .text          0x9d02497c      0x638 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(malloc_realloc.o)
-                0x9d02497c                realloc
- .text          0x9d024fb4      0x5d8 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libm.a(log32.o)
-                0x9d024fb4                exlog
-                0x9d02529c                __mchp_log
-                0x9d02529c                dplog
-                0x9d0253f8                __mchp_log10
-                0x9d0253f8                dplog10
- .text          0x9d02558c      0x5d4 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libm.a(func32.o)
-                0x9d02558c                sigmax
-                0x9d025694                exmul
-                0x9d025760                exadd
-                0x9d02584c                exsub
-                0x9d0258fc                exdiv
- .text          0x9d025b60      0x5c8 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libm.a(mod32.o)
-                0x9d025b60                dpfmod
-                0x9d025b60                fmod
-                0x9d025e00                frexp
-                0x9d025e00                dpfrexp
-                0x9d025ea4                dpldexp
-                0x9d025ea4                __mchp_ldexp
-                0x9d02600c                dpmodf
-                0x9d02600c                modf
- .text          0x9d026128      0x520 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libm.a(pow32.o)
-                0x9d026128                dppow
-                0x9d026128                __mchp_pow
- .text          0x9d026648      0x49c build/default/production/I2C.o
-                0x9d026648                init_I2C
-                0x9d026748                I2C_wait_for_idle
-                0x9d026798                I2C_start
-                0x9d0267f4                I2C_stop
-                0x9d026838                I2C_restart
-                0x9d026894                I2C_ack
-                0x9d026900                I2C_nack
-                0x9d026970                I2C_write
-                0x9d0269f8                I2C_read
-                0x9d026aa0                I2C_error
- .text          0x9d026ae4      0x46c c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1\libgcc.a(_umoddi3.o)
-                0x9d026ae4                __umoddi3
- .text          0x9d026f50      0x448 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1\libgcc.a(_udivdi3.o)
-                0x9d026f50                __udivdi3
- .text          0x9d027398      0x418 build/default/production/TCPClient.o
-                0x9d027398                TCPClient
- .text          0x9d0277b0      0x3f8 build/default/production/_ext/867694782/SNTP.o
-                0x9d0277b0                SNTPClient
-                0x9d027b10                SNTPGetUTCSeconds
- .text          0x9d027ba8      0x3dc build/default/production/HTU21D.o
-                0x9d027ba8                HTU21DF_begin
-                0x9d027c50                HTU21DF_reset
-                0x9d027cb4                HTU21DF_readTemperature
-                0x9d027e1c                HTU21DF_readHumidity
- .text          0x9d027f84      0x3c8 build/default/production/_ext/867694782/Tick.o
-                0x9d027f84                TickInit
-                0x9d0280e4                TickGet
-                0x9d028164                TickGetDiv256
-                0x9d0281e4                TickGetDiv64K
-                0x9d028264                TickConvertToMilliseconds
-                0x9d0282cc                _T1Interrupt
- .text          0x9d02834c      0x370 build/default/production/eeprom.o
-                0x9d02834c                write_EEPROM
-                0x9d0284f0                read_EEPROM
- .text          0x9d0286bc      0x364 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(offtime.o)
-                0x9d0286bc                offtime_r
-                0x9d0289b4                offtime
- .text          0x9d028a20      0x348 build/default/production/_ext/867694782/IP.o
-                0x9d028a20                IPGetHeader
-                0x9d028b60                IPPutHeader
-                0x9d028c8c                IPSetRxBuffer
- .text          0x9d028d68      0x340 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libm.a(exp32.o)
-                0x9d028d68                exexp
-                0x9d028f4c                __mchp_exp
-                0x9d028f4c                dpexp
- .text          0x9d0290a8      0x33c build/default/production/_ext/867694782/StackTsk.o
-                0x9d0290a8                StackInit
-                0x9d029170                StackTask
-                0x9d0293a4                StackApplications
- .text          0x9d0293e4      0x308 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(sbrk.o)
-                0x9d0293e4                getpagesize
-                0x9d0293ec                _sbd_memlayout
-                0x9d0293ec                _stub_sbd_memlayout
-                0x9d029418                _sbrk_init
-                0x9d029594                _sbrk
-                0x9d02969c                sbrk
- .text          0x9d0296ec      0x2bc build/default/production/_ext/221508487/debug_ram_buffer.o
-                0x9d0296ec                DEBUG_Initialize
-                0x9d029744                DEBUG_PutChar
-                0x9d0297d0                DEBUG_PutString
-                0x9d029848                DEBUG_PutHexUINT8
-                0x9d0298c0                DEBUG_PutHexUINT16
-                0x9d029920                DEBUG_PutHexUINT32
- .text          0x9d0299a8      0x29c c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(_iobfuncs.o)
-                0x9d0299a8                _filbuf_simple
-                0x9d0299c8                _fflush_simple
-                0x9d029a48                _flsbuf_simple
-                0x9d029b50                _fwrite_simple
-                0x9d029be0                _fsync_simple
- .text          0x9d029c44      0x26c c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(strtol.o)
-                0x9d029c44                strtol
+.text           0x9d022e1c     0x7114
+ .text          0x9d022e1c      0xb28 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(strftime.o)
+                0x9d022e1c                strftime
+ .text          0x9d023944      0xa0c c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(localtime.o)
+                0x9d023d60                tzset
+                0x9d023e78                localtime_r
+                0x9d023eb8                localtime
+                0x9d023f10                mktime
+ .text          0x9d024350      0x640 build/default/production/_ext/867694782/ARP.o
+                0x9d024350                ARPSendPkt
+                0x9d0244f0                ARPInit
+                0x9d02457c                ARPProcess
+                0x9d024740                ARPResolve
+                0x9d024824                ARPIsResolved
+                0x9d024904                SwapARPPacket
+ .text          0x9d024990      0x638 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(malloc_realloc.o)
+                0x9d024990                realloc
+ .text          0x9d024fc8      0x5d8 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libm.a(log32.o)
+                0x9d024fc8                exlog
+                0x9d0252b0                __mchp_log
+                0x9d0252b0                dplog
+                0x9d02540c                __mchp_log10
+                0x9d02540c                dplog10
+ .text          0x9d0255a0      0x5d4 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libm.a(func32.o)
+                0x9d0255a0                sigmax
+                0x9d0256a8                exmul
+                0x9d025774                exadd
+                0x9d025860                exsub
+                0x9d025910                exdiv
+ .text          0x9d025b74      0x5c8 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libm.a(mod32.o)
+                0x9d025b74                dpfmod
+                0x9d025b74                fmod
+                0x9d025e14                frexp
+                0x9d025e14                dpfrexp
+                0x9d025eb8                dpldexp
+                0x9d025eb8                __mchp_ldexp
+                0x9d026020                dpmodf
+                0x9d026020                modf
+ .text          0x9d02613c      0x520 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libm.a(pow32.o)
+                0x9d02613c                dppow
+                0x9d02613c                __mchp_pow
+ .text          0x9d02665c      0x49c build/default/production/I2C.o
+                0x9d02665c                init_I2C
+                0x9d02675c                I2C_wait_for_idle
+                0x9d0267ac                I2C_start
+                0x9d026808                I2C_stop
+                0x9d02684c                I2C_restart
+                0x9d0268a8                I2C_ack
+                0x9d026914                I2C_nack
+                0x9d026984                I2C_write
+                0x9d026a0c                I2C_read
+                0x9d026ab4                I2C_error
+ .text          0x9d026af8      0x484 build/default/production/TCPClient.o
+                0x9d026af8                TCPClient
+ .text          0x9d026f7c      0x46c c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1\libgcc.a(_umoddi3.o)
+                0x9d026f7c                __umoddi3
+ .text          0x9d0273e8      0x448 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1\libgcc.a(_udivdi3.o)
+                0x9d0273e8                __udivdi3
+ .text          0x9d027830      0x3f8 build/default/production/_ext/867694782/SNTP.o
+                0x9d027830                SNTPClient
+                0x9d027b90                SNTPGetUTCSeconds
+ .text          0x9d027c28      0x3dc build/default/production/HTU21D.o
+                0x9d027c28                HTU21DF_begin
+                0x9d027cd0                HTU21DF_reset
+                0x9d027d34                HTU21DF_readTemperature
+                0x9d027e9c                HTU21DF_readHumidity
+ .text          0x9d028004      0x3c8 build/default/production/_ext/867694782/Tick.o
+                0x9d028004                TickInit
+                0x9d028164                TickGet
+                0x9d0281e4                TickGetDiv256
+                0x9d028264                TickGetDiv64K
+                0x9d0282e4                TickConvertToMilliseconds
+                0x9d02834c                _T1Interrupt
+ .text          0x9d0283cc      0x370 build/default/production/eeprom.o
+                0x9d0283cc                write_EEPROM
+                0x9d028570                read_EEPROM
+ .text          0x9d02873c      0x364 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(offtime.o)
+                0x9d02873c                offtime_r
+                0x9d028a34                offtime
+ .text          0x9d028aa0      0x348 build/default/production/_ext/867694782/IP.o
+                0x9d028aa0                IPGetHeader
+                0x9d028be0                IPPutHeader
+                0x9d028d0c                IPSetRxBuffer
+ .text          0x9d028de8      0x340 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libm.a(exp32.o)
+                0x9d028de8                exexp
+                0x9d028fcc                __mchp_exp
+                0x9d028fcc                dpexp
+ .text          0x9d029128      0x33c build/default/production/_ext/867694782/StackTsk.o
+                0x9d029128                StackInit
+                0x9d0291f0                StackTask
+                0x9d029424                StackApplications
+ .text          0x9d029464      0x308 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(sbrk.o)
+                0x9d029464                getpagesize
+                0x9d02946c                _sbd_memlayout
+                0x9d02946c                _stub_sbd_memlayout
+                0x9d029498                _sbrk_init
+                0x9d029614                _sbrk
+                0x9d02971c                sbrk
+ .text          0x9d02976c      0x2bc build/default/production/_ext/221508487/debug_ram_buffer.o
+                0x9d02976c                DEBUG_Initialize
+                0x9d0297c4                DEBUG_PutChar
+                0x9d029850                DEBUG_PutString
+                0x9d0298c8                DEBUG_PutHexUINT8
+                0x9d029940                DEBUG_PutHexUINT16
+                0x9d0299a0                DEBUG_PutHexUINT32
+ .text          0x9d029a28      0x29c c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(_iobfuncs.o)
+                0x9d029a28                _filbuf_simple
+                0x9d029a48                _fflush_simple
+                0x9d029ac8                _flsbuf_simple
+                0x9d029bd0                _fwrite_simple
+                0x9d029c60                _fsync_simple
+ .text          0x9d029cc4      0x26c c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(strtol.o)
+                0x9d029cc4                strtol
 
-.rodata         0x9d029eb0      0x58c
- .rodata        0x9d029eb0      0x1dc build/default/production/ST7735.o
-                0x9d029eb0                Font
-                0x9d029fb0                Font2
- .rodata        0x9d02a08c      0x1d8 build/default/production/_ext/867694782/DynDNS.o
-                0x9d02a144                ddnsServiceHosts
- .rodata        0x9d02a264      0x1d8 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(strftime.o)
+.rodata         0x9d029f30      0x58c
+ .rodata        0x9d029f30      0x1dc build/default/production/ST7735.o
+                0x9d029f30                Font
+                0x9d02a030                Font2
+ .rodata        0x9d02a10c      0x1d8 build/default/production/_ext/867694782/DynDNS.o
+                0x9d02a1c4                ddnsServiceHosts
+ .rodata        0x9d02a2e4      0x1d8 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(strftime.o)
 
-.text           0x9d02a43c      0x350
- .text          0x9d02a43c      0x1b0 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(isinf.o)
-                0x9d02a43c                isnanl
-                0x9d02a464                isnan
-                0x9d02a488                isnanf
-                0x9d02a4bc                isinfl
-                0x9d02a4e4                isinf
-                0x9d02a564                isinff
- .text          0x9d02a5ec      0x1a0 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(strcpy.o)
-                0x9d02a5ec                strcpy
+.text           0x9d02a4bc      0x350
+ .text          0x9d02a4bc      0x1b0 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(isinf.o)
+                0x9d02a4bc                isnanl
+                0x9d02a4e4                isnan
+                0x9d02a508                isnanf
+                0x9d02a53c                isinfl
+                0x9d02a564                isinf
+                0x9d02a5e4                isinff
+ .text          0x9d02a66c      0x1a0 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(strcpy.o)
+                0x9d02a66c                strcpy
 
-.text.pow       0x9d02a78c      0x18c
- .text.pow      0x9d02a78c      0x18c c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libm.a(w_pow.o)
-                0x9d02a78c                pow
+.text.pow       0x9d02a80c      0x18c
+ .text.pow      0x9d02a80c      0x18c c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libm.a(w_pow.o)
+                0x9d02a80c                pow
 
-.text           0x9d02a918      0x3f0
- .text          0x9d02a918      0x168 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(memcpy.o)
-                0x9d02a918                memcpy
- .text          0x9d02aa80      0x168 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(strlen.o)
-                0x9d02aa80                strlen
- .text          0x9d02abe8      0x120 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(strcmp.o)
-                0x9d02abe8                strcmp
+.text           0x9d02a998      0x3f0
+ .text          0x9d02a998      0x168 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(memcpy.o)
+                0x9d02a998                memcpy
+ .text          0x9d02ab00      0x168 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(strlen.o)
+                0x9d02ab00                strlen
+ .text          0x9d02ac68      0x120 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(strcmp.o)
+                0x9d02ac68                strcmp
 
-.rodata         0x9d02ad08      0x104
- .rodata        0x9d02ad08      0x104 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(ctype.o)
-                0x9d02ad08                _ctype
+.rodata         0x9d02ad88      0x104
+ .rodata        0x9d02ad88      0x104 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(ctype.o)
+                0x9d02ad88                _ctype
 
-.rodata         0x9d02ae10      0x100
- .rodata        0x9d02ae10      0x100 build/default/production/TCPServer.o
+.rodata         0x9d02ae90      0x100
+ .rodata        0x9d02ae90      0x100 build/default/production/TCPServer.o
 
-.text           0x9d02af10       0xf0
- .text          0x9d02af10       0xf0 build/default/production/_ext/867694782/Delay.o
-                0x9d02af10                DelayMs
-                0x9d02afa4                Delay10us
+.text           0x9d02af90       0xf0
+ .text          0x9d02af90       0xf0 build/default/production/_ext/867694782/Delay.o
+                0x9d02af90                DelayMs
+                0x9d02b024                Delay10us
 
-.rodata         0x9d02b000       0xe8
- .rodata        0x9d02b000       0xe8 build/default/production/main.o
+.rodata         0x9d02b080       0xe8
+ .rodata        0x9d02b080       0xe8 build/default/production/main.o
 
-.text           0x9d02b0e8      0x1b8
- .text          0x9d02b0e8       0xe4 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(strncpy.o)
-                0x9d02b0e8                strncpy
- .text          0x9d02b1cc       0xd4 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(stubs.o)
-                0x9d02b1cc                _weak_pthread_mutex_init
-                0x9d02b1cc                pthread_mutex_init
-                0x9d02b1d4                _weak_pthread_mutex_destroy
-                0x9d02b1d4                pthread_mutex_destroy
-                0x9d02b1dc                _weak_pthread_mutex_lock
-                0x9d02b1dc                pthread_mutex_lock
-                0x9d02b1e4                pthread_mutex_trylock
-                0x9d02b1e4                _weak_pthread_mutex_trylock
-                0x9d02b1ec                _weak_pthread_mutex_unlock
-                0x9d02b1ec                pthread_mutex_unlock
-                0x9d02b1f4                _weak_pthread_mutex_setname_np
-                0x9d02b1f4                pthread_mutex_setname_np
-                0x9d02b1fc                pthread_mutexattr_init
-                0x9d02b1fc                _weak_pthread_mutexattr_init
-                0x9d02b204                pthread_mutexattr_destroy
-                0x9d02b204                _weak_pthread_mutexattr_destroy
-                0x9d02b20c                pthread_mutexattr_setname_np
-                0x9d02b20c                _weak_pthread_mutexattr_setname_np
-                0x9d02b214                _weak_pthread_mutexattr_settype_np
-                0x9d02b214                pthread_mutexattr_settype_np
-                0x9d02b21c                pthread_sysconf_np
-                0x9d02b21c                _weak_pthread_sysconf_np
-                0x9d02b224                _weak_pthread_sigdisable_np
-                0x9d02b224                pthread_sigdisable_np
-                0x9d02b22c                pthread_sigrestore_np
-                0x9d02b22c                _weak_pthread_sigrestore_np
-                0x9d02b234                _weak__pthread_cleanup_push
-                0x9d02b234                _pthread_cleanup_push
-                0x9d02b23c                _weak__pthread_cleanup_pop
-                0x9d02b23c                _pthread_cleanup_pop
-                0x9d02b244                _weak__pthread_cleanup_push_defer
-                0x9d02b244                _pthread_cleanup_push_defer
-                0x9d02b24c                _weak__pthread_cleanup_pop_restore
-                0x9d02b24c                _pthread_cleanup_pop_restore
-                0x9d02b254                pthread_once
-                0x9d02b254                _weak_pthread_once
-                0x9d02b254                _pthread_once
-                0x9d02b280                _weak_pthread_key_create
-                0x9d02b280                pthread_key_create
-                0x9d02b288                _weak_pthread_setspecific
-                0x9d02b288                pthread_setspecific
-                0x9d02b290                pthread_getspecific
-                0x9d02b290                _weak_pthread_getspecific
-                0x9d02b298                _libc_private_storage
-                0x9d02b298                _weak__libc_private_storage
+.text           0x9d02b168      0x1b8
+ .text          0x9d02b168       0xe4 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(strncpy.o)
+                0x9d02b168                strncpy
+ .text          0x9d02b24c       0xd4 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(stubs.o)
+                0x9d02b24c                _weak_pthread_mutex_init
+                0x9d02b24c                pthread_mutex_init
+                0x9d02b254                _weak_pthread_mutex_destroy
+                0x9d02b254                pthread_mutex_destroy
+                0x9d02b25c                _weak_pthread_mutex_lock
+                0x9d02b25c                pthread_mutex_lock
+                0x9d02b264                pthread_mutex_trylock
+                0x9d02b264                _weak_pthread_mutex_trylock
+                0x9d02b26c                _weak_pthread_mutex_unlock
+                0x9d02b26c                pthread_mutex_unlock
+                0x9d02b274                _weak_pthread_mutex_setname_np
+                0x9d02b274                pthread_mutex_setname_np
+                0x9d02b27c                pthread_mutexattr_init
+                0x9d02b27c                _weak_pthread_mutexattr_init
+                0x9d02b284                pthread_mutexattr_destroy
+                0x9d02b284                _weak_pthread_mutexattr_destroy
+                0x9d02b28c                pthread_mutexattr_setname_np
+                0x9d02b28c                _weak_pthread_mutexattr_setname_np
+                0x9d02b294                _weak_pthread_mutexattr_settype_np
+                0x9d02b294                pthread_mutexattr_settype_np
+                0x9d02b29c                pthread_sysconf_np
+                0x9d02b29c                _weak_pthread_sysconf_np
+                0x9d02b2a4                _weak_pthread_sigdisable_np
+                0x9d02b2a4                pthread_sigdisable_np
+                0x9d02b2ac                pthread_sigrestore_np
+                0x9d02b2ac                _weak_pthread_sigrestore_np
+                0x9d02b2b4                _weak__pthread_cleanup_push
+                0x9d02b2b4                _pthread_cleanup_push
+                0x9d02b2bc                _weak__pthread_cleanup_pop
+                0x9d02b2bc                _pthread_cleanup_pop
+                0x9d02b2c4                _weak__pthread_cleanup_push_defer
+                0x9d02b2c4                _pthread_cleanup_push_defer
+                0x9d02b2cc                _weak__pthread_cleanup_pop_restore
+                0x9d02b2cc                _pthread_cleanup_pop_restore
+                0x9d02b2d4                pthread_once
+                0x9d02b2d4                _weak_pthread_once
+                0x9d02b2d4                _pthread_once
+                0x9d02b300                _weak_pthread_key_create
+                0x9d02b300                pthread_key_create
+                0x9d02b308                _weak_pthread_setspecific
+                0x9d02b308                pthread_setspecific
+                0x9d02b310                pthread_getspecific
+                0x9d02b310                _weak_pthread_getspecific
+                0x9d02b318                _libc_private_storage
+                0x9d02b318                _weak__libc_private_storage
 
 .text.general_exception
-                0x9d02b2a0       0xd0
+                0x9d02b320       0xd0
  .text.general_exception
-                0x9d02b2a0       0xd0 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(legacy-general-exception.o)
-                0x9d02b2a0                _general_exception_context
+                0x9d02b320       0xd0 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(legacy-general-exception.o)
+                0x9d02b320                _general_exception_context
 
-.text           0x9d02b370      0x378
- .text          0x9d02b370       0xd0 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(fputc.o)
-                0x9d02b370                fputc
-                0x9d02b42c                putc
-                0x9d02b434                putchar
- .text          0x9d02b440       0xcc build/default/production/_ext/867694782/UART.o
-                0x9d02b440                ReadStringUART
- .text          0x9d02b50c       0xa8 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(memset.o)
-                0x9d02b50c                memset
- .text          0x9d02b5b4       0x9c c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(fullexit.o)
-                0x9d02b5b4                _fullexit
- .text          0x9d02b650       0x98 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(memcmp.o)
-                0x9d02b650                memcmp
+.text           0x9d02b3f0      0x378
+ .text          0x9d02b3f0       0xd0 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(fputc.o)
+                0x9d02b3f0                fputc
+                0x9d02b4ac                putc
+                0x9d02b4b4                putchar
+ .text          0x9d02b4c0       0xcc build/default/production/_ext/867694782/UART.o
+                0x9d02b4c0                ReadStringUART
+ .text          0x9d02b58c       0xa8 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(memset.o)
+                0x9d02b58c                memset
+ .text          0x9d02b634       0x9c c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(fullexit.o)
+                0x9d02b634                _fullexit
+ .text          0x9d02b6d0       0x98 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(memcmp.o)
+                0x9d02b6d0                memcmp
 
-.rodata         0x9d02b6e8      0x110
- .rodata        0x9d02b6e8       0x90 build/default/production/BMP180.o
- .rodata        0x9d02b778       0x80 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(_doprnt.o)
+.rodata         0x9d02b768      0x110
+ .rodata        0x9d02b768       0x90 build/default/production/BMP180.o
+ .rodata        0x9d02b7f8       0x80 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(_doprnt.o)
 
 .text.SoftReset
-                0x9d02b7f8       0x78
+                0x9d02b878       0x78
  .text.SoftReset
-                0x9d02b7f8       0x78 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(soft_reset_lib.o)
-                0x9d02b7f8                SoftReset
+                0x9d02b878       0x78 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(soft_reset_lib.o)
+                0x9d02b878                SoftReset
 
-.rodata         0x9d02b870      0x148
- .rodata        0x9d02b870       0x74 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(localtime.o)
- .rodata        0x9d02b8e4       0x6c c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(offtime.o)
- .rodata        0x9d02b950       0x68 build/default/production/TCPClient.o
+.rodata         0x9d02b8f0      0x14c
+ .rodata        0x9d02b8f0       0x74 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(localtime.o)
+ .rodata        0x9d02b964       0x6c build/default/production/TCPClient.o
+ .rodata        0x9d02b9d0       0x6c c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(offtime.o)
 
 .text.__unorddf2
-                0x9d02b9b8       0x64
+                0x9d02ba3c       0x64
  .text.__unorddf2
-                0x9d02b9b8       0x64 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libe.a(_unorddf2.o)
-                0x9d02b9b8                __unorddf2
+                0x9d02ba3c       0x64 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libe.a(_unorddf2.o)
+                0x9d02ba3c                __unorddf2
 
-.text           0x9d02ba1c      0x154
- .text          0x9d02ba1c       0x60 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(__vsnprintf.o)
-                0x9d02ba1c                __vsnprintf
- .text          0x9d02ba7c       0x58 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(memmove.o)
-                0x9d02ba7c                memmove
- .text          0x9d02bad4       0x50 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(_mon_write.o)
-                0x9d02bad4                _mon_write
- .text          0x9d02bb24       0x4c c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1\libgcc.a(floatunsidf.o)
-                0x9d02bb24                __floatunsidf
+.text           0x9d02baa0      0x154
+ .text          0x9d02baa0       0x60 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(__vsnprintf.o)
+                0x9d02baa0                __vsnprintf
+ .text          0x9d02bb00       0x58 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(memmove.o)
+                0x9d02bb00                memmove
+ .text          0x9d02bb58       0x50 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(_mon_write.o)
+                0x9d02bb58                _mon_write
+ .text          0x9d02bba8       0x4c c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1\libgcc.a(floatunsidf.o)
+                0x9d02bba8                __floatunsidf
 
 .text.putsUART1
-                0x9d02bb70       0x4c
+                0x9d02bbf4       0x4c
  .text.putsUART1
-                0x9d02bb70       0x4c c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(puts_uartx_lib_legacy.o)
-                0x9d02bb70                putsUART1
+                0x9d02bbf4       0x4c c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(puts_uartx_lib_legacy.o)
+                0x9d02bbf4                putsUART1
 
 .text.putsUART2
-                0x9d02bbbc       0x4c
+                0x9d02bc40       0x4c
  .text.putsUART2
-                0x9d02bbbc       0x4c c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(puts_uartx_lib_legacy.o)
-                0x9d02bbbc                putsUART2
+                0x9d02bc40       0x4c c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(puts_uartx_lib_legacy.o)
+                0x9d02bc40                putsUART2
 
-.text           0x9d02bc08       0x3c
- .text          0x9d02bc08       0x3c c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(sprintf.o)
-                0x9d02bc08                sprintf
+.text           0x9d02bc8c       0x3c
+ .text          0x9d02bc8c       0x3c c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(sprintf.o)
+                0x9d02bc8c                sprintf
 
 .text.INTEnableSystemMultiVectoredInt
-                0x9d02bc44       0x34
+                0x9d02bcc8       0x34
  .text.INTEnableSystemMultiVectoredInt
-                0x9d02bc44       0x34 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(int_enable_mv_int_lib.o)
-                0x9d02bc44                INTEnableSystemMultiVectoredInt
+                0x9d02bcc8       0x34 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(int_enable_mv_int_lib.o)
+                0x9d02bcc8                INTEnableSystemMultiVectoredInt
 
-.rodata         0x9d02bc78       0x28
- .rodata        0x9d02bc78       0x28 build/default/production/HTU21D.o
+.rodata         0x9d02bd00       0x28
+ .rodata        0x9d02bd00       0x28 build/default/production/HTU21D.o
 
-.text           0x9d02bca0       0x4c
- .text          0x9d02bca0       0x28 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(_iobstring.o)
- .text          0x9d02bcc8       0x24 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(_mon_putc.o)
-                0x9d02bcc8                _mon_putc
+.text           0x9d02bd28       0x4c
+ .text          0x9d02bd28       0x28 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(_iobstring.o)
+ .text          0x9d02bd50       0x24 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(_mon_putc.o)
+                0x9d02bd50                _mon_putc
 
 .text.INTRestoreInterrupts
-                0x9d02bcec       0x1c
+                0x9d02bd74       0x1c
  .text.INTRestoreInterrupts
-                0x9d02bcec       0x1c c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(int_restore_interrupts_lib.o)
-                0x9d02bcec                INTRestoreInterrupts
+                0x9d02bd74       0x1c c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(int_restore_interrupts_lib.o)
+                0x9d02bd74                INTRestoreInterrupts
 
-.rodata         0x9d02bd08       0x48
- .rodata        0x9d02bd08       0x18 build/default/production/I2C.o
- .rodata        0x9d02bd20       0x18 build/default/production/rtcc.o
- .rodata        0x9d02bd38       0x18 build/default/production/_ext/867694782/TCP.o
-                0x9d02bd38                TCPSocketInitializer
+.rodata         0x9d02bd90       0x48
+ .rodata        0x9d02bd90       0x18 build/default/production/I2C.o
+ .rodata        0x9d02bda8       0x18 build/default/production/rtcc.o
+ .rodata        0x9d02bdc0       0x18 build/default/production/_ext/867694782/TCP.o
+                0x9d02bdc0                TCPSocketInitializer
 
-.text           0x9d02bd50       0x18
- .text          0x9d02bd50       0x18 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(default-nmi-handler.o)
-                0x9d02bd50                _nmi_handler
+.text           0x9d02bdd8       0x18
+ .text          0x9d02bdd8       0x18 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(default-nmi-handler.o)
+                0x9d02bdd8                _nmi_handler
 
 .text.CheKseg0CacheOff
-                0x9d02bd68       0x18
+                0x9d02bdf0       0x18
  .text.CheKseg0CacheOff
-                0x9d02bd68       0x18 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(pcache.o)
-                0x9d02bd68                CheKseg0CacheOff
+                0x9d02bdf0       0x18 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(pcache.o)
+                0x9d02bdf0                CheKseg0CacheOff
 
 .text.CheKseg0CacheOn
-                0x9d02bd80       0x18
+                0x9d02be08       0x18
  .text.CheKseg0CacheOn
-                0x9d02bd80       0x18 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(pcache.o)
-                0x9d02bd80                CheKseg0CacheOn
+                0x9d02be08       0x18 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(pcache.o)
+                0x9d02be08                CheKseg0CacheOn
 
-.rodata         0x9d02bd98       0x3c
- .rodata        0x9d02bd98       0x14 build/default/production/_ext/867694782/SNTP.o
- .rodata        0x9d02bdac       0x14 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(_iobdata.o)
-                0x9d02bdac                _io_funcs
- .rodata        0x9d02bdc0       0x14 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(_iobstring.o)
-                0x9d02bdc0                _io_strfuncs
+.rodata         0x9d02be20       0x3c
+ .rodata        0x9d02be20       0x14 build/default/production/_ext/867694782/SNTP.o
+ .rodata        0x9d02be34       0x14 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(_iobdata.o)
+                0x9d02be34                _io_funcs
+ .rodata        0x9d02be48       0x14 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(_iobstring.o)
+                0x9d02be48                _io_strfuncs
 
-.text           0x9d02bdd4       0x1c
- .text          0x9d02bdd4       0x10 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib/crt0.o
-                0x9d02bddc                __crt0_exit
- .text          0x9d02bde4        0xc c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(atoi.o)
-                0x9d02bde4                atoi
+.text           0x9d02be5c       0x1c
+ .text          0x9d02be5c       0x10 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib/crt0.o
+                0x9d02be64                __crt0_exit
+ .text          0x9d02be6c        0xc c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(atoi.o)
+                0x9d02be6c                atoi
 
-.rodata         0x9d02bdf0       0x10
- .rodata        0x9d02bdf0        0x8 build/default/production/_ext/867694782/MPFS2.o
- .rodata        0x9d02bdf8        0x8 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1\libgcc.a(floatunsidf.o)
+.rodata         0x9d02be78       0x10
+ .rodata        0x9d02be78        0x8 build/default/production/_ext/867694782/MPFS2.o
+ .rodata        0x9d02be80        0x8 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1\libgcc.a(floatunsidf.o)
 
-.text           0x9d02be00       0x30
- .text          0x9d02be00        0x8 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(default-bootstrap-exception-handler.o)
-                0x9d02be00                _bootstrap_exception_handler
- .text          0x9d02be08        0x8 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(default-on-reset.o)
-                0x9d02be08                _on_reset
- .text          0x9d02be10        0x8 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(default-on-bootstrap.o)
-                0x9d02be10                _on_bootstrap
- .text          0x9d02be18        0x8 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(getenv.o)
-                0x9d02be18                _weak_getenv
-                0x9d02be18                getenv
- .text          0x9d02be20        0x8 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(_mon_getc.o)
-                0x9d02be20                _mon_getc
- .text          0x9d02be28        0x8 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(_exit.o)
-                0x9d02be28                _exit
+.text           0x9d02be88       0x30
+ .text          0x9d02be88        0x8 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(default-bootstrap-exception-handler.o)
+                0x9d02be88                _bootstrap_exception_handler
+ .text          0x9d02be90        0x8 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(default-on-reset.o)
+                0x9d02be90                _on_reset
+ .text          0x9d02be98        0x8 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(default-on-bootstrap.o)
+                0x9d02be98                _on_bootstrap
+ .text          0x9d02bea0        0x8 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(getenv.o)
+                0x9d02bea0                _weak_getenv
+                0x9d02bea0                getenv
+ .text          0x9d02bea8        0x8 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(_mon_getc.o)
+                0x9d02bea8                _mon_getc
+ .text          0x9d02beb0        0x8 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(_exit.o)
+                0x9d02beb0                _exit
 
-.rodata         0x9d02be30        0x8
- .rodata        0x9d02be30        0x8 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libm.a(w_pow.o)
+.rodata         0x9d02beb8        0x8
+ .rodata        0x9d02beb8        0x8 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libm.a(w_pow.o)
 
 .text.INTDisableInterrupts
-                0x9d02be38        0x8
+                0x9d02bec0        0x8
  .text.INTDisableInterrupts
-                0x9d02be38        0x8 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(int_disable_interrupts_lib.o)
-                0x9d02be38                INTDisableInterrupts
+                0x9d02bec0        0x8 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(int_disable_interrupts_lib.o)
+                0x9d02bec0                INTDisableInterrupts
 
 .text.INTEnableInterrupts
-                0x9d02be40        0x8
+                0x9d02bec8        0x8
  .text.INTEnableInterrupts
-                0x9d02be40        0x8 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(int_enable_interrupts_lib.o)
-                0x9d02be40                INTEnableInterrupts
+                0x9d02bec8        0x8 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\libmchp_peripheral_32MX440F256H.a(int_enable_interrupts_lib.o)
+                0x9d02bec8                INTEnableInterrupts
 
-.rodata         0x9d02be48        0x8
- .rodata        0x9d02be48        0x8 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(isinf.o)
+.rodata         0x9d02bed0        0x8
+ .rodata        0x9d02bed0        0x8 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib\liblega-c.a(isinf.o)
 
 .text%z342      0x00000000        0x0
  .text          0x00000000        0x0 c:/program files (x86)/microchip/mplabc32/v2.02/bin/../lib/gcc/pic32mx/4.5.1/../../../../pic32mx/lib/./proc/32MX440F256H\processor.o
