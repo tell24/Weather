@@ -14,7 +14,7 @@ const char* fingerprint = "";
 //const uint8_t fingerprint[20] = {};
 
 //const char *GScriptId = "AKfycbxh59cdEWb2FFSmYRMZpH3hBGs1UJEno2151AYO"; // data store
-const char *GScriptId =   "AKfycbyZ6Pon7rbqouKJ6mtAzxXOHA4kTXxByMpe-syruhwf77x6DMM";  // spreadsheet script
+const char *GScriptId =   "/AKfycbwdejyp_XqafKDG_xJcFKxqEyWAXvYHaymh-oKUXyql0bcqRyk";  // spreadsheet script
 
 String getReceiverURL = String("/macros/s/") + GScriptId + "/exec?read="; // The data receiver script
 String postReceiverURL = String("/macros/s/") + GScriptId + "/exec?value="; // The data receiver script
