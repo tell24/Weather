@@ -235,9 +235,6 @@ void handle_request(WiFiClient client) {
         Serial.print("P_loc "); Serial.println(P_loc);
         type = String( line.charAt(6)).toInt();
         Serial.print("P_type "); Serial.println(type);
-        Serial.println((char)line.charAt(4));
-        Serial.println((char)line.charAt(5));
-        Serial.println((char)line.charAt(6));
       }
       if (G_loc >= 0) {
 
@@ -249,12 +246,14 @@ void handle_request(WiFiClient client) {
       if (con >= 0) {
         String lenstr = line.substring(line.indexOf(':') + 1);
         len = lenstr.toInt();
+        Serial.println("");
         Serial.print("con "); Serial.println(len);
       }
 
       // wait for end of client's request, that is marked with an empty line
       if (line.length() == 1 && line[0] == '\n')
       {
+        if(len>0){
         char c = client.read();
         byte dat[len];
         for (int x = 0; x < len; x ++ ) {
@@ -264,10 +263,12 @@ void handle_request(WiFiClient client) {
         memcpy(&c_data, &dat, 24);
         Serial.print("temp "); Serial.println(c_data.in_temp);
             Serial.print("type "); Serial.println(type);
+        }
     switch (type) {
       case CURRENT_DATA:
-
-        get_post_Data(2);
+Serial.println("return home");
+       get_post_Data(2);
+   //   data_result = "proc";
         client.println(prepareHtmlPage());
         delay(100); // give the web browser time to receive the data
 

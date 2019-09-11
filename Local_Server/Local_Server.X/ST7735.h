@@ -26,6 +26,9 @@ extern "C" {
 #define   ST7735_YELLOW  0xFFE0
 #define   ST7735_WHITE   0xFFFF
     
+#define   ST7735_DAY_TIME 0x07FF
+#define   ST7735_NIGHT_TIME 0x0410
+    
     // SPI
 
 #define TFT_CS_LOW  LATBbits.LATB4 = 0

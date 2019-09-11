@@ -60,7 +60,7 @@ namespace TestingSoftware
         private void button1_Click(object sender, EventArgs e)
         {
 
-            PostCurrent().Wait();
+            PostCurrent();
         }
 
 
@@ -92,7 +92,7 @@ namespace TestingSoftware
             remote_data.rainfall_rate = 167;
             remote_data.timestamp = 6588290;
 
-            byte[] bin = new byte[Marshal.SizeOf(remote_data)];// StructureToByteArray(remote_data);
+            byte[] bin = new byte[Marshal.SizeOf(remote_data)];
             bin = getCurrentBytes(remote_data);
             // var questionId = 1;
             ByteArrayContent byteContent = new ByteArrayContent(bin);
@@ -104,7 +104,7 @@ namespace TestingSoftware
             var response = await myHttpClient.PostAsync(uri.ToString(), byteContent);
             var result = await response.Content.ReadAsStringAsync();
             Console.WriteLine($"{url}: {url.Length / 2:N0} characters");
-            Console.WriteLine(result.ToString());
+            Console.WriteLine(response.ToString());
         }
 
         static byte[] getHistoryBytes(data_packet_2 str)
