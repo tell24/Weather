@@ -1,36 +1,49 @@
-﻿using System;
+﻿using SimpleTCP;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Net.Http;
-using System.Threading;
-using System.Runtime.InteropServices;
 
 namespace TestingSoftware
 {
+    struct data_packet_1
+    {
+        public Int16 out_temp;
+        public Int16 in_temp;
+        public Int16 out_hum;
+        public Int16 in_hum;
+        public Int16 wind_speed;
+        public Int16 peak_wind_speed;
+        public Int16 bearing;
+        public Int16 pressure;
+        public Int16 rainfall;
+        public Int16 rainfall_rate;
+        public UInt32 timestamp;
+    }
+
+
+    struct data_packet
+    {
+        public Int16 temp;
+        public Int16 hum;
+        public Int16 wind_speed;
+        public Int16 peak_wind_speed;
+        public Int16 rain;
+        public Int16 bearing;
+        public byte checksum;
+    }
+
     public partial class Form1 : Form
     {
 
-
-        struct data_packet_1
-        {
-            public Int16 out_temp;
-            public Int16 in_temp;
-            public Int16 out_hum;
-            public Int16 in_hum;
-            public Int16 wind_speed;
-            public Int16 peak_wind_speed;
-            public Int16 bearing;
-            public Int16 pressure;
-            public Int16 rainfall;
-            public Int16 rainfall_rate;
-            public UInt32 timestamp;
-        }
+       
 
 
         struct data_packet_2
@@ -52,106 +65,119 @@ namespace TestingSoftware
             public UInt32 timestamp;
         }
 
+        data_packet remote;
+
         public Form1()
         {
             InitializeComponent();
         }
 
+        // private void update_txtReply(object sender, string msg) { txtReply.Text = msg; }
+
         private void button1_Click(object sender, EventArgs e)
         {
+            //    TcpClient client = new TcpClient("192.168.0.39", 80);
+            //    string d = "Terry";
+            //    int byteCount = Encoding.ASCII.GetByteCount(d);
+            //    byte[] sendData = new byte[byteCount];
+            //    sendData = Encoding.ASCII.GetBytes(d);
 
-            PostCurrent();
-        }
+            //    NetworkStream stream = client.GetStream();
+            //    stream.Write(sendData, 0, sendData.Length);
 
+            //    if (stream.CanRead)
+            //    {
+            //        // Reads NetworkStream into a byte buffer.
+            //        byte[] bytes = new byte[client.ReceiveBufferSize];
 
-        static byte[] getCurrentBytes(data_packet_1 str)
-        {
-            int size = Marshal.SizeOf(str);
-            byte[] arr = new byte[size];
+            //        // Read can return anything from 0 to numBytesToRead. 
+            //        // This method blocks until at least one byte is read.
+            //        stream.Read(bytes, 0, (int)client.ReceiveBufferSize);
 
-            IntPtr ptr = Marshal.AllocHGlobal(size);
-            Marshal.StructureToPtr(str, ptr, true);
-            Marshal.Copy(ptr, arr, 0, size);
+            //        // Returns the data received from the host to the console.
+            //        string returndata = Encoding.UTF8.GetString(bytes);
+            //        TextBox.CheckForIllegalCrossThreadCalls = false;
+            //        txtReply.AppendText(returndata);
+            //    }
+
+            //    stream.Close();
+            //    client.Close();
+            //}
+            // connect to device
+            TcpClient client = new TcpClient();
+            client.Connect(System.Net.IPAddress.Parse("192.168.0.40"), 80);
+            
+            byte[] data = new byte[24];
+            remote.temp = 201;
+            remote.hum = 700;
+            remote.wind_speed = 200;
+            remote.peak_wind_speed = 400;
+            remote.bearing = 200;
+            remote.checksum = Sum(remote);
+
+        // create post data to be sent
+        string postDataAsString = @"POST /r / HTTP/1.1" + Environment.NewLine +
+            "Host: 192.168.0.40" + Environment.NewLine +
+            "Content-Length: 13" + Environment.NewLine +
+            Environment.NewLine +
+            Environment.NewLine;
+            int headerSize = Encoding.ASCII.GetByteCount(postDataAsString);
+            byte[] DataBinary = System.Text.Encoding.UTF8.GetBytes(postDataAsString);
+
+            byte[] postDataBinary = new byte[headerSize + 13];
+            Array.Copy(DataBinary, postDataBinary, headerSize);
+            int len = 13;
+            IntPtr ptr = Marshal.AllocHGlobal(len);
+            Marshal.StructureToPtr(remote, ptr, true);
+            Marshal.Copy(ptr, postDataBinary, headerSize, len);
             Marshal.FreeHGlobal(ptr);
-            return arr;
+
+            // make post request
+            client.Client.Send(postDataBinary);
+
+            // get response
+            byte[] bytes = new byte[1024];
+            int lengthOfResponse = client.Client.Receive(bytes);
+
+            var resp = System.Text.Encoding.UTF8.GetString(bytes, 0, lengthOfResponse);
+
+                    TextBox.CheckForIllegalCrossThreadCalls = false;
+                    txtReply.AppendText(resp);
         }
 
-        static async Task PostCurrent()
+        byte Sum(data_packet message)
         {
-            //    
-            data_packet_1 remote_data;
-            remote_data.out_temp = 100;
-            remote_data.in_temp = 246;
-            remote_data.out_hum = 784;
-            remote_data.in_hum = 549;
-            remote_data.wind_speed = 34;
-            remote_data.peak_wind_speed = 86;
-            remote_data.bearing = 253;
-            remote_data.pressure = 1026;
-            remote_data.rainfall = 77;
-            remote_data.rainfall_rate = 167;
-            remote_data.timestamp = 6588290;
-
-            byte[] bin = new byte[Marshal.SizeOf(remote_data)];
-            bin = getCurrentBytes(remote_data);
-            // var questionId = 1;
-            ByteArrayContent byteContent = new ByteArrayContent(bin);
-
-            string url = "http://192.168.0.39:80/1";
-
-            var uri = new Uri(Uri.EscapeUriString(url));
-            var myHttpClient = new HttpClient();
-            var response = await myHttpClient.PostAsync(uri.ToString(), byteContent);
-            var result = await response.Content.ReadAsStringAsync();
-            Console.WriteLine($"{url}: {url.Length / 2:N0} characters");
-            Console.WriteLine(response.ToString());
-        }
-
-        static byte[] getHistoryBytes(data_packet_2 str)
-        {
-            int size = Marshal.SizeOf(str);
-            byte[] arr = new byte[size];
-
-            IntPtr ptr = Marshal.AllocHGlobal(size);
-            Marshal.StructureToPtr(str, ptr, true);
-            Marshal.Copy(ptr, arr, 0, size);
+            byte sum = 0;
+            byte[] block = new byte[13];
+            IntPtr ptr = Marshal.AllocHGlobal(13);
+            Marshal.StructureToPtr(message, ptr, true);
+            Marshal.Copy(ptr, block, 0, 12);
             Marshal.FreeHGlobal(ptr);
-            return arr;
+
+            int nBytes = 0;
+            while (nBytes< 13)
+            {
+                sum += block[nBytes++];
+
+            }
+
+            return (sum);
+
+        }   /* Sum() */
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
 
-        static async Task PostHistory()
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //    
-            data_packet_2 remote_data;
-            remote_data.out_temp_H = 123;
-            remote_data.out_temp_L = 97;
-            remote_data.in_temp_H = 239;
-            remote_data.in_temp_L = 195;
-            remote_data.out_hum_H = 967;
-            remote_data.out_hum_L = 598;
-            remote_data.in_hum_H = 608;
-            remote_data.in_hum_L = 407;
-            remote_data.wind_speed = 75;
-            remote_data.peak_wind_speed = 156;
-            remote_data.bearing = 254;
-            remote_data.pressure_H = 1026;
-            remote_data.pressure_L = 998;
-            remote_data.rainfall = 890;
-            remote_data.timestamp = 6588290; ;
 
-            byte[] bin = new byte[Marshal.SizeOf(remote_data)];// StructureToByteArray(remote_data);
-            bin = getHistoryBytes(remote_data);
-            // var questionId = 1;
-            ByteArrayContent byteContent = new ByteArrayContent(bin);
+        }
 
-            string url = "http://192.168.0.39:80/2";
+        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
 
-            var uri = new Uri(Uri.EscapeUriString(url));
-            var myHttpClient = new HttpClient();
-            var response = await myHttpClient.PostAsync(uri.ToString(), byteContent);
-            var result = await response.Content.ReadAsStringAsync();
-            Console.WriteLine($"{url}: {url.Length / 2:N0} characters");
-            Console.WriteLine(result.ToString());
         }
     }
-}
+    }

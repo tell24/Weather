@@ -60,7 +60,7 @@
 #define GET_INCOMMING  1
 #define GET_TIME       2
 #define SET_ALARM      3
-#define SET_TIME_ALARM 4
+#define SET_TIME       4
 #define READ_DATA      5
 #define UPLOAD_CURRENT 6
 #define UPLOAD_HISTORY 7

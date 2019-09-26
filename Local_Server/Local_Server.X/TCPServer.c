@@ -131,6 +131,7 @@ void TCPServer(int *TCP_status, DWORD *post_data_size, MPFS_HANDLE *f) {
     WORD wMaxGet, wMaxPut, wCurrentChunk;
     int POST = 0;
     int a_index = 0;
+    int data_start;
     //   DWORD ds = *post_data_size;
     static TCP_SOCKET MySocket;
 
@@ -194,8 +195,10 @@ void TCPServer(int *TCP_status, DWORD *post_data_size, MPFS_HANDLE *f) {
 
                     AppBuffer[a_index] = c;
                     a_index++;
-                    //      putrsUART1(c);
                 }
+                
+            //    int ad = 0;
+             //   for(ad = 0; ad<a_index;ad++){my_uart_println_int(AppBuffer[ad]);}
 
                 if (((AppBuffer[0] == 'G')&&(AppBuffer[1] == 'E'))) {
 
@@ -229,8 +232,10 @@ void TCPServer(int *TCP_status, DWORD *post_data_size, MPFS_HANDLE *f) {
                 if (((AppBuffer[0] == 'P')&&(AppBuffer[1] == 'O'))) {
 
                     switch (AppBuffer[6]) {
-                        case 'c':
-                    //        putrsUART1((ROM char*) "SOCKET SM_CURRENT...\r\n");
+                        case 'r':
+                            putrsUART1((ROM char*) "SOCKET SM_CURRENT...\r\n");
+                            
+                     *post_data_size = a_index - 13;
                             TCPServerState = SM_CURRENT;
                             *TCP_status = 6;
                             return;
@@ -248,7 +253,7 @@ void TCPServer(int *TCP_status, DWORD *post_data_size, MPFS_HANDLE *f) {
         case SM_Wait_DataSize:
             if (TCPIsGetReady(MySocket)) {
                 a_index = 0;
-                // 	putrsUART((ROM char*)"SOCKET GET READY...\r\n");
+                 	putrsUART((ROM char*)"SOCKET WAIT DATA...\r\n");
                 while (TCPGet(MySocket, &c)) {
                     AppBuffer[a_index] = c;
                     a_index++;
@@ -362,6 +367,7 @@ void TCPServer(int *TCP_status, DWORD *post_data_size, MPFS_HANDLE *f) {
 
         case SM_CURRENT:
             if (TCPIsPutReady(MySocket)) {
+                putrsUART1((ROM char*) "buf...\r\n");
                 char buf[100];
                 /*
                   int out_temp;
@@ -393,18 +399,39 @@ void TCPServer(int *TCP_status, DWORD *post_data_size, MPFS_HANDLE *f) {
                 if (*TCP_status == 6) {
                     TCPPutROMString(MySocket, (ROM BYTE*) "HTTP/1.1 200 OK\r\n");
                     TCPPutROMString(MySocket, (ROM BYTE*) "Content-Type: text/html\r\n");
-                    TCPPutROMString(MySocket, (ROM BYTE*) "Content-Length: 20\r\n");
+              //      TCPPutROMString(MySocket, (ROM BYTE*) "Content-Length: 20\r\n");
                     TCPPutROMString(MySocket, (ROM BYTE*) "Connection: close\r\n");
                     TCPPutROMString(MySocket, (ROM BYTE*) "\r\n");
                     TCPFlush(MySocket);
                     *TCP_status = 2;
+                     int offset = *post_data_size;
+                     *post_data_size = 0;
+                     my_uart_println_int(offset);
+                     
+    BYTE RemoteBuffer[13];
+                       //      memcpy(&RemoteBuffer, &AppBuffer+offset, 13);
+                                  int ad = 0;
+                for(ad = 0; ad<13;ad++){my_uart_println_int(RemoteBuffer[ad] = AppBuffer[offset+ad]);}
+                                  
+                             memcpy(&outsidedata, RemoteBuffer, 13); 
+                            my_uart_println_int(outsidedata.temp);
+                            my_uart_println_int(outsidedata.hum);
+                            
+                            outside.t = (double)outsidedata.temp/100;
+                            outside.h = (double)outsidedata.hum/100;
+                    
+                            TCPServerState = SM_DIS;
             //        putrsUART1((ROM char*) "Data Header...\r\n");
                     return;
                 }
+                
+                
                 memcpy(&buf, &WEB_data_0, 20);
-                TCPPutROMArray(MySocket, &buf, 20);
-                TCPFlush(MySocket);
-            //    putrsUART1((ROM char*) "Data Raw...\r\n");
+         //       TCPPutROMArray(MySocket, &buf, 20);
+         //       TCPFlush(MySocket);
+                int id = 0;
+         //       for(id = 0; id<13;id++){my_uart_println_int(buf[id]);}
+                putrsUART1((ROM char*) "Data Raw...\r\n");
             } else return;
 
 

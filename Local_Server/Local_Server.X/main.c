@@ -509,7 +509,7 @@ int main(void) {
     //    process_item  = DO_NOTHING;
     //process_item = STARTUP;
 
-    process_item = SET_TIME_ALARM;
+    process_item = SET_TIME;
 
     // Initialize application specific hardware
     InitializeBoard();
@@ -555,6 +555,11 @@ int main(void) {
     DWORD hFatID;
     DWORD reg;
     while (1) {
+        
+          if ((IFS1bits.RTCCIF == 1)&&(TCP_status < 2)) {
+            process_item = READ_DATA;
+            IFS1CLR = 0x00008000; // clear RTCC existing event
+        }
         // This task performs normal stack task including checking
         // for incoming packet, type of packet and calling
         // appropriate stack entity to process it.
@@ -567,7 +572,7 @@ int main(void) {
             case GET_INCOMMING:
                 TCPServer(&TCP_status, &post_data_size, &f);
                 break;
-            case SET_TIME_ALARM: t_d = Set_RTCC();
+            case SET_TIME: t_d = Set_RTCC();
                 if (t_d.d != 0) {
                     DelayMs(2000);
                     process_item = STARTUP;
@@ -584,11 +589,13 @@ int main(void) {
                 break;
             case UPLOAD_CURRENT:
                 //     my_uart_println_str("UPLOAD...\r\n");
-                if (TCPClient(CURRENT_DATA) == 1) process_item = GET_INCOMMING;
+            //    if (TCPClient(CURRENT_DATA) == 1)
+                    process_item = GET_INCOMMING;
                 break;
             case UPLOAD_HISTORY:
                 //     my_uart_println_str("UPLOAD...\r\n");
-                if (TCPClient(HISTORY_DATA) == 1) process_item = GET_INCOMMING;
+            //    if (TCPClient(HISTORY_DATA) == 1)
+                    process_item = GET_INCOMMING;
                 break;
             case STOP_SERVER:
                 TCP_status = 10;

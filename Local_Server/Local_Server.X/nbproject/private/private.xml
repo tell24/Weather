@@ -7,8 +7,12 @@
             <file>file:/E:/Projects/Weather/Local_Server/Local_Server.X/main.h</file>
             <file>file:/E:/Projects/Weather/Local_Server/Local_Server.X/TCPClient.c</file>
             <file>file:/E:/Projects/Weather/Local_Server/Local_Server.X/eeprom.h</file>
+            <file>file:/E:/Projects/Weather/Local_Server/Microchip/TCPIP%20Stack/Delay.c</file>
             <file>file:/E:/Projects/Weather/Local_Server/Local_Server.X/ST7735.h</file>
+            <file>file:/E:/Projects/Weather/Local_Server/Microchip/TCPIP%20Stack/ENC28J60.c</file>
+            <file>file:/E:/Projects/Weather/Local_Server/Local_Server.X/TCPServer.c</file>
             <file>file:/E:/Projects/Weather/Local_Server/Local_Server.X/main.c</file>
+            <file>file:/E:/Projects/Weather/Local_Server/Local_Server.X/HardwareProfile.h</file>
         </group>
     </open-files>
 </project-private>

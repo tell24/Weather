@@ -4,6 +4,7 @@
 #include "DebugMacros.h"
 #include <Wire.h>
 
+#define DEV 
 // Fill ssid and password with your network credentials
 const char* ssid =  "SKY4B6A5";
 const char* password = "RDFDZPDP";
@@ -13,14 +14,21 @@ const char* password = "RDFDZPDP";
 const char* host = "script.google.com";
 
 // google script id
-const char *GScriptId = "AKfycbzep_6TONHLbfjt1H23_iCb0DMc126LPo3smsun";
+//const char *GScriptId = "AKfycbwdejyp_XqafKDG_xJcFKxqEyWAXvYHaymh-oKUXyql0bcqRyk";
+//
 
 //port
 const int httpsPort = 443;
 
 // Write to Google Spreadsheet
-String url = String("/macros/s/") + GScriptId + "/exec?value=";
-String url1 = String("/macros/s/") + GScriptId + "/exec?value=Testing";
+//String url = String("/macros/s/") + GScriptId + "/exec?value=";
+#ifdef DEV
+const char *GScriptId = "AKfycbyh3Hsl6u0REhLq2A0Wkz7x2RtXZq0D373nVmTsL9w";
+String url = String("/macros/s/") + GScriptId + "/dev?value=Testing";
+#else
+//const char *GScriptId = "AKfycbznD66uT9RcicnAhSnAuAherAwO9iQ7hssPCfJfrQW3auBDEJ0";
+//String url = String("/macros/s/") + GScriptId + "/exec?value=Testing";
+#endif
 
 String payload_base =  "{\"command\": \"appendRow\", \
                     \"sheet_name\": \"Sheet1\", \
@@ -248,13 +256,13 @@ int send_data(String data)
   // Use HTTPSRedirect class to create a new TLS connection
   client = new HTTPSRedirect(httpsPort);
   client->setTimeout(10000); // 15 Seconds
-  client->setInsecure();
+ //client->setInsecure();
   client->setPrintResponseBody(true);
   client->setContentTypeHeader("application/json");
 
-  //    Serial.print("Connecting to ");
-  //    Serial.print(host);
-  //    Serial.print("  ");
+      Serial.print("Connecting to ");
+      Serial.print(host);
+      Serial.print("  ");
   // Try to connect for a maximum of 5 times
   bool flag = false;
   for (int i = 0; i < 5; i++) {
@@ -263,22 +271,22 @@ int send_data(String data)
       flag = true;
       break;
     }
-    //   else
-    //      Serial.println("Connection failed. Retrying...");
+       else
+          Serial.println("Connection failed. Retrying...");
   }
 
   if (!flag) {
-    //      Serial.print("Could not connect to server: ");
-    //      Serial.println(host);
-    //      Serial.println("Exiting...");
+          Serial.print("Could not connect to server: ");
+          Serial.println(host);
+          Serial.println("Exiting...");
     return 0;
   }
   // fetch spreadsheet data
-  //   Serial.println(host + url + dataString);
+     Serial.println(host + url + dataString);
   client->GET(url + data, host);
 
-  ESP.getFreeHeap();
-  ESP.getFreeContStack();
+ // ESP.getFreeHeap();
+//  ESP.getFreeContStack();
 
   http_status = client->getStatusCode();
   body = client->getResponseBody();
@@ -295,8 +303,8 @@ void setup() {
   Serial.begin(115200);
   Serial.flush();
   inputString.reserve(200);
-  free_heap_before = ESP.getFreeHeap();
-  free_stack_before = ESP.getFreeContStack();
+ // free_heap_before = ESP.getFreeHeap();
+//  free_stack_before = ESP.getFreeContStack();
 
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
