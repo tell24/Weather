@@ -45,6 +45,7 @@
       <itemPath>CustomHTTPApp.c</itemPath>
       <itemPath>TCPClient.c</itemPath>
       <itemPath>eeprom.c</itemPath>
+      <itemPath>TCPRemoteData.c</itemPath>
     </logicalFolder>
     <logicalFolder name="TCPIP Stack" displayName="TCPIP Stack" projectFiles="true">
       <itemPath>../Microchip/TCPIP Stack/Announce.c</itemPath>

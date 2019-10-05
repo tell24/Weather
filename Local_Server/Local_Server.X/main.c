@@ -130,6 +130,9 @@ TempHum inside, outside;
 unsigned short pressure;
 BYTE process_item;
 uint8_t old_min;
+uint8_t today;
+bool reset_clock = false;
+
 
 // Private helper functions.
 // These may or may not be present in all applications.
@@ -198,56 +201,58 @@ static void read_inside_data() {
 
 static _Bool save_data(RTCCDateTime tim) {
 
-//    // Save min data to eeprom
-//    if (tim.t.min != 0) {
-//        WEB_data_0.timestamp = tim.d.mday + tim.t.min;
-//        write_EEPROM(tim.t.min * 32, &WEB_data_0, 20);
-//        ThisHour[tim.t.min] = WEB_data_0;
-//        
-//        return true;
-//    } else {
-//        int i = 0;
-//        current av;
-//        int itl = 100, ith = -100, otl = 100, oth = -100, ihl = 100, ihh = 0, ohl = 100, ohh = 0, pl = 1100, ph = 100, w = 0, pw = 0, b = 0, r = 0;
-//        for (i = 0; i < 60; i++) {
-//            av = ThisHour[i];
-//            if (av.in_temp > ith)ith = av.in_temp;
-//            if (av.in_temp < itl)itl = av.in_temp;
-//            if (av.in_hum > ihh)ihh = av.in_hum;
-//            if (av.in_hum < ihl)ihl = av.in_hum;
-//            if (av.out_temp > oth)oth = av.out_temp;
-//            if (av.out_temp < otl)otl = av.out_temp;
-//            if (av.out_hum > ohh)ohh = av.out_hum;
-//            if (av.out_hum < ohl)ohl = av.out_hum;
-//            if (av.pressure > ph)ph = av.pressure;
-//            if (av.pressure < pl)pl = av.pressure;
-//            if (av.peak_wind_speed > pw)pw = av.peak_wind_speed;
-//            w += av.wind_speed;
-//            b += av.bearing;
-//            r += av.rainfall;
-//        }
-//        History.in_temp_H = ith;
-//        History.in_temp_L = itl;
-//        History.out_temp_H = oth;
-//        History.out_temp_L = otl;
-//        History.in_hum_H = ihh;
-//        History.in_hum_L = ihl;
-//        History.out_hum_H = ohh;
-//        History.out_hum_L = ohl;
-//        History.pressure_H = ph;
-//        History.pressure_L = pl;
-//        History.wind_speed = pw;
-//        History.peak_wind_speed = (signed short) (w / 60);
-//        History.bearing = (signed short) (b / 60);
-//        History.rainfall = (signed short) (r / 60);
-//        
-//
-//        write_EEPROM(tim.t.min * 32, &WEB_data_0, 20);
-//        write_EEPROM(HOUR_OFFSET + (tim.d.mday * 32 * 24) +(tim.t.hour * 32), &History, 32);
-//
-//    }
+    uint32_t TimeStamp = unixtime(tim);
 
-        return false;
+    //    // Save min data to eeprom
+    //    if (tim.t.min != 0) {
+    //        WEB_data_0.timestamp = tim.d.mday + tim.t.min;
+    //        write_EEPROM(tim.t.min * 32, &WEB_data_0, 20);
+    //        ThisHour[tim.t.min] = WEB_data_0;
+    //        
+    //        return true;
+    //    } else {
+    //        int i = 0;
+    //        current av;
+    //        int itl = 100, ith = -100, otl = 100, oth = -100, ihl = 100, ihh = 0, ohl = 100, ohh = 0, pl = 1100, ph = 100, w = 0, pw = 0, b = 0, r = 0;
+    //        for (i = 0; i < 60; i++) {
+    //            av = ThisHour[i];
+    //            if (av.in_temp > ith)ith = av.in_temp;
+    //            if (av.in_temp < itl)itl = av.in_temp;
+    //            if (av.in_hum > ihh)ihh = av.in_hum;
+    //            if (av.in_hum < ihl)ihl = av.in_hum;
+    //            if (av.out_temp > oth)oth = av.out_temp;
+    //            if (av.out_temp < otl)otl = av.out_temp;
+    //            if (av.out_hum > ohh)ohh = av.out_hum;
+    //            if (av.out_hum < ohl)ohl = av.out_hum;
+    //            if (av.pressure > ph)ph = av.pressure;
+    //            if (av.pressure < pl)pl = av.pressure;
+    //            if (av.peak_wind_speed > pw)pw = av.peak_wind_speed;
+    //            w += av.wind_speed;
+    //            b += av.bearing;
+    //            r += av.rainfall;
+    //        }
+    //        History.in_temp_H = ith;
+    //        History.in_temp_L = itl;
+    //        History.out_temp_H = oth;
+    //        History.out_temp_L = otl;
+    //        History.in_hum_H = ihh;
+    //        History.in_hum_L = ihl;
+    //        History.out_hum_H = ohh;
+    //        History.out_hum_L = ohl;
+    //        History.pressure_H = ph;
+    //        History.pressure_L = pl;
+    //        History.wind_speed = pw;
+    //        History.peak_wind_speed = (signed short) (w / 60);
+    //        History.bearing = (signed short) (b / 60);
+    //        History.rainfall = (signed short) (r / 60);
+    //        
+    //
+    //        write_EEPROM(tim.t.min * 32, &WEB_data_0, 20);
+    //        write_EEPROM(HOUR_OFFSET + (tim.d.mday * 32 * 24) +(tim.t.hour * 32), &History, 32);
+    //
+    //    }
+
+    return false;
 }
 
 DateTime Set_RTCC() {
@@ -268,6 +273,7 @@ DateTime Set_RTCC() {
             cc++;
         } while (cc < 128);
 
+        today = mytime->tm_wday;
         uint32_t ts = (mRTCCDec2BCD(mytime->tm_hour));
         ts = ts << 8 | (mRTCCDec2BCD(mytime->tm_min));
         ts = ts << 8 | (mRTCCDec2BCD(mytime->tm_sec));
@@ -433,6 +439,11 @@ RTCCDateTime update_clock() {
     mon = mRTCCBCD2Dec(dt.mon) + 1;
     year = mRTCCBCD2Dec(dt.year);
 
+    if (today != day) {
+        reset_clock = true;
+        today = day;
+    }
+
     t.tm_hour = hour;
     t.tm_min = min;
     t.tm_sec = 0;
@@ -452,37 +463,42 @@ RTCCDateTime update_clock() {
             }
         }
     }
-    DWORD  ST7735_COLOUR ;
-    if((hour < 8)|| (hour > 22)){
+    DWORD ST7735_COLOUR;
+    if ((hour < 8) || (hour > 22)) {
         ST7735_COLOUR = ST7735_NIGHT_TIME;
-    }
-    else
-    {
+    } else {
         ST7735_COLOUR = ST7735_DAY_TIME;
-        
+
     }
     char buf[10];
-    sprintf(buf, "%02d:%02d", hour, min);
+    if (hour > 12) hour -= 12;
+    if (hour == 0) hour = 12;
+    if (hour < 10)
+        sprintf(buf, " %1d:%02d", hour, min);
+    else
+        sprintf(buf, "%2d:%02d", hour, min);
+
     drawtext(4, 0, buf, ST7735_COLOUR, ST7735_BLACK, 4);
     sprintf(buf, "%02d-%02d-%d", day, mon, year);
     drawtext(16, 40, buf, ST7735_COLOUR, ST7735_BLACK, 2);
-    
+
     int t_right = 12;
 
     drawtext(40, 72, "Inside", ST7735_COLOUR, ST7735_BLACK, 1);
-    sprintf(buf, "%3.1f%s", inside.t,"C");
-    if(inside.t < 10) t_right = 24;
-    if(inside.t < 0) t_right = 12;    
-    if(inside.t <= -10) t_right = 0;
-
+    sprintf(buf, "%3.1f%s", inside.t, "C");
+    if (inside.t < 10) t_right = 24;
+    if (inside.t < 0) t_right = 12;
+    if (inside.t <= -10) t_right = 0;
+    outside.t = (double) outsidedata.temp / 100;
+    outside.h = (double) outsidedata.hum / 100;
     drawtext(t_right, 88, buf, ST7735_COLOUR, ST7735_BLACK, 2);
     sprintf(buf, "%2.0f%s", inside.h, "%");
     drawtext(88, 88, buf, ST7735_COLOUR, ST7735_BLACK, 2);
     drawtext(40, 144, "Outside", ST7735_COLOUR, ST7735_BLACK, 1);
-    if(outside.t < 10) t_right = 24;
-    if(outside.t < 0) t_right = 12;    
-    if(outside.t <= -10) t_right = 0;
-    sprintf(buf, "%3.1f%s", outside.t,"C");
+    if (outside.t < 10) t_right = 24;
+    if (outside.t < 0) t_right = 12;
+    if (outside.t <= -10) t_right = 0;
+    sprintf(buf, "%3.1f%s", outside.t, "C");
     drawtext(t_right, 120, buf, ST7735_COLOUR, ST7735_BLACK, 2);
     sprintf(buf, "%2.0f%s", outside.h, "%");
     drawtext(88, 120, buf, ST7735_COLOUR, ST7735_BLACK, 2);
@@ -555,8 +571,8 @@ int main(void) {
     DWORD hFatID;
     DWORD reg;
     while (1) {
-        
-          if ((IFS1bits.RTCCIF == 1)&&(TCP_status < 2)) {
+
+        if ((IFS1bits.RTCCIF == 1)&&(TCP_status < 2)) {
             process_item = READ_DATA;
             IFS1CLR = 0x00008000; // clear RTCC existing event
         }
@@ -577,25 +593,40 @@ int main(void) {
                     DelayMs(2000);
                     process_item = STARTUP;
                     my_uart_println_str((ROM char*) "a");
+                    reset_clock = false;
                 }
                 break;
             case READ_DATA:
-                my_uart_println_str("Read Data...\r\n");
+                //  my_uart_println_str("Read Data...\r\n");
                 read_inside_data();
-                if(save_data(update_clock()))
-                    process_item = UPLOAD_CURRENT;
-                else
-                    process_item = UPLOAD_HISTORY;
+                BYTE status = TCPRemoteData();
+                if (status == 1) {
+                    if (save_data(update_clock())) {
+                        process_item = UPLOAD_CURRENT;
+                    } else
+                        process_item = GET_INCOMMING;
+                }
                 break;
             case UPLOAD_CURRENT:
                 //     my_uart_println_str("UPLOAD...\r\n");
-            //    if (TCPClient(CURRENT_DATA) == 1)
+                //    if (TCPClient(CURRENT_DATA) == 1)
+                if (reset_clock)
+                    process_item = UPDATE_RTCC;
+                else
                     process_item = GET_INCOMMING;
+                break;
+            case UPDATE_RTCC:
+                t_d = Set_RTCC();
+                if (t_d.d != 0) {
+                    DelayMs(2000);
+                    process_item = GET_INCOMMING;
+                    reset_clock = false;
+                }
                 break;
             case UPLOAD_HISTORY:
                 //     my_uart_println_str("UPLOAD...\r\n");
-            //    if (TCPClient(HISTORY_DATA) == 1)
-                    process_item = GET_INCOMMING;
+                //    if (TCPClient(HISTORY_DATA) == 1)
+                process_item = GET_INCOMMING;
                 break;
             case STOP_SERVER:
                 TCP_status = 10;
@@ -916,4 +947,36 @@ void my_uart_print_HEX(uint32_t hex) {
     my_uart_print('\r');
     my_uart_print('\n');
 
+}
+
+uint16_t date2days(uint16_t y, uint8_t m, uint8_t d) {
+    if (y >= 2000)
+        y -= 2000;
+    uint16_t days = d;
+    uint8_t i = 0;
+    for (i = 1; i < m; ++i)
+        days += month[i] - 1;
+    if (m > 2 && y % 4 == 0)
+        ++days;
+    return days + 365 * y + (y + 3) / 4 - 1;
+}
+
+uint32_t time2long(uint16_t days, uint8_t h, uint8_t m, uint8_t s) {
+    return ((days * 24L + h) * 60 + m) * 60 + s;
+}
+
+uint32_t unixtime(RTCCDateTime dt) {
+    uint32_t t;
+    int y = mRTCCBCD2Dec(dt.d.year);
+    int m = mRTCCBCD2Dec(dt.d.mon);
+    int d = mRTCCBCD2Dec(dt.d.mday);
+    int hh = mRTCCBCD2Dec(dt.t.hour);
+    int mm = mRTCCBCD2Dec(dt.t.min);
+    int ss = 0;
+
+    uint16_t days = date2days(y, m, d);
+    t = time2long(days, hh, mm, ss);
+    t += SECONDS_FROM_1970_TO_2000; // seconds from 1970 to 2000
+
+    return t;
 }

@@ -97,6 +97,8 @@ void setup() {
   Serial.print("IP address:\t");
   Serial.println(WiFi.localIP()); // Send the IP address of the ESP8266 to the computer
 
+  Serial.print("IP SIGNAL LEVEL:\t");
+      Serial.println(WiFi.RSSI());
   // set interrupt handler
   //pinMode(interruptPin, INPUT_PULLUP);
   //attachInterrupt(digitalPinToInterrupt(interruptPin), handleInterrupt, FALLING);

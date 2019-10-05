@@ -1,14 +1,7 @@
-﻿using SimpleTCP;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
+﻿using System;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace TestingSoftware
@@ -43,7 +36,7 @@ namespace TestingSoftware
     public partial class Form1 : Form
     {
 
-       
+
 
 
         struct data_packet_2
@@ -106,7 +99,7 @@ namespace TestingSoftware
             // connect to device
             TcpClient client = new TcpClient();
             client.Connect(System.Net.IPAddress.Parse("192.168.0.40"), 80);
-            
+
             byte[] data = new byte[24];
             remote.temp = 201;
             remote.hum = 700;
@@ -115,12 +108,12 @@ namespace TestingSoftware
             remote.bearing = 200;
             remote.checksum = Sum(remote);
 
-        // create post data to be sent
-        string postDataAsString = @"POST /r / HTTP/1.1" + Environment.NewLine +
-            "Host: 192.168.0.40" + Environment.NewLine +
-            "Content-Length: 13" + Environment.NewLine +
-            Environment.NewLine +
-            Environment.NewLine;
+            // create post data to be sent
+            string postDataAsString = @"POST /r / HTTP/1.1" + Environment.NewLine +
+                "Host: 192.168.0.40" + Environment.NewLine +
+                "Content-Length: 13" + Environment.NewLine +
+                Environment.NewLine +
+                Environment.NewLine;
             int headerSize = Encoding.ASCII.GetByteCount(postDataAsString);
             byte[] DataBinary = System.Text.Encoding.UTF8.GetBytes(postDataAsString);
 
@@ -141,8 +134,8 @@ namespace TestingSoftware
 
             var resp = System.Text.Encoding.UTF8.GetString(bytes, 0, lengthOfResponse);
 
-                    TextBox.CheckForIllegalCrossThreadCalls = false;
-                    txtReply.AppendText(resp);
+            TextBox.CheckForIllegalCrossThreadCalls = false;
+            txtReply.AppendText(resp);
         }
 
         byte Sum(data_packet message)
@@ -155,7 +148,7 @@ namespace TestingSoftware
             Marshal.FreeHGlobal(ptr);
 
             int nBytes = 0;
-            while (nBytes< 13)
+            while (nBytes < 13)
             {
                 sum += block[nBytes++];
 
@@ -170,14 +163,90 @@ namespace TestingSoftware
 
         }
 
-        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
-        {
 
+
+        private void sender_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (Sender.SelectedIndex == 0)
+            {
+                destinationLabel.Text = "Destination HTTP Forward";
+                if (radioButton1.Checked == true)
+                {
+                    radioButton1.Enabled = true;
+                    radioButton2.Enabled = true;
+                    textBox8.Visible = false;
+                    textBox9.Visible = false;
+                    textBox12.Visible = false;
+                    textBox13.Visible = false;
+                    textBox14.Visible = false;
+                }
+                else
+                {
+                    textBox8.Visible = true;
+                    textBox9.Visible = true;
+                    textBox12.Visible = true;
+                    textBox13.Visible = true;
+                    textBox14.Visible = true;
+                    textBox1.Visible = true;
+                    label3.Visible = true;
+                }
+
+            }
+            else
+            {
+                destinationLabel.Text = "Destination Local Server";
+                radioButton1.Enabled = false;
+                radioButton2.Enabled = false;
+                textBox1.Visible = false;
+                label3.Visible = false;
+                textBox2.Visible = false;
+                label4.Visible = false;
+                textBox5.Visible = false;
+                label7.Visible = false;
+                textBox8.Visible = false;
+                textBox9.Visible = false;
+                textBox12.Visible = false;
+                textBox13.Visible = false;
+                textBox14.Visible = false;
+
+
+
+
+            }
         }
 
-        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
+            if (Sender.SelectedIndex == 0)
+            {
+                destinationLabel.Text = "Destination Local Server";
+                if (radioButton1.Checked == true)
+                {
+                }
+                else
+                {
+                    textBox1.Visible = true;
+                    label3.Visible = true;
+                }
 
+            }
+        }
+
+        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (Sender.SelectedIndex == 0)
+            {
+                destinationLabel.Text = "Destination Local Server";
+                if (radioButton1.Checked == true)
+                {
+                }
+                else
+                {
+                    textBox1.Visible = true;
+                    label3.Visible = true;
+                }
+
+            }
         }
     }
-    }
+}

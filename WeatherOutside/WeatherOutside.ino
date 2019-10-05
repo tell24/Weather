@@ -1,72 +1,26 @@
-#include <SparkFunHTU21D.h>
-#include <ESP8266WiFi.h>
-#include "HTTPSRedirect.h"
-#include "DebugMacros.h"
+;
 #include <Wire.h>
+#include <SparkFunHTU21D.h>
 
-#define DEV 
-// Fill ssid and password with your network credentials
-const char* ssid =  "SKY4B6A5";
-const char* password = "RDFDZPDP";
-// google script file
-//https://script.google.com/macros/s/AKfycbzep_6TONHLbfjt1H23_iCb0DMc126LPo3smsun/exec?read=current
-//Hodt address
-const char* host = "script.google.com";
+#include <ESP8266WiFi.h>
 
-// google script id
-//const char *GScriptId = "AKfycbwdejyp_XqafKDG_xJcFKxqEyWAXvYHaymh-oKUXyql0bcqRyk";
-//
+HTU21D  htu ;
 
-//port
-const int httpsPort = 443;
+#define dev 0
 
-// Write to Google Spreadsheet
-//String url = String("/macros/s/") + GScriptId + "/exec?value=";
-#ifdef DEV
-const char *GScriptId = "AKfycbyh3Hsl6u0REhLq2A0Wkz7x2RtXZq0D373nVmTsL9w";
-String url = String("/macros/s/") + GScriptId + "/dev?value=Testing";
-#else
-//const char *GScriptId = "AKfycbznD66uT9RcicnAhSnAuAherAwO9iQ7hssPCfJfrQW3auBDEJ0";
-//String url = String("/macros/s/") + GScriptId + "/exec?value=Testing";
-#endif
+typedef struct data_packet {
+  int16_t    temp;
+  int16_t    hum ;
+  uint16_t  wind_speed;
+  uint16_t  peak_wind_speed;
+  uint16_t  bearing;
+  int16_t   rain;
+  int32_t   rssi;
+  int16_t   status;
+} sensor_data;
 
-String payload_base =  "{\"command\": \"appendRow\", \
-                    \"sheet_name\": \"Sheet1\", \
-                    \"values\": ";
-String payload = "";
+sensor_data sensors;
 
-String inputString = "";         // a String to hold incoming data
-
-HTTPSRedirect* client = nullptr;
-
-unsigned int free_heap_before = 0;
-unsigned int free_stack_before = 0;
-int http_status = 0;
-String body = "";
-String dataString = "";
-
-HTU21D th;
-
-int tx_pin = 16;
-byte channel = 3;
-double     temp, hum, old_temp = 0, old_hum = 0;
-
-
-uint32_t interval_milli_sec = 800000;
-volatile byte tick = 0;
-volatile int    interval_set = 1000;
-volatile int      weather_status = 0;
-volatile int      rain ;
-
-volatile boolean measure = false;
-volatile boolean  update_outside_data = false;
-volatile boolean getting_data = false;
-volatile boolean  update_froggy_data = false;
-
-
-double  wind_speed = 0;
-double  peak_wind_speed = 0;
-int  bearing = 0;
 
 typedef struct data_packet_1 {
   int16_t status;
@@ -78,57 +32,31 @@ typedef struct data_packet_1 {
 
 remotedata remote_data;
 
+// Fill ssid and password with your network credentials
+const char* ssid =  "SKY4B6A5";
+const char* password = "RDFDZPDP";
+bool htu_found;
+//unsigned long last_sent_time = millis(); // time last counter sent to the receiver host
 
-void inline timer0_ISR (void) {
-  //Serial.println(millis());
-  if (tick == 0) {
-    tick++;
-    measure = true;
-    timer0_write(ESP.getCycleCount() + (interval_milli_sec * interval_set ));
-    return;
-  }
+// config static IP
+IPAddress ip(192, 168, 0, 27); // where xx is the desired IP Address
+IPAddress gateway(192, 168, 0, 1); // set gateway to match your network
 
-  if (tick == 1) {
-    update_froggy_data = true;
-    tick++;
-    timer0_write(ESP.getCycleCount() + (interval_milli_sec * interval_set ));
-    return;
-  }
+IPAddress subnet(255, 255, 255, 0); // set subnet mask to match your network
 
-  if (tick == 3) {
-    update_outside_data = true;
-    tick++;
-    timer0_write(ESP.getCycleCount() + (interval_milli_sec * interval_set ));
-    return;
-  }
+WiFiServer server(80); // set WiFiServer on port 80
+#define SDA 0
+#define SCL 2
 
-  if (tick >= 5) {
-    tick = 0;
-    timer0_write(ESP.getCycleCount() + (interval_milli_sec * interval_set ));
-    return;
-  }
-
-  tick++;
-  timer0_write(ESP.getCycleCount() + (interval_milli_sec * interval_set ));
-}
-
-byte Sum(byte  * message, int nBytes)
-{
-  uint8_t  sum = 0;
-
-
-  while (nBytes-- > 0)
-  {
-    sum += *(message++);
-  }
-
-  return (sum);
-
-}   /* Sum() */
+boolean getting_data;
+volatile int      weather_status = 0;
+double    hum ;
+double    temp;
 
 boolean i2c_RainSensor_read()
 {
   byte buf[3];
+#if DEV
   int c = 0;
   Wire.requestFrom(8, 3);    // request 3 bytes from slave device #8
 
@@ -150,218 +78,116 @@ boolean i2c_RainSensor_read()
   }
   getting_data = false;
   return false;
+#else
+  sensors.rain = 0;
+  getting_data = false;
+  return true;
+#endif
 }
 
-
 void i2c_WindSensor_read() {
-  //  Serial.println("request wind");
-  //  getting_data = true;
-  //  byte s_buf[7];
-  //  requestdata.type = 6;
-  //  requestdata.temp = sensor_data.temp;
-  //  requestdata.hum = sensor_data.hum;
-  //  memcpy(s_buf, &requestdata, 6);
-  //  s_buf[6] = Sum(s_buf, 8);
-  //  Wire.beginTransmission(32); // transmit to device #16
-  //  Wire.write(s_buf, 9);
-  //  Wire.endTransmission();     // stop transmitting
-  //  delay(1);
-  //  byte buf[10];
-  //  int c = 0;
-  //  Wire.requestFrom(32, 9);    // request 3 bytes from slave device #16
-  //  while (Wire.available()) { // slave may send less than requested
-  //    buf[c] = Wire.read(); // receive a byte as character buf[c] = Wire.read(); // receive a byte as character
-  //
-  //    c++;
-  //  }
-  //  if (buf[6] == Sum(buf, 6))
-  //  {
-  //    memcpy(&remote_data, buf, 9);
-  //    if (remote_data.status == 0) {
-  //      wind_speed = (double)remote_data.wind_speed / 100;
-  //      peak_wind_speed = (double)remote_data.peak_wind_speed / 100;
-  //      bearing = remote_data.bearing;
-  //    }
-  //    else {
-  //      wind_speed = 0;
-  //      peak_wind_speed = 0;
-  //      bearing = 0;
-  //
-  //    }
-  //  }
+#if DEV
+  Serial.println("request wind");
+  getting_data = true;
+  byte s_buf[7];
+  requestdata.type = 6;
+  requestdata.temp = sensor_data.temp;
+  requestdata.hum = sensor_data.hum;
+  memcpy(s_buf, &requestdata, 6);
+  s_buf[6] = Sum(s_buf, 8);
+  Wire.beginTransmission(32); // transmit to device #16
+  Wire.write(s_buf, 9);
+  Wire.endTransmission();     // stop transmitting
+  delay(1);
+  byte buf[10];
+  int c = 0;
+  Wire.requestFrom(32, 9);    // request 3 bytes from slave device #16
+  while (Wire.available()) { // slave may send less than requested
+    buf[c] = Wire.read(); // receive a byte as character buf[c] = Wire.read(); // receive a byte as character
+
+    c++;
+  }
+  if (buf[6] == Sum(buf, 6))
+  {
+    memcpy(&remote_data, buf, 9);
+    if (remote_data.status == 0) {
+      wind_speed = (double)remote_data.wind_speed / 100;
+      peak_wind_speed = (double)remote_data.peak_wind_speed / 100;
+      bearing = remote_data.bearing;
+    }
+    else {
+      wind_speed = 0;
+      peak_wind_speed = 0;
+      bearing = 0;
+
+    }
+  }
+#else
+  sensors.status = 0;
+  sensors.wind_speed = 234;
+  sensors.peak_wind_speed = 760;
+  sensors.bearing = 170;
+#endif
   getting_data = false;
 }
 
-
-void clock_pulse() {
-  digitalWrite(tx_pin, HIGH);
-  delayMicroseconds(500);
-  digitalWrite(tx_pin, LOW);
-}
-
-
-void  send_start() {
-  clock_pulse();   delay(4);
-
-}
-
-void send_byte(byte dat)
-{
-  int shift = 0;
-  byte res = 0;
-  do {
-    res = (dat << shift);
-    clock_pulse();
-    if ((res & 0x80) == 0x80)
-      delay(2); else delay(1);
-    shift++;
-  } while (shift < 8);
-}
-void  send_nibble(byte nib)
-{
-  int shift = 0;
-  byte res = 0;
-  do {
-    res = nib << shift;
-    clock_pulse();
-
-    if ((res & 0x08) == 0x08) delay(2); else  delay(1);
-    shift++;
-  } while (shift < 4);
-}
-
-
-void Send_Froggy_Data() {
-  int rep = 10;
-  do {
-    send_start();
-    send_byte(170);
-    byte ch = 0x08 >> (channel - 1);
-    send_nibble(ch);
-    int temperature = (int) (temp * 10);
-    byte th = (temperature >> 8) & 0x0f;
-    byte tl = temperature  & 0xff;
-    send_nibble(th);
-    send_byte(tl);
-    send_nibble(0x0f);
-    send_byte((byte)hum);
-    rep--;
-  } while (rep > 0);
-  clock_pulse();
-}
-
-
-int send_data(String data)
-{
-  // Use HTTPSRedirect class to create a new TLS connection
-  client = new HTTPSRedirect(httpsPort);
-  client->setTimeout(10000); // 15 Seconds
- //client->setInsecure();
-  client->setPrintResponseBody(true);
-  client->setContentTypeHeader("application/json");
-
-      Serial.print("Connecting to ");
-      Serial.print(host);
-      Serial.print("  ");
-  // Try to connect for a maximum of 5 times
-  bool flag = false;
-  for (int i = 0; i < 5; i++) {
-    int retval = client->connect(host, httpsPort);
-    if (retval == 1) {
-      flag = true;
-      break;
-    }
-       else
-          Serial.println("Connection failed. Retrying...");
-  }
-
-  if (!flag) {
-          Serial.print("Could not connect to server: ");
-          Serial.println(host);
-          Serial.println("Exiting...");
-    return 0;
-  }
-  // fetch spreadsheet data
-     Serial.println(host + url + dataString);
-  client->GET(url + data, host);
-
- // ESP.getFreeHeap();
-//  ESP.getFreeContStack();
-
-  http_status = client->getStatusCode();
-  body = client->getResponseBody();
-  // delete HTTPSRedirect object
-  delete client;
-  client = nullptr;                             //  time taken 3.6 seconds
-  //Serial.print("body = ");
-  //Serial.println(body);
-  if (body == "fail") return 0;
-  return (int) body.toInt();
-}
-
 void setup() {
-  Serial.begin(115200);
-  Serial.flush();
-  inputString.reserve(200);
- // free_heap_before = ESP.getFreeHeap();
-//  free_stack_before = ESP.getFreeContStack();
+  Serial.begin(115200); // Start the Serial communication to send messages to the computer
+  delay(100);
+  Serial.println('\n');
 
-  WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-  }
-  //  Serial.println("");
-  //  Serial.println("WiFi connected");
-  //  Serial.println("IP address: ");
-  //  Serial.println(WiFi.localIP());
-  Wire.begin(13, 12);
-  th.begin();
+  Wire.begin(SDA, SCL);
   delay(1000);
-  pinMode(tx_pin, OUTPUT);
+  int test_sensor = 0;
 
-  hum = th.readHumidity();
-  temp = th.readTemperature();
-  String dataString = "outside," + String(temp) + "," + String(hum) + ","
-                      + String(0)  + "," + String(0)  + "," + String(0)  + ","
-                      + String(0)  + "," + String(weather_status);
-  int del = send_data( dataString);
+  double    hum, temp;
+  do {
+    htu.begin();
+    hum = htu.readHumidity();
+    temp = htu.readTemperature();
+    Serial.println('.');
+    test_sensor++;
+    delay(100);
+  } while ((hum != 998) && (temp != 998) && (test_sensor < 5));
+  if (test_sensor <= 5) htu_found = true; else  htu_found = false ;
+  Serial.println(temp);
+  Serial.println(hum);
+  Serial.print(F("Setting static ip to : "));
+  Serial.println(ip);
+  WiFi.config(ip, gateway, subnet);
+  WiFi.hostname("ESP-01 board");
+  WiFi.begin(ssid, password); // Connect to the network
+  Serial.print("Connecting to ");
+  Serial.print(ssid); Serial.println(" ...");
 
-  if (del < 60) tick = 1 + (int)(del / 10); else tick = 0;
-  //     Serial.print("tick = "); Serial.println(tick);
-  noInterrupts();
-  timer0_isr_init();
-  timer0_attachInterrupt(timer0_ISR);
-  timer0_write(ESP.getCycleCount() + interval_milli_sec * interval_set );
-  interrupts();
+  int i = 0;
+  while (WiFi.status() != WL_CONNECTED) { // Wait for the Wi-Fi to connect
+    delay(1000);
+    Serial.print('.');
+  }
+
+  Serial.println('\n');
+  Serial.println("Connection established!");
+  Serial.print("IP address:\t");
+  Serial.println(WiFi.localIP()); // Send the IP address of the ESP8266 to the computer
+
+  Serial.print("IP SIGNAL LEVEL:\t");
+  Serial.println(WiFi.RSSI());
+  // set interrupt handler
+  //pinMode(interruptPin, INPUT_PULLUP);
+  //attachInterrupt(digitalPinToInterrupt(interruptPin), handleInterrupt, FALLING);
+
+  // start HTTP server
+  server.begin();
+  Serial.printf("Web server started, open %s in a web browser\n", WiFi.localIP().toString().c_str());
 }
 
-void loop() {
 
-  if (  measure ) {
-    measure = false;
-    weather_status = 0;
-    int repeat = 3;
-    do {
-      hum = th.readHumidity();
-      temp = th.readTemperature();
-      if ((hum != 998) && (temp != 998))
-      {
-        break;
-      }
-      repeat--;
-      if (hum == 998) {
-        weather_status |= 1;
-        hum =  old_hum;
-      }
-      if (temp == 998) {
-        weather_status |= 2;
-        temp = old_temp;
-      }
-    } while (repeat > 0);
-    if (hum > 100)hum = 99.9;
-    old_temp = temp;
-    old_hum = hum;
-
+// prepare a web page to be send to a client (web browser)
+String prepareHtmlPage(boolean isPOST)
+{
+  String htmlPage = "";
+  if (htu_found) {
     long t = millis();
     getting_data = true;
     if (!i2c_RainSensor_read()) weather_status |= 2;
@@ -373,28 +199,102 @@ void loop() {
       }
     };                                  // time taken 1 - 2 milliseconds
 
-    //    t = millis();
-    //    i2c_WindSensor_read();
-    //    while (getting_data) {
-    //      delay(10);
-    //      if ((millis() - t ) > 1000) {
-    //        Serial.println("timeout");
-    //        weather_status |= 8;
-    //        // give false data
-    //        break;
-    //      }
+    t = millis();
+    i2c_WindSensor_read();
+    while (getting_data) {
+      delay(10);
+      if ((millis() - t ) > 1000) {
+        Serial.println("timeout");
+        weather_status |= 8;
+        // give false data
+        break;
+      }
+    }
+    sensors.rssi = WiFi.RSSI();
+    sensors.temp = (int16_t)(htu.readTemperature() * 100);
+    sensors.hum = (int16_t)(htu.readHumidity() * 100);
+    sensors.rain = 0;
+    if (isPOST) {
+      htmlPage =
+        String("HTTP/1.1 200 OK\r\n") +
+        "Content-Type: text/html\r\n" +
+        "Content-Length: " + String(sizeof(sensor_data)) + "\r\n" +
+        "Connection: Keep_Alive\r\n\r\n";
+    }
+    else
+    {
+      htmlPage =
+        String("HTTP/1.1 200 OK\r\n") +
+        "Content-Type: text/html\r\n" +
+        "Pragma: no-cache\r\n" +
+        "Connection: close\r\n\r\n" +
+        "<meta http-equiv='refresh' content='5'/>" +
+        "<title>RBBB server</title>" +
+        "<h1>ESP-01 board  </h1>" +
+        "<h2 RSSI>" + String(sensors.rssi) + "</h2>" +
+        "<h2>" + String((double)sensors.temp / 100) + "</h2>" +
+        "<h2>" + String((double)sensors.hum / 100) + "</h2>" +
+        "<h2>" + String((double)sensors.wind_speed / 100) + "</h2>" +
+        "<h2>" + String((double)sensors.peak_wind_speed / 100) + "</h2>" +
+        "<h2>" + String(sensors.bearing) + "</h2>";
+    }
   }
-  if ( update_froggy_data) {
-    update_froggy_data = false;
-    Send_Froggy_Data();
+  else
+  {
+    int32_t s = WiFi.RSSI();
+    htmlPage =
+      String("HTTP/1.1 200 OK\r\n") +
+      "Content-Type: text/html\r\n" +
+      "Pragma: no-cache\r\n" +
+      "\r\n" +
+      "<meta http-equiv='refresh' content='5'/>" +
+      "<title>RBBB server</title>" +
+      "<h1>ESP-07 board  </h1>" +
+      "<h2>" + String(s) + "</h2>" +
+      "<h2>Sensor not found</h2>";
   }
-  if ( update_outside_data) {
-    update_outside_data = false;
-    dataString = "outside," + String(temp) + "," + String(hum) + ","
-                 + String(wind_speed)  + "," + String(peak_wind_speed)  + "," + String(bearing)  + ","
-                 + String(rain)  + "," + String(weather_status);
-    send_data( dataString);
 
-    dataString = "";
+  return htmlPage;
+}
+
+// handle HTTP request to this board
+void handle_request(WiFiClient client, boolean isPOST) {
+  Serial.println("\n[Client connected]");
+  while (client.connected())
+  {
+    // read line by line what the client (web browser) is requesting
+    while (client.available())client.read();
+    client.print(prepareHtmlPage(isPOST));
+    if (isPOST) {
+      Serial.println("s_d");
+      int size_data = sizeof(sensor_data);
+      byte buf[size_data];      
+      Serial.println(size_data);
+      memcpy(&buf, &sensors, size_data);
+      client.write((const uint8_t*)buf,size_data);      
+    client.stop();
+    }
+    else
+    client.stop();
   }
+  Serial.println("[Client disonnected]");
+  //postData();
+}
+
+
+// main loop of the board
+void loop() {
+
+  // wait for a client (web browser) to connect
+  WiFiClient client = server.available();
+  if (client)
+  {
+
+    String instr = client.readStringUntil('\r');
+    Serial.println(instr);
+    int isPOST = false;
+    if (instr.indexOf("POST") >= 0) isPOST = true;
+    handle_request(client, isPOST);
+  }
+
 }

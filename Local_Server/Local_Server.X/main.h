@@ -66,9 +66,11 @@
 #define UPLOAD_HISTORY 7
 #define STOP_SERVER    8
 #define STARTUP        9
+#define UPDATE_RTCC    10 
 
 #define CURRENT_DATA   1
 #define HISTORY_DATA   2
+#define GET_REMOTE     3
 
 #define mRTCCBCD2Dec(BCD)   (((BCD>>4)*10)+(BCD & 0x0f))    
 #define mRTCCDec2BCD(Dec)  ((Dec/10)<<4)|(Dec % 10)
@@ -102,9 +104,10 @@ typedef struct data_packet {
     signed short hum;
     signed short wind_speed;
     signed short peak_wind_speed;
-    signed short rain;
     signed short bearing;
-    unsigned char checksum;
+    signed short rain;
+    int32_t      rssi;
+    signed short status;
 } remotedata;
 
 typedef struct data_packet1 {
@@ -167,6 +170,13 @@ void my_uart_print_int(int i);
 void my_uart_println_double(double i);
 void my_uart_print_HEX(uint32_t hex);
 void DoUARTConfig(void);
+
+
+
+#define SECONDS_FROM_1970_TO_2000 946684800
+    uint16_t date2days(uint16_t y, uint8_t m, uint8_t d);
+    uint32_t time2long(uint16_t days, uint8_t h, uint8_t m, uint8_t s);
+    uint32_t unixtime(RTCCDateTime tim);
 
 
 #endif // _MAIN_H

@@ -56,19 +56,19 @@
 
 #include "TCPIPConfig.h"
 #include "main.h"
+#include <stdbool.h>
 
 #if defined(STACK_USE_GENERIC_TCP_CLIENT_EXAMPLE)
 
 #include "TCPIP Stack/TCPIP.h"
 
 
-static BYTE ServerName[] = "192.168.0.39";
+static BYTE ServerName[] = "192.168.0.27";
 
 static WORD ServerPort = HTTP_PORT;
 
 // Defines the URL to be requested by this HTTP client
-static ROM BYTE RemoteURLCurrent[] = "/1";
-static ROM BYTE RemoteURLHistory[] = "/2";
+static ROM BYTE RemoteURLData[] = "/";
 
 /*****************************************************************************
   Function:
@@ -97,11 +97,13 @@ static ROM BYTE RemoteURLHistory[] = "/2";
   Returns:
     None
  ***************************************************************************/
-BYTE TCPClient(BYTE type) {
+BYTE TCPRemoteData() {
     BYTE i;
     WORD w;
-    BYTE vBuffer[9];
+    BYTE vBuffer[500];
+    BYTE vDATA[20];
     BYTE status = 0;
+    _Bool isData;
     static DWORD Timer;
     static TCP_SOCKET MySocket = INVALID_SOCKET;
 
@@ -121,6 +123,7 @@ BYTE TCPClient(BYTE type) {
             // Connect a socket to the remote TCP server
             //	MySocket = TCPOpen((DWORD)(PTR_BASE)&ServerName[0], TCP_OPEN_RAM_HOST, ServerPort, TCP_PURPOSE_GENERIC_TCP_CLIENT);
 
+            isData = false;
             MySocket = TCPOpen((DWORD) & ServerName[0], TCP_OPEN_RAM_HOST, ServerPort, TCP_PURPOSE_GENERIC_TCP_CLIENT);
 
             // Abort operation if no TCP socket of type TCP_PURPOSE_GENERIC_TCP_CLIENT is available
@@ -179,25 +182,12 @@ BYTE TCPClient(BYTE type) {
                 break;
 
             // Place the application protocol data into the transmit buffer.  For this example, we are connected to an HTTP server, so we'll send an HTTP GET request.
-            switch (type) {
-                case CURRENT_DATA:
-                    TCPPutROMString(MySocket, (ROM BYTE*) "POST ");
-                    TCPPutROMString(MySocket, RemoteURLCurrent);
-                    TCPPutROMString(MySocket, (ROM BYTE*) " HTTP/1.0\r\nHost: ");
-                    TCPPutString(MySocket, ServerName);
-                    TCPPutROMString(MySocket, (ROM BYTE*) "Content-Length: 24\r\n");
-                    TCPPutROMString(MySocket, (ROM BYTE*) "\r\nConnection: close\r\n\r\n");
-                    TCPPutROMArray(MySocket, &WEB_data_0, 24);
-                    break;
-                case HISTORY_DATA:
-                    TCPPutROMString(MySocket, (ROM BYTE*) "POST ");
-                    TCPPutROMString(MySocket, RemoteURLHistory);
-                    TCPPutROMString(MySocket, (ROM BYTE*) " HTTP/1.0\r\nHost: ");
-                    TCPPutString(MySocket, ServerName);
-                    TCPPutROMString(MySocket, (ROM BYTE*) "Content-Length: 32\r\n");
-                    TCPPutROMArray(MySocket, &History, 32);
-                    break;
-            }
+            putrsUART1((ROM char*) "DATA REQUEST...\r\n");
+            TCPPutROMString(MySocket, (ROM BYTE*) "POST");
+            TCPPutROMString(MySocket, RemoteURLData);
+            TCPPutROMString(MySocket, (ROM BYTE*) " HTTP/1.0\r\nHost: ");
+            TCPPutString(MySocket, ServerName);
+            TCPPutROMString(MySocket, (ROM BYTE*) "\r\nConnection: close\r\n\r\n");
             // Send the packet
             TCPFlush(MySocket);
             GenericTCPExampleState++;
@@ -210,12 +200,13 @@ BYTE TCPClient(BYTE type) {
                 GenericTCPExampleState = SM_DISCONNECT;
                 // Do not break;  We might still have data in the TCP RX FIFO waiting for us
             }
-            //	putrsUART1((ROM char*) "RESPONSE...\r\n");
+            //        	putrsUART1((ROM char*) "RESPONSE...\r\n");
             // Get count of RX bytes waiting
             w = TCPIsGetReady(MySocket);
-
+            
             // Obtian and print the server reply
             i = sizeof (vBuffer) - 1;
+
             vBuffer[i] = '\0';
             while (w) {
                 if (w < i) {
@@ -224,9 +215,20 @@ BYTE TCPClient(BYTE type) {
                 }
                 w -= TCPGetArray(MySocket, vBuffer, i);
                 //	#if defined(STACK_USE_UART)
-                putrsUART((char*) vBuffer);
+                putrsUART1((ROM char*) "D..");
+                         putrsUART((char*) vBuffer);
+                         
                 //	#endif
-
+                if(isData){
+                memcpy(&outsidedata, &vBuffer, 18);
+                my_uart_println_str(" ");
+                my_uart_println_int(outsidedata.hum);
+                my_uart_println_int(outsidedata.temp);
+                my_uart_println_int(outsidedata.bearing);
+                isData = false;
+                }         
+                else  
+                    isData = true;
                 // putsUART is a blocking call which will slow down the rest of the stack 
                 // if we shovel the whole TCP RX FIFO into the serial port all at once.  
                 // Therefore, let's break out after only one chunk most of the time.  The 
@@ -239,22 +241,23 @@ BYTE TCPClient(BYTE type) {
             break;
 
         case SM_DISCONNECT:
-            //   putrsUART1((ROM char*) "DIS...\r\n");
+            putrsUART1((ROM char*) "DIS...\r\n");
             // Close the socket so it can be used by other modules
             // For this application, we wish to stay connected, but this state will still get entered if the remote server decides to disconnect
             TCPDisconnect(MySocket);
             MySocket = INVALID_SOCKET;
             GenericTCPExampleState = SM_DONE;
-            status = 1;
             break;
 
         case SM_DONE:
             // Do nothing unless the user pushes BUTTON1 and wants to restart the whole connection/download process
             //	if(BUTTON1_IO == 0u)
             GenericTCPExampleState = SM_HOME;
+            status = 1;
             break;
     }
     return status;
 }
 
 #endif	//#if defined(STACK_USE_GENERIC_TCP_CLIENT_EXAMPLE)
+
