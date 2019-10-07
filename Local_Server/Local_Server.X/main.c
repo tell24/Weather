@@ -482,27 +482,55 @@ RTCCDateTime update_clock() {
     sprintf(buf, "%02d-%02d-%d", day, mon, year);
     drawtext(16, 40, buf, ST7735_COLOUR, ST7735_BLACK, 2);
 
-    int t_right = 12;
-
-    drawtext(40, 72, "Inside", ST7735_COLOUR, ST7735_BLACK, 1);
-    sprintf(buf, "%3.1f%s", inside.t, "C");
-    if (inside.t < 10) t_right = 24;
-    if (inside.t < 0) t_right = 12;
-    if (inside.t <= -10) t_right = 0;
     outside.t = (double) outsidedata.temp / 100;
     outside.h = (double) outsidedata.hum / 100;
-    drawtext(t_right, 88, buf, ST7735_COLOUR, ST7735_BLACK, 2);
+    my_uart_println_int(outsidedata.hum);
+    my_uart_println_double(outside.t);
+
+    drawtext(40, 72, "Inside", ST7735_COLOUR, ST7735_BLACK, 1);
+    if (inside.t <= -10) sprintf(buf, "%3.1f%s", inside.t, "C ");
+    else if (inside.t < 0)
+        sprintf(buf, "%s%3.1f%s", " ", inside.t, "C ");
+    else if (inside.t < 10)
+        sprintf(buf, "%s%3.1f%s", "  ", inside.t, "C ");
+    else
+        sprintf(buf, "%s%3.1f%s", " ", inside.t, "C ");
+    drawtext(0, 88, buf, ST7735_COLOUR, ST7735_BLACK, 2);
+    if(inside.h >99)inside.h = 99;
     sprintf(buf, "%2.0f%s", inside.h, "%");
     drawtext(88, 88, buf, ST7735_COLOUR, ST7735_BLACK, 2);
     drawtext(40, 144, "Outside", ST7735_COLOUR, ST7735_BLACK, 1);
-    if (outside.t < 10) t_right = 24;
-    if (outside.t < 0) t_right = 12;
-    if (outside.t <= -10) t_right = 0;
-    sprintf(buf, "%3.1f%s", outside.t, "C");
-    drawtext(t_right, 120, buf, ST7735_COLOUR, ST7735_BLACK, 2);
-    sprintf(buf, "%2.0f%s", outside.h, "%");
-    drawtext(88, 120, buf, ST7735_COLOUR, ST7735_BLACK, 2);
 
+    if (outside.t <= -10) sprintf(buf, "%3.1f%s", outside.t, "C ");
+    else if (outside.t < 0)
+        sprintf(buf, "%s%3.1f%s", " ", outside.t, "C ");
+    else if (outside.t < 10)
+        sprintf(buf, "%s%3.1f%s", "  ", outside.t, "C ");
+    else
+        sprintf(buf, "%s%3.1f%s", " ", outside.t, "C ");
+
+    drawtext(0, 120, buf, ST7735_COLOUR, ST7735_BLACK, 2);
+    if(outside.h >99)outside.h = 99;
+    sprintf(buf, "%2.0f%s", outside.h, "%");
+    drawtext(88, 120, buf, ST7735_COLOUR, ST7735_BLACK, 2);    
+    
+    if (outsidedata.rssi == 0) {
+        drawFastVLine(120, 150, 3, ST7735_BLACK);
+        drawFastVLine(123, 147, 6, ST7735_BLACK);
+        drawFastVLine(126, 144, 9, ST7735_BLACK);
+    } else if (outsidedata.rssi < -80) {
+        drawFastVLine(120, 150, 3, ST7735_COLOUR);
+        drawFastVLine(123, 147, 6, ST7735_BLACK);
+        drawFastVLine(126, 144, 9, ST7735_BLACK);
+    } else if (outsidedata.rssi < -65) {
+        drawFastVLine(120, 150, 3, ST7735_COLOUR);
+        drawFastVLine(123, 147, 6, ST7735_COLOUR);
+        drawFastVLine(126, 144, 9, ST7735_BLACK);
+    } else if (outsidedata.rssi < -50) {
+        drawFastVLine(120, 150, 3, ST7735_COLOUR);
+        drawFastVLine(123, 147, 6, ST7735_COLOUR);
+        drawFastVLine(126, 144, 9, ST7735_COLOUR);
+    }
 
     RTCCDateTime now;
     now.d = dt;
@@ -529,7 +557,6 @@ int main(void) {
 
     // Initialize application specific hardware
     InitializeBoard();
-
     if (!BMP180_begin()) {
         my_uart_println_str("Couldn't find BMP180!");
         while (1);
@@ -570,6 +597,7 @@ int main(void) {
     MPFS_HANDLE f;
     DWORD hFatID;
     DWORD reg;
+    BYTE status = 0;
     while (1) {
 
         if ((IFS1bits.RTCCIF == 1)&&(TCP_status < 2)) {
@@ -598,13 +626,21 @@ int main(void) {
                 break;
             case READ_DATA:
                 //  my_uart_println_str("Read Data...\r\n");
+                inside.t = 0;
+                inside.h = 0;
+                outside.t = 0;
+                outside.h = 0;
                 read_inside_data();
-                BYTE status = TCPRemoteData();
-                if (status == 1) {
+                status = TCPRemoteData();
+                if (status == 10) {
                     if (save_data(update_clock())) {
                         process_item = UPLOAD_CURRENT;
                     } else
                         process_item = GET_INCOMMING;
+                }
+                if (status == 5) {
+                    update_clock();
+                    process_item = GET_INCOMMING;
                 }
                 break;
             case UPLOAD_CURRENT:

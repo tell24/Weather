@@ -68,7 +68,6 @@ static BYTE ServerName[] = "192.168.0.27";
 static WORD ServerPort = HTTP_PORT;
 
 // Defines the URL to be requested by this HTTP client
-static ROM BYTE RemoteURLData[] = "/";
 
 /*****************************************************************************
   Function:
@@ -103,6 +102,7 @@ BYTE TCPRemoteData() {
     BYTE vBuffer[500];
     BYTE vDATA[20];
     BYTE status = 0;
+ //   int buf_clear;
     _Bool isData;
     static DWORD Timer;
     static TCP_SOCKET MySocket = INVALID_SOCKET;
@@ -122,7 +122,8 @@ BYTE TCPRemoteData() {
         case SM_HOME:
             // Connect a socket to the remote TCP server
             //	MySocket = TCPOpen((DWORD)(PTR_BASE)&ServerName[0], TCP_OPEN_RAM_HOST, ServerPort, TCP_PURPOSE_GENERIC_TCP_CLIENT);
-
+      //       buf_clear = 0;
+      //      for(buf_clear = 0; buf_clear <500; buf_clear++) &vBuffer[buf_clear] = 0;
             isData = false;
             MySocket = TCPOpen((DWORD) & ServerName[0], TCP_OPEN_RAM_HOST, ServerPort, TCP_PURPOSE_GENERIC_TCP_CLIENT);
 
@@ -151,7 +152,15 @@ BYTE TCPRemoteData() {
                     TCPDisconnect(MySocket);
                     MySocket = INVALID_SOCKET;
                     GenericTCPExampleState--;
-                    status = 1;
+                    outsidedata.temp = 0;
+                    outsidedata.hum = 0;
+                    outsidedata.wind_speed = 0;
+                    outsidedata.peak_wind_speed = 0;
+                    outsidedata.bearing = 0;
+                    outsidedata.rain = 0;
+                    outsidedata.rssi = 0;
+                    outsidedata.status = 0;
+                    status = 5;
                     return;
                 }
                 break;
@@ -183,11 +192,10 @@ BYTE TCPRemoteData() {
 
             // Place the application protocol data into the transmit buffer.  For this example, we are connected to an HTTP server, so we'll send an HTTP GET request.
             putrsUART1((ROM char*) "DATA REQUEST...\r\n");
-            TCPPutROMString(MySocket, (ROM BYTE*) "POST");
-            TCPPutROMString(MySocket, RemoteURLData);
+            TCPPutROMString(MySocket, (ROM BYTE*) "POST /2");
             TCPPutROMString(MySocket, (ROM BYTE*) " HTTP/1.0\r\nHost: ");
             TCPPutString(MySocket, ServerName);
-            TCPPutROMString(MySocket, (ROM BYTE*) "\r\nConnection: close\r\n\r\n");
+            TCPPutROMString(MySocket, (ROM BYTE*) "\r\nConnection: Close\r\n\r\n");
             // Send the packet
             TCPFlush(MySocket);
             GenericTCPExampleState++;
@@ -203,7 +211,7 @@ BYTE TCPRemoteData() {
             //        	putrsUART1((ROM char*) "RESPONSE...\r\n");
             // Get count of RX bytes waiting
             w = TCPIsGetReady(MySocket);
-            
+
             // Obtian and print the server reply
             i = sizeof (vBuffer) - 1;
 
@@ -216,19 +224,25 @@ BYTE TCPRemoteData() {
                 w -= TCPGetArray(MySocket, vBuffer, i);
                 //	#if defined(STACK_USE_UART)
                 putrsUART1((ROM char*) "D..");
-                         putrsUART((char*) vBuffer);
-                         
+                putrsUART((char*) vBuffer);
+
                 //	#endif
-                if(isData){
-                memcpy(&outsidedata, &vBuffer, 18);
-                my_uart_println_str(" ");
-                my_uart_println_int(outsidedata.hum);
-                my_uart_println_int(outsidedata.temp);
-                my_uart_println_int(outsidedata.bearing);
-                isData = false;
-                }         
-                else  
+                if (isData) {
+                    memcpy(&outsidedata, &vBuffer, 18);
+                    my_uart_println_str(" isData ");
+                    my_uart_println_int(outsidedata.hum);
+                    my_uart_println_int(outsidedata.temp);
+                    my_uart_println_int(outsidedata.bearing);
+                    my_uart_println_int(outsidedata.wind_speed);
+                    my_uart_println_int(outsidedata.peak_wind_speed);
+                    my_uart_println_int(outsidedata.rssi);
+                    my_uart_println_int(outsidedata.status);
+                    isData = false;
+                }
+                else {
+                    my_uart_println_str("! isData ");
                     isData = true;
+                }
                 // putsUART is a blocking call which will slow down the rest of the stack 
                 // if we shovel the whole TCP RX FIFO into the serial port all at once.  
                 // Therefore, let's break out after only one chunk most of the time.  The 
@@ -253,7 +267,7 @@ BYTE TCPRemoteData() {
             // Do nothing unless the user pushes BUTTON1 and wants to restart the whole connection/download process
             //	if(BUTTON1_IO == 0u)
             GenericTCPExampleState = SM_HOME;
-            status = 1;
+            status = 10;
             break;
     }
     return status;

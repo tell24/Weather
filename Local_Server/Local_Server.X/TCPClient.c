@@ -62,13 +62,13 @@
 #include "TCPIP Stack/TCPIP.h"
 
 
-static BYTE ServerName[] = "192.168.0.39";
+static BYTE ServerName[] = "192.168.0.27";
 
 static WORD ServerPort = HTTP_PORT;
 
 // Defines the URL to be requested by this HTTP client
-static ROM BYTE RemoteURLCurrent[] = "/1";
-static ROM BYTE RemoteURLHistory[] = "/2";
+static ROM BYTE RemoteURLCurrent[] = "/0";
+static ROM BYTE RemoteURLHistory[] = "/1";
 
 /*****************************************************************************
   Function:
