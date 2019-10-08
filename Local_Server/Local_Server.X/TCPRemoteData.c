@@ -121,9 +121,6 @@ BYTE TCPRemoteData() {
     switch (GenericTCPExampleState) {
         case SM_HOME:
             // Connect a socket to the remote TCP server
-            //	MySocket = TCPOpen((DWORD)(PTR_BASE)&ServerName[0], TCP_OPEN_RAM_HOST, ServerPort, TCP_PURPOSE_GENERIC_TCP_CLIENT);
-      //       buf_clear = 0;
-      //      for(buf_clear = 0; buf_clear <500; buf_clear++) &vBuffer[buf_clear] = 0;
             isData = false;
             MySocket = TCPOpen((DWORD) & ServerName[0], TCP_OPEN_RAM_HOST, ServerPort, TCP_PURPOSE_GENERIC_TCP_CLIENT);
 
@@ -222,13 +219,16 @@ BYTE TCPRemoteData() {
                     vBuffer[i] = '\0';
                 }
                 w -= TCPGetArray(MySocket, vBuffer, i);
-                //	#if defined(STACK_USE_UART)
+                
+#if defined(STACK_USE_MY_UART)
                 putrsUART1((ROM char*) "D..");
                 putrsUART((char*) vBuffer);
-
+#endif
                 //	#endif
                 if (isData) {
                     memcpy(&outsidedata, &vBuffer, 18);
+                    
+#if defined(STACK_USE_MY_UART)
                     my_uart_println_str(" isData ");
                     my_uart_println_int(outsidedata.hum);
                     my_uart_println_int(outsidedata.temp);
@@ -237,10 +237,14 @@ BYTE TCPRemoteData() {
                     my_uart_println_int(outsidedata.peak_wind_speed);
                     my_uart_println_int(outsidedata.rssi);
                     my_uart_println_int(outsidedata.status);
+#endif
                     isData = false;
                 }
                 else {
+                    
+#if defined(STACK_USE_MY_UART)
                     my_uart_println_str("! isData ");
+#endif
                     isData = true;
                 }
                 // putsUART is a blocking call which will slow down the rest of the stack 

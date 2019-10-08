@@ -160,6 +160,7 @@ extern BYTE process_item;
 _Bool Is_DST(DWORD time);
 RTCCDateTime update_clock();
 
+#if defined(STACK_USE_MY_UART)
 //
 void my_uart_begin();
 void my_uart_print(char data);
@@ -169,6 +170,9 @@ void my_uart_println_int(int i);
 void my_uart_print_int(int i);
 void my_uart_println_double(double i);
 void my_uart_print_HEX(uint32_t hex);
+
+#endif
+
 void DoUARTConfig(void);
 
 

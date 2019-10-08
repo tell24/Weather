@@ -130,7 +130,7 @@ TempHum inside, outside;
 unsigned short pressure;
 BYTE process_item;
 uint8_t old_min;
-uint8_t today;
+volatile uint8_t ref_day;
 bool reset_clock = false;
 
 
@@ -144,7 +144,7 @@ static void DisplayIPValue(IP_ADDR IPVal);
 void TCPServer(int *TCP_status, DWORD *post_data_size, MPFS_HANDLE *f);
 BYTE TCPClient(BYTE type);
 static DateTime Set_RTCC();
-static void SetAlarm(DateTime alarm);
+//static void SetAlarm(DateTime alarm);
 static void read_inside_data();
 static TempHum get_Humidity_Temperature();
 static double i2c_Pressure_read();
@@ -173,13 +173,8 @@ double i2c_Pressure_read() {
             if (status != 0) {
                 DelayMs(status);
                 status = BMP180_getPressure(&P, &T);
-                if (status != 0) {
-                    //    my_uart_println_double(T);
-                    //    my_uart_println_double(P);
-                    //    my_uart_println_double(BMP180_sealevel(P, ALTITUDE));
-
+                if (status != 0)
                     return BMP180_sealevel(P, ALTITUDE);
-                }
             }
         }
     }
@@ -201,15 +196,14 @@ static void read_inside_data() {
 
 static _Bool save_data(RTCCDateTime tim) {
 
-    uint32_t TimeStamp = unixtime(tim);
-
+    //
+    //    WEB_data_0.timestamp = unixtime(tim);
+    //    
     //    // Save min data to eeprom
     //    if (tim.t.min != 0) {
     //        WEB_data_0.timestamp = tim.d.mday + tim.t.min;
     //        write_EEPROM(tim.t.min * 32, &WEB_data_0, 20);
     //        ThisHour[tim.t.min] = WEB_data_0;
-    //        
-    //        return true;
     //    } else {
     //        int i = 0;
     //        current av;
@@ -245,14 +239,13 @@ static _Bool save_data(RTCCDateTime tim) {
     //        History.peak_wind_speed = (signed short) (w / 60);
     //        History.bearing = (signed short) (b / 60);
     //        History.rainfall = (signed short) (r / 60);
-    //        
+    //
     //
     //        write_EEPROM(tim.t.min * 32, &WEB_data_0, 20);
     //        write_EEPROM(HOUR_OFFSET + (tim.d.mday * 32 * 24) +(tim.t.hour * 32), &History, 32);
-    //
     //    }
 
-    return false;
+    return true;
 }
 
 DateTime Set_RTCC() {
@@ -267,13 +260,15 @@ DateTime Set_RTCC() {
         strftime(buf, 128, "%H:%M:%S on the %d-%m-%Y\n", mytime);
         int cc = 0;
 
+#if defined(STACK_USE_MY_UART)     
+        my_uart_print_str("Clock time  ");
         do {
             my_uart_print((char) buf[cc]);
             if (buf[cc] == '\n') break;
             cc++;
         } while (cc < 128);
+#endif
 
-        today = mytime->tm_wday;
         uint32_t ts = (mRTCCDec2BCD(mytime->tm_hour));
         ts = ts << 8 | (mRTCCDec2BCD(mytime->tm_min));
         ts = ts << 8 | (mRTCCDec2BCD(mytime->tm_sec));
@@ -282,9 +277,6 @@ DateTime Set_RTCC() {
         ds = ds << 8 | (mRTCCDec2BCD(mytime->tm_mon));
         ds = ds << 8 | (mRTCCDec2BCD(mytime->tm_mday));
         ds = ds << 8 | (mRTCCDec2BCD(mytime->tm_wday));
-        my_uart_println_str("t1");
-        my_uart_print_HEX(ts);
-        my_uart_print_HEX(ds);
 
         SYSKEY = 0xaa996655; // write first unlock key to SYSKEY
         SYSKEY = 0x556699aa; // write second unlock key to SYSKEY
@@ -295,7 +287,7 @@ DateTime Set_RTCC() {
         RTCCONSET = 0x8000; // turn on the RTCC
         RTCCONCLR = 0x8; // set RTCWREN in RTCCONSET  
         while (!(RTCCON & 0x40)); // wait for clock to be turned on  
-        //   process_item = DO_NOTHING;
+        
         tim.l = RtccGetTime();
         dt.l = RtccGetDate();
         mytime->tm_hour = mRTCCBCD2Dec(tim.hour);
@@ -306,48 +298,8 @@ DateTime Set_RTCC() {
         mytime->tm_year = mRTCCBCD2Dec(dt.year);
         mytime->tm_wday = mRTCCBCD2Dec(dt.wday);
 
-        strftime(buf, 128, "%H:%M:%S on the %d-%m-%Y\n", mytime);
-        cc = 0;
-
-        do {
-            my_uart_print((char) buf[cc]);
-            if (buf[cc] == '\n') break;
-            cc++;
-        } while (cc < 128);
-
-        time += 90;
-
-        mytime = localtime(&time);
-        old_min = mytime->tm_min;
-        ts = (mRTCCDec2BCD(mytime->tm_hour));
-        ts = ts << 8 | (mRTCCDec2BCD(mytime->tm_min));
-        ts = ts << 8 | (mRTCCDec2BCD(mytime->tm_sec));
-        ts = ts << 8;
-        ds = (mRTCCDec2BCD(mytime->tm_year));
-        ds = ds << 8 | (mRTCCDec2BCD(mytime->tm_mon));
-        ds = ds << 8 | (mRTCCDec2BCD(mytime->tm_mday));
-        ds = ds << 8 | (mRTCCDec2BCD(mytime->tm_wday));
-
-        d_t.t = ts;
-        d_t.d = ds;
-
-
-        my_uart_println_str("t2");
-        my_uart_print_HEX(ts);
-        my_uart_print_HEX(ds);
-
-        my_uart_println_str("t3");
-        my_uart_print_HEX(d_t.t);
-        my_uart_print_HEX(d_t.d);
-
-        strftime(buf, 128, "%H:%M:%S on the %d-%m-%Y\n", mytime);
-        cc = 0;
-
-        do {
-            my_uart_print((char) buf[cc]);
-            if (buf[cc] == '\n') break;
-            cc++;
-        } while (cc < 128);
+        d_t.t = tim.l;
+        d_t.d = dt.l;
 
         return d_t;
 
@@ -356,30 +308,6 @@ DateTime Set_RTCC() {
     d_t.t = 0;
     return d_t;
 }
-//
-//void SetAlarm(DateTime alarm) {
-//
-//    //   SYSKEY = 0xaa996655; // write first unlock key to SYSKEY
-//    //   SYSKEY = 0x556699aa; // write second unlock key to SYSKEY
-//    RTCCONSET = 0x8; // set RTCWREN in RTCCONSET  
-//    RTCCONCLR = 0x8000; // turn off the RTCC 
-//    while (RTCCON & 0x40); // wait for clock to be turned off
-//    IEC1CLR = 0x00008000; // disable RTCC interrupts
-//    IFS1CLR = 0x00008000; // clear RTCC existing event
-//    IPC8CLR = 0x1f000000; // clear the priority
-//    IPC8SET = 0x0d000000; // Set IPL=5, subpriority 1
-//    IEC1SET = 0x00008000; // Enable RTCC interrupts
-//    RTCALRMCLR = 0xCFFF; // clear ALRMEN, CHIME, AMASK and ARPT;
-//    ALRMTIME = alarm.t & 0xffff0000; // set alarm time to 16 hr, 15 min, 43 sec
-//    ALRMDATE = alarm.d; // set alarm date to Friday 27 Oct 2006
-//    RTCALRMSET = 0x8000 | 0x00004300; // re-enable the alarm, set alarm mask at once per day
-//    RTCCONSET = 0x8000; // turn on the RTCC
-//    RTCCONCLR = 0x8; // set RTCWREN in RTCCONSET
-//    while (!(RTCCON & 0x40)); // wait for clock to be turned on
-//    
-//    my_uart_print_HEX(alarm.t & 0xffff0000);
-//    my_uart_print_HEX(alarm.d);
-//}
 
 _Bool Is_DST(DWORD time) {
     struct tm *newtime = localtime(&time);
@@ -439,9 +367,18 @@ RTCCDateTime update_clock() {
     mon = mRTCCBCD2Dec(dt.mon) + 1;
     year = mRTCCBCD2Dec(dt.year);
 
-    if (today != day) {
+
+#if defined(STACK_USE_MY_UART)
+    my_uart_print_str("days ");
+    my_uart_print_int(ref_day);
+    my_uart_print_str(" ");
+    my_uart_println_int(day);
+#endif
+
+    if (ref_day != day) {
+        my_uart_println_str("reset ");
         reset_clock = true;
-        today = day;
+        ref_day = day;
     }
 
     t.tm_hour = hour;
@@ -484,8 +421,6 @@ RTCCDateTime update_clock() {
 
     outside.t = (double) outsidedata.temp / 100;
     outside.h = (double) outsidedata.hum / 100;
-    my_uart_println_int(outsidedata.hum);
-    my_uart_println_double(outside.t);
 
     drawtext(40, 72, "Inside", ST7735_COLOUR, ST7735_BLACK, 1);
     if (inside.t <= -10) sprintf(buf, "%3.1f%s", inside.t, "C ");
@@ -496,7 +431,7 @@ RTCCDateTime update_clock() {
     else
         sprintf(buf, "%s%3.1f%s", " ", inside.t, "C ");
     drawtext(0, 88, buf, ST7735_COLOUR, ST7735_BLACK, 2);
-    if(inside.h >99)inside.h = 99;
+    if (inside.h > 99)inside.h = 99;
     sprintf(buf, "%2.0f%s", inside.h, "%");
     drawtext(88, 88, buf, ST7735_COLOUR, ST7735_BLACK, 2);
     drawtext(40, 144, "Outside", ST7735_COLOUR, ST7735_BLACK, 1);
@@ -510,10 +445,10 @@ RTCCDateTime update_clock() {
         sprintf(buf, "%s%3.1f%s", " ", outside.t, "C ");
 
     drawtext(0, 120, buf, ST7735_COLOUR, ST7735_BLACK, 2);
-    if(outside.h >99)outside.h = 99;
+    if (outside.h > 99)outside.h = 99;
     sprintf(buf, "%2.0f%s", outside.h, "%");
-    drawtext(88, 120, buf, ST7735_COLOUR, ST7735_BLACK, 2);    
-    
+    drawtext(88, 120, buf, ST7735_COLOUR, ST7735_BLACK, 2);
+
     if (outsidedata.rssi == 0) {
         drawFastVLine(120, 150, 3, ST7735_BLACK);
         drawFastVLine(123, 147, 6, ST7735_BLACK);
@@ -557,24 +492,37 @@ int main(void) {
 
     // Initialize application specific hardware
     InitializeBoard();
+
+
+#if defined(STACK_USE_MY_UART)
+    my_uart_println_str("InitializeBoard()");
+#endif
+
     if (!BMP180_begin()) {
+
+#if defined(STACK_USE_MY_UART)
         my_uart_println_str("Couldn't find BMP180!");
+#endif
         while (1);
     }
 
     DelayMs(100);
 
     if (!HTU21DF_begin()) {
+
+#if defined(STACK_USE_MY_UART)
         my_uart_println_str("Couldn't find HTU21DF!");
+#endif
         while (1);
     }
 
     read_inside_data();
 
+#if defined(STACK_USE_MY_UART)
     my_uart_println_int(pressure);
     my_uart_println_double(inside.t);
     my_uart_println_double(inside.h);
-
+#endif
 
     // Initialize stack-related hardware components that may be 
     // required by the UART configuration routines
@@ -616,16 +564,15 @@ int main(void) {
             case GET_INCOMMING:
                 TCPServer(&TCP_status, &post_data_size, &f);
                 break;
-            case SET_TIME: t_d = Set_RTCC();
+            case SET_TIME:
+                t_d = Set_RTCC();
                 if (t_d.d != 0) {
                     DelayMs(2000);
                     process_item = STARTUP;
-                    my_uart_println_str((ROM char*) "a");
                     reset_clock = false;
                 }
                 break;
             case READ_DATA:
-                //  my_uart_println_str("Read Data...\r\n");
                 inside.t = 0;
                 inside.h = 0;
                 outside.t = 0;
@@ -644,7 +591,9 @@ int main(void) {
                 }
                 break;
             case UPLOAD_CURRENT:
-                //     my_uart_println_str("UPLOAD...\r\n");
+#if defined(STACK_USE_MY_UART)
+                my_uart_println_str("UPLOAD_CURRENT");
+#endif
                 //    if (TCPClient(CURRENT_DATA) == 1)
                 if (reset_clock)
                     process_item = UPDATE_RTCC;
@@ -652,6 +601,10 @@ int main(void) {
                     process_item = GET_INCOMMING;
                 break;
             case UPDATE_RTCC:
+
+#if defined(STACK_USE_MY_UART)
+                my_uart_println_str("UPDATE_RTCC");
+#endif
                 t_d = Set_RTCC();
                 if (t_d.d != 0) {
                     DelayMs(2000);
@@ -660,7 +613,6 @@ int main(void) {
                 }
                 break;
             case UPLOAD_HISTORY:
-                //     my_uart_println_str("UPLOAD...\r\n");
                 //    if (TCPClient(HISTORY_DATA) == 1)
                 process_item = GET_INCOMMING;
                 break;
@@ -681,7 +633,6 @@ int main(void) {
 // Writes an IP address to the LCD display and the UART as available
 
 void DisplayIPValue(IP_ADDR IPVal) {
-    // printf("%u.%u.%u.%u", IPVal.v[0], IPVal.v[1], IPVal.v[2], IPVal.v[3]);
 
     BYTE IPDigit[4];
 
@@ -758,7 +709,10 @@ static void InitializeBoard(void) {
     DelayMs(1);
     LATEbits.LATE5 = 0;
     DelayMs(1000);
+
+#if defined(STACK_USE_MY_UART)
     my_uart_begin();
+#endif
     init_I2C(100000);
 
 #if defined(__PIC32MX__)
@@ -907,6 +861,8 @@ static void InitAppConfig(void) {
 
 //UART
 
+#if defined(STACK_USE_MY_UART)
+
 void my_uart_begin() {
     U1MODEbits.BRGH = 0; // Baud Rate = 9600
     U1BRG = 259; // baud 19200
@@ -984,6 +940,7 @@ void my_uart_print_HEX(uint32_t hex) {
     my_uart_print('\n');
 
 }
+#endif
 
 uint16_t date2days(uint16_t y, uint8_t m, uint8_t d) {
     if (y >= 2000)

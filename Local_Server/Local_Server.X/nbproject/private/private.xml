@@ -5,7 +5,8 @@
         <group>
             <file>file:/E:/Projects/Weather/Local_Server/Local_Server.X/main.h</file>
             <file>file:/E:/Projects/Weather/Local_Server/Local_Server.X/TCPClient.c</file>
-            <file>file:/E:/Projects/Weather/Local_Server/Local_Server.X/TCPRemoteData.c</file>
+            <file>file:/E:/Projects/Weather/Local_Server/Local_Server.X/eeprom.h</file>
+            <file>file:/E:/Projects/Weather/Local_Server/Local_Server.X/TCPIPConfig.h</file>
             <file>file:/E:/Projects/Weather/Local_Server/Local_Server.X/TCPServer.c</file>
             <file>file:/E:/Projects/Weather/Local_Server/Local_Server.X/main.c</file>
         </group>

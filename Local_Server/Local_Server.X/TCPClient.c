@@ -119,8 +119,6 @@ BYTE TCPClient(BYTE type) {
     switch (GenericTCPExampleState) {
         case SM_HOME:
             // Connect a socket to the remote TCP server
-            //	MySocket = TCPOpen((DWORD)(PTR_BASE)&ServerName[0], TCP_OPEN_RAM_HOST, ServerPort, TCP_PURPOSE_GENERIC_TCP_CLIENT);
-
             MySocket = TCPOpen((DWORD) & ServerName[0], TCP_OPEN_RAM_HOST, ServerPort, TCP_PURPOSE_GENERIC_TCP_CLIENT);
 
             // Abort operation if no TCP socket of type TCP_PURPOSE_GENERIC_TCP_CLIENT is available
@@ -128,8 +126,9 @@ BYTE TCPClient(BYTE type) {
             if (MySocket == INVALID_SOCKET)
                 break;
 
-#if defined(STACK_USE_UART)
-            //	putrsUART2((ROM char*)"\r\n\r\nConnecting using Microchip TCP API...\r\n");
+
+#if defined(STACK_USE_MY_UART)
+            	putrsUART2((ROM char*)"\r\n\r\nConnecting using Microchip TCP API...\r\n");
 #endif
 
             GenericTCPExampleState++;
@@ -137,13 +136,14 @@ BYTE TCPClient(BYTE type) {
             break;
 
         case SM_SOCKET_OBTAINED:
-            //     putrsUART1((ROM char*) "OBTAINED...\r\n");
+            
+#if defined(STACK_USE_MY_UART)
+                 putrsUART1((ROM char*) "CLIENT OBTAINED...\r\n");
+#endif
             // Wait for the remote server to accept our connection request
-            if (!TCPIsConnected(MySocket)) {
-                //        putrsUART1((ROM char*) "CL...\r\n");
+            if (!TCPIsConnected(MySocket)) {  
                 // Time out if too much time is spent in this state
                 if (TickGet() - Timer > 5 * TICK_SECOND) {
-                    //         putrsUART1((ROM char*) "BACK...\r\n");
                     // Close the socket so it can be used by other modules
                     TCPDisconnect(MySocket);
                     MySocket = INVALID_SOCKET;
@@ -155,24 +155,6 @@ BYTE TCPClient(BYTE type) {
             }
 
             Timer = TickGet();
-
-#if defined (STACK_USE_SSL_CLIENT)
-            if (!TCPStartSSLClient(MySocket, (void *) "thishost"))
-                break;
-            GenericTCPExampleState++;
-            break;
-
-        case SM_START_SSL:
-            if (TCPSSLIsHandshaking(MySocket)) {
-                if (TickGet() - Timer > 10 * TICK_SECOND) {
-                    // Close the socket so it can be used by other modules
-                    TCPDisconnect(MySocket);
-                    MySocket = INVALID_SOCKET;
-                    GenericTCPExampleState = SM_HOME;
-                }
-                break;
-            }
-#endif
 
             // Make certain the socket can be written to
             if (TCPIsPutReady(MySocket) < 125u)
@@ -210,7 +192,9 @@ BYTE TCPClient(BYTE type) {
                 GenericTCPExampleState = SM_DISCONNECT;
                 // Do not break;  We might still have data in the TCP RX FIFO waiting for us
             }
-            //	putrsUART1((ROM char*) "RESPONSE...\r\n");
+#if defined(STACK_USE_MY_UART)
+            	putrsUART1((ROM char*) "RESPONSE...\r\n");
+#endif
             // Get count of RX bytes waiting
             w = TCPIsGetReady(MySocket);
 
@@ -223,9 +207,10 @@ BYTE TCPClient(BYTE type) {
                     vBuffer[i] = '\0';
                 }
                 w -= TCPGetArray(MySocket, vBuffer, i);
-                //	#if defined(STACK_USE_UART)
+
+#if defined(STACK_USE_MY_UART)
                 putrsUART((char*) vBuffer);
-                //	#endif
+#endif
 
                 // putsUART is a blocking call which will slow down the rest of the stack 
                 // if we shovel the whole TCP RX FIFO into the serial port all at once.  
@@ -238,8 +223,10 @@ BYTE TCPClient(BYTE type) {
 
             break;
 
-        case SM_DISCONNECT:
-            //   putrsUART1((ROM char*) "DIS...\r\n");
+        case SM_DISCONNECT:            
+#if defined(STACK_USE_MY_UART)
+               putrsUART1((ROM char*) "CLIENT DIS...\r\n");
+#endif
             // Close the socket so it can be used by other modules
             // For this application, we wish to stay connected, but this state will still get entered if the remote server decides to disconnect
             TCPDisconnect(MySocket);

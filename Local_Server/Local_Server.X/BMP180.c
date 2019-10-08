@@ -1,7 +1,6 @@
 #include <math.h>
 #include "BMP180.h"
 #include <stdbool.h>
-//#include "MyUart.h"
 
 char BMP180_begin()
 // Initialize library for subsequent pressure measurements
@@ -124,7 +123,6 @@ char readBytes(unsigned char *values, char length)
     if(I2C_error)	{
        I2C_start();
     I2C_write(BMP180_ADDR_READ, _nack);
-    //		I2C_write(length, _nack);
     uint8_t x = 0;
     while (x < (length - 1)) {
         //values[x]
@@ -137,7 +135,9 @@ char readBytes(unsigned char *values, char length)
         return (0);
     return (1);
     	}
+#if defined(STACK_USE_MY_UART)
     my_uart_println_str("R_e");
+#endif
         return (0);
 
 }
