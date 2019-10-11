@@ -452,6 +452,16 @@ void TCPServer(int *TCP_status, DWORD *post_data_size, MPFS_HANDLE *f) {
                     return;
                 }
 
+                WEB_data_0.out_temp = outsidedata.temp;
+                WEB_data_0.in_temp = inside.t * 10;
+                WEB_data_0.out_hum = outsidedata.hum;
+                WEB_data_0.in_hum = inside.h * 10;
+                WEB_data_0.wind_speed = outsidedata.wind_speed;
+                WEB_data_0.peak_wind_speed = outsidedata.peak_wind_speed;
+                WEB_data_0.bearing = outsidedata.bearing;
+                WEB_data_0.pressure = pressure;
+                WEB_data_0.rainfall = outsidedata.rain;
+                WEB_data_0.rainfall_rate = outsidedata.rain;
 
                 memcpy(&buf, &WEB_data_0, 20);
                 //       TCPPutROMArray(MySocket, &buf, 20);

@@ -155,10 +155,12 @@ extern unsigned short pressure;
 
 extern BYTE AN0String[8];
 extern BYTE process_item;
-
+extern 
+RTCCDateTime now;
 
 _Bool Is_DST(DWORD time);
 RTCCDateTime update_clock();
+uint32_t unixtime(RTCCDateTime dt);
 
 #if defined(STACK_USE_MY_UART)
 //
@@ -174,7 +176,7 @@ void my_uart_print_HEX(uint32_t hex);
 #endif
 
 void DoUARTConfig(void);
-
+ 
 
 
 #define SECONDS_FROM_1970_TO_2000 946684800

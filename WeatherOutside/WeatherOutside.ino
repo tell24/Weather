@@ -524,8 +524,9 @@ String prepareHtmlPage()
 
         }
         // wait for end of client's request, that is marked with an empty line
-        if (line.length() == 1 && line[0] == '\n')
-        {
+         if (line.indexOf("close") >= 0 )
+        { 
+          line = client.readStringUntil('\r');
           if (len > 0) {
             char c = client.read();
 

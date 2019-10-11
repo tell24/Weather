@@ -120,7 +120,7 @@ static ROM BYTE SerializedMACAddress[6] = {MY_DEFAULT_MAC_BYTE1, MY_DEFAULT_MAC_
 uint8_t month[] = {0, 30, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 remotedata outsidedata;
 current WEB_data_0;
-RTCCDateTime DataTime;
+//RTCCDateTime DataTime;
 current ThisHour[60];
 history_packet History;
 
@@ -149,7 +149,7 @@ static void read_inside_data();
 static TempHum get_Humidity_Temperature();
 static double i2c_Pressure_read();
 static _Bool save_data(RTCCDateTime tim);
-
+RTCCDateTime now;
 
 #if defined(__C32__)
 
@@ -196,54 +196,75 @@ static void read_inside_data() {
 
 static _Bool save_data(RTCCDateTime tim) {
 
-    //
-    //    WEB_data_0.timestamp = unixtime(tim);
-    //    
-    //    // Save min data to eeprom
-    //    if (tim.t.min != 0) {
-    //        WEB_data_0.timestamp = tim.d.mday + tim.t.min;
-    //        write_EEPROM(tim.t.min * 32, &WEB_data_0, 20);
-    //        ThisHour[tim.t.min] = WEB_data_0;
-    //    } else {
-    //        int i = 0;
-    //        current av;
-    //        int itl = 100, ith = -100, otl = 100, oth = -100, ihl = 100, ihh = 0, ohl = 100, ohh = 0, pl = 1100, ph = 100, w = 0, pw = 0, b = 0, r = 0;
-    //        for (i = 0; i < 60; i++) {
-    //            av = ThisHour[i];
-    //            if (av.in_temp > ith)ith = av.in_temp;
-    //            if (av.in_temp < itl)itl = av.in_temp;
-    //            if (av.in_hum > ihh)ihh = av.in_hum;
-    //            if (av.in_hum < ihl)ihl = av.in_hum;
-    //            if (av.out_temp > oth)oth = av.out_temp;
-    //            if (av.out_temp < otl)otl = av.out_temp;
-    //            if (av.out_hum > ohh)ohh = av.out_hum;
-    //            if (av.out_hum < ohl)ohl = av.out_hum;
-    //            if (av.pressure > ph)ph = av.pressure;
-    //            if (av.pressure < pl)pl = av.pressure;
-    //            if (av.peak_wind_speed > pw)pw = av.peak_wind_speed;
-    //            w += av.wind_speed;
-    //            b += av.bearing;
-    //            r += av.rainfall;
-    //        }
-    //        History.in_temp_H = ith;
-    //        History.in_temp_L = itl;
-    //        History.out_temp_H = oth;
-    //        History.out_temp_L = otl;
-    //        History.in_hum_H = ihh;
-    //        History.in_hum_L = ihl;
-    //        History.out_hum_H = ohh;
-    //        History.out_hum_L = ohl;
-    //        History.pressure_H = ph;
-    //        History.pressure_L = pl;
-    //        History.wind_speed = pw;
-    //        History.peak_wind_speed = (signed short) (w / 60);
-    //        History.bearing = (signed short) (b / 60);
-    //        History.rainfall = (signed short) (r / 60);
-    //
-    //
-    //        write_EEPROM(tim.t.min * 32, &WEB_data_0, 20);
-    //        write_EEPROM(HOUR_OFFSET + (tim.d.mday * 32 * 24) +(tim.t.hour * 32), &History, 32);
-    //    }
+    /*     
+    Sample to read / write data to eeprom 
+    uint16_t eeAddress = 0;
+    uint8_t data[32] ;
+    uint8_t numBytes = 8;
+    memcpy(data1, &STRUCTURE, numBytes);
+    write_EEPROM( eeAddress, data,  numBytes);
+    read_EEPROM(eeAddress, &data1, numBytes);
+     */
+
+    uint16_t eeAddress = 0;
+    uint8_t data[32];
+    uint8_t numBytes = 0;
+
+    WEB_data_0.timestamp = unixtime(tim);
+
+    // Save min data to eeprom
+    if (tim.t.min != 0) {
+        numBytes = 20;
+        eeAddress = tim.t.min * 32;
+        memcpy(data, &WEB_data_0, numBytes);
+        write_EEPROM(tim.t.min * 32, data, numBytes);
+        ThisHour[tim.t.min] = WEB_data_0;
+    } else {
+        int i = 0;
+        current av;
+        int itl = 100, ith = -100, otl = 100, oth = -100, ihl = 100, ihh = 0, ohl = 100, ohh = 0, pl = 1100, ph = 100, w = 0, pw = 0, b = 0, r = 0;
+        for (i = 0; i < 60; i++) {
+            av = ThisHour[i];
+            if (av.in_temp > ith)ith = av.in_temp;
+            if (av.in_temp < itl)itl = av.in_temp;
+            if (av.in_hum > ihh)ihh = av.in_hum;
+            if (av.in_hum < ihl)ihl = av.in_hum;
+            if (av.out_temp > oth)oth = av.out_temp;
+            if (av.out_temp < otl)otl = av.out_temp;
+            if (av.out_hum > ohh)ohh = av.out_hum;
+            if (av.out_hum < ohl)ohl = av.out_hum;
+            if (av.pressure > ph)ph = av.pressure;
+            if (av.pressure < pl)pl = av.pressure;
+            if (av.peak_wind_speed > pw)pw = av.peak_wind_speed;
+            w += av.wind_speed;
+            b += av.bearing;
+            r += av.rainfall;
+        }
+        History.in_temp_H = ith;
+        History.in_temp_L = itl;
+        History.out_temp_H = oth;
+        History.out_temp_L = otl;
+        History.in_hum_H = ihh;
+        History.in_hum_L = ihl;
+        History.out_hum_H = ohh;
+        History.out_hum_L = ohl;
+        History.pressure_H = ph;
+        History.pressure_L = pl;
+        History.wind_speed = pw;
+        History.peak_wind_speed = (signed short) (w / 60);
+        History.bearing = (signed short) (b / 60);
+        History.rainfall = (signed short) (r / 60);
+
+        numBytes = 20;
+        eeAddress = tim.t.min * 32;
+        memcpy(data, &WEB_data_0, numBytes);        
+        write_EEPROM(eeAddress, data, numBytes);
+        ThisHour[tim.t.min] = WEB_data_0;
+        numBytes = 32;
+        eeAddress = HOUR_OFFSET + (tim.d.mday * 32 * 24) +(tim.t.hour * 32);
+        memcpy(data, &History, numBytes);  
+        write_EEPROM(eeAddress, data, 32);
+    }
 
     return true;
 }
@@ -287,7 +308,7 @@ DateTime Set_RTCC() {
         RTCCONSET = 0x8000; // turn on the RTCC
         RTCCONCLR = 0x8; // set RTCWREN in RTCCONSET  
         while (!(RTCCON & 0x40)); // wait for clock to be turned on  
-        
+
         tim.l = RtccGetTime();
         dt.l = RtccGetDate();
         mytime->tm_hour = mRTCCBCD2Dec(tim.hour);
@@ -366,14 +387,6 @@ RTCCDateTime update_clock() {
     day = mRTCCBCD2Dec(dt.mday);
     mon = mRTCCBCD2Dec(dt.mon) + 1;
     year = mRTCCBCD2Dec(dt.year);
-
-
-#if defined(STACK_USE_MY_UART)
-    my_uart_print_str("days ");
-    my_uart_print_int(ref_day);
-    my_uart_print_str(" ");
-    my_uart_println_int(day);
-#endif
 
     if (ref_day != day) {
         my_uart_println_str("reset ");
@@ -467,7 +480,7 @@ RTCCDateTime update_clock() {
         drawFastVLine(126, 144, 9, ST7735_COLOUR);
     }
 
-    RTCCDateTime now;
+
     now.d = dt;
     now.t = tm;
     return now;
@@ -492,6 +505,8 @@ int main(void) {
 
     // Initialize application specific hardware
     InitializeBoard();
+
+
 
 
 #if defined(STACK_USE_MY_UART)
@@ -573,6 +588,7 @@ int main(void) {
                 }
                 break;
             case READ_DATA:
+                now = update_clock();
                 inside.t = 0;
                 inside.h = 0;
                 outside.t = 0;
@@ -580,21 +596,20 @@ int main(void) {
                 read_inside_data();
                 status = TCPRemoteData();
                 if (status == 10) {
-                    if (save_data(update_clock())) {
+                    if (save_data(now)) {
                         process_item = UPLOAD_CURRENT;
+#if defined(STACK_USE_MY_UART)
+                        my_uart_println_str("UPLOAD_CURRENT");
+#endif
                     } else
                         process_item = GET_INCOMMING;
                 }
-                if (status == 5) {
-                    update_clock();
+                if (status == 5)
                     process_item = GET_INCOMMING;
-                }
+
                 break;
             case UPLOAD_CURRENT:
-#if defined(STACK_USE_MY_UART)
-                my_uart_println_str("UPLOAD_CURRENT");
-#endif
-                //    if (TCPClient(CURRENT_DATA) == 1)
+                //        if (TCPClient(CURRENT_DATA) == 1)
                 if (reset_clock)
                     process_item = UPDATE_RTCC;
                 else
@@ -709,6 +724,11 @@ static void InitializeBoard(void) {
     DelayMs(1);
     LATEbits.LATE5 = 0;
     DelayMs(1000);
+
+#if defined(ANALIZER_ON)    
+    TRIGGER_CONTROL = 0; // Ref LED1
+    TRIGGER_IO = 0;
+#endif
 
 #if defined(STACK_USE_MY_UART)
     my_uart_begin();

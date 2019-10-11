@@ -102,7 +102,7 @@ BYTE TCPRemoteData() {
     BYTE vBuffer[500];
     BYTE vDATA[20];
     BYTE status = 0;
- //   int buf_clear;
+    //   int buf_clear;
     _Bool isData;
     static DWORD Timer;
     static TCP_SOCKET MySocket = INVALID_SOCKET;
@@ -158,7 +158,7 @@ BYTE TCPRemoteData() {
                     outsidedata.rssi = 0;
                     outsidedata.status = 0;
                     status = 5;
-                    return;
+                    return status;
                 }
                 break;
             }
@@ -219,15 +219,11 @@ BYTE TCPRemoteData() {
                     vBuffer[i] = '\0';
                 }
                 w -= TCPGetArray(MySocket, vBuffer, i);
-                
-#if defined(STACK_USE_MY_UART)
-                putrsUART1((ROM char*) "D..");
-                putrsUART((char*) vBuffer);
-#endif
-                //	#endif
+
                 if (isData) {
                     memcpy(&outsidedata, &vBuffer, 18);
-                    
+
+
 #if defined(STACK_USE_MY_UART)
                     my_uart_println_str(" isData ");
                     my_uart_println_int(outsidedata.hum);
@@ -235,13 +231,13 @@ BYTE TCPRemoteData() {
                     my_uart_println_int(outsidedata.bearing);
                     my_uart_println_int(outsidedata.wind_speed);
                     my_uart_println_int(outsidedata.peak_wind_speed);
+                    my_uart_println_int(outsidedata.rain);
                     my_uart_println_int(outsidedata.rssi);
                     my_uart_println_int(outsidedata.status);
 #endif
                     isData = false;
-                }
-                else {
-                    
+                } else {
+
 #if defined(STACK_USE_MY_UART)
                     my_uart_println_str("! isData ");
 #endif

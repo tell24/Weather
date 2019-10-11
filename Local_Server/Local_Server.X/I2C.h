@@ -21,7 +21,7 @@
 #define SYS_FREQ  80000000
 
 
-#define ATMLH_ADDRESS 0x00
+#define ATMLH_ADDRESS 0x50
 #define _ack 1
 #define _nack 0
 
