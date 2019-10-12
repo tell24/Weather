@@ -61,7 +61,9 @@
  *   Uncomment or comment the following lines to enable or
  *   disabled the following high-level application modules.
  */
-
+#define FILL_HOUR_DATA
+#define SAVE_DATA
+#define SEND_DATA
 #define STACK_USE_MY_UART					// My uart
 //#define STACK_USE_UART					// Application demo using UART for IP address display and stack configuration
 //#define STACK_USE_UART2TCP_BRIDGE		// UART to TCP Bridge application example

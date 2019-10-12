@@ -162,6 +162,9 @@ _Bool Is_DST(DWORD time);
 RTCCDateTime update_clock();
 uint32_t unixtime(RTCCDateTime dt);
 
+#if defined(FILL_HOUR_DATA)
+   void fill_hour_data();
+#endif
 #if defined(STACK_USE_MY_UART)
 //
 void my_uart_begin();

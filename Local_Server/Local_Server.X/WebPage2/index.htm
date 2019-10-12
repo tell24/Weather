@@ -519,12 +519,20 @@ xhr.send(null);
 }
 function update_history(){
 sel=document.getElementById("duration").value;
-var url1="https://script.google.com/macros/s/AKfycbzep_6TONHLbfjt1H23_iCb0DMc126LPo3smsun/exec?read="+sel;
+var url1 = "";
+switch(sel){
+case "hour":
+url1="http://192.168.0.40/2";
+break;
+default:
+url1="http://192.168.0.40/2";
+break;
+}
+
 xhr=new XMLHttpRequest();
 xhr.onreadystatechange=function(){
 if(xhr.readyState == 4){
-var t_r=xhr.responseText;
-var all_dat=t_r.split(",");
+var all_dat=new Uint16Array(this.response);
 len=30;
 var index=0;
 var cell=2;
@@ -535,58 +543,84 @@ type=1;
 mark=true;
 len=59;
 m_len=15;
-do{
-myarr[0][index]=all_dat[cell];
-myarr[1][index]=all_dat[cell+18];
-myarr[2][index]=all_dat[cell+3];
-myarr[3][index]=all_dat[cell+21];
-myarr[4][index]=all_dat[cell+24];
-myarr[5][index]=all_dat[cell+9];
-myarr[6][index]=all_dat[cell+6];
-myarr[7][index]=all_dat[cell+15]/rain_scale;
-myarr[8][index]=all_dat[cell+1];
-myarr[9][index]=all_dat[cell+19];
-myarr[10][index]=all_dat[cell+4];
-myarr[11][index]=all_dat[cell+22];
+var t_max =-100;
+var t_min = 100;
+var h_max =-100;
+var h_min = 100;
+var p_max = 0;
+var p_min = 2000;
+var w_max = 0;
+var r_max = 0;
+
+myarr[0][index]=(all_dat[cell]+(all_dat[cell+1]*256))/100;//o-t
+myarr[1][index]=(all_dat[cell+2]+(all_dat[cell+3]*256))/100;//i-t
+myarr[2][index]=(all_dat[cell+4]+(all_dat[cell+5]*256))/100;//o-h
+myarr[3][index]=(all_dat[cell+6]+(all_dat[cell+7]*256))/100;//i-h
+myarr[6][index]=(all_dat[cell+8]+(all_dat[cell+9]*256))/100;//w
+myarr[5][index]=(all_dat[cell+10]+(all_dat[cell+11]*256))/100;//pw
+myarr[4][index]=all_dat[cell+12]+(all_dat[cell+13]*256);//pre
+myarr[7][index]=(all_dat[cell+14]+(all_dat[cell+15]*256))/rain_scale;//r
+t_max = myarr[0][index];
+t_min = myarr[0][index];
+h_max = myarr[2][index];
+h_min = myarr[2][index];
+p_max = myarr[4][index];
+p_min = myarr[4][index];
+w_max = myarr[6][index];
+r_max = myarr[7][index];
+if(t_max < myarr[1][index])t_max = myarr[1][index];
+if(t_min > myarr[1][index])t_min = myarr[1][index];
+if(h_max < myarr[2][index])h_max = myarr[2][index];
+if(h_min > myarr[2][index])h_min = myarr[2][index];
+if(w_max < myarr[5][index])w_max = myarr[5][index];
 index++;
-cell += 29;
+cell += 24;
+do{
+myarr[0][index]=(all_dat[cell]+(all_dat[cell+1]*256))/100;//o-t
+myarr[1][index]=(all_dat[cell+2]+(all_dat[cell+3]*256))/100;//i-t
+myarr[2][index]=(all_dat[cell+4]+(all_dat[cell+5]*256))/100;//o-h
+myarr[3][index]=(all_dat[cell+6]+(all_dat[cell+7]*256))/100;//i-h
+myarr[6][index]=(all_dat[cell+8]+(all_dat[cell+9]*256))/100;//w
+myarr[5][index]=(all_dat[cell+10]+(all_dat[cell+11]*256))/100;//pw
+myarr[4][index]=all_dat[cell+12]+(all_dat[cell+13]*256);//pre
+myarr[7][index]=(all_dat[cell+14]+(all_dat[cell+15]*256))/rain_scale;//r
+if(t_max < myarr[0][index])t_max = myarr[0][index];
+if(t_min > myarr[0][index])t_min = myarr[0][index];
+if(t_max < myarr[1][index])t_max = myarr[1][index];
+if(t_min > myarr[1][index])t_min = myarr[1][index];
+if(h_max < myarr[2][index])h_max = myarr[2][index];
+if(h_min > myarr[2][index])h_min = myarr[2][index];
+if(h_max < myarr[2][index])h_max = myarr[3][index];
+if(h_min > myarr[2][index])h_min = myarr[3][index];
+if(p_max < myarr[4][index])p_max = myarr[4][index];
+if(p_min > myarr[4][index])p_min = myarr[4][index];
+if(w_max < myarr[6][index])w_max = myarr[6][index];
+if(w_max < myarr[5][index])w_max = myarr[6][index];
+if(r_max < myarr[7][index])r_max = myarr[7][index];
+
+//myarr[8][index]=all_dat[cell+1];
+//myarr[9][index]=all_dat[cell+19];
+//myarr[10][index]=all_dat[cell+4];
+//myarr[11][index]=all_dat[cell+22];
+index++;
+cell += 24;
 } while (index <= len);
-marker=all_dat[1770];
-if(parseFloat(all_dat[2+(61*29)]) < parseFloat(all_dat[20+(61*29)]))
-m_m_arr[0][0]=Math.floor(all_dat[2+(61*29)]);
-else
-m_m_arr[0][0]=Math.floor(all_dat[20+(61*29)]);
-if(parseFloat(all_dat[3+(61*29)]) > parseFloat(all_dat[21+(61*29)]))
-m_m_arr[1][0]=Math.ceil(all_dat[3+(61*29)]);
-else
-m_m_arr[1][0]=Math.ceil(all_dat[21+(61*29)]);
-if(m_m_arr[1][0] > 100) m_m_arr[1][0]=50;
-m_m_arr[0][1]=m_m_arr[0][0];
-m_m_arr[1][1]=m_m_arr[1][0];
-if(parseFloat(all_dat[5+(61*29)]) < parseFloat(all_dat[23+(61*29)]))
-m_m_arr[0][2]=Math.floor(all_dat[5+(61*29)]);
-else
-m_m_arr[0][2]=Math.floor(all_dat[23+(61*29)]);
-if(m_m_arr[0][2] < 0) m_m_arr[0][2]=0;
-if(parseFloat(all_dat[6+(61*29)]) > parseFloat(all_dat[24+(61*29)]))
-m_m_arr[1][2]=Math.ceil(all_dat[6+(61*29)]);
-else
-m_m_arr[1][2]=Math.ceil(all_dat[24+(61*29)]);
-if(m_m_arr[1][2] > 100) m_m_arr[1][2]=100;
-m_m_arr[0][3]=m_m_arr[0][2];
-m_m_arr[1][3]=m_m_arr[1][2];
-m_m_arr[0][4]=Math.floor(all_dat[26+(61*29)]);
-m_m_arr[1][4]=Math.ceil(all_dat[27+(61*29)]);
+m_m_arr[0][0]=Math.floor(t_min);
+m_m_arr[1][0]=Math.ceil(t_max);
+m_m_arr[0][1] = m_m_arr[0][0];
+m_m_arr[1][1] = m_m_arr[0][0];
+m_m_arr[0][2]=Math.floor(h_min);
+m_m_arr[1][2]=Math.ceil(h_max);
+m_m_arr[0][3] = m_m_arr[0][2];
+m_m_arr[1][3] = m_m_arr[1][2];
+m_m_arr[0][4]=Math.floor(p_min);
+m_m_arr[1][4]=Math.ceil(p_max);
 m_m_arr[0][5]=0;
-if(parseFloat(all_dat[12+(61*29)]) > parseFloat(all_dat[15+(61*29)]))
-m_m_arr[1][5]=Math.ceil(all_dat[12+(61*29)]);
-else
-m_m_arr[1][5]=Math.ceil(all_dat[15+(61*29)]);
-if(m_m_arr[1][5] < 2) m_m_arr[1][5]=2;
-m_m_arr[0][6]=m_m_arr[0][5];
+m_m_arr[1][5]=Math.ceil(w_max);
+m_m_arr[0][6]=0
 m_m_arr[1][6]=m_m_arr[1][5];
 m_m_arr[0][7]=0;
-m_m_arr[1][7]=Math.ceil(all_dat[17+(62*29)]/rain_scale);
+m_m_arr[1][7]=Math.ceil(r_max);
 break;
 case "day":
 type=2;

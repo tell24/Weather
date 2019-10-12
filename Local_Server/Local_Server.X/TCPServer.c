@@ -133,6 +133,7 @@ void TCPServer(int *TCP_status, DWORD *post_data_size, MPFS_HANDLE *f) {
     int POST = 0;
     int a_index = 0;
     int data_start;
+    uint8_t numBytes;
     //   DWORD ds = *post_data_size;
     static TCP_SOCKET MySocket;
 
@@ -220,33 +221,33 @@ void TCPServer(int *TCP_status, DWORD *post_data_size, MPFS_HANDLE *f) {
 #if defined(STACK_USE_MY_UART)
                             putrsUART1((ROM char*) "SOCKET SM_CURRENT...\r\n");
 #endif
-                            *TCP_status = 2;
+                            *TCP_status = 6;
                             break;
 
-//                        case '2':
-//                            TCPServerState = SM_LAST_HOUR;
-//#if defined(STACK_USE_MY_UART)
-//                            putrsUART1((ROM char*) "SOCKET SM_LAST_HOUR...\r\n");
-//#endif
-//                            *TCP_status = 2;
-//                            break;
-//                        case '3':
-//                            TCPServerState = SM_LAST_DAY;
-//#if defined(STACK_USE_MY_UART)
-//                            putrsUART1((ROM char*) "SOCKET SM_LAST_DAY...\r\n");
-//#endif
-//                            eeAddress = 0;
-//                            TCPPutROMString(MySocket, (ROM BYTE*) "HTTP/1.1 200 OK\r\n");
-//                            TCPPutROMString(MySocket, (ROM BYTE*) "Content-Encoding: gzip\r\n");
-//                            TCPPutROMString(MySocket, (ROM BYTE*) "Content-Type: text/html\r\n");
-//                            TCPPutROMString(MySocket, (ROM BYTE*) "Content-Length: 1920");
-//                            TCPPutROMString(MySocket, (ROM BYTE*) "\r\n");
-//                            TCPPutROMString(MySocket, (ROM BYTE*) "Pragma: no-cache\r\n");
-//                            TCPPutROMString(MySocket, (ROM BYTE*) "Connection: close\r\n");
-//                            TCPPutROMString(MySocket, (ROM BYTE*) "\r\n");
-//                            TCPFlush(MySocket);
-//                            *TCP_status = 2;
-//                            break;
+                        case '2':
+                            TCPServerState = SM_LAST_HOUR;
+#if defined(STACK_USE_MY_UART)
+                            putrsUART1((ROM char*) "SOCKET SM_LAST_HOUR...\r\n");
+#endif
+                            *TCP_status = 6;
+                            break;
+                            //                        case '3':
+                            //                            TCPServerState = SM_LAST_DAY;
+                            //#if defined(STACK_USE_MY_UART)
+                            //                            putrsUART1((ROM char*) "SOCKET SM_LAST_DAY...\r\n");
+                            //#endif
+                            //                            eeAddress = 0;
+                            //                            TCPPutROMString(MySocket, (ROM BYTE*) "HTTP/1.1 200 OK\r\n");
+                            //                            TCPPutROMString(MySocket, (ROM BYTE*) "Content-Encoding: gzip\r\n");
+                            //                            TCPPutROMString(MySocket, (ROM BYTE*) "Content-Type: text/html\r\n");
+                            //                            TCPPutROMString(MySocket, (ROM BYTE*) "Content-Length: 1920");
+                            //                            TCPPutROMString(MySocket, (ROM BYTE*) "\r\n");
+                            //                            TCPPutROMString(MySocket, (ROM BYTE*) "Pragma: no-cache\r\n");
+                            //                            TCPPutROMString(MySocket, (ROM BYTE*) "Connection: close\r\n");
+                            //                            TCPPutROMString(MySocket, (ROM BYTE*) "\r\n");
+                            //                            TCPFlush(MySocket);
+                            //                            *TCP_status = 2;
+                            //                            break;
                         case 'f':
                             TCPServerState = SM_POST;
                             *TCP_status = 2;
@@ -452,9 +453,9 @@ void TCPServer(int *TCP_status, DWORD *post_data_size, MPFS_HANDLE *f) {
                     return;
                 }
 
-                WEB_data_0.out_temp = outsidedata.temp;
+                WEB_data_0.out_temp = outsidedata.temp / 10;
                 WEB_data_0.in_temp = inside.t * 10;
-                WEB_data_0.out_hum = outsidedata.hum;
+                WEB_data_0.out_hum = outsidedata.hum / 10;
                 WEB_data_0.in_hum = inside.h * 10;
                 WEB_data_0.wind_speed = outsidedata.wind_speed;
                 WEB_data_0.peak_wind_speed = outsidedata.peak_wind_speed;
@@ -464,12 +465,12 @@ void TCPServer(int *TCP_status, DWORD *post_data_size, MPFS_HANDLE *f) {
                 WEB_data_0.rainfall_rate = outsidedata.rain;
 
                 memcpy(&buf, &WEB_data_0, 20);
-                //       TCPPutROMArray(MySocket, &buf, 20);
-                //       TCPFlush(MySocket);
-                int id = 0;
-                //       for(id = 0; id<13;id++){my_uart_println_int(buf[id]);}
+                TCPPutROMArray(MySocket, &buf, 20);
+                TCPFlush(MySocket);
 #if defined(STACK_USE_MY_UART)
-                putrsUART1((ROM char*) "Data Raw...\r\n");
+                //        int id = 0;
+                //               for(id = 0; id<13;id++){my_uart_print_HEX(buf[id]);}
+                //        putrsUART1((ROM char*) "Data Raw...\r\n");
 #endif
             } else return;
             //    putrsUART1((ROM char*) "Data DIS...\r\n");
@@ -477,18 +478,44 @@ void TCPServer(int *TCP_status, DWORD *post_data_size, MPFS_HANDLE *f) {
             *TCP_status = 2;
             *post_data_size = 0;
             break;
+
         case SM_LAST_HOUR:
-            read_EEPROM( eeAddress * 32, *AppBuffer, 20);
-            TCPPutROMArray(MySocket, &AppBuffer, 20);
-            TCPFlush(MySocket);
-            *TCP_status = 2;
-eeAddress++;
-#if defined(STACK_USE_MY_UART)
-                    my_uart_println_int(eeAddress);
+            if (TCPIsPutReady(MySocket)) {
+                if (*TCP_status == 6) {
+                    char buf[8];
+                    sprintf(&buf, "%06d", 24*60);
+                    TCPPutROMString(MySocket, (ROM BYTE*) "HTTP/1.1 200 OK\r\n");
+                    TCPPutROMString(MySocket, (ROM BYTE*) "Content-Type: text/html\r\n");
+                    TCPPutROMString(MySocket, (ROM BYTE*) "Content-Length: ");
+                    TCPPutROMArray(MySocket, &buf, 6);
+                    TCPPutROMString(MySocket, (ROM BYTE*) "Connection: close\r\n");
+                    TCPPutROMString(MySocket, (ROM BYTE*) "\r\n");
+                    TCPFlush(MySocket);
+                    eeAddress = 0;
+                    *TCP_status = 2;
+                }
+#if defined(SEND_DATA)
+                uint8_t data[32];
+                numBytes = 24;
+                read_EEPROM(eeAddress*32, &data, numBytes);
+                memcpy(&AppBuffer, &data, numBytes);
+                TCPPutROMArray(MySocket, &AppBuffer, 24);
+                TCPFlush(MySocket);
+                *TCP_status = 2;
+                eeAddress++;
+#else
+        eeAddress = 60  ;      
 #endif
-if(eeAddress >= 60)
-            TCPServerState = SM_DIS;
+#if defined(STACK_USE_MY_UART)
+                my_uart_println_int(eeAddress);
+                my_uart_println_int(data[0]);
+                my_uart_println_int(AppBuffer[0]);
+#endif
+                if (eeAddress >= 60)
+                    TCPServerState = SM_DIS;
+            }
             break;
+
         case SM_LAST_DAY:
             *TCP_status = 2;
             TCPServerState = SM_DIS;

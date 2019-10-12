@@ -184,6 +184,7 @@ BYTE TCPClient(BYTE type) {
                     TCPPutROMString(MySocket, (ROM BYTE*) "\r\nConnection: close\r\n\r\n");
                     TCPPutROMArray(MySocket, &WEB_data_0, 24);
                     break;
+                    
                 case HISTORY_DATA:
                     TCPPutROMString(MySocket, (ROM BYTE*) "POST ");
                     TCPPutROMString(MySocket, RemoteURLHistory);
@@ -205,14 +206,7 @@ BYTE TCPClient(BYTE type) {
             if (!TCPIsConnected(MySocket)) {
                 GenericTCPExampleState = SM_DISCONNECT;
 
-                    my_uart_print((char)vBuffer[0]); my_uart_print((char)vBuffer[1]); my_uart_print((char)vBuffer[2]); my_uart_print((char)vBuffer[3]); 
-                     my_uart_println_str(" ");
-                    my_uart_println_int(vBuffer[0]);
-                    my_uart_println_int(vBuffer[1]);
-                    my_uart_println_int(vBuffer[2]);
-                    my_uart_println_int(vBuffer[3]);
-                    if(((char)vBuffer[0] == 'o')&&((char)vBuffer[1] == 'k'))completed = true;
-                
+                         
 #if defined(STACK_USE_MY_UART)
                 putrsUART1((ROM char*) "SM_DISCONNECT...\r\n");
 #endif

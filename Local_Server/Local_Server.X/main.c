@@ -68,6 +68,7 @@
 #include <stdbool.h>
 #include <plib.h>
 #include <math.h>
+#include <peripheral/rtcc.h>
 #include "../Include/TCPIP Stack/UART.h"
 #include "BMP180.h"
 #include "HTU21D.h"
@@ -206,19 +207,22 @@ static _Bool save_data(RTCCDateTime tim) {
     read_EEPROM(eeAddress, &data1, numBytes);
      */
 
+#if defined(SAVE_DATA)
     uint16_t eeAddress = 0;
     uint8_t data[32];
     uint8_t numBytes = 0;
+    uint8_t min = mRTCCBCD2Dec(tim.t.min);
 
     WEB_data_0.timestamp = unixtime(tim);
 
     // Save min data to eeprom
-    if (tim.t.min != 0) {
+    if (min != 0) {
         numBytes = 20;
-        eeAddress = tim.t.min * 32;
+        eeAddress = min * 32;
         memcpy(data, &WEB_data_0, numBytes);
-        write_EEPROM(tim.t.min * 32, data, numBytes);
-        ThisHour[tim.t.min] = WEB_data_0;
+        write_EEPROM(min * 32, data, numBytes);
+        ThisHour[min] = WEB_data_0;
+
     } else {
         int i = 0;
         current av;
@@ -255,17 +259,21 @@ static _Bool save_data(RTCCDateTime tim) {
         History.bearing = (signed short) (b / 60);
         History.rainfall = (signed short) (r / 60);
 
-        numBytes = 20;
-        eeAddress = tim.t.min * 32;
-        memcpy(data, &WEB_data_0, numBytes);        
+        numBytes = 24;
+        eeAddress = min * 32;
+        memcpy(data, &WEB_data_0, numBytes);
         write_EEPROM(eeAddress, data, numBytes);
-        ThisHour[tim.t.min] = WEB_data_0;
+        ThisHour[min] = WEB_data_0;
+
         numBytes = 32;
-        eeAddress = HOUR_OFFSET + (tim.d.mday * 32 * 24) +(tim.t.hour * 32);
-        memcpy(data, &History, numBytes);  
-        write_EEPROM(eeAddress, data, 32);
+        eeAddress = HOUR_OFFSET + (mRTCCBCD2Dec(tim.d.mday) * 32 * 24) +(mRTCCBCD2Dec(tim.t.hour) * 32);
+        memcpy(data, &History, numBytes);
+        write_EEPROM(eeAddress, data, numBytes);
+
+
     }
 
+#endif
     return true;
 }
 
@@ -376,6 +384,7 @@ _Bool Is_It_Time() {
 }
 
 RTCCDateTime update_clock() {
+    RTCCDateTime clockTime;
     uint8_t min, hour, day, mon, year;
     struct tm t;
     rtccTime tm;
@@ -481,9 +490,9 @@ RTCCDateTime update_clock() {
     }
 
 
-    now.d = dt;
-    now.t = tm;
-    return now;
+    clockTime.d = dt;
+    clockTime.t = tm;
+    return clockTime;
 }
 
 
@@ -506,7 +515,9 @@ int main(void) {
     // Initialize application specific hardware
     InitializeBoard();
 
-
+#if defined(FILL_HOUR_DATA)
+    fill_hour_data();
+#endif
 
 
 #if defined(STACK_USE_MY_UART)
@@ -561,12 +572,14 @@ int main(void) {
     DWORD hFatID;
     DWORD reg;
     BYTE status = 0;
+
+
     while (1) {
 
-        if ((IFS1bits.RTCCIF == 1)&&(TCP_status < 2)) {
-            process_item = READ_DATA;
-            IFS1CLR = 0x00008000; // clear RTCC existing event
-        }
+//        if ((IFS1bits.RTCCIF == 1)&&(TCP_status < 2)) {
+//            process_item = READ_DATA;
+//            IFS1CLR = 0x00008000; // clear RTCC existing event
+//        }
         // This task performs normal stack task including checking
         // for incoming packet, type of packet and calling
         // appropriate stack entity to process it.
@@ -609,11 +622,16 @@ int main(void) {
 
                 break;
             case UPLOAD_CURRENT:
-                //        if (TCPClient(CURRENT_DATA) == 1)
-                if (reset_clock)
-                    process_item = UPDATE_RTCC;
-                else
-                    process_item = GET_INCOMMING;
+                if (TCPClient(CURRENT_DATA) == 1) {
+                    if (now.t.min == 0) {
+                        process_item = UPLOAD_CURRENT;
+                    } else {
+                        if (reset_clock)
+                            process_item = UPDATE_RTCC;
+                        else
+                            process_item = GET_INCOMMING;
+                    }
+                }
                 break;
             case UPDATE_RTCC:
 
@@ -629,20 +647,24 @@ int main(void) {
                 break;
             case UPLOAD_HISTORY:
                 //    if (TCPClient(HISTORY_DATA) == 1)
-                process_item = GET_INCOMMING;
-                break;
-            case STOP_SERVER:
-                TCP_status = 10;
-                TCPServer(&TCP_status, &post_data_size, &f);
-                if (TCP_status == 0)process_item = READ_DATA;
-                break;
-            case STARTUP:
-                process_item = GET_INCOMMING;
-                break;
-        }
-
-        ProcessIO();
+                if (reset_clock)
+                    process_item = UPDATE_RTCC;
+                else
+                    process_item = GET_INCOMMING;
+        //}
+        break;
+        case STOP_SERVER:
+        TCP_status = 10;
+        TCPServer(&TCP_status, &post_data_size, &f);
+        if (TCP_status == 0)process_item = READ_DATA;
+        break;
+        case STARTUP:
+        process_item = GET_INCOMMING;
+        break;
     }
+
+    ProcessIO();
+}
 }
 
 // Writes an IP address to the LCD display and the UART as available
@@ -657,7 +679,7 @@ void DisplayIPValue(IP_ADDR IPVal) {
     for (i = 0; i < sizeof (IP_ADDR); i++) {
         uitoa((WORD) IPVal.v[i], IPDigit);
 
-#if defined(STACK_USE_UART)
+#if defined(STACK_USE_MY_UART)
         putrsUART((char *) IPDigit);
 #endif
 
@@ -993,3 +1015,10 @@ uint32_t unixtime(RTCCDateTime dt) {
 
     return t;
 }
+
+
+#if defined(FILL_HOUR_DATA)
+
+void fill_hour_data() {
+}
+#endif
