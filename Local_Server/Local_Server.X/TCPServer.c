@@ -483,7 +483,7 @@ void TCPServer(int *TCP_status, DWORD *post_data_size, MPFS_HANDLE *f) {
             if (TCPIsPutReady(MySocket)) {
                 if (*TCP_status == 6) {
                     char buf[8];
-                    sprintf(&buf, "%06d", 24*60);
+                    sprintf(&buf, "%06d", 24 * 60);
                     TCPPutROMString(MySocket, (ROM BYTE*) "HTTP/1.1 200 OK\r\n");
                     TCPPutROMString(MySocket, (ROM BYTE*) "Content-Type: text/html\r\n");
                     TCPPutROMString(MySocket, (ROM BYTE*) "Content-Length: ");
@@ -493,23 +493,20 @@ void TCPServer(int *TCP_status, DWORD *post_data_size, MPFS_HANDLE *f) {
                     TCPFlush(MySocket);
                     eeAddress = 0;
                     *TCP_status = 2;
+                    break;
                 }
 #if defined(SEND_DATA)
                 uint8_t data[32];
                 numBytes = 24;
-                read_EEPROM(eeAddress*32, &data, numBytes);
+                read_EEPROM(eeAddress * 32, &data, numBytes);
                 memcpy(&AppBuffer, &data, numBytes);
                 TCPPutROMArray(MySocket, &AppBuffer, 24);
                 TCPFlush(MySocket);
                 *TCP_status = 2;
                 eeAddress++;
+                
 #else
-        eeAddress = 60  ;      
-#endif
-#if defined(STACK_USE_MY_UART)
-                my_uart_println_int(eeAddress);
-                my_uart_println_int(data[0]);
-                my_uart_println_int(AppBuffer[0]);
+                eeAddress = 60;
 #endif
                 if (eeAddress >= 60)
                     TCPServerState = SM_DIS;

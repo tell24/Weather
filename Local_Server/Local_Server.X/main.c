@@ -109,7 +109,7 @@
 #pragma config DEBUG    = OFF            // Background Debugger Enable
 
 
-#define HOUR_OFFSET  1860
+
 // Declare AppConfig structure and some other supporting stack variables
 APP_CONFIG AppConfig;
 static unsigned short wOriginalAppConfigChecksum; // Checksum of the ROM defaults for AppConfig
@@ -212,12 +212,12 @@ static _Bool save_data(RTCCDateTime tim) {
     uint8_t data[32];
     uint8_t numBytes = 0;
     uint8_t min = mRTCCBCD2Dec(tim.t.min);
-
+    min = 0;
     WEB_data_0.timestamp = unixtime(tim);
 
     // Save min data to eeprom
     if (min != 0) {
-        numBytes = 20;
+        numBytes = 24;
         eeAddress = min * 32;
         memcpy(data, &WEB_data_0, numBytes);
         write_EEPROM(min * 32, data, numBytes);
@@ -264,7 +264,10 @@ static _Bool save_data(RTCCDateTime tim) {
         memcpy(data, &WEB_data_0, numBytes);
         write_EEPROM(eeAddress, data, numBytes);
         ThisHour[min] = WEB_data_0;
-
+        int a;
+        int aa;
+        int c;
+        int d;
         numBytes = 32;
         eeAddress = HOUR_OFFSET + (mRTCCBCD2Dec(tim.d.mday) * 32 * 24) +(mRTCCBCD2Dec(tim.t.hour) * 32);
         memcpy(data, &History, numBytes);
@@ -335,6 +338,8 @@ DateTime Set_RTCC() {
     }
     d_t.d = 0;
     d_t.t = 0;
+    now.t = tim;
+    now.d = dt;
     return d_t;
 }
 
@@ -398,7 +403,9 @@ RTCCDateTime update_clock() {
     year = mRTCCBCD2Dec(dt.year);
 
     if (ref_day != day) {
+#if defined(STACK_USE_MY_UART)
         my_uart_println_str("reset ");
+#endif
         reset_clock = true;
         ref_day = day;
     }
@@ -515,9 +522,6 @@ int main(void) {
     // Initialize application specific hardware
     InitializeBoard();
 
-#if defined(FILL_HOUR_DATA)
-    fill_hour_data();
-#endif
 
 
 #if defined(STACK_USE_MY_UART)
@@ -576,10 +580,10 @@ int main(void) {
 
     while (1) {
 
-//        if ((IFS1bits.RTCCIF == 1)&&(TCP_status < 2)) {
-//            process_item = READ_DATA;
-//            IFS1CLR = 0x00008000; // clear RTCC existing event
-//        }
+        //        if ((IFS1bits.RTCCIF == 1)&&(TCP_status < 2)) {
+        //            process_item = READ_DATA;
+        //            IFS1CLR = 0x00008000; // clear RTCC existing event
+        //        }
         // This task performs normal stack task including checking
         // for incoming packet, type of packet and calling
         // appropriate stack entity to process it.
@@ -595,6 +599,7 @@ int main(void) {
             case SET_TIME:
                 t_d = Set_RTCC();
                 if (t_d.d != 0) {
+ 
                     DelayMs(2000);
                     process_item = STARTUP;
                     reset_clock = false;
@@ -608,6 +613,7 @@ int main(void) {
                 outside.h = 0;
                 read_inside_data();
                 status = TCPRemoteData();
+#if defined(SAVE_DATA)                
                 if (status == 10) {
                     if (save_data(now)) {
                         process_item = UPLOAD_CURRENT;
@@ -619,9 +625,13 @@ int main(void) {
                 }
                 if (status == 5)
                     process_item = GET_INCOMMING;
-
+#else
+                if (status == 10)
+                    process_item = GET_INCOMMING;
+#endif
                 break;
             case UPLOAD_CURRENT:
+#if defined(SEND_DATA)    
                 if (TCPClient(CURRENT_DATA) == 1) {
                     if (now.t.min == 0) {
                         process_item = UPLOAD_CURRENT;
@@ -632,9 +642,11 @@ int main(void) {
                             process_item = GET_INCOMMING;
                     }
                 }
+#else
+                process_item = GET_INCOMMING;
+#endif
                 break;
             case UPDATE_RTCC:
-
 #if defined(STACK_USE_MY_UART)
                 my_uart_println_str("UPDATE_RTCC");
 #endif
@@ -646,12 +658,16 @@ int main(void) {
                 }
                 break;
             case UPLOAD_HISTORY:
-                //    if (TCPClient(HISTORY_DATA) == 1)
+#if defined(SEND_DATA)    
+                if(TCPClient(HISTORY_DATA) == 1)
                 if (reset_clock)
                     process_item = UPDATE_RTCC;
                 else
                     process_item = GET_INCOMMING;
-        //}
+        
+#else
+                process_item = GET_INCOMMING;
+#endif
         break;
         case STOP_SERVER:
         TCP_status = 10;
@@ -659,6 +675,10 @@ int main(void) {
         if (TCP_status == 0)process_item = READ_DATA;
         break;
         case STARTUP:
+                               
+#if defined(FILL_HOUR_DATA)
+    fill_hour_data();
+#endif
         process_item = GET_INCOMMING;
         break;
     }
@@ -997,12 +1017,12 @@ uint16_t date2days(uint16_t y, uint8_t m, uint8_t d) {
 }
 
 uint32_t time2long(uint16_t days, uint8_t h, uint8_t m, uint8_t s) {
-    return ((days * 24L + h) * 60 + m) * 60 + s;
+    return ((((days * 24L) + h) * 60 )+ m) * 60 + s;
 }
 
 uint32_t unixtime(RTCCDateTime dt) {
     uint32_t t;
-    int y = mRTCCBCD2Dec(dt.d.year);
+    int y = mRTCCBCD2Dec(dt.d.year)-100;
     int m = mRTCCBCD2Dec(dt.d.mon);
     int d = mRTCCBCD2Dec(dt.d.mday);
     int hh = mRTCCBCD2Dec(dt.t.hour);
@@ -1020,5 +1040,64 @@ uint32_t unixtime(RTCCDateTime dt) {
 #if defined(FILL_HOUR_DATA)
 
 void fill_hour_data() {
+
+    uint16_t numBytes = 24;
+    uint16_t eeAddress = 0;
+    uint8_t data[32];
+
+    uint32_t timestamp = unixtime(now);
+    int location = 0;
+    do {
+        WEB_data_0.in_temp = 2112;
+        WEB_data_0.in_hum = 5900;
+        WEB_data_0.out_temp = 1534;
+        WEB_data_0.out_hum = 7612;
+        WEB_data_0.pressure = 1007;
+        WEB_data_0.wind_speed = 1167;
+        WEB_data_0.peak_wind_speed = 1543;
+        WEB_data_0.bearing = 232;
+        WEB_data_0.rainfall = 89;
+        WEB_data_0.rainfall_rate = 345;
+        WEB_data_0.timestamp = timestamp;
+        timestamp += 60;
+        memcpy(data, &WEB_data_0, numBytes);
+        my_uart_print_str("write current ");
+        my_uart_println_int(timestamp);
+        eeAddress = location * 32;
+        write_EEPROM(eeAddress, data, numBytes);
+        location++;
+    } while (location < 60);
+
+    numBytes = 32;
+    timestamp = 1570964400;
+
+    History.in_temp_H = 2189;
+    History.in_temp_L = 1612;
+    History.in_hum_H = 7560;
+    History.in_hum_L = 5060;
+    History.out_temp_H = 1740;
+    History.out_temp_L = 1034;
+    History.out_hum_H = 8712;
+    History.out_hum_L = 7012;
+    History.pressure_H = 1020;
+    History.pressure_L = 990;
+    History.wind_speed = 1167;
+    History.peak_wind_speed = 1543;
+    History.bearing = 232;
+    History.rainfall = 360;
+    History.timestamp = timestamp;
+    location = 0;
+    do {
+        memcpy(data, &WEB_data_0, numBytes);
+        my_uart_print_str("write current ");
+        my_uart_println_int(timestamp);
+        eeAddress = HOUR_OFFSET + (location * 32);
+        write_EEPROM(eeAddress, data, numBytes);
+        timestamp += (60 * 60);
+        location++;
+    } while (location < 24);
+    
+    while(true);
+
 }
 #endif

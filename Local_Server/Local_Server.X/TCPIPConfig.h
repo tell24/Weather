@@ -61,7 +61,7 @@
  *   Uncomment or comment the following lines to enable or
  *   disabled the following high-level application modules.
  */
-#define FILL_HOUR_DATA
+//#define FILL_HOUR_DATA
 #define SAVE_DATA
 #define SEND_DATA
 #define STACK_USE_MY_UART					// My uart

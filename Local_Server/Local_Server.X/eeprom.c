@@ -26,11 +26,12 @@ void write_EEPROM(uint16_t eeAddress, uint8_t data[], uint8_t numBytes) {
     uint8_t so_send = 0;
     do {
         so_send  = data[x];
-        I2C_write(data[x], _nack);
+        I2C_write(data[x], _ack);
         x++;
     }while( x < numBytes );
          //Write the data
     I2C_stop(); /* Send stop condition */
+    DelayMs(6);    
 }
 
 void read_EEPROM(uint16_t eeAddress, uint8_t data1[], uint8_t numBytes) {

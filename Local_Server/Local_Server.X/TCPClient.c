@@ -57,6 +57,7 @@
 #include "TCPIPConfig.h"
 #include "main.h"
 #include <stdbool.h>
+#include <peripheral/rtcc.h>
 
 #if defined(STACK_USE_GENERIC_TCP_CLIENT_EXAMPLE)
 
@@ -164,7 +165,6 @@ BYTE TCPClient(BYTE type) {
             // Place the application protocol data into the transmit buffer.  For this example, we are connected to an HTTP server, so we'll send an HTTP GET request.
             switch (type) {
                 case CURRENT_DATA:
-
                     WEB_data_0.out_temp = outsidedata.temp;
                     WEB_data_0.in_temp = inside.t * 10;
                     WEB_data_0.out_hum = outsidedata.hum;
@@ -184,7 +184,7 @@ BYTE TCPClient(BYTE type) {
                     TCPPutROMString(MySocket, (ROM BYTE*) "\r\nConnection: close\r\n\r\n");
                     TCPPutROMArray(MySocket, &WEB_data_0, 24);
                     break;
-                    
+
                 case HISTORY_DATA:
                     TCPPutROMString(MySocket, (ROM BYTE*) "POST ");
                     TCPPutROMString(MySocket, RemoteURLHistory);
@@ -206,7 +206,7 @@ BYTE TCPClient(BYTE type) {
             if (!TCPIsConnected(MySocket)) {
                 GenericTCPExampleState = SM_DISCONNECT;
 
-                         
+
 #if defined(STACK_USE_MY_UART)
                 putrsUART1((ROM char*) "SM_DISCONNECT...\r\n");
 #endif
@@ -232,16 +232,21 @@ BYTE TCPClient(BYTE type) {
                 // Therefore, let's break out after only one chunk most of the time.  The 
                 // only exception is when the remote node disconncets from us and we need to 
                 // use up all the data before changing states.
-                if (GenericTCPExampleState == SM_PROCESS_RESPONSE){             
+                if (GenericTCPExampleState == SM_PROCESS_RESPONSE) {
 
-                   
-                    my_uart_print((char)vBuffer[0]); my_uart_print((char)vBuffer[1]); my_uart_print((char)vBuffer[2]); my_uart_print((char)vBuffer[3]); 
-                     my_uart_println_str(" ");
+#if defined(STACK_USE_MY_UART)   
+                    my_uart_print((char) vBuffer[0]);
+                    my_uart_print((char) vBuffer[1]);
+                    my_uart_print((char) vBuffer[2]);
+                    my_uart_print((char) vBuffer[3]);
+                    my_uart_println_str(" ");
                     my_uart_println_int(vBuffer[0]);
                     my_uart_println_int(vBuffer[1]);
                     my_uart_println_int(vBuffer[2]);
                     my_uart_println_int(vBuffer[3]);
-                    break;}
+#endif
+                    break;
+                }
             }
 
             break;

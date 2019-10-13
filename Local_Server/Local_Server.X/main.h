@@ -55,7 +55,6 @@
 #define SaveAppConfig(a)
 #define RAD 57.296
 
-
 #define DO_NOTHING     0 
 #define GET_INCOMMING  1
 #define GET_TIME       2
@@ -75,7 +74,7 @@
 #define mRTCCBCD2Dec(BCD)   (((BCD>>4)*10)+(BCD & 0x0f))    
 #define mRTCCDec2BCD(Dec)  ((Dec/10)<<4)|(Dec % 10)
 
-
+#define HOUR_OFFSET  1920
 // Define a header structure for validating the AppConfig data structure in EEPROM/Flash
 
 typedef struct {
