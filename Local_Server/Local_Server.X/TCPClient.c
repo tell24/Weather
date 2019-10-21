@@ -63,14 +63,15 @@
 
 #include "TCPIP Stack/TCPIP.h"
 
-
+#if defined(TESTING)
 static BYTE ServerName[] = "192.168.0.39";
+#else
+static BYTE ServerName[] = "192.168.0.27";
+#endif
 
 static WORD ServerPort = HTTP_PORT;
 
 // Defines the URL to be requested by this HTTP client
-static ROM BYTE RemoteURLCurrent[] = "/0";
-static ROM BYTE RemoteURLHistory[] = "/1";
 
 /*****************************************************************************
   Function:
@@ -158,17 +159,21 @@ BYTE TCPClient(BYTE type) {
 
             Timer = TickGet();
 
+            WORD PutReady = TCPIsPutReady(MySocket);
+#if defined(STACK_USE_MY_UART)   
+            my_uart_println_int((int) PutReady);
+#endif
             // Make certain the socket can be written to
-            if (TCPIsPutReady(MySocket) < 125u)
+            if (PutReady < 125u)
                 break;
 
             // Place the application protocol data into the transmit buffer.  For this example, we are connected to an HTTP server, so we'll send an HTTP GET request.
             switch (type) {
                 case CURRENT_DATA:
                     WEB_data_0.out_temp = outsidedata.temp;
-                    WEB_data_0.in_temp = inside.t * 10;
+                    WEB_data_0.in_temp = inside.t * 100;
                     WEB_data_0.out_hum = outsidedata.hum;
-                    WEB_data_0.in_hum = inside.h * 10;
+                    WEB_data_0.in_hum = inside.h * 100;
                     WEB_data_0.wind_speed = outsidedata.wind_speed;
                     WEB_data_0.peak_wind_speed = outsidedata.peak_wind_speed;
                     WEB_data_0.bearing = outsidedata.bearing;
@@ -176,9 +181,7 @@ BYTE TCPClient(BYTE type) {
                     WEB_data_0.rainfall = outsidedata.rain;
                     WEB_data_0.rainfall_rate = outsidedata.rain;
                     WEB_data_0.timestamp = unixtime(now);
-                    TCPPutROMString(MySocket, (ROM BYTE*) "POST \0");
-                    TCPPutROMString(MySocket, RemoteURLCurrent);
-                    TCPPutROMString(MySocket, (ROM BYTE*) " HTTP/1.0\r\nHost: ");
+                    TCPPutROMString(MySocket, (ROM BYTE*) "POST /0 HTTP/1.0\r\nHost: ");
                     TCPPutString(MySocket, ServerName);
                     TCPPutROMString(MySocket, (ROM BYTE*) "\r\nContent-Length: 24\r\n");
                     TCPPutROMString(MySocket, (ROM BYTE*) "\r\nConnection: close\r\n\r\n");
@@ -186,13 +189,17 @@ BYTE TCPClient(BYTE type) {
                     break;
 
                 case HISTORY_DATA:
-                    TCPPutROMString(MySocket, (ROM BYTE*) "POST ");
-                    TCPPutROMString(MySocket, RemoteURLHistory);
-                    TCPPutROMString(MySocket, (ROM BYTE*) " HTTP/1.0\r\nHost: ");
+                    TCPPutROMString(MySocket, (ROM BYTE*) "POST /1 HTTP/1.0\r\nHost: ");
                     TCPPutString(MySocket, ServerName);
                     TCPPutROMString(MySocket, (ROM BYTE*) "\r\nContent-Length: 32\r\n");
                     TCPPutROMString(MySocket, (ROM BYTE*) "\r\nConnection: close\r\n\r\n");
                     TCPPutROMArray(MySocket, &History, 32);
+                    break;
+                case GET_REMOTE:
+                    TCPPutROMString(MySocket, (ROM BYTE*) "GET /2 HTTP/1.0\r\n");
+                    TCPPutROMString(MySocket, (ROM BYTE*) "Host: ");
+                    TCPPutString(MySocket, ServerName);
+                    TCPPutROMString(MySocket, (ROM BYTE*) "\r\nConnection: close\r\n\r\n");
                     break;
             }
             // Send the packet
@@ -233,18 +240,38 @@ BYTE TCPClient(BYTE type) {
                 // only exception is when the remote node disconncets from us and we need to 
                 // use up all the data before changing states.
                 if (GenericTCPExampleState == SM_PROCESS_RESPONSE) {
-
-#if defined(STACK_USE_MY_UART)   
-                    my_uart_print((char) vBuffer[0]);
-                    my_uart_print((char) vBuffer[1]);
-                    my_uart_print((char) vBuffer[2]);
-                    my_uart_print((char) vBuffer[3]);
-                    my_uart_println_str(" ");
-                    my_uart_println_int(vBuffer[0]);
-                    my_uart_println_int(vBuffer[1]);
-                    my_uart_println_int(vBuffer[2]);
-                    my_uart_println_int(vBuffer[3]);
+                    switch (type) {
+                        case GET_REMOTE:
+                            if (i == 18) {
+                                memcpy(&outsidedata, &vBuffer, 18);
+#if defined(STACK_USE_MY_UART)                  
+                                my_uart_println_str("Remote Data ");
+                                my_uart_println_int(outsidedata.hum);
+                                my_uart_println_int(outsidedata.temp);
+                                my_uart_println_int(outsidedata.bearing);
+                                my_uart_println_int(outsidedata.wind_speed);
+                                my_uart_println_int(outsidedata.peak_wind_speed);
+                                my_uart_println_int(outsidedata.rain);
+                                my_uart_println_int(outsidedata.rssi);
+                                my_uart_println_int(outsidedata.status);
 #endif
+                            }
+                            completed = true;
+                            break;
+defualt:
+#if defined(STACK_USE_MY_UART)   
+                            my_uart_print((char) vBuffer[0]);
+                            my_uart_print((char) vBuffer[1]);
+                            my_uart_print((char) vBuffer[2]);
+                            my_uart_print((char) vBuffer[3]);
+                            my_uart_println_str(" ");
+                            my_uart_println_int(vBuffer[0]);
+                            my_uart_println_int(vBuffer[1]);
+                            my_uart_println_int(vBuffer[2]);
+                            my_uart_println_int(vBuffer[3]);
+#endif
+                            break;
+                    }
                     break;
                 }
             }
@@ -260,17 +287,14 @@ BYTE TCPClient(BYTE type) {
             TCPDisconnect(MySocket);
             MySocket = INVALID_SOCKET;
             GenericTCPExampleState = SM_DONE;
-            status = 1;
             break;
 
         case SM_DONE:
             // Do nothing unless the user pushes BUTTON1 and wants to restart the whole connection/download process
             //	if(BUTTON1_IO == 0u)
             GenericTCPExampleState = SM_HOME;
-#if defined(STACK_USE_MY_UART)
-            if (completed)
-                my_uart_println_str("\r\nend");
-#endif
+            status = 1;
+            if (completed) status = 2;
             break;
     }
     return status;

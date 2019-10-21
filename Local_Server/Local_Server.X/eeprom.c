@@ -11,7 +11,7 @@
 #include <stdint.h>
 #include <string.h>
 
-  
+     
 // I2C_init() initialises I2C2 at at frequency of [frequency]Hz  
 
 
@@ -31,7 +31,6 @@ void write_EEPROM(uint16_t eeAddress, uint8_t data[], uint8_t numBytes) {
     }while( x < numBytes );
          //Write the data
     I2C_stop(); /* Send stop condition */
-    DelayMs(6);    
 }
 
 void read_EEPROM(uint16_t eeAddress, uint8_t data1[], uint8_t numBytes) {

@@ -10,6 +10,7 @@
 #include "I2C.h"
 
 #define ATMLH_ADDRESS 0x50
+#define MIN_WRITE_DELAY   DelayMs(6); 
 //#define ANALIZER_ON
 
 #ifndef EEPROM_H

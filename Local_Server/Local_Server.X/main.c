@@ -118,6 +118,8 @@ BYTE AN0String[8];
 
 static ROM BYTE SerializedMACAddress[6] = {MY_DEFAULT_MAC_BYTE1, MY_DEFAULT_MAC_BYTE2, MY_DEFAULT_MAC_BYTE3, MY_DEFAULT_MAC_BYTE4, MY_DEFAULT_MAC_BYTE5, MY_DEFAULT_MAC_BYTE6};
 
+const char * Day_array[] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+const char * Month_array[] = {"", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 uint8_t month[] = {0, 30, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 remotedata outsidedata;
 current WEB_data_0;
@@ -210,11 +212,10 @@ static _Bool save_data(RTCCDateTime tim) {
 #if defined(SAVE_DATA)
     uint16_t eeAddress = 0;
     uint8_t data[32];
+    uint8_t data1[32];
     uint8_t numBytes = 0;
     uint8_t min = mRTCCBCD2Dec(tim.t.min);
-    min = 0;
     WEB_data_0.timestamp = unixtime(tim);
-
     // Save min data to eeprom
     if (min != 0) {
         numBytes = 24;
@@ -258,22 +259,23 @@ static _Bool save_data(RTCCDateTime tim) {
         History.peak_wind_speed = (signed short) (w / 60);
         History.bearing = (signed short) (b / 60);
         History.rainfall = (signed short) (r / 60);
+        History.timestamp = WEB_data_0.timestamp;
 
         numBytes = 24;
         eeAddress = min * 32;
         memcpy(data, &WEB_data_0, numBytes);
         write_EEPROM(eeAddress, data, numBytes);
+        MIN_WRITE_DELAY;
         ThisHour[min] = WEB_data_0;
-        int a;
-        int aa;
-        int c;
-        int d;
         numBytes = 32;
         eeAddress = HOUR_OFFSET + (mRTCCBCD2Dec(tim.d.mday) * 32 * 24) +(mRTCCBCD2Dec(tim.t.hour) * 32);
         memcpy(data, &History, numBytes);
         write_EEPROM(eeAddress, data, numBytes);
-
-
+        MIN_WRITE_DELAY;
+        //        read_EEPROM(min * 32, &data, 24) ;
+        //        MIN_WRITE_DELAY;
+        //        read_EEPROM(eeAddress, &data1, 32) ;
+        //        MIN_WRITE_DELAY;
     }
 
 #endif
@@ -390,7 +392,7 @@ _Bool Is_It_Time() {
 
 RTCCDateTime update_clock() {
     RTCCDateTime clockTime;
-    uint8_t min, hour, day, mon, year;
+    uint8_t min, hour, day, mon, wday;
     struct tm t;
     rtccTime tm;
     rtccDate dt;
@@ -400,7 +402,7 @@ RTCCDateTime update_clock() {
     min = mRTCCBCD2Dec(tm.min);
     day = mRTCCBCD2Dec(dt.mday);
     mon = mRTCCBCD2Dec(dt.mon) + 1;
-    year = mRTCCBCD2Dec(dt.year);
+    wday = mRTCCBCD2Dec(dt.wday);
 
     if (ref_day != day) {
 #if defined(STACK_USE_MY_UART)
@@ -415,13 +417,12 @@ RTCCDateTime update_clock() {
     t.tm_sec = 0;
     t.tm_mday = day;
     t.tm_mon = mon;
-    t.tm_year = year;
     time_t t_of_day = mktime(&t);
-    year -= 100;
     if (Is_DST(t_of_day)) {
         hour++;
         if (hour == 24) {
             day++;
+            wday++;
             hour = 0;
             if (day > month[mon]) {
                 mon++;
@@ -445,9 +446,13 @@ RTCCDateTime update_clock() {
         sprintf(buf, "%2d:%02d", hour, min);
 
     drawtext(4, 0, buf, ST7735_COLOUR, ST7735_BLACK, 4);
-    sprintf(buf, "%02d-%02d-%d", day, mon, year);
-    drawtext(16, 40, buf, ST7735_COLOUR, ST7735_BLACK, 2);
 
+    if (day < 10)
+        sprintf(buf, "%s  %1d %s", Day_array[wday], day, Month_array[mon]);
+    else
+        sprintf(buf, "%s %2d %s", Day_array[wday], day, Month_array[mon]);
+
+    drawtext(0, 40, buf, ST7735_COLOUR, ST7735_BLACK, 2);
     outside.t = (double) outsidedata.temp / 100;
     outside.h = (double) outsidedata.hum / 100;
 
@@ -490,7 +495,7 @@ RTCCDateTime update_clock() {
         drawFastVLine(120, 150, 3, ST7735_COLOUR);
         drawFastVLine(123, 147, 6, ST7735_COLOUR);
         drawFastVLine(126, 144, 9, ST7735_BLACK);
-    } else if (outsidedata.rssi < -50) {
+    } else {
         drawFastVLine(120, 150, 3, ST7735_COLOUR);
         drawFastVLine(123, 147, 6, ST7735_COLOUR);
         drawFastVLine(126, 144, 9, ST7735_COLOUR);
@@ -599,53 +604,44 @@ int main(void) {
             case SET_TIME:
                 t_d = Set_RTCC();
                 if (t_d.d != 0) {
- 
+
                     DelayMs(2000);
                     process_item = STARTUP;
                     reset_clock = false;
                 }
                 break;
-            case READ_DATA:
+            case READ_INSIDE_DATA:
                 now = update_clock();
                 inside.t = 0;
                 inside.h = 0;
                 outside.t = 0;
                 outside.h = 0;
                 read_inside_data();
-                status = TCPRemoteData();
-#if defined(SAVE_DATA)                
-                if (status == 10) {
-                    if (save_data(now)) {
-                        process_item = UPLOAD_CURRENT;
-#if defined(STACK_USE_MY_UART)
-                        my_uart_println_str("UPLOAD_CURRENT");
-#endif
-                    } else
+                process_item = READ_OUTSIDE_DATA;
+                break;
+                
+            case READ_OUTSIDE_DATA:
+                status = TCPClient(GET_REMOTE);
+                switch (status) {
+                    case 0:
+                        break;
+                    case 1:
                         process_item = GET_INCOMMING;
-                }
-                if (status == 5)
-                    process_item = GET_INCOMMING;
-#else
-                if (status == 10)
-                    process_item = GET_INCOMMING;
+                        break;
+                    case 2:
+                        process_item = GET_INCOMMING;
+#if defined(SAVE_DATA)                
+                        if (save_data(now)) {
+                            process_item = UPLOAD_CURRENT;
+#if defined(STACK_USE_MY_UART)
+                            my_uart_println_str("UPLOAD_CURRENT");
 #endif
-                break;
-            case UPLOAD_CURRENT:
-#if defined(SEND_DATA)    
-                if (TCPClient(CURRENT_DATA) == 1) {
-                    if (now.t.min == 0) {
-                        process_item = UPLOAD_CURRENT;
-                    } else {
-                        if (reset_clock)
-                            process_item = UPDATE_RTCC;
-                        else
-                            process_item = GET_INCOMMING;
-                    }
-                }
-#else
-                process_item = GET_INCOMMING;
+                        }
 #endif
+                        break;
+                }
                 break;
+
             case UPDATE_RTCC:
 #if defined(STACK_USE_MY_UART)
                 my_uart_println_str("UPDATE_RTCC");
@@ -657,34 +653,56 @@ int main(void) {
                     reset_clock = false;
                 }
                 break;
-            case UPLOAD_HISTORY:
+                 case UPLOAD_CURRENT:
 #if defined(SEND_DATA)    
-                if(TCPClient(HISTORY_DATA) == 1)
-                if (reset_clock)
-                    process_item = UPDATE_RTCC;
-                else
-                    process_item = GET_INCOMMING;
-        
+                if (TCPClient(CURRENT_DATA) == 1) {
+
+#if defined(STACK_USE_MY_UART)
+                    my_uart_println_str("HISTORY SENT");
+#endif
+                    if (reset_clock)
+                        process_item = UPDATE_RTCC;
+                    else
+                        process_item = GET_INCOMMING;
+                }
 #else
                 process_item = GET_INCOMMING;
 #endif
-        break;
-        case STOP_SERVER:
-        TCP_status = 10;
-        TCPServer(&TCP_status, &post_data_size, &f);
-        if (TCP_status == 0)process_item = READ_DATA;
-        break;
-        case STARTUP:
-                               
-#if defined(FILL_HOUR_DATA)
-    fill_hour_data();
-#endif
-        process_item = GET_INCOMMING;
-        break;
-    }
+                break;
+                
+            case UPLOAD_HISTORY:
+#if defined(SEND_DATA)    
+                if (TCPClient(HISTORY_DATA) == 1) {
 
-    ProcessIO();
-}
+#if defined(STACK_USE_MY_UART)
+                    my_uart_println_str("HISTORY SENT");
+#endif
+                    if (reset_clock)
+                        process_item = UPDATE_RTCC;
+                    else
+                        process_item = GET_INCOMMING;
+                }
+#else
+                process_item = GET_INCOMMING;
+#endif
+                break;
+                
+            case STOP_SERVER:
+                TCP_status = 10;
+                TCPServer(&TCP_status, &post_data_size, &f);
+                if (TCP_status == 0)process_item = READ_INSIDE_DATA;
+                break;
+                
+            case STARTUP:
+#if defined(FILL_HOUR_DATA)
+                fill_hour_data();
+#endif
+                process_item = GET_INCOMMING;
+                break;
+        }
+
+        ProcessIO();
+    }
 }
 
 // Writes an IP address to the LCD display and the UART as available
@@ -724,7 +742,8 @@ static void ProcessIO(void) {
     //  uitoa((WORD) ADC1BUF0, AN0String);
 #endif
     if (TCP_status == 1)
-        if (Is_It_Time()) process_item = STOP_SERVER;
+        if (Is_It_Time())
+            process_item = STOP_SERVER;
 }
 
 /****************************************************************************
@@ -1002,6 +1021,21 @@ void my_uart_print_HEX(uint32_t hex) {
     my_uart_print('\n');
 
 }
+
+void my_uart_print_byte_HEX(uint8_t hex) {
+    char HEX_Char[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+    my_uart_print('0');
+    my_uart_print('x');
+    int b = 4;
+    do {
+        uint32_t c = hex>>b;
+        my_uart_print(HEX_Char[hex >> b & 0x0f]);
+        b -= 4;
+    } while (b >= 0);
+    my_uart_print('\r');
+    my_uart_print('\n');
+
+}
 #endif
 
 uint16_t date2days(uint16_t y, uint8_t m, uint8_t d) {
@@ -1017,12 +1051,12 @@ uint16_t date2days(uint16_t y, uint8_t m, uint8_t d) {
 }
 
 uint32_t time2long(uint16_t days, uint8_t h, uint8_t m, uint8_t s) {
-    return ((((days * 24L) + h) * 60 )+ m) * 60 + s;
+    return ((((days * 24L) + h) * 60) + m) * 60 + s;
 }
 
 uint32_t unixtime(RTCCDateTime dt) {
     uint32_t t;
-    int y = mRTCCBCD2Dec(dt.d.year)-100;
+    int y = mRTCCBCD2Dec(dt.d.year) - 100;
     int m = mRTCCBCD2Dec(dt.d.mon);
     int d = mRTCCBCD2Dec(dt.d.mday);
     int hh = mRTCCBCD2Dec(dt.t.hour);
@@ -1096,8 +1130,8 @@ void fill_hour_data() {
         timestamp += (60 * 60);
         location++;
     } while (location < 24);
-    
-    while(true);
+
+    while (true);
 
 }
 #endif

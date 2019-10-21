@@ -55,17 +55,18 @@
 #define SaveAppConfig(a)
 #define RAD 57.296
 
-#define DO_NOTHING     0 
-#define GET_INCOMMING  1
-#define GET_TIME       2
-#define SET_ALARM      3
-#define SET_TIME       4
-#define READ_DATA      5
-#define UPLOAD_CURRENT 6
-#define UPLOAD_HISTORY 7
-#define STOP_SERVER    8
-#define STARTUP        9
-#define UPDATE_RTCC    10 
+#define DO_NOTHING              0 
+#define GET_INCOMMING           1
+#define GET_TIME                2
+#define SET_ALARM               3
+#define SET_TIME                4
+#define READ_INSIDE_DATA        5
+#define READ_OUTSIDE_DATA       6
+#define UPLOAD_CURRENT          7
+#define UPLOAD_HISTORY          8
+#define STOP_SERVER             9
+#define STARTUP                 10
+#define UPDATE_RTCC             11 
 
 #define CURRENT_DATA   1
 #define HISTORY_DATA   2
@@ -101,9 +102,9 @@ typedef struct Temp_Hum {
 typedef struct data_packet {
     signed short temp;
     signed short hum;
-    signed short wind_speed;
-    signed short peak_wind_speed;
-    signed short bearing;
+    unsigned short wind_speed;
+    unsigned short peak_wind_speed;
+    unsigned short bearing;
     signed short rain;
     int32_t      rssi;
     signed short status;
@@ -156,6 +157,7 @@ extern BYTE AN0String[8];
 extern BYTE process_item;
 extern 
 RTCCDateTime now;
+
 
 _Bool Is_DST(DWORD time);
 RTCCDateTime update_clock();

@@ -96,6 +96,7 @@
 #include "main.h"
 
 #define block_size 128
+
 // Defines which port the server will listen on
 #define SERVER_PORT	80
 
@@ -216,6 +217,7 @@ void TCPServer(int *TCP_status, DWORD *post_data_size, MPFS_HANDLE *f) {
 #endif
                             *TCP_status = 5;
                             break;
+                            
                         case '0':
                             TCPServerState = SM_CURRENT;
 #if defined(STACK_USE_MY_UART)
@@ -403,78 +405,40 @@ void TCPServer(int *TCP_status, DWORD *post_data_size, MPFS_HANDLE *f) {
 
         case SM_CURRENT:
             if (TCPIsPutReady(MySocket)) {
-#if defined(STACK_USE_MY_UART)
-                putrsUART1((ROM char*) "buf...\r\n");
-#endif
                 char buf[100];
                 struct tm;
                 rtccTime tm;
                 tm.l = RtccGetTime();
-                WEB_data_0.out_temp = outsidedata.temp;
+                WEB_data_0.out_temp = (uint16_t)outsidedata.temp/10;
                 WEB_data_0.in_temp = inside.t * 10;
-                WEB_data_0.out_hum = outsidedata.hum;
+                WEB_data_0.out_hum = (uint16_t)outsidedata.hum/10;
                 WEB_data_0.in_hum = inside.h * 10;
-                WEB_data_0.wind_speed = outsidedata.wind_speed;
+                WEB_data_0.wind_speed = (uint16_t)outsidedata.wind_speed/10;
                 WEB_data_0.peak_wind_speed = outsidedata.peak_wind_speed;
                 WEB_data_0.bearing = outsidedata.bearing;
                 WEB_data_0.pressure = pressure;
                 WEB_data_0.rainfall = outsidedata.rain;
-                WEB_data_0.rainfall_rate = outsidedata.rain;
+                WEB_data_0.rainfall_rate = outsidedata.rain;                    
+                memcpy(&buf, &WEB_data_0, 20);
                 if (*TCP_status == 6) {
                     TCPPutROMString(MySocket, (ROM BYTE*) "HTTP/1.1 200 OK\r\n");
                     TCPPutROMString(MySocket, (ROM BYTE*) "Content-Type: text/html\r\n");
+                    TCPPutROMString(MySocket, (ROM BYTE*) "Content-Length: 20\r\n");
                     TCPPutROMString(MySocket, (ROM BYTE*) "Connection: close\r\n");
                     TCPPutROMString(MySocket, (ROM BYTE*) "\r\n");
-                    TCPFlush(MySocket);
+               //     TCPFlush(MySocket);
+                TCPPutROMArray(MySocket, &buf, 20);
+                TCPFlush(MySocket);
                     *TCP_status = 2;
                     int offset = *post_data_size;
                     *post_data_size = 0;
-#if defined(STACK_USE_MY_UART)
-                    my_uart_println_int(offset);
-#endif
-                    BYTE RemoteBuffer[13];
-                    int ad = 0;
-                    for (ad = 0; ad < 13; ad++) {
-                        RemoteBuffer[ad] = AppBuffer[offset + ad];
-                    }
-
-                    memcpy(&outsidedata, RemoteBuffer, 13);
-#if defined(STACK_USE_MY_UART)
-                    my_uart_println_int(outsidedata.temp);
-                    my_uart_println_int(outsidedata.hum);
-#endif
-                    outside.t = (double) outsidedata.temp / 100;
-                    outside.h = (double) outsidedata.hum / 100;
-
-                    TCPServerState = SM_DIS;
-#if defined(STACK_USE_MY_UART)
-                    putrsUART1((ROM char*) "Data Header...\r\n");
-#endif
-                    return;
                 }
-
-                WEB_data_0.out_temp = outsidedata.temp / 10;
-                WEB_data_0.in_temp = inside.t * 10;
-                WEB_data_0.out_hum = outsidedata.hum / 10;
-                WEB_data_0.in_hum = inside.h * 10;
-                WEB_data_0.wind_speed = outsidedata.wind_speed;
-                WEB_data_0.peak_wind_speed = outsidedata.peak_wind_speed;
-                WEB_data_0.bearing = outsidedata.bearing;
-                WEB_data_0.pressure = pressure;
-                WEB_data_0.rainfall = outsidedata.rain;
-                WEB_data_0.rainfall_rate = outsidedata.rain;
-
-                memcpy(&buf, &WEB_data_0, 20);
-                TCPPutROMArray(MySocket, &buf, 20);
-                TCPFlush(MySocket);
-#if defined(STACK_USE_MY_UART)
-                //        int id = 0;
-                //               for(id = 0; id<13;id++){my_uart_print_HEX(buf[id]);}
-                //        putrsUART1((ROM char*) "Data Raw...\r\n");
-#endif
-            } else return;
-            //    putrsUART1((ROM char*) "Data DIS...\r\n");
+                return;
+            }
             TCPServerState = SM_DIS;
+#if defined(STACK_USE_MY_UART)
+                    my_uart_println_str("go to DISMISS");
+#endif
             *TCP_status = 2;
             *post_data_size = 0;
             break;
