@@ -158,8 +158,7 @@ extern BYTE process_item;
 extern 
 RTCCDateTime now;
 
-
-_Bool Is_DST(DWORD time);
+_Bool Is_DST(struct tm newtime) ;
 RTCCDateTime update_clock();
 uint32_t unixtime(RTCCDateTime dt);
 

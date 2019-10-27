@@ -158,13 +158,9 @@ BYTE TCPClient(BYTE type) {
             }
 
             Timer = TickGet();
-
-            WORD PutReady = TCPIsPutReady(MySocket);
-#if defined(STACK_USE_MY_UART)   
-            my_uart_println_int((int) PutReady);
-#endif
+            
             // Make certain the socket can be written to
-            if (PutReady < 125u)
+            if (TCPIsPutReady(MySocket) < 125u)
                 break;
 
             // Place the application protocol data into the transmit buffer.  For this example, we are connected to an HTTP server, so we'll send an HTTP GET request.
@@ -244,7 +240,7 @@ BYTE TCPClient(BYTE type) {
                         case GET_REMOTE:
                             if (i == 18) {
                                 memcpy(&outsidedata, &vBuffer, 18);
-#if defined(STACK_USE_MY_UART)                  
+#if defined(UART_DATA)                  
                                 my_uart_println_str("Remote Data ");
                                 my_uart_println_int(outsidedata.hum);
                                 my_uart_println_int(outsidedata.temp);
@@ -259,7 +255,7 @@ BYTE TCPClient(BYTE type) {
                             completed = true;
                             break;
 defualt:
-#if defined(STACK_USE_MY_UART)   
+#if defined(UART_DATA)   
                             my_uart_print((char) vBuffer[0]);
                             my_uart_print((char) vBuffer[1]);
                             my_uart_print((char) vBuffer[2]);

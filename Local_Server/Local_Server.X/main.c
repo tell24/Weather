@@ -118,8 +118,8 @@ BYTE AN0String[8];
 
 static ROM BYTE SerializedMACAddress[6] = {MY_DEFAULT_MAC_BYTE1, MY_DEFAULT_MAC_BYTE2, MY_DEFAULT_MAC_BYTE3, MY_DEFAULT_MAC_BYTE4, MY_DEFAULT_MAC_BYTE5, MY_DEFAULT_MAC_BYTE6};
 
-const char * Day_array[] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
-const char * Month_array[] = {"", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+const char * Day_array[] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+const char * Month_array[] = {"", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan"};
 uint8_t month[] = {0, 30, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 remotedata outsidedata;
 current WEB_data_0;
@@ -345,36 +345,43 @@ DateTime Set_RTCC() {
     return d_t;
 }
 
-_Bool Is_DST(DWORD time) {
-    struct tm *newtime = localtime(&time);
-    if ((newtime->tm_mon > 1)&&(newtime->tm_mon < 10)) {
-        if (newtime->tm_mon == 2) {
-            if (newtime->tm_wday == 0) {
-                if ((newtime->tm_mday + (6 - newtime->tm_wday)) >= 31) {
-                    if (newtime->tm_hour >= 1) return true;
-                    else return false;
-                } else return false;
-            } else {
-                if ((newtime->tm_mday + (6 - newtime->tm_wday)) < 31) {
-                    return false;
-                }
-            }
-        }
-        if (newtime->tm_mon == 9) {
-            if (newtime->tm_wday == 0) {
-                if ((newtime->tm_mday + (6 - newtime->tm_wday)) >= 31) {
-                    if (newtime->tm_hour >= 1) return false;
-                    else return true;
-                } else
+_Bool Is_DST(struct tm newtime) {
+    if ((newtime.tm_mon > 3) && (newtime.tm_mon < 10)) {
+        return true;
+    }
+    if (newtime.tm_mon == 3) {
+        if (newtime.tm_wday == 0) {
+            if ((newtime.tm_mday + (6 - newtime.tm_wday)) >= 31) {
+                if (newtime.tm_hour >= 1) {
                     return true;
-            } else {
-                if ((newtime->tm_mday + (6 - newtime->tm_wday)) < 31) return true;
-                else
+                } else
                     return false;
+            } else {
+                return false;
             }
+        } else {
+            if ((newtime.tm_mday + (6 - newtime.tm_wday)) < 31)
+                return false;
         }
     }
-    return true;
+
+    if (newtime.tm_mon == 10) {
+        if (newtime.tm_wday == 0) {
+            if ((newtime.tm_mday + (6 - newtime.tm_wday)) >= 31) {
+                if (newtime.tm_hour > 1) {
+                    return false;
+                } else
+                    return true;
+            } else
+                return true;
+        } else {
+            if ((newtime.tm_mday + (6 - newtime.tm_wday)) < 31) {
+                return true;
+            } else
+                return false;
+        }
+    }
+    return false;
 }
 
 _Bool Is_It_Time() {
@@ -417,8 +424,9 @@ RTCCDateTime update_clock() {
     t.tm_sec = 0;
     t.tm_mday = day;
     t.tm_mon = mon;
-    time_t t_of_day = mktime(&t);
-    if (Is_DST(t_of_day)) {
+    t.tm_wday = wday;
+
+    if (Is_DST(t)) {
         hour++;
         if (hour == 24) {
             day++;
@@ -491,7 +499,7 @@ RTCCDateTime update_clock() {
         drawFastVLine(120, 150, 3, ST7735_COLOUR);
         drawFastVLine(123, 147, 6, ST7735_BLACK);
         drawFastVLine(126, 144, 9, ST7735_BLACK);
-    } else if (outsidedata.rssi < -65) {
+    } else if (outsidedata.rssi < -70) {
         drawFastVLine(120, 150, 3, ST7735_COLOUR);
         drawFastVLine(123, 147, 6, ST7735_COLOUR);
         drawFastVLine(126, 144, 9, ST7735_BLACK);
@@ -526,7 +534,6 @@ int main(void) {
 
     // Initialize application specific hardware
     InitializeBoard();
-
 
 
 #if defined(STACK_USE_MY_UART)
@@ -617,9 +624,13 @@ int main(void) {
                 outside.t = 0;
                 outside.h = 0;
                 read_inside_data();
+#ifndef TESTING
                 process_item = READ_OUTSIDE_DATA;
+#else       
+                process_item = GET_INCOMMING;
+#endif
                 break;
-                
+
             case READ_OUTSIDE_DATA:
                 status = TCPClient(GET_REMOTE);
                 switch (status) {
@@ -653,7 +664,7 @@ int main(void) {
                     reset_clock = false;
                 }
                 break;
-                 case UPLOAD_CURRENT:
+            case UPLOAD_CURRENT:
 #if defined(SEND_DATA)    
                 if (TCPClient(CURRENT_DATA) == 1) {
 
@@ -669,7 +680,7 @@ int main(void) {
                 process_item = GET_INCOMMING;
 #endif
                 break;
-                
+
             case UPLOAD_HISTORY:
 #if defined(SEND_DATA)    
                 if (TCPClient(HISTORY_DATA) == 1) {
@@ -686,13 +697,13 @@ int main(void) {
                 process_item = GET_INCOMMING;
 #endif
                 break;
-                
+
             case STOP_SERVER:
                 TCP_status = 10;
                 TCPServer(&TCP_status, &post_data_size, &f);
                 if (TCP_status == 0)process_item = READ_INSIDE_DATA;
                 break;
-                
+
             case STARTUP:
 #if defined(FILL_HOUR_DATA)
                 fill_hour_data();
@@ -942,7 +953,7 @@ static void InitAppConfig(void) {
 
 //UART
 
-#if defined(STACK_USE_MY_UART)
+#if (defined STACK_USE_MY_UART) || (defined UART_DATA)
 
 void my_uart_begin() {
     U1MODEbits.BRGH = 0; // Baud Rate = 9600

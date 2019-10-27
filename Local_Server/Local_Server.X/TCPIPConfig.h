@@ -65,8 +65,9 @@
 //#define SAVE_DATA
 //#define NO_DATA
 //#define SEND_DATA
-//#define TESTING
-#define STACK_USE_MY_UART					// My uart
+#define TESTING
+//#define UART_DATA
+//#define STACK_USE_MY_UART					// My uart
 //#define STACK_USE_UART					// Application demo using UART for IP address display and stack configuration
 //#define STACK_USE_UART2TCP_BRIDGE		// UART to TCP Bridge application example
 //#define STACK_USE_IP_GLEANING
