@@ -111,6 +111,7 @@ typedef struct data_packet {
 } remotedata;
 
 typedef struct data_packet1 {
+    uint32_t     timestamp;
     signed short out_temp;
     signed short in_temp;
     signed short out_hum;
@@ -120,8 +121,6 @@ typedef struct data_packet1 {
     signed short bearing;
     signed short pressure;
     signed short rainfall;
-    signed short rainfall_rate;
-    DWORD timestamp;
 } current;
 
 
@@ -140,7 +139,7 @@ typedef struct data_packet2 {
     signed short pressure_H;
     signed short pressure_L;
     signed short rainfall;
-    DWORD timestamp;
+    uint32_t     timestamp;
 } history_packet;
 
 extern RTCCDateTime DataTime;

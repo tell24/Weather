@@ -109,6 +109,7 @@
 #pragma config DEBUG    = OFF            // Background Debugger Enable
 
 
+//#define NO_DATA = 0
 
 // Declare AppConfig structure and some other supporting stack variables
 APP_CONFIG AppConfig;
@@ -188,6 +189,13 @@ TempHum get_Humidity_Temperature() {
     TempHum res;
     res.t = HTU21DF_readTemperature();
     res.h = HTU21DF_readHumidity();
+    if(res.h > 95){
+    if(res.h <97) res.h =  95;
+    else if(res.h<98) res.h =  96;
+    else if(res.h<103) res.h =  97;
+    else if(res.h<111) res.h =  98;
+    else res.h =  99;
+    }
     return res;
 }
 
@@ -626,8 +634,12 @@ int main(void) {
                 read_inside_data();
 #ifndef TESTING
                 process_item = READ_OUTSIDE_DATA;
-#else       
+#else   
+#ifndef NO_DATA
+                process_item = READ_OUTSIDE_DATA;
+#else
                 process_item = GET_INCOMMING;
+#endif
 #endif
                 break;
 
@@ -638,9 +650,13 @@ int main(void) {
                         break;
                     case 1:
                         process_item = GET_INCOMMING;
-                        break;
-                    case 2:
-                        process_item = GET_INCOMMING;
+                        
+#if defined(SEND_DATA)  
+                            process_item = UPLOAD_CURRENT;
+#if defined(STACK_USE_MY_UART)
+                            my_uart_println_str("UPLOAD_CURRENT");
+#endif
+#else
 #if defined(SAVE_DATA)                
                         if (save_data(now)) {
                             process_item = UPLOAD_CURRENT;
@@ -648,6 +664,7 @@ int main(void) {
                             my_uart_println_str("UPLOAD_CURRENT");
 #endif
                         }
+#endif                            
 #endif
                         break;
                 }
@@ -669,7 +686,7 @@ int main(void) {
                 if (TCPClient(CURRENT_DATA) == 1) {
 
 #if defined(STACK_USE_MY_UART)
-                    my_uart_println_str("HISTORY SENT");
+                    my_uart_println_str("CURRENT SENT");
 #endif
                     if (reset_clock)
                         process_item = UPDATE_RTCC;
@@ -999,12 +1016,12 @@ void my_uart_println_str(char *str) {
     my_uart_print('\r');
     my_uart_print('\n');
 }
-
 void my_uart_println_int(int i) {
     char buf[10];
     sprintf(buf, "%d", i);
     my_uart_println_str(buf); // Transmit one character
 }
+
 
 void my_uart_print_int(int i) {
     char buf[10];
@@ -1052,31 +1069,72 @@ void my_uart_print_byte_HEX(uint8_t hex) {
 uint16_t date2days(uint16_t y, uint8_t m, uint8_t d) {
     if (y >= 2000)
         y -= 2000;
-    uint16_t days = d;
+    uint16_t days = 1;
     uint8_t i = 0;
-    for (i = 1; i < m; ++i)
-        days += month[i] - 1;
-    if (m > 2 && y % 4 == 0)
+    for (i = 1; i < m; ++i){
+        days += month[i];
+     
+    #if (defined UART_DATA)
+ my_uart_print_int(i);
+    my_uart_print_str("  ");
+ my_uart_print_int(month[i]);
+    my_uart_print_str("  ");
+ my_uart_println_int(days);
+#endif
+}
+    days += d;
+       
+    #if (defined UART_DATA)
+ my_uart_println_int(days);
+#endif
+    if (m > 2 && y % 4 == 0){
         ++days;
+           
+    #if (defined UART_DATA)
+ my_uart_println_int(days);
+#endif
+    }
     return days + 365 * y + (y + 3) / 4 - 1;
 }
 
 uint32_t time2long(uint16_t days, uint8_t h, uint8_t m, uint8_t s) {
-    return ((((days * 24L) + h) * 60) + m) * 60 + s;
+    return ((((((uint32_t)days * 24L) + (uint32_t)h) * 60) + (uint32_t)m) * 60) + (uint32_t)s;
 }
 
 uint32_t unixtime(RTCCDateTime dt) {
     uint32_t t;
     int y = mRTCCBCD2Dec(dt.d.year) - 100;
-    int m = mRTCCBCD2Dec(dt.d.mon);
+    int m = mRTCCBCD2Dec(dt.d.mon) + 1;
     int d = mRTCCBCD2Dec(dt.d.mday);
     int hh = mRTCCBCD2Dec(dt.t.hour);
     int mm = mRTCCBCD2Dec(dt.t.min);
     int ss = 0;
+    
+    #if (defined UART_DATA)
+my_uart_print_HEX(dt.d.l);
+ my_uart_println_int(y);
+ my_uart_println_int(m);
+ my_uart_println_int(d);
+my_uart_print_HEX(dt.t.l);
+ my_uart_println_int(hh);
+ my_uart_println_int(mm);
+
+#endif
 
     uint16_t days = date2days(y, m, d);
+    
+    #if (defined UART_DATA)
+ my_uart_println_int(days);
+#endif
     t = time2long(days, hh, mm, ss);
+   
+    #if (defined UART_DATA)
+ my_uart_println_int(t);
+#endif   
     t += SECONDS_FROM_1970_TO_2000; // seconds from 1970 to 2000
+    #if (defined UART_DATA)
+ my_uart_println_int(t);
+#endif   
 
     return t;
 }

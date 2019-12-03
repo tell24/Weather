@@ -103,9 +103,11 @@ static WORD ServerPort = HTTP_PORT;
 BYTE TCPClient(BYTE type) {
     BYTE i;
     WORD w;
+    int ccc;
     BYTE vBuffer[150];
     BYTE data_buf[32];
     BYTE status = 0;
+    uint32_t utc;
     _Bool completed;
     static DWORD Timer;
     static TCP_SOCKET MySocket = INVALID_SOCKET;
@@ -158,7 +160,7 @@ BYTE TCPClient(BYTE type) {
             }
 
             Timer = TickGet();
-            
+
             // Make certain the socket can be written to
             if (TCPIsPutReady(MySocket) < 125u)
                 break;
@@ -174,25 +176,44 @@ BYTE TCPClient(BYTE type) {
                     WEB_data_0.peak_wind_speed = outsidedata.peak_wind_speed;
                     WEB_data_0.bearing = outsidedata.bearing;
                     WEB_data_0.pressure = pressure;
-                    WEB_data_0.rainfall = outsidedata.rain;
-                    WEB_data_0.rainfall_rate = outsidedata.rain;
-                    WEB_data_0.timestamp = unixtime(now);
-                    TCPPutROMString(MySocket, (ROM BYTE*) "POST /0 HTTP/1.0\r\nHost: ");
+                    WEB_data_0.rainfall = 0x0145; //outsidedata.rain;
+                    utc = unixtime(now);
+                    WEB_data_0.timestamp = utc;
+
+#if defined(STACK_USE_MY_UART)                              
+                    my_uart_println_str("Upload Data ");
+                    my_uart_println_int(WEB_data_0.in_temp);
+                    my_uart_println_int(WEB_data_0.in_hum);
+                    my_uart_println_int(WEB_data_0.out_temp);
+                    my_uart_println_int(WEB_data_0.out_hum);
+                    my_uart_println_int(WEB_data_0.wind_speed);
+                    my_uart_println_int(WEB_data_0.peak_wind_speed);
+                    my_uart_println_int(WEB_data_0.bearing);
+                    my_uart_println_int(WEB_data_0.pressure);
+                    my_uart_println_int(WEB_data_0.rainfall);
+                    my_uart_println_int(WEB_data_0.timestamp);
+#endif
+                    TCPPutROMString(MySocket, (ROM BYTE*) "POST /C_forward HTTP/1.0\r\nHost: ");
                     TCPPutString(MySocket, ServerName);
-                    TCPPutROMString(MySocket, (ROM BYTE*) "\r\nContent-Length: 24\r\n");
-                    TCPPutROMString(MySocket, (ROM BYTE*) "\r\nConnection: close\r\n\r\n");
-                    TCPPutROMArray(MySocket, &WEB_data_0, 24);
+                    TCPPutROMString(MySocket, (ROM BYTE*) "\r\nContent-Length: 22r\n");
+                    TCPPutROMString(MySocket, (ROM BYTE*) "Connection: close\r\n");
+                    TCPPutROMString(MySocket, (ROM BYTE*) "Content-Type: application/x-binary\r\n\r\n");
+                    TCPPutROMArray(MySocket, &WEB_data_0, 22);
                     break;
 
                 case HISTORY_DATA:
                     TCPPutROMString(MySocket, (ROM BYTE*) "POST /1 HTTP/1.0\r\nHost: ");
                     TCPPutString(MySocket, ServerName);
                     TCPPutROMString(MySocket, (ROM BYTE*) "\r\nContent-Length: 32\r\n");
-                    TCPPutROMString(MySocket, (ROM BYTE*) "\r\nConnection: close\r\n\r\n");
+                    TCPPutROMString(MySocket, (ROM BYTE*) "Connection: close\r\n");
+                    TCPPutROMString(MySocket, (ROM BYTE*) "Content-Type: application/x-binary\r\n\r\n");
                     TCPPutROMArray(MySocket, &History, 32);
                     break;
                 case GET_REMOTE:
-                    TCPPutROMString(MySocket, (ROM BYTE*) "GET /2 HTTP/1.0\r\n");
+#if defined(STACK_USE_MY_UART)
+                    putrsUART1((ROM char*) "GET_REMOTE...\r\n");
+#endif
+                    TCPPutROMString(MySocket, (ROM BYTE*) "GET /remote HTTP/1.0\r\n");
                     TCPPutROMString(MySocket, (ROM BYTE*) "Host: ");
                     TCPPutString(MySocket, ServerName);
                     TCPPutROMString(MySocket, (ROM BYTE*) "\r\nConnection: close\r\n\r\n");
@@ -206,6 +227,7 @@ BYTE TCPClient(BYTE type) {
         case SM_PROCESS_RESPONSE:
             // Check to see if the remote node has disconnected from us or sent us any application data
             // If application data is available, write it to the UART
+
             if (!TCPIsConnected(MySocket)) {
                 GenericTCPExampleState = SM_DISCONNECT;
 
@@ -240,60 +262,58 @@ BYTE TCPClient(BYTE type) {
                         case GET_REMOTE:
                             if (i == 18) {
                                 memcpy(&outsidedata, &vBuffer, 18);
+                                if (outsidedata.hum > 9500) {
+                                    if (outsidedata.hum < 9700) outsidedata.hum = 9500;
+                                    else if (outsidedata.hum < 9800) outsidedata.hum = 9600;
+                                    else if (outsidedata.hum < 10300) outsidedata.hum = 9700;
+                                    else if (outsidedata.hum < 11100) outsidedata.hum = 9800;
+                                    else outsidedata.hum = 9900;
+                                }
 #if defined(UART_DATA)                  
-                                my_uart_println_str("Remote Data ");
-                                my_uart_println_int(outsidedata.hum);
-                                my_uart_println_int(outsidedata.temp);
-                                my_uart_println_int(outsidedata.bearing);
-                                my_uart_println_int(outsidedata.wind_speed);
-                                my_uart_println_int(outsidedata.peak_wind_speed);
-                                my_uart_println_int(outsidedata.rain);
-                                my_uart_println_int(outsidedata.rssi);
-                                my_uart_println_int(outsidedata.status);
+                                    my_uart_println_str("Remote Data ");
+                                    my_uart_println_int(outsidedata.hum);
+                                    my_uart_println_int(outsidedata.temp);
+                                    my_uart_println_int(outsidedata.bearing);
+                                    my_uart_println_int(outsidedata.wind_speed);
+                                    my_uart_println_int(outsidedata.peak_wind_speed);
+                                    my_uart_println_int(outsidedata.rain);
+                                    my_uart_println_int(outsidedata.rssi);
+                                    my_uart_println_int(outsidedata.status);
 #endif
-                            }
-                            completed = true;
-                            break;
-defualt:
+                                }
+                                completed = true;
+                                break;
+                                default:
 #if defined(UART_DATA)   
-                            my_uart_print((char) vBuffer[0]);
-                            my_uart_print((char) vBuffer[1]);
-                            my_uart_print((char) vBuffer[2]);
-                            my_uart_print((char) vBuffer[3]);
-                            my_uart_println_str(" ");
-                            my_uart_println_int(vBuffer[0]);
-                            my_uart_println_int(vBuffer[1]);
-                            my_uart_println_int(vBuffer[2]);
-                            my_uart_println_int(vBuffer[3]);
+                                my_uart_println_str(vBuffer);
 #endif
+                                break;
+                            }
                             break;
                     }
-                    break;
                 }
-            }
 
-            break;
+                break;
 
-        case SM_DISCONNECT:
+                case SM_DISCONNECT:
 #if defined(STACK_USE_MY_UART)
-            putrsUART1((ROM char*) "CLIENT DIS...\r\n");
+                putrsUART1((ROM char*) "CLIENT DIS...\r\n");
 #endif
-            // Close the socket so it can be used by other modules
-            // For this application, we wish to stay connected, but this state will still get entered if the remote server decides to disconnect
-            TCPDisconnect(MySocket);
-            MySocket = INVALID_SOCKET;
-            GenericTCPExampleState = SM_DONE;
-            break;
+                // Close the socket so it can be used by other modules
+                // For this application, we wish to stay connected, but this state will still get entered if the remote server decides to disconnect
+                TCPDisconnect(MySocket);
+                MySocket = INVALID_SOCKET;
+                GenericTCPExampleState = SM_DONE;
+                break;
 
-        case SM_DONE:
-            // Do nothing unless the user pushes BUTTON1 and wants to restart the whole connection/download process
-            //	if(BUTTON1_IO == 0u)
-            GenericTCPExampleState = SM_HOME;
-            status = 1;
-            if (completed) status = 2;
-            break;
+                case SM_DONE:
+                // Do nothing unless the user pushes BUTTON1 and wants to restart the whole connection/download process
+                //	if(BUTTON1_IO == 0u)
+                GenericTCPExampleState = SM_HOME;
+                status = 1;
+                break;
+            }
+            return status;
     }
-    return status;
-}
 
 #endif	//#if defined(STACK_USE_GENERIC_TCP_CLIENT_EXAMPLE)

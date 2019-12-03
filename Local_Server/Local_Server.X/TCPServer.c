@@ -417,8 +417,7 @@ void TCPServer(int *TCP_status, DWORD *post_data_size, MPFS_HANDLE *f) {
                 WEB_data_0.peak_wind_speed = outsidedata.peak_wind_speed;
                 WEB_data_0.bearing = outsidedata.bearing;
                 WEB_data_0.pressure = pressure;
-                WEB_data_0.rainfall = outsidedata.rain;
-                WEB_data_0.rainfall_rate = outsidedata.rain;                    
+                WEB_data_0.rainfall = outsidedata.rain;                 
                 memcpy(&buf, &WEB_data_0, 20);
                 if (*TCP_status == 6) {
                     TCPPutROMString(MySocket, (ROM BYTE*) "HTTP/1.1 200 OK\r\n");

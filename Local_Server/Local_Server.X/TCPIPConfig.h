@@ -64,8 +64,8 @@
 //#define FILL_HOUR_DATA
 //#define SAVE_DATA
 //#define NO_DATA
-//#define SEND_DATA
-#define TESTING
+#define SEND_DATA
+//#define TESTING
 //#define UART_DATA
 //#define STACK_USE_MY_UART					// My uart
 //#define STACK_USE_UART					// Application demo using UART for IP address display and stack configuration
