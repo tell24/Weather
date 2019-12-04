@@ -176,7 +176,7 @@ BYTE TCPClient(BYTE type) {
                     WEB_data_0.peak_wind_speed = outsidedata.peak_wind_speed;
                     WEB_data_0.bearing = outsidedata.bearing;
                     WEB_data_0.pressure = pressure;
-                    WEB_data_0.rainfall = 0x0145; //outsidedata.rain;
+                    WEB_data_0.rainfall = outsidedata.rain;
                     utc = unixtime(now);
                     WEB_data_0.timestamp = utc;
 

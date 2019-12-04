@@ -562,7 +562,7 @@ body {
             var all_dat = t_r.split(",");
             len = 30;
             var index = 0;
-            var cell = 2;
+            var cell = 1;
             var type = 0;
             switch (sel) {
               case "hour":
@@ -584,7 +584,7 @@ body {
                   myarr[10][index] = all_dat[cell + 4]; //out low hum
                   myarr[11][index] = all_dat[cell + 22]; //in low hum
                   index++;
-                  cell += 29;
+                  cell += 25;
                 } while (index <= len);
                 marker = all_dat[1770];
                 if (parseFloat(all_dat[2 + (61 * 29)]) < parseFloat(all_dat[20 + (61 * 29)])) //temp low
@@ -655,7 +655,7 @@ body {
                   myarr[11][index] = all_dat[cell + 22]; //in low hum
                   myarr[12][index] = all_dat[cell + 25]; //low pres
                   index++;
-                  cell += 29;
+                  cell += 28;
                 } while (index <= len);
                 marker = all_dat[784];
                 if (parseFloat(all_dat[2 + (27 * 29)]) < parseFloat(all_dat[20 + (27 * 29)])) //temp low
