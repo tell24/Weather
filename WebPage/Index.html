@@ -112,7 +112,6 @@
     }
 
     window.onload = function() {
-
       var L1 = 130;
       var L2 = 350;
       var L3 = 570;
@@ -521,9 +520,7 @@
             draw_dial(5, ctx);
             draw_bearing(ctx);
             draw_rain(ctx);
-
             clock(ctx);
-
             ctx.fillStyle = "Black";
             data_plot(0, parseFloat(dat[19]), ctx);
             data_plot(1, parseFloat(dat[1]), ctx);
@@ -540,10 +537,8 @@
             data_plot(6, parseFloat(dat[10]), ctx);
             data_plot(7, parseFloat(dat[13]), ctx);
             rain_plot(parseFloat(dat[16]), parseFloat(dat[17]), ctx);
-
             var x = document.getElementById("cent_c");
             x.style.display = "block";
-
           }
         };
         xhr.open("GET", url);
