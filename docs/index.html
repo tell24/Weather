@@ -584,47 +584,47 @@ body {
                   myarr[10][index] = all_dat[cell + 4]; //out low hum
                   myarr[11][index] = all_dat[cell + 22]; //in low hum
                   index++;
-                  cell += 26;
+                  cell += 30;
                 } while (index <= len);
-                marker = all_dat[1620];
-                if (parseFloat(all_dat[1 + (61 * 26)]) < parseFloat(all_dat[19 + (61 * 26)])) //temp low
-                  m_m_arr[0][0] = Math.floor(all_dat[1 + (61 * 26)]);
+                marker = all_dat[1860];
+                if (parseFloat(all_dat[1 + (61 * 30)]) < parseFloat(all_dat[19 + (61 * 30)])) //temp low
+                  m_m_arr[0][0] = Math.floor(all_dat[1 + (61 * 30)]);
                 else
-                  m_m_arr[0][0] = Math.floor(all_dat[19 + (61 * 26)]);
+                  m_m_arr[0][0] = Math.floor(all_dat[19 + (61 * 30)]);
 
-                if (parseFloat(all_dat[2 + (61 * 26)]) > parseFloat(all_dat[20 + (61 * 26)])) //temp high
-                  m_m_arr[1][0] = Math.ceil(all_dat[2 + (61 * 26)]);
+                if (parseFloat(all_dat[2 + (61 * 30)]) > parseFloat(all_dat[20 + (61 * 30)])) //temp high
+                  m_m_arr[1][0] = Math.ceil(all_dat[2 + (61 * 30)]);
                 else
-                  m_m_arr[1][0] = Math.ceil(all_dat[20 + (61 * 26)]);
+                  m_m_arr[1][0] = Math.ceil(all_dat[20 + (61 * 30)]);
                 if (m_m_arr[1][0] > 100) m_m_arr[1][0] = 50;
 
                 m_m_arr[0][1] = m_m_arr[0][0];
                 m_m_arr[1][1] = m_m_arr[1][0];
 
-                if (parseFloat(all_dat[4 + (61 * 26)]) < parseFloat(all_dat[22 + (61 * 26)])) //hum low
-                  m_m_arr[0][2] = Math.floor(all_dat[4 + (61 * 26)]);
+                if (parseFloat(all_dat[4 + (61 * 30)]) < parseFloat(all_dat[22 + (61 * 30)])) //hum low
+                  m_m_arr[0][2] = Math.floor(all_dat[4 + (61 * 30)]);
                 else
-                  m_m_arr[0][2] = Math.floor(all_dat[22 + (61 * 26)]);
+                  m_m_arr[0][2] = Math.floor(all_dat[22 + (61 * 30)]);
                 if (m_m_arr[0][2] < 0) m_m_arr[0][2] = 0;
 
-                if (parseFloat(all_dat[5 + (61 * 26)]) > parseFloat(all_dat[23 + (61 * 26)])) //hum high
-                  m_m_arr[1][2] = Math.ceil(all_dat[5 + (61 * 26)]);
+                if (parseFloat(all_dat[5 + (61 * 30)]) > parseFloat(all_dat[23 + (61 * 30)])) //hum high
+                  m_m_arr[1][2] = Math.ceil(all_dat[5 + (61 * 30)]);
                 else
-                  m_m_arr[1][2] = Math.ceil(all_dat[23 + (61 * 26)]);
+                  m_m_arr[1][2] = Math.ceil(all_dat[23 + (61 * 30)]);
                 if (m_m_arr[1][2] > 100) m_m_arr[1][2] = 100;
 
                 m_m_arr[0][3] = m_m_arr[0][2];
                 m_m_arr[1][3] = m_m_arr[1][2];
 
-                m_m_arr[0][4] = Math.floor(all_dat[25 + (61 * 26)]); // pes low
-                m_m_arr[1][4] = Math.ceil(all_dat[26 + (61 * 26)]); // pres high                
+                m_m_arr[0][4] = Math.floor(all_dat[25 + (61 * 30)]); // pes low
+                m_m_arr[1][4] = Math.ceil(all_dat[26 + (61 * 30)]); // pres high                
 
                 m_m_arr[0][5] = 0; //wind low
 
-                if (parseFloat(all_dat[11 + (61 * 26)]) > parseFloat(all_dat[14 + (61 * 26)])) //wind high
-                  m_m_arr[1][5] = Math.ceil(all_dat[11 + (61 * 26)]);
+                if (parseFloat(all_dat[11 + (61 * 30)]) > parseFloat(all_dat[14 + (61 * 30)])) //wind high
+                  m_m_arr[1][5] = Math.ceil(all_dat[11 + (61 * 30)]);
                 else
-                  m_m_arr[1][5] = Math.ceil(all_dat[14 + (61 * 26)]);
+                  m_m_arr[1][5] = Math.ceil(all_dat[14 + (61 * 30)]);
 
                 if (m_m_arr[1][5] < 2) m_m_arr[1][5] = 2;
 
@@ -632,7 +632,10 @@ body {
                 m_m_arr[1][6] = m_m_arr[1][5];
 
                 m_m_arr[0][7] = 0; //rain
-                m_m_arr[1][7] = Math.ceil(all_dat[16 + (62 * 26)] / rain_scale);
+				if(all_dat[16 + (62 * 30)]>0)
+                m_m_arr[1][7] = Math.ceil(all_dat[16 + (62 * 30)] / rain_scale);
+				else
+				m_m_arr[1][7] = 1;
                 break;
 
               case "day":
@@ -655,56 +658,59 @@ body {
                   myarr[11][index] = all_dat[cell + 22]; //in low hum
                   myarr[12][index] = all_dat[cell + 25]; //low pres
                   index++;
-                  cell += 28;
+                  cell += 31;
                 } while (index <= len);
                 marker = all_dat[784];
-                if (parseFloat(all_dat[2 + (27 * 29)]) < parseFloat(all_dat[20 + (27 * 29)])) //temp low
-                  m_m_arr[0][0] = Math.floor(all_dat[2 + (27 * 29)]);
+                if (parseFloat(all_dat[1 + (27 * 31)]) < parseFloat(all_dat[19 + (27 * 31)])) //temp low
+                  m_m_arr[0][0] = Math.floor(all_dat[1 + (27 * 31)]);
                 else
-                  m_m_arr[0][0] = Math.floor(all_dat[20 + (27 * 29)]);
+                  m_m_arr[0][0] = Math.floor(all_dat[19 + (27 * 31)]);
 
-                if (parseFloat(all_dat[3 + (27 * 29)]) > parseFloat(all_dat[21 + (27 * 29)])) //temp high
-                  m_m_arr[1][0] = Math.ceil(all_dat[3 + (27 * 29)]);
+                if (parseFloat(all_dat[2 + (27 * 31)]) > parseFloat(all_dat[20 + (27 * 31)])) //temp high
+                  m_m_arr[1][0] = Math.ceil(all_dat[2 + (27 * 31)]);
                 else
-                  m_m_arr[1][0] = Math.ceil(all_dat[21 + (27 * 29)]);
+                  m_m_arr[1][0] = Math.ceil(all_dat[20 + (27 * 31)]);
 
                 if (m_m_arr[1][0] > 100) m_m_arr[1][0] = 50;
 
                 m_m_arr[0][1] = m_m_arr[0][0];
                 m_m_arr[1][1] = m_m_arr[1][0];
 
-                if (parseFloat(all_dat[5 + (27 * 29)]) < parseFloat(all_dat[23 + (27 * 29)])) //hum low
-                  m_m_arr[0][2] = Math.floor(all_dat[5 + (27 * 29)]);
+                if (parseFloat(all_dat[4 + (27 * 31)]) < parseFloat(all_dat[22 + (27 * 31)])) //hum low
+                  m_m_arr[0][2] = Math.floor(all_dat[4 + (27 * 31)]);
                 else
-                  m_m_arr[0][2] = Math.floor(all_dat[23 + (27 * 29)]);
+                  m_m_arr[0][2] = Math.floor(all_dat[22 + (27 * 31)]);
                 if (m_m_arr[0][2] < 0) m_m_arr[0][2] = 0;
 
-                if (parseFloat(all_dat[6 + (27 * 29)]) > parseFloat(all_dat[24 + (27 * 29)])) //hum high
-                  m_m_arr[1][2] = Math.ceil(all_dat[6 + (27 * 29)]);
+                if (parseFloat(all_dat[5 + (27 * 31)]) > parseFloat(all_dat[23 + (27 * 31)])) //hum high
+                  m_m_arr[1][2] = Math.ceil(all_dat[5 + (27 * 31)]);
                 else
-                  m_m_arr[1][2] = Math.ceil(all_dat[24 + (27 * 29)]);
+                  m_m_arr[1][2] = Math.ceil(all_dat[23 + (27 * 31)]);
 
                 if (m_m_arr[1][2] > 100) m_m_arr[1][2] = 100;
 
                 m_m_arr[0][3] = m_m_arr[0][2];
                 m_m_arr[1][3] = m_m_arr[1][2];
 
-                m_m_arr[0][4] = Math.floor(all_dat[26 + (27 * 29)]); // pes low
-                m_m_arr[1][4] = Math.ceil(all_dat[27 + (27 * 29)]); // pres high                
+                m_m_arr[0][4] = Math.floor(all_dat[25 + (27 * 31)]); // pes low
+                m_m_arr[1][4] = Math.ceil(all_dat[26 + (27 * 31)]); // pres high                
 
                 m_m_arr[0][5] = 0; //wind low
 
-                if (parseFloat(all_dat[12 + (27 * 29)]) > parseFloat(all_dat[15 + (27 * 29)])) //wind high
-                  m_m_arr[1][5] = Math.ceil(all_dat[12 + (27 * 29)]);
+                if (parseFloat(all_dat[11 + (27 * 31)]) > parseFloat(all_dat[14 + (27 * 31)])) //wind high
+                  m_m_arr[1][5] = Math.ceil(all_dat[11 + (27 * 31)]);
                 else
-                  m_m_arr[1][5] = Math.ceil(all_dat[15 + (27 * 29)]);
+                  m_m_arr[1][5] = Math.ceil(all_dat[14 + (27 * 31)]);
                 if (m_m_arr[1][5] < 2) m_m_arr[1][5] = 2;
 
                 m_m_arr[0][6] = m_m_arr[0][5];
                 m_m_arr[1][6] = m_m_arr[1][5];
 
                 m_m_arr[0][7] = 0; //rain
-                m_m_arr[1][7] = Math.ceil(all_dat[18 + (28 * 29)] / rain_scale);
+				if(all_dat[17 + (28 * 31)]>0)
+                m_m_arr[1][7] = Math.ceil(all_dat[17 + (28 * 31)] / rain_scale);
+				else
+				m_m_arr[1][7] = 1;
                 break;
 
               default:
@@ -737,54 +743,59 @@ body {
                   myarr[11][index] = all_dat[cell + 22]; //in low hum
                   myarr[12][index] = all_dat[cell + 25]; //low pres
                   index++;
-                  cell += 29;
+                  cell += 31;
                 } while (index <= len);
-                if (parseFloat(all_dat[2 + (33 * 29)]) < parseFloat(all_dat[20 + (33 * 29)])) //temp low
-                  m_m_arr[0][0] = Math.floor(all_dat[2 + (33 * 29)]);
+                if (parseFloat(all_dat[1 + (33 * 31)]) < parseFloat(all_dat[19 + (33 * 31)])) //temp low
+                  m_m_arr[0][0] = Math.floor(all_dat[1 + (33 * 31)]);
                 else
-                  m_m_arr[0][0] = Math.floor(all_dat[20 + (33 * 29)]);
+                  m_m_arr[0][0] = Math.floor(all_dat[19 + (33 * 31)]);
 
-                if (parseFloat(all_dat[3 + (33 * 29)]) > parseFloat(all_dat[21 + (33 * 29)])) //temp high
-                  m_m_arr[1][0] = Math.ceil(all_dat[3 + (33 * 29)]);
+                if (parseFloat(all_dat[2 + (33 * 31)]) > parseFloat(all_dat[20 + (33 * 31)])) //temp high
+                  m_m_arr[1][0] = Math.ceil(all_dat[2 + (33 * 31)]);
                 else
-                  m_m_arr[1][0] = Math.ceil(all_dat[21 + (33 * 29)]);
+                  m_m_arr[1][0] = Math.ceil(all_dat[20 + (33 * 31)]);
                 if (m_m_arr[1][0] > 100) m_m_arr[1][0] = 50;
 
                 m_m_arr[0][1] = m_m_arr[0][0];
                 m_m_arr[1][1] = m_m_arr[1][0];
 
 
-                if (parseFloat(all_dat[5 + (33 * 29)]) < parseFloat(all_dat[23 + (33 * 29)])) //hum low
-                  m_m_arr[0][2] = Math.floor(all_dat[5 + (33 * 29)]);
+                if (parseFloat(all_dat[4 + (33 * 31)]) < parseFloat(all_dat[22 + (33 * 31)])) //hum low
+                  m_m_arr[0][2] = Math.floor(all_dat[4 + (33 * 31)]);
                 else
-                  m_m_arr[0][2] = Math.floor(all_dat[23 + (33 * 29)]);
+                  m_m_arr[0][2] = Math.floor(all_dat[22 + (33 * 31)]);
                 if (m_m_arr[0][2] < 0) m_m_arr[0][2] = 0;
 
-                if (parseFloat(all_dat[6 + (33 * 29)]) > parseFloat(all_dat[24 + (33 * 29)])) //hum high
-                  m_m_arr[1][2] = Math.ceil(all_dat[6 + (33 * 29)]);
+                if (parseFloat(all_dat[5 + (33 * 31)]) > parseFloat(all_dat[23 + (33 * 31)])) //hum high
+                  m_m_arr[1][2] = Math.ceil(all_dat[5 + (33 * 31)]);
                 else
-                  m_m_arr[1][2] = Math.ceil(all_dat[24 + (33 * 29)]);
+                  m_m_arr[1][2] = Math.ceil(all_dat[23 + (33 * 31)]);
                 if (m_m_arr[1][2] > 100) m_m_arr[1][2] = 100;
 
                 m_m_arr[0][3] = m_m_arr[0][2];
                 m_m_arr[1][3] = m_m_arr[1][2];
 
-                m_m_arr[0][4] = Math.floor(all_dat[26 + (33 * 29)]); // pes low
-                m_m_arr[1][4] = Math.ceil(all_dat[27 + (33 * 29)]); // pres high                
+                m_m_arr[0][4] = Math.floor(all_dat[25 + (33 * 31)]); // pes low
+                m_m_arr[1][4] = Math.ceil(all_dat[26 + (33 * 31)]); // pres high                
 
                 m_m_arr[0][5] = 0; //wind low
 
-                if (parseFloat(all_dat[12 + (33 * 29)]) > parseFloat(all_dat[15 + (33 * 29)])) //wind high
-                  m_m_arr[1][5] = Math.ceil(all_dat[12 + (33 * 29)]);
+                if (parseFloat(all_dat[11 + (33 * 31)]) > parseFloat(all_dat[14 + (33 * 31)])) //wind high
+                  m_m_arr[1][5] = Math.ceil(all_dat[11 + (33 * 31)]);
                 else
-                  m_m_arr[1][5] = Math.ceil(all_dat[15 + (33 * 29)]);
+                  m_m_arr[1][5] = Math.ceil(all_dat[14 + (33 * 31)]);
                 if (m_m_arr[1][5] < 2) m_m_arr[1][5] = 2;
 
                 m_m_arr[0][6] = m_m_arr[0][5];
                 m_m_arr[1][6] = m_m_arr[1][5];
 
                 m_m_arr[0][7] = 0; //rain
-                m_m_arr[1][7] = Math.ceil(all_dat[18 + (33 * 29)] / rain_scale);
+				
+				if(all_dat[17 + (33 * 31)]>0)
+                m_m_arr[1][7] = Math.ceil(all_dat[17 + (33 * 31)] / rain_scale);
+				else
+				m_m_arr[1][7] = 1;
+				
 
                 m_len = Math.ceil((len + 1) / 2);
                 break;
