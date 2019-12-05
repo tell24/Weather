@@ -586,16 +586,16 @@ body {
                   index++;
                   cell += 26;
                 } while (index <= len);
-                marker = all_dat[1770];
-                if (parseFloat(all_dat[1 + (61 * 29)]) < parseFloat(all_dat[19 + (61 * 29)])) //temp low
-                  m_m_arr[0][0] = Math.floor(all_dat[1 + (61 * 29)]);
+                marker = all_dat[1612];
+                if (parseFloat(all_dat[1 + (61 * 26)]) < parseFloat(all_dat[19 + (61 * 26)])) //temp low
+                  m_m_arr[0][0] = Math.floor(all_dat[1 + (61 * 26)]);
                 else
-                  m_m_arr[0][0] = Math.floor(all_dat[19 + (61 * 29)]);
+                  m_m_arr[0][0] = Math.floor(all_dat[19 + (61 * 26)]);
 
-                if (parseFloat(all_dat[3 + (61 * 29)]) > parseFloat(all_dat[21 + (61 * 29)])) //temp high
-                  m_m_arr[1][0] = Math.ceil(all_dat[3 + (61 * 29)]);
+                if (parseFloat(all_dat[2 + (61 * 26)]) > parseFloat(all_dat[20 + (61 * 26)])) //temp high
+                  m_m_arr[1][0] = Math.ceil(all_dat[2 + (61 * 26)]);
                 else
-                  m_m_arr[1][0] = Math.ceil(all_dat[21 + (61 * 29)]);
+                  m_m_arr[1][0] = Math.ceil(all_dat[20 + (61 * 26)]);
                 if (m_m_arr[1][0] > 100) m_m_arr[1][0] = 50;
 
                 m_m_arr[0][1] = m_m_arr[0][0];
